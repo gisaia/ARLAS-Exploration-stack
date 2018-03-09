@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${elasticsearch_version}
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.graph.enabled=false
+      - xpack.watcher.enabled=false
+    ports:
+      - 9200:9200
+      - 9300:9300
+  arlas-server:
+    image: gisaia/arlas-server:${ARLAS_server_version}
+    container_name: arlas-server
+    environment:
+      - "ARLAS_ELASTIC_CLUSTER=docker-cluster"
+      - "ARLAS_ELASTIC_HOST=elasticsearch"
+    ports:
+      - 9999:9999
+    command: ["/opt/app/wait-for-elasticsearch.sh", "elasticsearch", "9300"]
+  arlas-wui:
+    image: gisaia/arlas-wui:${ARLAS_WUI_version}
+    container_name: arlas-wui
+    ports:
+      - 80:80
