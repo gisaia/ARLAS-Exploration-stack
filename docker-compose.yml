@@ -6,19 +6,6 @@ networks:
       name: arlas
 
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.5
-    container_name: elasticsearch
-    environment:
-      - cluster.name=docker-cluster
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.enabled=false
-      - xpack.monitoring.enabled=false
-      - xpack.graph.enabled=false
-      - xpack.watcher.enabled=false
-    ports:
-      - 9200:9200
-      - 9300:9300
   arlas-server:
     image: gisaia/arlas-server
     container_name: arlas-server
