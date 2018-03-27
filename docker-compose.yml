@@ -1,8 +1,13 @@
-version: '3'
+version: "3"
+
+networks:
+  default:
+    external:
+      name: arlas
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${elasticsearch_version}
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.5
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
@@ -15,16 +20,21 @@ services:
       - 9200:9200
       - 9300:9300
   arlas-server:
-    image: gisaia/arlas-server:${ARLAS_server_version}
+    image: gisaia/arlas-server
     container_name: arlas-server
     environment:
       - "ARLAS_ELASTIC_CLUSTER=docker-cluster"
       - "ARLAS_ELASTIC_HOST=elasticsearch"
     ports:
       - 9999:9999
-    command: ["/opt/app/wait-for-elasticsearch.sh", "elasticsearch", "9300"]
+    command: ["/opt/app/wait-for-elasticsearch.sh", "elasticsearch", "9200"]
   arlas-wui:
-    image: gisaia/arlas-wui:${ARLAS_WUI_version}
+    image: gisaia/arlas-wui
     container_name: arlas-wui
     ports:
       - 80:80
+    volumes:
+      - wui-configuration:/usr/share/nginx/html/
+
+volumes:
+  wui-configuration:

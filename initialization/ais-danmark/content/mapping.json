@@ -1,0 +1,152 @@
+{
+  "settings": {
+    "number_of_shards": 10
+  },
+  "mappings": {
+    "logs": {
+      "dynamic": false,
+      "properties": {
+        "callsign": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cargo_type": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cog": {
+          "type": "float"
+        },
+        "data_source_type": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "destination": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "draught": {
+          "type": "float"
+        },
+        "eta": {
+          "type": "date",
+          "format": "dd/MM/yyyy HH:mm:ss"
+        },
+        "heading": {
+          "type": "float"
+        },
+        "id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "imo": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "length": {
+          "type": "long"
+        },
+        "location": {
+          "type": "geo_point"
+        },
+        "mmsi": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "navigational_status": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "rot": {
+          "type": "float"
+        },
+        "ship_type": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "sog": {
+          "type": "float"
+        },
+        "timestamp": {
+          "type": "date",
+          "format": "dd/MM/yyyy HH:mm:ss"
+        },
+        "type_of_mobile": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "type_of_position_fixing_device": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "width": {
+          "type": "long"
+        }
+      }
+    }
+  }
+}
