@@ -45,7 +45,7 @@ docker network rm arlas
 
 ## [OPTIONAL] Initialize ARLAS with AIS-danmark data (ships positions)
 
-```
+```bash
 time docker run -e ELASTICSEARCH="http://elasticsearch:9200" \
     -e ARLAS_SERVER="http://arlas-server:9999" \
     --net arlas \
