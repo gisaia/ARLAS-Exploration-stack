@@ -23,22 +23,6 @@ You can remove it anytime with the following command:
 docker network rm arlas
 ```
 
-### `vm.max_map_count` (elasticsearch)
-
-ARLAS relies on elasticsearch, thus the minimal development setup runs an elasticsearch docker container.
-
-elasticsearch requires a minimal value of 262144 for kernel setting `vm.max_map_count`.
-
-Check the value of this setting in your environment with the following command:
-
-```bash
-sysctl vm.max_map_count
-```
-
-If it is lower than the minimum value, follow this section of the official elasticsearch documentation to increase it:
-
-https://www.elastic.co/guide/en/elasticsearch/reference/5.6/vm-max-map-count.html
-
 ## Run
 
 To start ARLAS:
