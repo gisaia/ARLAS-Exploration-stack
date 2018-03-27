@@ -1,5 +1,17 @@
 A repository aiming at allowing to easily run ARLAS locally, for developing purposes.
 
+**Table of content**
+
+- [Usage](#usage)
+  - [Prerequisites](#prerequisites)
+  - [Initial setup](#initial-setup)
+  - [Run](#run)
+    - [Without embedded elasticsearch](#without-embedded-elasticsearch)
+  - [[OPTIONAL] Initialize ARLAS with AIS-danmark data (ships positions)](#optional-initialize-arlas-with-ais-danmark-data-ships-positions)
+    - [Without embedded elasticsearch](#without-embedded-elasticsearch-1)
+- [Development](#development)
+  - [Build data-initialization docker image](#build-data-initialization-docker-image)
+
 # Usage
 
 ## Prerequisites
