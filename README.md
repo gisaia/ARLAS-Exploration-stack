@@ -70,7 +70,7 @@ time docker run -e ELASTICSEARCH="http://elasticsearch:9200" \
 
 ### Without embedded elasticsearch
 
-In the above command, just change the value of environment variable `ELASTICSEARCH` to point to a single server of your elasticsearch cluster in the above command, and the elasticsearch-related part of the initialization will be performed against your custom cluster.
+In the above command, just change the value of environment variable `ELASTICSEARCH` to point to a single server of your elasticsearch cluster, and the elasticsearch-related part of the initialization will be performed against your custom cluster.
 
 # Development
 
