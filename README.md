@@ -17,7 +17,7 @@ A repository aiming at allowing to easily run ARLAS locally, for developing purp
 ## Prerequisites
 
 - [Docker CE](https://docs.docker.com/install/) (Community Edition)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/) >= 1.13.0
 
 ## Initial setup
 
