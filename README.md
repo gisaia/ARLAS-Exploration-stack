@@ -6,9 +6,9 @@ A repository aiming at allowing to easily run ARLAS locally, for developing purp
   - [Prerequisites](#prerequisites)
   - [Initial setup](#initial-setup)
   - [Run](#run)
-    - [Without embedded elasticsearch](#without-embedded-elasticsearch)
+    - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment)
   - [[OPTIONAL] Initialize ARLAS with AIS-danmark data (ships positions)](#optional-initialize-arlas-with-ais-danmark-data-ships-positions)
-    - [Without embedded elasticsearch](#without-embedded-elasticsearch-1)
+    - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment-1)
 - [Development](#development)
   - [Build data-initialization docker image](#build-data-initialization-docker-image)
 
@@ -80,7 +80,7 @@ time docker run -e ELASTICSEARCH="http://elasticsearch:9200" \
     arlas-ais-danmark-init
 ```
 
-### Without embedded elasticsearch
+### With your own elasticsearch deployment
 
 In the above command, just change the value of environment variable `ELASTICSEARCH` to point to a single server of your elasticsearch cluster, and the elasticsearch-related part of the initialization will be performed against your custom cluster.
 
