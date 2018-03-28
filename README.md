@@ -51,9 +51,9 @@ To shut down ARLAS:
 docker-compose down
 ```
 
-### Without embedded elasticsearch
+### With your own elasticsearch deployment
 
-By default, ARLAS-stack runs an embedded elasticsearch container.
+By default, ARLAS-stack runs an embedded elasticsearch container. You can choose not to deploy it, and instead connect ARLAS to your own elasticsearch deployment.
 
 1<sup>st</sup>, you need to configure ARLAS to connect to your elasticsearch cluster. Change values of environment variables `ARLAS_ELASTIC_CLUSTER` & `ARLAS_ELASTIC_HOST` for service `arlas-server`, in file `docker-compose.yml`.
 
