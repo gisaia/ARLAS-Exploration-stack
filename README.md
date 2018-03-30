@@ -71,6 +71,8 @@ docker-compose -f docker-compose.yml down
 
 ## [OPTIONAL] Initialize ARLAS with AIS-danmark data (ships positions)
 
+It should take ~2mn:
+
 ```bash
 time docker run -e ELASTICSEARCH="http://elasticsearch:9200" \
     -e ARLAS_SERVER="http://arlas-server:9999" \
