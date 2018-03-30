@@ -31,7 +31,7 @@ index (){
 
 arlas (){
   echo "Creating collection in ARLAS server..."
-  curl -s -X PUT --header 'Content-Type: application/json;charset=utf-8' --header 'Accept: application/json' -d '{"index_name": "'$INDEXNAME'", "type_name": "logs", "id_path": "id", "geometry_path": "location", "centroid_path": "location", "timestamp_path": "timestamp" }' "$ARLAS_SERVER/arlas/collections/ais-danmark"
+  curl -s -X PUT --header 'Content-Type: application/json;charset=utf-8' --header 'Accept: application/json' -d '{"index_name": "'$INDEXNAME'", "type_name": "logs", "id_path": "vessel.mmsi", "geometry_path": "course.segment.geometry.geometry", "centroid_path": "position.location", "timestamp_path": "position.timestamp" }' "$ARLAS_SERVER/arlas/collections/ais-danmark"
   echo
 }
 

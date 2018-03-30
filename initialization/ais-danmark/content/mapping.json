@@ -6,145 +6,127 @@
     "logs": {
       "dynamic": false,
       "properties": {
-        "callsign": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "cargo_type": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "cog": {
-          "type": "float"
-        },
-        "data_source_type": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "destination": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "draught": {
-          "type": "float"
-        },
-        "eta": {
-          "type": "date",
-          "format": "dd/MM/yyyy HH:mm:ss"
-        },
-        "heading": {
-          "type": "float"
-        },
         "id": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+          "type": "keyword"
+        },
+        "vessel": {
+          "properties": {
+            "callsign": {
+              "type": "keyword"
+            },
+            "cargo_type": {
+              "type": "keyword"
+            },
+            "ship_type": {
+              "type": "keyword"
+            },
+            "id": {
+              "type": "keyword"
+            },
+            "imo": {
+              "type": "keyword"
+            },
+            "length": {
+              "type": "long"
+            },
+            "width": {
+              "type": "long"
+            },
+            "mmsi": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "keyword"
+            },
+            "type_of_mobile": {
+              "type": "keyword"
             }
           }
         },
-        "imo": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+        "course": {
+          "properties": {
+            "cog": {
+              "type": "float"
+            },
+            "draught": {
+              "type": "float"
+            },
+            "heading": {
+              "type": "float"
+            },
+            "rot": {
+              "type": "float"
+            },
+            "sog": {
+              "type": "float"
+            },
+            "navigational_status": {
+              "type": "keyword"
+            },
+            "segment": {
+              "properties": {
+                "geometry": {
+                  "properties": {
+                    "geometry": {
+                      "type": "geo_shape"
+                    }
+                  }
+                },
+                "distance": {
+                  "type": "float"
+                },
+                "duration": {
+                  "type": "long"
+                },
+                "speed": {
+                  "type": "float"
+                }
+              }
+            },
+            "delta": {
+              "properties": {
+                "rot": {
+                  "type": "float"
+                },
+                "sog": {
+                  "type": "float"
+                },
+                "cog": {
+                  "type": "float"
+                },
+                "heading": {
+                  "type": "float"
+                }
+              }
             }
           }
         },
-        "length": {
-          "type": "long"
-        },
-        "location": {
-          "type": "geo_point"
-        },
-        "mmsi": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+        "position": {
+          "properties": {
+            "location": {
+              "type": "geo_point"
+            },
+            "timestamp": {
+              "type": "date",
+              "format": "dd/MM/yyyy HH:mm:ss"
+            },
+            "type_of_position_fixing_device": {
+              "type": "keyword"
+            },
+            "data_source_type": {
+              "type": "keyword"
             }
           }
         },
-        "name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+        "route": {
+          "properties": {
+            "destination": {
+              "type": "keyword"
+            },
+            "eta": {
+              "type": "text"
             }
           }
-        },
-        "navigational_status": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "rot": {
-          "type": "float"
-        },
-        "ship_type": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "sog": {
-          "type": "float"
-        },
-        "timestamp": {
-          "type": "date",
-          "format": "dd/MM/yyyy HH:mm:ss"
-        },
-        "type_of_mobile": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "type_of_position_fixing_device": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "width": {
-          "type": "long"
         }
       }
     }

@@ -94,7 +94,21 @@
     {
       "layout": {
         "icon-image": "monument_11",
-        "icon-allow-overlap": true
+        "icon-allow-overlap": true,
+        "icon-rotate": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "heading"
+          ],
+          0,
+          0,
+          360,
+          360
+        ]
       },
       "filter": [
         "all",

@@ -83,6 +83,7 @@
           "drawtype": "RECTANGLE",
           "name": "Map",
           "initZoom": 2,
+          "includeFeaturesFields": ["heading"],
           "icon": "check_box_outline_blank",
           "geometry": "geometry",
           "actions": {
@@ -101,43 +102,43 @@
           ],
           "zoomLevelFullData": 2,
           "zoomLevelForTestCount": 6,
-          "nbMaxDefautFeatureForCluster": 1000,
+          "nbMaxDefautFeatureForCluster": 5000,
           "zoomToNbMaxFeatureForCluster": [
             [
               4,
-              1000
+              5000
             ],
             [
               5,
-              1000
+              5000
             ],
             [
               6,
-              1000
+              5000
             ],
             [
               7,
-              1000
+              5000
             ],
             [
               8,
-              3000
+              5000
             ],
             [
               9,
-              3000
+              5000
             ],
             [
               10,
-              3000
+              5000
             ],
             [
               11,
-              3000
+              5000
             ],
             [
               12,
-              3000
+              5000
             ]
           ],
           "maxPrecision": [
@@ -280,6 +281,7 @@
               "contributorId": "sog",
               "componentType": "histogram",
               "input": {
+                "id": "sog-histogram",
                 "dataType": "numeric",
                 "isHistogramSelectable": true,
                 "multiselectable": true,
@@ -317,6 +319,7 @@
               "contributorId": "heading",
               "componentType": "histogram",
               "input": {
+                "id": "heading-histogram",
                 "dataType": "numeric",
                 "isHistogramSelectable": true,
                 "multiselectable": true,
@@ -354,6 +357,7 @@
               "contributorId": "cog",
               "componentType": "histogram",
               "input": {
+                "id": "cog-histogram",
                 "dataType": "numeric",
                 "isHistogramSelectable": true,
                 "multiselectable": true,
@@ -471,7 +475,7 @@
       }
     },
     "server": {
-      "url": "http://localhost:9999/arlas",
+      "url": "http://fadas.local:9999/arlas",
       "collection": {
         "name": "ais-danmark",
         "id": "id"
