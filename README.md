@@ -40,8 +40,11 @@ docker network rm arlas
 To start ARLAS:
 
 ```bash
+docker-compose pull
 docker-compose up -d
 ```
+
+*Note: by default, docker-compose does not pull latest version of docker images, when deploying, hence why the `docker-compose pull`.*
 
 You should now be able to access it @ http://localhost
 
@@ -60,6 +63,7 @@ By default, ARLAS-stack runs an embedded elasticsearch container. You can choose
 You can then run ARLAS without embedded elasticsearch with the following commands:
 
 ```
+docker-compose pull
 docker-compose -f docker-compose.yml up -d
 ```
 
