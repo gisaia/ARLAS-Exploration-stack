@@ -39,5 +39,6 @@ index
 arlas
 
 echo "Upload wui configuration..."
-cp config.json config.map.json /wui-configuration/
+curl -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.json | jq '.arlas.server.url="http://localhost:9999/arlas"' > /wui-configuration/config.json
+curl -o /wui-configuration/config.map.json -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.map.json
 echo "Done"
