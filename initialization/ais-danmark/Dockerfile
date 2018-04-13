@@ -1,15 +1,4 @@
-FROM ubuntu:17.10
-
-ENV logstash_version=5.6.4
-
-RUN export logstash_archive="logstash-$logstash_version.tar.gz" && \
-    apt update && \
-    apt -y install curl jq openjdk-8-jre-headless && \
-    curl -o "$logstash_archive" "https://artifacts.elastic.co/downloads/logstash/$logstash_archive" && \
-    tar xf "$logstash_archive" && \
-    rm -fr "$logstash_archive"
-
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+FROM gisaia/arlas-init-base
 
 ADD content/csv2es.logstash.conf content/mapping.json content/start.bash content/data/aisdk_20180102_head100000.csv ./
 

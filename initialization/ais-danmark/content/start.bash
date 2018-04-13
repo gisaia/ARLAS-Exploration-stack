@@ -1,44 +1,28 @@
 #!/bin/bash -e
 
-script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export data_file=/aisdk_20180102_head100000.csv
+export elasticsearch_index=ais-danmark
+export elasticsearch_mapping=/mapping.json
+export logstash_configuration=/csv2es.logstash.conf
 
-INDEXNAME=ais-danmark
-
-[[ -z "${ELASTICSEARCH}" ]] && echo "Missing required environment variable: ELASTICSEARCH." && exit 1
-[[ -z "${ARLAS_SERVER}" ]] && echo "Missing required environment variable: ARLAS_SERVER." && exit 1
-[[ -n "${ELASTICSEARCH_PASSWORD}" ]] && ELASTICSEARCH_OPTIONS=" -u $ELASTICSEARCH_USER:$ELASTICSEARCH_PASSWORD "
-
-echo "ELASTICSEARCH: $ELASTICSEARCH"
-
-index (){
-  get_index_response_http_code=$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_OPTIONS "$ELASTICSEARCH/$INDEXNAME")
-  if (( $get_index_response_http_code == 200 )); then
-    echo "Deleting pre-existing index from elasticsearch..."
-    curl -s $ELASTICSEARCH_OPTIONS -X DELETE "$ELASTICSEARCH/$INDEXNAME"
-    echo
-  elif (( $get_index_response_http_code == 404 )); then
-    :
-  else
-    >&2 echo "Undefined response HTTP code while verifying if index is already existing, exiting."
-    exit 2
-  fi
-  echo "Creating index in elasticsearch..."
-  curl -s $ELASTICSEARCH_OPTIONS -X PUT "$ELASTICSEARCH/$INDEXNAME/" -d @mapping.json -H 'Content-Type: application/json'
-  echo
-  echo "Indexing data in elasticsearch..."
-  cat aisdk_20180102_head100000.csv | "./logstash-$logstash_version/bin/logstash" -f csv2es.logstash.conf
+export server_collection=/server-collection.json
+cat > "$server_collection" <<EOF
+{  
+  "index_name": "$INDEXNAME",
+  "type_name": "logs",
+  "id_path": "vessel.mmsi",
+  "geometry_path": "course.segment.geometry.geometry",
+  "centroid_path": "position.location",
+  "timestamp_path": "position.timestamp"
 }
+EOF
 
-arlas (){
-  echo "Creating collection in ARLAS server..."
-  curl -s -X PUT --header 'Content-Type: application/json;charset=utf-8' --header 'Accept: application/json' -d '{"index_name": "'$INDEXNAME'", "type_name": "logs", "id_path": "vessel.mmsi", "geometry_path": "course.segment.geometry.geometry", "centroid_path": "position.location", "timestamp_path": "position.timestamp" }' "$ARLAS_SERVER/arlas/collections/ais-danmark"
-  echo
-}
+export server_collection_name=ais-danmark
 
-index
-arlas
+export WUI_configuration=/WUI-config.json
+curl -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.json | jq '.arlas.server.url="http://localhost:9999/arlas"' > "$WUI_configuration"
 
-echo "Upload wui configuration..."
-curl -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.json | jq '.arlas.server.url="http://localhost:9999/arlas"' > /wui-configuration/config.json
-curl -o /wui-configuration/config.map.json -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.map.json
-echo "Done"
+export WUI_map_configuration=/WUI-map-config.json
+curl -o "$WUI_map_configuration" -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.map.json
+
+/base.bash

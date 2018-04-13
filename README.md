@@ -2,15 +2,18 @@ A repository aiming at allowing to easily run ARLAS locally, for developing purp
 
 **Table of content**
 
-- [Usage](#usage)
-  - [Prerequisites](#prerequisites)
-  - [Initial setup](#initial-setup)
-  - [Run](#run)
-    - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment)
-  - [[OPTIONAL] Initialize ARLAS with AIS-danmark data (ships positions)](#optional-initialize-arlas-with-ais-danmark-data-ships-positions)
-    - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment-1)
-- [Development](#development)
-  - [Build data-initialization docker image](#build-data-initialization-docker-image)
+[Usage](#usage)
+- [Prerequisites](#prerequisites)
+- [Initial setup](#initial-setup)
+- [Run](#run)
+  - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment)
+- [Initialization](#initialization)
+  - [Data-specific initialization](#data-specific-initialization)
+    - [ais-danmark](#ais-danmark)
+      - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment-1)
+[Development](#development)
+- [Data initialization](#data-initialization)
+  - [ais-danmark](#ais-danmark-1)
 
 # Usage
 
@@ -40,8 +43,7 @@ docker network rm arlas
 To start ARLAS:
 
 ```bash
-docker-compose pull
-docker-compose up -d
+docker-compose pull; docker-compose up -d
 ```
 
 *Note: by default, docker-compose does not pull latest version of docker images, when deploying, hence why the `docker-compose pull`.*
@@ -63,8 +65,7 @@ By default, ARLAS-stack runs an embedded elasticsearch container. You can choose
 You can then run ARLAS without embedded elasticsearch with the following commands:
 
 ```
-docker-compose pull
-docker-compose -f docker-compose.yml up -d
+docker-compose pull; docker-compose -f docker-compose.yml up -d
 ```
 
 To shut it down:
@@ -73,29 +74,62 @@ To shut it down:
 docker-compose -f docker-compose.yml down
 ```
 
-## [OPTIONAL] Initialize ARLAS with AIS-danmark data (ships positions)
+## Initialization
+
+We provide a docker image, `gisaia/arlas-init-base`, for initializing ARLAS. It supports the following environment variables:
+
+| Environment Variable | | Description |
+| - | - | - |
+| `data_file` | | Path to the file containing the data, inside the container. |
+| `elasticsearch` | | elsaticsearch server. |
+| `elasticsearch_index` | | Name of the elasticsearch index where to ingest the data. |
+| `elasticsearch_mapping` | | Path to the elasticsearch mapping json file for index creation. |
+| `elasticsearch_password` | optional | Goes with `elasticsearch_user`. |
+| `elasticsearch_user` | optional | Goes with `elasticsearch_password`. |
+| `logstash_configuration` | | Path to the logstash configuration file for data ingestion into elasticsearch. |
+| `server` | | ARLAS server. |
+| `server_collection` | | |
+| `server_collection_name` | | |
+| `WUI_configuration` | | Path to the general configuration file for ARLAS-WUI, inside the container. |
+| `WUI_map_configuration` | | Path to the map configuration file for ARLAS-WUI, inside the container. |
+
+### Data-specific initialization
+
+We provide some data-specific initialization with pre-built docker images inheriting from `gisaia/arlas-init-base`.
+
+#### ais-danmark
 
 It should take ~2mn:
 
 ```bash
-time docker run -e ELASTICSEARCH="http://elasticsearch:9200" \
-    -e ARLAS_SERVER="http://arlas-server:9999" \
+time docker run -e elasticsearch="http://elasticsearch:9200" \
+    -e server="http://arlas-server:9999" \
     --net arlas \
     --rm \
     --mount type=volume,src=arlasstack_wui-configuration,dst=/wui-configuration \
-    arlas-ais-danmark-init
+    gisaia/arlas-init-ais-danmark
 ```
 
-### With your own elasticsearch deployment
+##### With your own elasticsearch deployment
 
 In the above command, just change the value of environment variable `ELASTICSEARCH` to point to a single server of your elasticsearch cluster, and the elasticsearch-related part of the initialization will be performed against your custom cluster.
 
 # Development
 
-## Build data-initialization docker image
+## Data initialization
+
+Sources for docker image `gisaia/arlas-init-base` are found in [initialization/base](initialization/base). Build instructions:
 
 ```bash
-cd initialization/ais-danmark
-docker build -t arlas-ais-danmark-init .
-cd -
+cd initialization/base; docker build -t gisaia/arlas-init-base .; cd -
 ```
+
+### ais-danmark
+
+Sources for docker image `gisaia/arlas-init-ais-danmark` are found in [initialization/ais-danmark](initialization/ais-danmark). Build instructions:
+
+```bash
+cd initialization/ais-danmark; docker build -t gisaia/arlas-init-ais-danmark .; cd -
+```
+
+Beware, this image inherits from `gisaia/arlas-init-base`, so if you make change to the latter, rebuild `gisaia/arlas-init-ais-danmark` for the changes to take effect.
