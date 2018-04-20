@@ -1,4 +1,4 @@
-A repository aiming at allowing to easily run ARLAS locally, for developing purposes.
+A repository aiming at allowing to easily run ARLAS locally, for developping purposes.
 
 **Table of content**
 
@@ -112,7 +112,7 @@ Once you have ARLAS running, you can use docker image `gisaia/arlas-init-base` t
 
 ##### Files
 
-Those are the files you have to provide. You will have to mount them inside the `gisaia/arlas-init-base` container at execution time (using docker run option [-v](https://docs.docker.com/engine/reference/run/#volume-shared-filesystems)).
+Those are the files you have to provide. You will have to mount them inside the `gisaia/arlas-init-base` container at execution time (using docker run option [--mount](https://docs.docker.com/storage/bind-mounts/)).
 
 | File | Description | Example: ais-danmark |
 |-|-|-|
