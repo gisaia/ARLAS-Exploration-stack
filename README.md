@@ -11,6 +11,10 @@ A repository aiming at allowing to easily run ARLAS locally, for developing purp
   - [Data-specific initialization](#data-specific-initialization)
     - [ais-danmark](#ais-danmark)
       - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment-1)
+  - [Use ARLAS with your own data](#use-arlas-with-your-own-data)
+    - [Requirements](#requirements)
+      - [Files](#files)
+      - [Environment Variables](#environment-variables)
 
 [Development](#development)
 - [Data initialization](#data-initialization)
@@ -128,7 +132,7 @@ Those are the files you have to provide. You will have to mount them inside the 
 | elasticsearch_index | Name of the elasticsearch index where your data will be indexed. | [ais-danmark](initialization/ais-danmark/content/start.bash#L4) |
 | elasticsearch_mapping | Path where you mounted **elasticsearch_mapping** inside the `gisaia/arlas-init-base` container. | `/mapping.json` (see [here](initialization/ais-danmark/Dockerfile#L3)) |
 | logstash_configuration | Logstash configuration file for indexing the data set into elasticsearch. | `/csv2es.logstash.conf` (see [here](initialization/ais-danmark/Dockerfile#L3)) |
-| server | Arlas server (`http://<hostname/IP>:<port>`). | [/server-collection.json](initialization/ais-danmark/content/start.bash#L8-18) |
+| server | Arlas server (`http://<hostname/IP>:<port>`). | |
 | server_collection | Path where you mounted **server_collection** inside the `gisaia/arlas-init-base` container. | [/server-collection.json](initialization/ais-danmark/content/start.bash#L8-18) |
 | server_collection_name | Name of the ARLAS server collection to create. | [ais-danmark](initialization/ais-danmark/content/start.bash#L20) |
 | WUI_configuration | Path where you mounted **WUI_configuration** inside the `gisaia/arlas-init-base` container. | `/config.json` (see [here](initialization/ais-danmark/Dockerfile#L3)) |
