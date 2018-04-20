@@ -3,28 +3,50 @@
     "number_of_shards": 10
   },
   "mappings": {
-    "logs": {
+    "doc": {
       "dynamic": false,
       "properties": {
         "id": {
           "type": "keyword"
         },
+        "internal":{
+          "properties": {
+            "fulltext": {
+              "type": "text"
+            }
+          }
+        },
+        "tags":{
+          "properties": {
+            "trainingset": {
+              "type": "keyword"
+            },
+            "predicted": {
+              "type": "keyword"
+            }
+          }
+        },
         "vessel": {
           "properties": {
             "callsign": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "cargo_type": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "ship_type": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "id": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "imo": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "length": {
               "type": "long"
@@ -33,13 +55,16 @@
               "type": "long"
             },
             "mmsi": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "name": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "type_of_mobile": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             }
           }
         },
@@ -61,7 +86,8 @@
               "type": "float"
             },
             "navigational_status": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "segment": {
               "properties": {
@@ -121,7 +147,8 @@
         "route": {
           "properties": {
             "destination": {
-              "type": "keyword"
+              "type": "keyword",
+              "copy_to": "internal.fulltext"
             },
             "eta": {
               "type": "text"

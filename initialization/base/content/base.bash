@@ -3,7 +3,6 @@
 script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 break_line='--------------'
 
-
 required_variables=( \
   data_file \
   elasticsearch \
@@ -12,12 +11,9 @@ required_variables=( \
   logstash_configuration \
   server_collection \
   server_collection_name \
-  server \
   WUI_configuration \
   WUI_map_configuration \
   )
-
-
 
 echo "Configuration:"
 echo "$break_line"
@@ -30,11 +26,14 @@ for variable in ${required_variables[@]} logstash_version; do
   fi
 done
 [[ -n "${elasticsearch_password}" ]] && elasticsearch_options=" -u $elasticsearch_user:$elasticsearch_password"
+
+server=${server:-http://localhost:9999}
+echo "server: $server"
+
 echo "$break_line"
 
-
 index (){
-  get_index_response_http_code=$(curl -s -o /dev/null -w "%{http_code}" $elasticsearch_options "$elasticsearch/$elasticsearch_index  ")
+  get_index_response_http_code=$(curl -s -o /dev/null -w "%{http_code}" $elasticsearch_options "$elasticsearch/$elasticsearch_index")
   if (( $get_index_response_http_code == 200 )); then
     echo "Deleting pre-existing index from elasticsearch..."
     curl -s $elasticsearch_options -X DELETE "$elasticsearch/$elasticsearch_index"

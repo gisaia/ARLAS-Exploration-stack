@@ -8,8 +8,8 @@ export logstash_configuration=/csv2es.logstash.conf
 export server_collection=/server-collection.json
 cat > "$server_collection" <<EOF
 {  
-  "index_name": "$INDEXNAME",
-  "type_name": "logs",
+  "index_name": "$elasticsearch_index",
+  "type_name": "doc",
   "id_path": "vessel.mmsi",
   "geometry_path": "course.segment.geometry.geometry",
   "centroid_path": "position.location",
@@ -19,10 +19,7 @@ EOF
 
 export server_collection_name=ais-danmark
 
-export WUI_configuration=/WUI-config.json
-curl -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.json | jq '.arlas.server.url="http://localhost:9999/arlas"' > "$WUI_configuration"
-
-export WUI_map_configuration=/WUI-map-config.json
-curl -o "$WUI_map_configuration" -s https://raw.githubusercontent.com/gisaia/ARLAS-wui/feat/ais-data/src/config.map.json
+export WUI_configuration=/config.json
+export WUI_map_configuration=/config.map.json
 
 /base.bash
