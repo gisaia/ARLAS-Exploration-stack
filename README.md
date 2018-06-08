@@ -114,14 +114,15 @@ Once you have ARLAS running, you can use docker image `gisaia/arlas-init-base` t
 
 Those are the files you have to provide. You will have to mount them inside the `gisaia/arlas-init-base` container at execution time (using docker run option [--mount](https://docs.docker.com/storage/bind-mounts/)).
 
-| File | Description | Example: ais-danmark |
+| File | Description | How-To notes | Example: ais-danmark |
 |-|-|-|
-| data_file | File containing your data (csv, ...). | [initialization/ais-danmark/content/data/aisdk_20180102_head100000.csv](initialization/ais-danmark/content/data/aisdk_20180102_head100000.csv) |
-| elasticsearch_mapping | Mapping for the elasticsearch index. | [initialization/ais-danmark/content/mapping.json](initialization/ais-danmark/content/mapping.json) |
-| logstash_configuration | Logstash configuration file for indexing the data set into elasticsearch. | [initialization/ais-danmark/content/csv2es.logstash.conf](initialization/ais-danmark/content/csv2es.logstash.conf) |
-| server_collection | ARLAS server collection to create. | see [here](initialization/ais-danmark/content/start.bash#L8-18) |
-| WUI_configuration | WUI configuration file specifically crafted for your set of data. | [initialization/ais-danmark/content/wui/config.json](initialization/ais-danmark/content/wui/config.json) |
-| WUI_map_configuration | Also WUI configuration, relative to the styles of data-layer you want to show on the map. | [initialization/ais-danmark/content/wui/config.map.json](initialization/ais-danmark/content/wui/config.map.json) |
+| data_file | File containing your data (csv, ...). | | [initialization/ais-danmark/content/data/aisdk_20180102_head100000.csv](initialization/ais-danmark/content/data/aisdk_20180102_head100000.csv) |
+| elasticsearch_mapping | Mapping for the elasticsearch index. Format: json. | It is required to define a property of type `geo_point` where you should store latitude & longitude. | [initialization/ais-danmark/content/mapping.json](initialization/ais-danmark/content/mapping.json) |
+| logstash_configuration | Logstash configuration file for indexing the data set into elasticsearch. | | [initialization/ais-danmark/content/csv2es.logstash.conf](initialization/ais-danmark/content/csv2es.logstash.conf) |
+| server_collection | ARLAS server collection to create. Format: json. | Should respect requirements stated in [collection documentation](http://arlas.io/arlas-tech/current/arlas-collection-model/). | see [here](initialization/ais-danmark/content/start.bash#L8-L18) |
+| WUI_configuration | WUI configuration file specifically crafted for your set of data. Format: json. | | [initialization/ais-danmark/content/wui/config.json](initialization/ais-danmark/content/wui/config.json) |
+| WUI_map_configuration | Also WUI configuration, relative to the styles of data-layer you want to show on the map. Format: json. | | [initialization/ais-danmark/content/wui/config.map.json](initialization/ais-danmark/content/wui/config.map.json) |
+
 
 ##### Environment variables
 
@@ -133,12 +134,16 @@ Those are the files you have to provide. You will have to mount them inside the 
 | elasticsearch_mapping | Path where you mounted **elasticsearch_mapping** inside the `gisaia/arlas-init-base` container. | `/mapping.json` (see [here](initialization/ais-danmark/Dockerfile#L3)) |
 | logstash_configuration | Logstash configuration file for indexing the data set into elasticsearch. | `/csv2es.logstash.conf` (see [here](initialization/ais-danmark/Dockerfile#L3)) |
 | server | Arlas server (`http://<hostname/IP>:<port>`). | |
-| server_collection | Path where you mounted **server_collection** inside the `gisaia/arlas-init-base` container. | [/server-collection.json](initialization/ais-danmark/content/start.bash#L8-18) |
+| server_collection | Path where you mounted **server_collection** inside the `gisaia/arlas-init-base` container. | [/server-collection.json](initialization/ais-danmark/content/start.bash#L8-L18) |
 | server_collection_name | Name of the ARLAS server collection to create. | [ais-danmark](initialization/ais-danmark/content/start.bash#L20) |
 | WUI_configuration | Path where you mounted **WUI_configuration** inside the `gisaia/arlas-init-base` container. | `/config.json` (see [here](initialization/ais-danmark/Dockerfile#L3)) |
 | WUI_map_configuration | Path where you mounted **WUI_map_configuration** inside the `gisaia/arlas-init-base` container. | `/config.map.json` (see [here](initialization/ais-danmark/Dockerfile#L3)) |
 
 `gisaia/arlas-init-base` also supports optional variables `elasticsearch_user` & `elasticsearch_user`, for authentication purposes.
+
+#### How To
+
+1. Start by writing the `server_collection` file
 
 #### Example
 

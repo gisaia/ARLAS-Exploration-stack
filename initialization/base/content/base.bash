@@ -27,7 +27,7 @@ for variable in ${required_variables[@]} logstash_version; do
 done
 [[ -n "${elasticsearch_password}" ]] && elasticsearch_options=" -u $elasticsearch_user:$elasticsearch_password"
 
-server=${server:-http://localhost:9999}
+server=${server:-http://localhost:http://arlas-server:9999}
 echo "server: $server"
 
 echo "$break_line"
@@ -63,7 +63,7 @@ arlas (){
 
 load_WUI_configuration () {
   echo "Loading wui configuration..."
-  cp "$WUI_configuration" /wui-configuration/config.json
+  jq -r ".arlas.server.url=\"http://localhost:9999/arlas\"" "$WUI_configuration" > /wui-configuration/config.json
   cp "$WUI_map_configuration" /wui-configuration/config.map.json
 }
 

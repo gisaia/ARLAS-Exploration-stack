@@ -7,7 +7,7 @@ networks:
 
 services:
   arlas-server:
-    image: gisaia/arlas-server
+    image: gisaia/arlas-server:5.6.0
     container_name: arlas-server
     environment:
       - "ARLAS_ELASTIC_CLUSTER=docker-cluster"
@@ -16,7 +16,7 @@ services:
       - 9999:9999
     command: ["/opt/app/wait-for-elasticsearch.sh", "elasticsearch", "9200"]
   arlas-wui:
-    image: gisaia/arlas-wui
+    image: gisaia/arlas-wui:5.0.1
     container_name: arlas-wui
     ports:
       - 80:80
