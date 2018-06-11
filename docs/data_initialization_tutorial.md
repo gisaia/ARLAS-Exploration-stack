@@ -1,70 +1,68 @@
-This tutorial will show you how to initialize ARLAS with a custom set of data.
+This tutorial aims at explaining how to initialize ARLAS with a custom set of data.
 
-TODO: table of content
+**Table of content**
 
-In this tutorial, we will use this set of data made of 3 randomly generated positions:
+[Have ARLAS running](#have-arlas-running)
+
+[Write the server collection](#write-the-server-collection)
+
+[Write the elasticsearch mapping](#write-the-elasticsearch-mapping)
+
+[Write the logstash configuration for data indexation](#write-the-logstash-configuration-for-data-indexation)
+
+[Write WUI configuration](#write-wui-configuration)
+  - [General configuration](#general-configuration)
+  - [Map-specific configuration](#map-specific-configuration)
+
+[Perform data initialization](#perform-data-initialization)
+
+In this tutorial, we will use this micro set of data made of 3 positions:
 
 ```bash
-cat > data_file.csv <<EOF
-02/05/2018 00:00:00;a;-69;134
-03/05/2018 00:00:00;b;10;63
-04/05/2018 00:00:00;c;-6;47
+cat > data <<'EOF'
+02/05/2018 00:00:00;a;48.856162;2.351855
+03/05/2018 00:00:00;b;35.708808;139.731856
+04/05/2018 00:00:00;c;40.711274;-74.006758
 EOF
 ```
 
+- **a**: somewhere in Paris
+- **b**: somewhere in Tokyo
+- **c**: somewhere in New York
+
 ### Have ARLAS running
 
-Follow instructions in the README.
-
-TODO: link
-
-### Set environment variables
-
-```bash
-export data_file=/data_file.csv \
-       elasticsearch=http://elasticsearch:9200 \
-       elasticsearch_index=my-data \
-       elasticsearch_mapping=/elasticsearch_mapping.json \
-       logstash_configuration=/logstash_configuration.conf \
-       server=http://arlas-server:9999 \
-       server_collection=/server_collection.json \
-       server_collection_name=my-data \
-       WUI_configuration=/WUI_configuration.json \
-       WUI_map_configuration=/WUI_map_configuration.json
-```
+[Follow related instructions in README](../../README.md#usage).
 
 ### Write the server collection
 
-A collection is an ARLAS object that references your data indexed into elasticsearch. This is the server collection we will use for our set of data:
+A collection is an ARLAS object that references your data indexed into elasticsearch, see the relative documentation [here](http://arlas.io/arlas-tech/current/arlas-collection-model/). This is the server collection we will use for our set of data:
 
 ```bash
 cat > server_collection.json <<EOF
-
 {  
-  "index_name": "$elasticsearch_index",
+  "index_name": "data",
   "type_name": "doc",
   "id_path": "identifier",
-  "geometry_path": "location",
-  "centroid_path": "location",
+  "geometry_path": "position",
+  "centroid_path": "position",
   "timestamp_path": "timestamp"
 }
-
 EOF
 ```
 
 ### Write the elasticsearch mapping
 
-You need to define a mapping to index your data in elasticsearch. Your indexed data are partially specified by the collection you created earlier:
+You need to define a mapping to index your data in elasticsearch. Your indexed data are partially specified by the collection you created earlier, it should contain fields:
 
-- The mapping should define a `doc` type
-- The doc type should contain fields
-  - `identifier`
-  - `location`
-  - `timestamp`
+- `identifier`
+- `position`
+- `timestamp`
+
+Also, ARLAS requires you to index the latitude/longitude of your data under type `geo_point`.
 
 ```bash
 cat > elasticsearch_mapping.json <<'EOF'
-
 {
   "mappings": {
     "doc": {
@@ -76,7 +74,7 @@ cat > elasticsearch_mapping.json <<'EOF'
         "name": {
           "type": "keyword"
         },
-        "location": {
+        "position": {
           "type": "geo_point"
         },
         "timestamp": {
@@ -87,19 +85,15 @@ cat > elasticsearch_mapping.json <<'EOF'
     }
   }
 }
-
 EOF
 ```
-
-ARLAS requires you to index the Latitude/Longitude of your data under type `geo_point`.
 
 ### Write the logstash configuration for data indexation
 
 Logstash is a data processing pipeline. We will use it to transform & index our raw data into elasticsearch.
 
 ```bash
-cat > logstash_configuration.conf <<'EOF'
-
+cat > logstash_configuration <<'EOF'
 input {
   stdin {}
 }
@@ -115,9 +109,9 @@ filter {
     }
   }
   mutate {
-    # Fill elasticsearch field "location" of type "geo_point"
-    rename => { "latitude" => "[location][lat]" }
-    rename => { "longitude" => "[location][lon]" }
+    # Fill elasticsearch field "position" of type "geo_point"
+    rename => { "latitude" => "[position][lat]" }
+    rename => { "longitude" => "[position][lon]" }
   }
   # Generate unique identifier for each of our positions
   uuid {
@@ -134,7 +128,6 @@ output {
     index => "${elasticsearch_index}"
   }
 }
-
 EOF
 ```
 
@@ -144,11 +137,12 @@ You need to shape ARLAS WUI (Web User Interface) so that it fits your data. For 
 - general configuration file
 - map-specific configuration file
 
+See [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/) for the relative documentation.
+
 #### General configuration
 
 ```bash
 cat >WUI_configuration.json <<'EOF'
-
 {
   "arlas": {
     "server": {
@@ -209,21 +203,12 @@ cat >WUI_configuration.json <<'EOF'
               "styleGroups": [
                 {
                   "base": [
-                    "geobox",
-                    "feature-line",
-                    "features-symbol"
+                    "features-point",
+                    "geobox"
                   ],
                   "id": "cluster",
                   "name": "Cluster",
                   "styles": [
-                    {
-                      "id": "heat",
-                      "isDefault": false,
-                      "layerIds": [
-                        "cluster-heat"
-                      ],
-                      "name": "Heats"
-                    },
                     {
                       "id": "fill",
                       "isDefault": true,
@@ -239,16 +224,6 @@ cat >WUI_configuration.json <<'EOF'
             "margePanForLoad": 40,
             "margePanForTest": 2,
             "style": "https://openmaptiles.github.io/osm-bright-gl-style/style-cdn.json"
-          }
-        },
-        "share": {
-          "geojson": {
-            "max_for_cluster": 100000,
-            "max_for_feature": 10000,
-            "sort_excluded_type": [
-              "TEXT",
-              "GEO_POINT"
-            ]
           }
         },
         "timeline": {
@@ -267,19 +242,12 @@ cat >WUI_configuration.json <<'EOF'
         }
       },
       "contributors": {
-        "chipssearch$chipssearch": {
-          "icon": "search",
-          "identifier": "chipssearch",
-          "name": "Search",
-          "search_field": "internal.fulltext",
-          "search_size": 100
-        },
-       "histogram$timeline": {
+        "histogram$timeline": {
           "aggregationmodels": [
             {
-              "field": "location.timestamp",
+              "field": "position.timestamp",
               "interval": {
-                "unit": "minute",
+                "unit": "day",
                 "value": 1
               },
               "type": "datehistogram"
@@ -299,7 +267,7 @@ cat >WUI_configuration.json <<'EOF'
           },
           "aggregationmodels": [
             {
-              "field": "location",
+              "field": "position",
               "interval": {
                 "value": 3
               },
@@ -312,6 +280,10 @@ cat >WUI_configuration.json <<'EOF'
           "icon": "check_box_outline_blank",
           "idFieldName": "identifier",
           "identifier": "mapbox",
+          "includeFeaturesFields": [
+            "course.heading",
+            "course.sog"
+          ],
           "initZoom": 4,
           "maxPrecision": [
             7,
@@ -430,7 +402,7 @@ cat >WUI_configuration.json <<'EOF'
               13,
               7,
               5
-             ],
+            ],
             [
               14,
               8,
@@ -506,16 +478,8 @@ cat >WUI_configuration.json <<'EOF'
   "arlas-wui": {
     "web": {
       "app": {
-        "components": {
-          "chipssearch": {
-            "autocomplete_field": "name",
-            "autocomplete_size": "20",
-            "icon": "search",
-            "name": "Search",
-            "search_size": 100
-          }
-        },
-        "idFieldName": "id"
+        "components": { },
+        "idFieldName": "identifier"
       }
     }
   },
@@ -527,7 +491,6 @@ cat >WUI_configuration.json <<'EOF'
     }
   ]
 }
-
 EOF
 ```
 
@@ -535,7 +498,6 @@ EOF
 
 ```bash
 cat >WUI_map_configuration.json <<'EOF'
-
 {
   "layers": [
     {
@@ -617,20 +579,15 @@ cat >WUI_map_configuration.json <<'EOF'
     }
   ]
 }
-
 EOF
 ```
 
 ### Perform data initialization
 
 ```bash
-docker run -e data_file -e elasticsearch -e elasticsearch_index -e elasticsearch_mapping -e logstash_configuration -e server -e server_collection -e server_collection_name -e WUI_configuration -e WUI_map_configuration --net arlas --rm -t \
-  --mount dst="$data_file",src="$PWD/data_file.csv",type=bind \
-  --mount dst="$elasticsearch_mapping",src="$PWD/elasticsearch_mapping.json",type=bind \
-  --mount dst="$logstash_configuration",src="$PWD/logstash_configuration.conf",type=bind \
-  --mount dst="$server_collection",src="$PWD/server_collection.json",type=bind \
-  --mount dst="$WUI_configuration",src="$PWD/WUI_configuration.json",type=bind \
-  --mount dst="$WUI_map_configuration",src="$PWD/WUI_map_configuration.json",type=bind \
+docker run \
+  --mount dst="/initialization",src="$PWD",type=bind \
   --mount type=volume,src=arlasstack_wui-configuration,dst=/wui-configuration \
-  gisaia/arlas-init-base
+  --net arlas --rm -t \
+  gisaia/arlas-initializer
 ```
