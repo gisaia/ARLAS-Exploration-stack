@@ -76,15 +76,15 @@ Also, we have implemented an initialization of ARLAS with [AIS](https://en.wikip
 
 The ARLAS initializer supports various environment variables.
 
-| Name | Description | Default value |
+| Name | Default value | Description |
 |-|-|-|
-| elasticsearch | URL to an elasticsearch server (`http://<hostname or IP>:<HTTP port>`). To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment). | `http://elasticsearch:9200` |
-| elasticsearch_index | Name of the elasticsearch index where your data will be indexed. | `arlas-data` |
-| elasticsearch_user | Username for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. | |
-| elasticsearch_password | Password for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. | |
-| server_collection_name | Name of the ARLAS server collection to create. | `data` |
-| server_initialization_URL | Arlas server URL for the initialization container. | `http://arlas-server:9999` |
-| server_URL | Arlas server URL for the client (`http://<hostname or IP>:<port>`). | `http://localhost:9999` |
+| elasticsearch | `http://elasticsearch:9200` | URL to an elasticsearch server (`http://<hostname or IP>:<HTTP port>`). To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment). |
+| elasticsearch_index | `arlas-data` | Name of the elasticsearch index where your data will be indexed. |
+| elasticsearch_user | | Username for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
+| elasticsearch_password | | Password for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
+| server_collection_name | `data` | Name of the ARLAS server collection to create. |
+| server_initialization_URL | `http://arlas-server:9999` | Arlas server URL for the initialization container. |
+| server_URL | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |
 
 ## Example: ais-danmark
 
