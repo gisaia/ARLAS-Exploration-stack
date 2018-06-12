@@ -5,6 +5,11 @@
 ###########
 
 index (){
+  echo "Waiting for elasticsearch to be ready..."
+  # On single server configuration, the best status we can reach is yellow.
+  # See https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
+  wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $elasticsearch_options $elasticsearch/_cluster/health?wait_for_status=yellow) == 200 ))"
+
   get_index_response_http_code=$(curl -s -o /dev/null -w "%{http_code}" $elasticsearch_options "$elasticsearch/$elasticsearch_index")
   if (( $get_index_response_http_code == 200 )); then
     echo "Deleting pre-existing index from elasticsearch..."
@@ -32,6 +37,9 @@ arlas (){
   jq -r ".index_name=\"$elasticsearch_index\"" /initialization/server_collection.json > /tmp/server_collection.json
   mv /tmp/server_collection.json /initialization/server_collection.json
 
+  echo "Waiting for ARLAS-server to be ready..."
+  wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $server_initialization_URL/admin/healthcheck) == 200 ))"
+
   echo "Creating collection in ARLAS server..."
   curl -s -X PUT --header 'Content-Type: application/json;charset=utf-8' --header 'Accept: application/json' -d@/initialization/server_collection.json "$server_initialization_URL/arlas/collections/$server_collection_name"
   echo
@@ -53,6 +61,28 @@ longest_string_length () {
   done
   echo $longest
 }
+
+wait_for () {
+command="${1}"
+timeout="${2:-300}"
+
+start="$(date +%s)"
+end=$(( start + timeout ))
+
+while (( $(date +%s) < $end )); do
+  if eval "${command}"; then
+    echo "Ready!"
+    return 0
+  fi
+  echo .
+  sleep 10
+done
+
+>&2 echo "Timed out waiting for command:"
+>&2 echo "  ${command}"
+return 1
+}
+
 
 ###########
 # Script

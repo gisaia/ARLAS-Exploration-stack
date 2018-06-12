@@ -1,5 +1,3 @@
-TODO: replace arlas-init-base by arlas-initializer
-
 A repository for deploying ARLAS locally in an easy way.
 
 **Table of content**
@@ -67,7 +65,7 @@ You will have to write them & put them in a single directory, and to [bind-mount
 
 The initializer detects the files by their name, so be sure to respect the nomenclature.
 
-Also, we have implemented an initialization of ARLAS with [AIS](https://en.wikipedia.org/wiki/Automatic_identification_system) data around Denmark, and the corresponding files are given as examples in the table.
+Also, we have implemented an initialization of ARLAS with [AIS](https://en.wikipedia.org/wiki/Automatic_identification_system) data (ships) around Denmark, and the corresponding files are given as examples in the table.
 
 | File name | Description | Example: ais-danmark |
 |-|-|-|
@@ -121,8 +119,7 @@ We provide pre-built initializer for a few specific data set. They come under th
 ```bash
 time docker run \
     --mount type=volume,src=arlasstack_wui-configuration,dst=/wui-configuration \
-    --net arlas \
-    --rm \
+    --net arlas --rm -t \
     gisaia/arlas-initializer-ais-danmark
 ```
 
