@@ -97,25 +97,10 @@ The ARLAS initializer supports various environment variables.
 Example with the AIS data around Denmark provided in this repository:
 
 ```bash
-# Set environment variables 
-export elasticsearch_index=ais-danmark \
-       server_collection_name=ais-danmark
-
-# Write `server_collection`
-cat > initialization/ais-danmark/content/server_collection.json <<EOF
-{  
-  "index_name": "$elasticsearch_index",
-  "type_name": "doc",
-  "id_path": "vessel.mmsi",
-  "geometry_path": "course.segment.geometry.geometry",
-  "centroid_path": "position.location",
-  "timestamp_path": "position.timestamp"
-}
-EOF
-
-# Perform initialization
 docker run \
-  --mount dst="/initialization",src="$PWD/initialization/ais-danmark/content",type=bind \
+  -e elasticsearch_index=ais-danmark \
+  -e server_collection_name=ais-danmark \
+  --mount dst="/initialization",src="$PWD/initialization/arlas-initializer-ais-danmark/content",type=bind \
   --mount type=volume,src=arlasstack_wui-configuration,dst=/wui-configuration \
   --net arlas --rm -t \
   gisaia/arlas-initializer
