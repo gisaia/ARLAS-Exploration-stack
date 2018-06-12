@@ -9,14 +9,10 @@ A repository for deploying ARLAS locally in an easy way.
 
 [Initialize ARLAS with data](#initialize-arlas-with-data)
 - [Environment variables](#environment-variables)
-- [Example: ais-danmark](#example--ais-danmark)
+- [Example: ais-danmark](#example-ais-danmark)
 - [Tutorial](#tutorial)
 - [Data-specific initialization](#data-specific-initialization)
   - [ais-danmark](#ais-danmark)
-      - [With your own elasticsearch deployment](#with-your-own-elasticsearch-deployment-1)
-  - [Use ARLAS with your own data](#use-arlas-with-your-own-data)
-      - [Files](#files)
-      - [Environment Variables](#environment-variables)
 
 [Development](#development)
 - [arlas-initializer](#arlas-initializer)
@@ -69,12 +65,12 @@ Also, we have implemented an initialization of ARLAS with [AIS](https://en.wikip
 
 | File name | Description | Example: ais-danmark |
 |-|-|-|
-| `data` | File containing your data (csv, ...). | [initialization/ais-danmark/content/data](initialization/ais-danmark/content/data) |
-| `elasticsearch_mapping.json` | Mapping for the elasticsearch index. In this file, it is required to define a property of type `geo_point` where you should store latitude & longitude. | [initialization/ais-danmark/content/elasticsearch_mapping.json](initialization/ais-danmark/content/elasticsearch_mapping.json) |
-| `logstash_configuration` | Logstash configuration file for indexing the data set into elasticsearch. | [initialization/ais-danmark/content/logstash_configuration](initialization/ais-danmark/content/logstash_configuration) |
-| `server_collection.json` | ARLAS server collection to create. This file should respect requirements stated in [the documentation](http://arlas.io/arlas-tech/current/arlas-collection-model/). | see [here](initialization/ais-danmark/content/start.bash#L8-L18) |
-| `WUI_configuration.json` | WUI configuration file specifically crafted for your set of data. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [initialization/ais-danmark/content/WUI_configuration.json](initialization/ais-danmark/content/WUI_configuration.json) |
-| `WUI_map_configuration.json` | Additional WUI configuration, relative to the styles of data-layer you want to show on the map. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [initialization/ais-danmark/content/WUI_map_configuration.json](initialization/ais-danmark/content/WUI_map_configuration.json) |
+| `data` | File containing your data (csv, ...). | [initialization/arlas-initializer-ais-danmark/content/data](initialization/arlas-initializer-ais-danmark/content/data) |
+| `elasticsearch_mapping.json` | Mapping for the elasticsearch index. In this file, it is required to define a property of type `geo_point` where you should store latitude & longitude. | [initialization/arlas-initializer-ais-danmark/content/elasticsearch_mapping.json](initialization/arlas-initializer-ais-danmark/content/elasticsearch_mapping.json) |
+| `logstash_configuration` | Logstash configuration file for indexing the data set into elasticsearch. | [initialization/arlas-initializer-ais-danmark/content/logstash_configuration](initialization/arlas-initializer-ais-danmark/content/logstash_configuration) |
+| `server_collection.json` | ARLAS server collection to create. This file should respect requirements stated in [the documentation](http://arlas.io/arlas-tech/current/arlas-collection-model/). | see [here](initialization/arlas-initializer-ais-danmark/content/start.bash#L8-L18) |
+| `WUI_configuration.json` | WUI configuration file specifically crafted for your set of data. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [initialization/arlas-initializer-ais-danmark/content/WUI_configuration.json](initialization/arlas-initializer-ais-danmark/content/WUI_configuration.json) |
+| `WUI_map_configuration.json` | Additional WUI configuration, relative to the styles of data-layer you want to show on the map. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [initialization/arlas-initializer-ais-danmark/content/WUI_map_configuration.json](initialization/arlas-initializer-ais-danmark/content/WUI_map_configuration.json) |
 
 ## Environment variables
 
@@ -106,7 +102,7 @@ docker run \
 
 ## Tutorial
 
-See [here](../docs/data_initialization_tutorial.md).
+See [here](./docs/data_initialization_tutorial.md).
 
 ## Data-specific initialization
 
@@ -137,7 +133,7 @@ cd initialization/arlas-initializer; docker build -t gisaia/arlas-initializer .;
 
 Sources for docker image `gisaia/arlas-initializer-ais-danmark` are found in [initialization/arlas-initializer-ais-danmark](initialization/arlas-initializer-ais-danmark). Build instructions:
 
-1. Re-build dependency [gisaia/arlas-initializer](#data-initialization)
+1. Re-build dependency [gisaia/arlas-initializer](#arlas-initializer)
 
 2. Build image
 

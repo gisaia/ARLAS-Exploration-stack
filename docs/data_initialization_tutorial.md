@@ -32,7 +32,7 @@ EOF
 
 ### Have ARLAS running
 
-[Follow related instructions in README](../../README.md#usage).
+[Follow related instructions in README](../README.md#usage).
 
 ### Write the server collection
 
