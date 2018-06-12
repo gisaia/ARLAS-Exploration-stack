@@ -109,7 +109,6 @@ variables=( \
   elasticsearch_user \
   server_collection_name \
   server_initialization_URL \
-  server_initialization_URL \
   server_URL \
   )
 
