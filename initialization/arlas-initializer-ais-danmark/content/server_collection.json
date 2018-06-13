@@ -1,0 +1,8 @@
+{
+  "index_name": "ais-danmark",
+  "type_name": "doc",
+  "id_path": "vessel.mmsi",
+  "geometry_path": "course.segment.geometry.geometry",
+  "centroid_path": "position.location",
+  "timestamp_path": "position.timestamp"
+}
