@@ -1,3 +1,9 @@
+TODO: README.md (just for github) + ARLAS-stack.md (for documentation site)
+TODO: add CI to publish `arlas-initializer`
+TODO: remove tutorial
+TODO: remove arlas-initializer-ais-danmark
+TODO: test with external elasticsearch deployment
+
 A repository for deploying ARLAS locally in an easy way.
 
 **Table of content**
@@ -42,6 +48,8 @@ By default, ARLAS-stack runs an embedded elasticsearch container. You can choose
 1<sup>st</sup>, you need to configure ARLAS to connect to your elasticsearch cluster. Change values of environment variables `ARLAS_ELASTIC_CLUSTER` & `ARLAS_ELASTIC_HOST` for service `arlas-server`, in file `docker-compose.yml`.
 
 You can then use ARLAS without embedded elasticsearch with the following commands:
+
+TODO: `--no-elasticsearch` instead
 
 ```bash
 # up

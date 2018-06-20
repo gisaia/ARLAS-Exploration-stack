@@ -10,16 +10,16 @@ services:
     image: gisaia/arlas-server:6.6.0
     container_name: arlas-server
     environment:
-      - "ARLAS_ELASTIC_CLUSTER=docker-cluster"
-      - "ARLAS_ELASTIC_HOST=elasticsearch"
+      - "ARLAS_ELASTIC_CLUSTER=docker-cluster" # TODO: make it configurable in `.env` file
+      - "ARLAS_ELASTIC_HOST=elasticsearch" # TODO: switch to ARLAS_ELASTIC_NODES, & make it configurable in `.env` file
     ports:
-      - 9999:9999
-    command: ["/opt/app/wait-for-elasticsearch.sh", "elasticsearch", "9200"]
+      - 9999:9999 # TODO: make it configurable in `.env` file
+    command: ["/opt/app/wait-for-elasticsearch.sh", "elasticsearch", "9200"] # TODO: replace `elasticsearch` `9300` by 1st element of ARLAS_ELASTIC_NODES. Por tis optional in ARLAS_ELASTIC_NODES. If none given, use 9200
   arlas-wui:
     image: gisaia/arlas-wui:6.0.1
     container_name: arlas-wui
     ports:
-      - 80:80
+      - 80:80 # TODO: make it configurable in `.env` file
     volumes:
       - wui-configuration:/usr/share/nginx/html/
 

@@ -14,10 +14,10 @@ services:
       - discovery.type=single-node
       
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.enabled=false
-      - xpack.monitoring.enabled=false
       - xpack.graph.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.security.enabled=false
       - xpack.watcher.enabled=false
     ports:
-      - 9200:9200
-      - 9300:9300
+      - 9200:9200 # TODO: make it configurable in `.env` file
+      - 9300:9300 # TODO: make it configurable in `.env` file
