@@ -16,7 +16,6 @@ A repository for deploying ARLAS locally in an easy way.
 [Initialize ARLAS with data](#initialize-arlas-with-data)
 - [Environment variables](#environment-variables)
 - [Example: ais-danmark](#example-ais-danmark)
-- [Tutorial](#tutorial)
 - [Data-specific initialization](#data-specific-initialization)
   - [ais-danmark](#ais-danmark)
 
@@ -107,10 +106,6 @@ docker run \
   --net arlas --rm -t \
   gisaia/arlas-initializer
 ```
-
-## Tutorial
-
-See [here](./docs/data_initialization_tutorial.md).
 
 ## Data-specific initialization
 
