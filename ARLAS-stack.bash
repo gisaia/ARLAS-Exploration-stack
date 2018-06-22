@@ -1,38 +1,95 @@
 #!/bin/bash -e
 
 ##################
+# Variables
+##################
+
+## Usage
+
+global_options_string="Global options:
+  -h, --help"
+
+
+global_usage="Usage:
+	./$(basename "$0") [global-options] <command> [command-options]
+	
+Commands:
+	down
+	up
+
+$global_options_string"
+
+declare -A usage
+
+usage[down]="Usage:
+	./$(basename "$0") [global-options] down [options]
+
+Options:
+	-e, --no-elasticsearch  Do not try to delete the (potential) elasticsearch container
+	-n, --no-network        Do not try to delete the docker network
+
+$global_options_string"
+
+
+usage[up]="Usage:
+	./$(basename "$0") [global-options] up [options]
+
+Options:
+	-e, --no-elasticsearch  Do not bring up an elasticsearch container
+	-n, --no-network        Do not create the docker network
+
+$global_options_string"
+
+
+##################
 # Functions
 ##################
 
 down () {
-	echo "Shutting down containers..."
+	log "Shutting down containers..."
 	docker-compose $docker_compose_file_options down
 
-	echo "Removing containers' network..."
-	set +e
-	docker network rm arlas
-	set -e
+	if ! [[ -v no_network ]]; then
+		log "Removing containers' network..."
+		set +e
+		docker network rm arlas
+		set -e
+	fi
 
-	echo "Removing docker bind-mount for WUI configuration..."
+
+	log "Removing docker bind-mount for WUI configuration..."
 	set +e
 	docker volume rm arlasstack_wui-configuration
 	set -e
 }
 
+log () {
+
+# Special case of the 1st log line: we do not want to have a blank line between the command prompt & the 1st log line.
+	if ! [[ -v first_log_done ]]; then
+		first_log_done=true
+	else
+		echo
+	fi
+
+
+	echo "> $1"
+}
+
+log_error () {
+	>&2 echo "> $1"	
+}
+
 parse_arguments () {
 	# Inspired from https://stackoverflow.com/a/29754866/3037171
 
-	usage="Usage:
-	$0 [-e|--elasticsearch false|true] action
-	  action: down|up"
-
 	if [[ "$(getopt --test > /dev/null; echo "$?")" != 4 ]]; then
-		echo "I’m sorry, `getopt --test` failed in this environment."
+		log_error "I’m sorry, `getopt --test` failed in this environment."
 		exit 1
 	fi
 
-	OPTIONS=e:
-	LONGOPTIONS=elasticsearch:
+	OPTIONS=hen
+	LONGOPTIONS=help,no-elasticsearch,no-network
 
 	# -temporarily store output to be able to check for errors
 	# -e.g. use “--options” parameter by name to activate quoting/enhanced mode
@@ -49,52 +106,57 @@ parse_arguments () {
 	# now enjoy the options in order and nicely split until we see --
 	while true; do
 		case "$1" in
-			-e|--elasticsearch)
-				if [[ "$2" == true ]]; then
-					:
-				elif [[ "$2" == false ]]; then
-					docker_compose_file_options="-f docker-compose.yml"
-				else
-					>&2 echo "-e|--elasticsearch: Unrecognized value \"$2\", exiting..."
-					>&2 echo "$usage"
-					exit 5
-				fi
-				shift 2
+			-h|--help)
+				help=true
+				shift
+				;;
+			-e|--no-elasticsearch)
+				docker_compose_file_options="-f docker-compose.yml"
+				shift
+				;;
+			-n|--no-network)
+				no_network=true
+				shift
 				;;
 			--)
 				shift
 				break
 				;;
 			*)
-				>&2 echo "Option parsing problem, exiting..."
-				>&2 echo "$usage"
+				log_error "Option parsing problem, exiting..."
+				>&2 echo "$global_usage"
 				exit 3
 				;;
 		esac
 	done
 
 	# handle non-option arguments
-	if (( $# != 1 )); then
-		>&2 echo "Wrong argument count, exiting"
-		>&2 echo "$usage"
+	if (( $# == 0 )) && [[ -v help ]]; then
+		:
+	elif (( $# == 1 )); then
+		command="$1"
+	else
+		log_error
+		log_error "Wrong argument count, exiting"
+		>&2 echo "$global_usage"
 		exit 4
 	fi
-
-	action="$1"
 }
 
 up () {
 	down
 
-	echo "Creating containers' network..."
-	docker network create arlas
+	if ! [[ -v no_network ]]; then
+		log "Creating containers' network..."
+		docker network create arlas
+	fi
 
-	echo "Pulling containers' images"
+	log "Pulling containers' images"
 	# `docker-compose up` does not pull latest version of docker images, hence why the `docker-compose pull`
-	docker-compose pull
+	docker-compose $docker_compose_file_options pull
 	
-	echo "Starting stack..."
-	docker-compose up -d
+	log "Starting stack..."
+	docker-compose $docker_compose_file_options up -d
 }
 
 
@@ -104,11 +166,20 @@ up () {
 
 parse_arguments $@
 
-if [[ "$action" == "down" ]]; then
+if [[ -v help ]]; then
+	if [[ -v command ]]; then
+		echo "${usage[$command]}"
+	else
+		echo "$global_usage"
+	fi
+	exit 0
+fi
+
+if [[ "$command" == "down" ]]; then
 	down
-elif [[ "$action" == "up" ]]; then
+elif [[ "$command" == "up" ]]; then
 	up
 else
-	>&2 echo "action: Unrecognized value \"$2\", exiting..."
-	>&2 echo "$usage"	
+	log_error "Unrecognized command \"$2\", exiting..."
+	>&2 echo "$global_usage"
 fi

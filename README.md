@@ -101,16 +101,14 @@ By default, ARLAS-stack runs an embedded elasticsearch container. You can choose
 
 1<sup>st</sup>, you need to configure ARLAS to connect to your elasticsearch cluster. Change values of environment variables `ARLAS_ELASTIC_CLUSTER` & `ARLAS_ELASTIC_HOST` for service `arlas-server`, in file `docker-compose.yml`.
 
-You can then use ARLAS without embedded elasticsearch with the following commands:
-
-TODO: `--no-elasticsearch` instead
+You can then use option `--no-elasticsearch` to launch the ARLAS stack without an embedded elasticsearch:
 
 ```bash
 # up
-./ARLAS-stack.bash --elasticsearch false up
+./ARLAS-stack.bash --no-elasticsearch up
 
 # down
-./ARLAS-stack.bash --elasticsearch false down
+./ARLAS-stack.bash --no-elasticsearch down
 ```
 
 # Initialize ARLAS with data
