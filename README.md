@@ -1,16 +1,37 @@
 TODO: README.md (just for github) + ARLAS-stack.md (for documentation site)
+
 TODO: add CI to publish `arlas-initializer`
+
 TODO: remove tutorial
+
 TODO: remove arlas-initializer-ais-danmark
+
 TODO: test with external elasticsearch deployment
 
-A repository for deploying ARLAS locally in an easy way.
+---
+
+This project aims at allowing to deploy & use ARLAS locally, in an easy way. It consists in 2 parts:
+
+- *Deploying ARLAS*
+
+The deployment consists of several [docker](https://docker.com) containers tied together using [Docker Compose](https://docs.docker.com/compose)
+
+- *Initializing ARLAS with data*
+
+ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</sup> part of the project allows to easily initialize ARLAS with data, so that you can really use it.
+
 
 **Table of content**
 
 [Prerequisites](#prerequisites)
 
 [Usage](#usage)
+- [Configuration](#configuration)
+  - [Container-level configuration](#container-level-configuration)
+    - [How-to](#how-to)
+    - [Available configuration](#available-configuration)
+  - [Application-level configuration](#application-level-configuration)
+    - [How-to](#how-to-1)
 - [With an external elasticsearch deployment](#with-an-external-elasticsearch-deployment)
 
 [Initialize ARLAS with data](#initialize-arlas-with-data)
@@ -40,6 +61,39 @@ A repository for deploying ARLAS locally in an easy way.
 # down
 ./ARLAS-stack.bash down
 ```
+
+## Configuration
+
+### Container-level configuration
+
+This is container-level configuration:
+
+- host port on which each container will listen
+- ...
+
+#### How-to
+
+Just export the environment variables you want in your shell, before starting ARLAS.
+
+Example:
+
+```bash
+export ARLAS_STACK_CONFIGURATION_KEY_1=CONFIGURATION_VALUE_1 ARLAS_STACK_CONFIGURATION_KEY_2=CONFIGURATION_VALUE_2
+
+./ARLAS-stack.bash up
+```
+
+#### Available configuration
+
+Default values are set in file `.env`. You will find here all the available configuration.
+
+### Application-level configuration
+
+This is environment-variable-style configuration of the applications running inside the containers (ARLAS WUI, ARLAS server, elasticsearch).
+
+#### How-to
+
+For each container, a docker-compose `env_file` is available under directory `environment`. Any environment variable set in an `env_file` will be populated inside the container.
 
 ## With an external elasticsearch deployment
 
