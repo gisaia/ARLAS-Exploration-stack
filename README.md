@@ -1,10 +1,10 @@
 This project aims at allowing to deploy & use ARLAS locally, in an easy way. It consists in 2 parts:
 
-- *Deploying ARLAS*
+**Deploying ARLAS**
 
 The deployment consists of several [docker](https://docker.com) containers tied together using [Docker Compose](https://docs.docker.com/compose)
 
-- *Initializing ARLAS with data*
+**Initializing ARLAS with data**
 
 ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</sup> part of the project allows to easily initialize ARLAS with data, so that you can really use it.
 
