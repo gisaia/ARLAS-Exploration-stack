@@ -1,15 +1,3 @@
-TODO: README.md (just for github) + ARLAS-stack.md (for documentation site)
-
-TODO: add CI to publish `arlas-initializer`
-
-TODO: remove tutorial
-
-TODO: remove arlas-initializer-ais-danmark
-
-TODO: test with external elasticsearch deployment
-
----
-
 This project aims at allowing to deploy & use ARLAS locally, in an easy way. It consists in 2 parts:
 
 - *Deploying ARLAS*
@@ -20,8 +8,9 @@ The deployment consists of several [docker](https://docker.com) containers tied 
 
 ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</sup> part of the project allows to easily initialize ARLAS with data, so that you can really use it.
 
+---
 
-**Table of content**
+# Table of content
 
 [Prerequisites](#prerequisites)
 
@@ -43,6 +32,9 @@ ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</s
 [Development](#development)
 - [arlas-initializer](#arlas-initializer)
 - [arlas-initializer-ais-danmark](#arlas-initializer-ais-danmark)
+- [TODO](#todo)
+
+---
 
 # Prerequisites
 
@@ -84,7 +76,7 @@ export ARLAS_STACK_CONFIGURATION_KEY_1=CONFIGURATION_VALUE_1 ARLAS_STACK_CONFIGU
 
 #### Available configuration
 
-Default values are set in file `.env`. You will find here all the available configuration.
+Default values are set in file `.env`. You will find all the available configuration there.
 
 ### Application-level configuration
 
@@ -96,11 +88,15 @@ For each container, a docker-compose `env_file` is available under directory `en
 
 ## With an external elasticsearch deployment
 
-By default, ARLAS-stack runs an embedded elasticsearch container. You can choose not to deploy it, and instead connect ARLAS to your own elasticsearch deployment.
+By default, ARLAS-stack runs an embedded elasticsearch container. You can choose not to deploy the latter, and instead connect ARLAS to your own elasticsearch deployment.
 
-1<sup>st</sup>, you need to configure ARLAS to connect to your elasticsearch cluster. Change values of environment variables `ARLAS_ELASTIC_CLUSTER` & `ARLAS_ELASTIC_HOST` for service `arlas-server`, in file `docker-compose.yml`.
+1<sup>st</sup>, you need to configure ARLAS to connect to your elasticsearch cluster. In [environment/arlas-server](environment/arlas-server), change values for the following environment variables: 
 
-You can then use option `--no-elasticsearch` to launch the ARLAS stack without an embedded elasticsearch:
+- `ARLAS_ELASTIC_CLUSTER`
+- `ARLAS_ELASTIC_HOST`
+- `ARLAS_ELASTIC_PORT`
+
+You can then use option `--no-elasticsearch` to launch the ARLAS stack without the embedded elasticsearch:
 
 ```bash
 # up
@@ -112,9 +108,9 @@ You can then use option `--no-elasticsearch` to launch the ARLAS stack without a
 
 # Initialize ARLAS with data
 
-Once you have ARLAS running, you can use our initializer to register data onto it. The initializer comes under the form of a docker image:  `gisaia/arlas-initializer`.
+Once you have ARLAS running, you can use our initializer to register data into it. The initializer comes under the form of a docker image: `gisaia/arlas-initializer`.
 
-It requires to be provided with a certain set of files presented in the table below.
+To be used, it requires to be provided with a certain set of files presented in the table below.
 
 You will have to write them & put them in a single directory, and to [bind-mount](https://docs.docker.com/storage/bind-mounts/) that directory onto the initializer container.
 
@@ -137,17 +133,17 @@ The ARLAS initializer supports various environment variables.
 
 | Name | Default value | Description |
 |-|-|-|
-| elasticsearch | `http://elasticsearch:9200` | URL to an elasticsearch server (`http://<hostname or IP>:<HTTP port>`). To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment). |
+| elasticsearch | `http://elasticsearch:9200` | URL to the HTTP port of the elasticsearch server (`http://<hostname or IP>:<HTTP port>`). To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment). |
 | elasticsearch_index | `arlas-data` | Name of the elasticsearch index where your data will be indexed. |
 | elasticsearch_user | | Username for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
 | elasticsearch_password | | Password for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
 | server_collection_name | `data` | Name of the ARLAS server collection to create. |
-| server_URL_for_initializer | `http://arlas-server:9999` | Arlas server URL for the initialization container. |
+| server_URL_for_initializer | `http://arlas-server:9999` | Arlas server URL for the initialization container (`http://<hostname or IP>:<port>`). |
 | server_URL_for_client | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |
 
 ## Example: ais-danmark
 
-Example with the AIS data around Denmark provided in this repository:
+Example with the AIS data around Denmark provided in this repository (*Estimated time: 2mn*):
 
 ```bash
 docker run \
@@ -198,3 +194,14 @@ Sources for docker image `gisaia/arlas-initializer-ais-danmark` are found in [in
 ```bash
 cd initialization/arlas-initializer-ais-danmark; docker build -t gisaia/arlas-initializer-ais-danmark .; cd -
 ```
+
+## TODO
+
+- split README:
+  - README.md: github specific documentation
+  - ARLAS-stack.md: general documentation, will be integrated to ARLAS documentation
+- add CI to publish `arlas-initializer`
+  - waiting for repository to be made public
+- remove arlas-initializer-ais-danmark
+- license
+- disclaimer for AIS data
