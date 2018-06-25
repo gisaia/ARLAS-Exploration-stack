@@ -1,0 +1,30 @@
+version: "3"
+
+networks:
+  default:
+    external:
+      name: arlas
+
+services:
+  arlas-server:
+    env_file:
+      - /environment/default/arlas-server
+      - /environment/user/arlas-server
+    image: gisaia/arlas-server:$ARLAS_STACK_SERVER_VERSION
+    container_name: arlas-server
+    ports:
+      - $ARLAS_STACK_SERVER_PORT:9999
+    command: ["sh", "-c", "/opt/app/wait-for-elasticsearch.sh $$ARLAS_ELASTIC_HOST $$ARLAS_ELASTIC_PORT"] # TODO: replace `elasticsearch` `9300` by 1st element of ARLAS_ELASTIC_NODES. Port is optional in ARLAS_ELASTIC_NODES, if none given, use 9200
+  arlas-wui:
+    env_file:
+      - /environment/default/arlas-wui
+      - /environment/user/arlas-wui
+    image: gisaia/arlas-wui:$ARLAS_STACK_WUI_VERSION
+    container_name: arlas-wui
+    ports:
+      - $ARLAS_STACK_WUI_PORT:80
+    volumes:
+      - wui-configuration:/usr/share/nginx/html/
+
+volumes:
+  wui-configuration:
