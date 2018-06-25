@@ -77,7 +77,7 @@ log () {
 }
 
 log_error () {
-	>&2 echo "> $1"	
+	>&2 echo "[ERROR] $1"	
 }
 
 parse_arguments () {

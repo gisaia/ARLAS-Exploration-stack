@@ -143,8 +143,8 @@ The ARLAS initializer supports various environment variables.
 | elasticsearch_user | | Username for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
 | elasticsearch_password | | Password for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
 | server_collection_name | `data` | Name of the ARLAS server collection to create. |
-| server_initialization_URL | `http://arlas-server:9999` | Arlas server URL for the initialization container. |
-| server_URL | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |
+| server_URL_for_initializer | `http://arlas-server:9999` | Arlas server URL for the initialization container. |
+| server_URL_for_client | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |
 
 ## Example: ais-danmark
 
@@ -154,9 +154,12 @@ Example with the AIS data around Denmark provided in this repository:
 docker run \
   -e elasticsearch_index=ais-danmark \
   -e server_collection_name=ais-danmark \
+  -i \
   --mount dst="/initialization",src="$PWD/initialization/arlas-initializer-ais-danmark/content",type=bind \
   --mount type=volume,src=arlasstack_wui-configuration,dst=/wui-configuration \
-  --net arlas --rm -t \
+  --net arlas \
+  --rm \
+  -t \
   gisaia/arlas-initializer
 ```
 
