@@ -37,7 +37,6 @@ ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</s
 [Initialize ARLAS with data](#initialize-arlas-with-data)
 - [Environment variables](#environment-variables)
 - [Example: ais-danmark](#example-ais-danmark)
-- [Tutorial](#tutorial)
 - [Data-specific initialization](#data-specific-initialization)
   - [ais-danmark](#ais-danmark)
 
@@ -162,10 +161,6 @@ docker run \
   -t \
   gisaia/arlas-initializer
 ```
-
-## Tutorial
-
-See [here](./docs/data_initialization_tutorial.md).
 
 ## Data-specific initialization
 
