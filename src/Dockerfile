@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ADD .env ARLAS-stack.bash docker-compose.override.yml docker-compose.yml /
+ADD .env ARLAS-Exploration-stack.bash docker-compose.override.yml docker-compose.yml /
 
 ADD  environment /environment/default
 
