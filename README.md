@@ -16,11 +16,8 @@ ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</s
 
 [Usage](#usage)
 - [Configuration](#configuration)
-  - [Container-level configuration](#container-level-configuration)
-    - [How-to](#how-to)
-    - [Available configuration](#available-configuration)
-  - [Application-level configuration](#application-level-configuration)
-    - [How-to](#how-to-1)
+  - [Docker Compose `.env` file](#docker-compose-env-file)
+  - [Docker Compose `env_file` mechanism](#docker-compose-env_file-mechanism)
 - [With an external elasticsearch deployment](#with-an-external-elasticsearch-deployment)
 
 [Initialize ARLAS with data](#initialize-arlas-with-data)
@@ -30,6 +27,7 @@ ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</s
   - [ais-danmark](#ais-danmark)
 
 [Development](#development)
+- [arlas-stack-manager](#arlas-stack-manager)
 - [arlas-initializer](#arlas-initializer)
 - [arlas-initializer-ais-danmark](#arlas-initializer-ais-danmark)
 - [TODO](#todo)
@@ -39,7 +37,6 @@ ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</s
 # Prerequisites
 
 - [Docker CE](https://docs.docker.com/install/) (Community Edition)
-- [Docker Compose](https://docs.docker.com/compose/install/) >= 1.13.0
 
 # Usage
 
@@ -55,36 +52,21 @@ ARLAS has no interest if there is no data (it won't even work). This 2<sup>nd</s
 
 ## Configuration
 
-### Container-level configuration
+### Docker Compose `.env` file
 
-This is container-level configuration:
-
-- host port on which each container will listen
-- ...
-
-#### How-to
-
-Just export the environment variables you want in your shell, before starting ARLAS.
-
-Example:
+We use [the Docker Compose's `.env` file mechanism](https://docs.docker.com/compose/env-file/) to configure the stack's docker compose. You can find available environment variables in [src/.env](src/.env), with their default values. You can override them by creating & filling a `.env` file at the root of the project.
 
 ```bash
-export ARLAS_STACK_CONFIGURATION_KEY_1=CONFIGURATION_VALUE_1 ARLAS_STACK_CONFIGURATION_KEY_2=CONFIGURATION_VALUE_2
-
-./ARLAS-stack.bash up
+touch .env
 ```
 
-#### Available configuration
+### Docker Compose `env_file` mechanism
 
-Default values are set in file `.env`. You will find all the available configuration there.
+We use [the Docker Compose's `env_file` mechanism](https://docs.docker.com/compose/compose-file/#env_file) to populate environment variables inside containers. Each container has its own distinct `env_file` s. Default values are found under [src/environment](src/environment). You can set new values, or override the defaults, by creating & filling files `arlas-server`, `arlas-wui` & `elasticsearch` under [environment](environment).
 
-### Application-level configuration
-
-This is environment-variable-style configuration of the applications running inside the containers (ARLAS WUI, ARLAS server, elasticsearch).
-
-#### How-to
-
-For each container, a docker-compose `env_file` is available under directory `environment`. Any environment variable set in an `env_file` will be populated inside the container.
+```bash
+touch environment/arlas-server environment/arlas-wui environment/elasticsearch
+```
 
 ## With an external elasticsearch deployment
 
@@ -151,7 +133,7 @@ docker run \
   -e server_collection_name=ais-danmark \
   -i \
   --mount dst="/initialization",src="$PWD/initialization/arlas-initializer-ais-danmark/content",type=bind \
-  --mount type=volume,src=arlasstack_wui-configuration,dst=/wui-configuration \
+  --mount type=volume,src=default_wui-configuration,dst=/wui-configuration \
   --net arlas \
   --rm \
   -t \
@@ -168,12 +150,20 @@ We provide pre-built initializer for a few specific data set. They come under th
 
 ```bash
 time docker run \
-    --mount type=volume,src=arlasstack_wui-configuration,dst=/wui-configuration \
+    --mount type=volume,src=default_wui-configuration,dst=/wui-configuration \
     --net arlas --rm -t \
     gisaia/arlas-initializer-ais-danmark
 ```
 
 # Development
+
+## arlas-stack-manager
+
+Sources for docker image `gisaia/arlas-stack-manager` are found in [src](src). Build instructions:
+
+```bash
+cd src; docker build -t gisaia/arlas-stack-manager .; cd -
+```
 
 ## arlas-initializer
 
