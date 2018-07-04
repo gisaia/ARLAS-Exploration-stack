@@ -21,4 +21,4 @@ docker run \
   --name arlas-stack-manager \
   --rm \
   -t \
-  gisaia/arlas-stack-manager $@
+  gisaia/arlas-exploration-stack-manager $@
