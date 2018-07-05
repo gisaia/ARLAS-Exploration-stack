@@ -50,17 +50,17 @@ down () {
 	log "Shutting down containers..."
 	docker-compose $docker_compose_file_options down
 
-	if ! [[ -v no_network ]]; then
+  network=arlas
+	if ! [[ -v no_network ]] && docker network inspect "$network" &>>/dev/null; then
 		log "Removing containers' network..."
-		set +e
-		docker network rm arlas
-		set -e
+		docker network rm "$network"
 	fi
 
-	log "Removing docker volume for WUI configuration..."
-	set +e
-	docker volume rm default_wui-configuration
-	set -e
+  configuration_volume=default_wui-configuration
+  if docker inspect "$configuration_volume" &>>/dev/null; then
+    log "Removing docker volume for WUI configuration..."
+    docker volume rm "$configuration_volume"
+  fi
 }
 
 log () {

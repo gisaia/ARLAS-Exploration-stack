@@ -18,7 +18,7 @@ docker run \
   --mount dst=/var/run/docker.sock,src=/var/run/docker.sock,type=bind \
   --mount dst=/.env_user,src="$script_directory"/.env,type=bind \
   --mount dst=/environment/user,src="$script_directory"/environment,type=bind \
-  --name arlas-stack-manager \
+  --name arlas-exploration-stack-manager \
   --rm \
   -t \
   gisaia/arlas-exploration-stack-manager $@
