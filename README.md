@@ -27,7 +27,12 @@ ARLAS Exploration stack has no interest if there is no data (it won't even work)
 [Development](#development)
 - [arlas-exploration-stack-manager](#arlas-exploration-stack-manager)
 - [arlas-exploration-stack-initializer](#arlas-exploration-stack-initializer)
-- [TODO](#todo)
+
+[Authors](#authors)
+
+[License](#license)
+
+[TODO](#todo)
 
 ---
 
@@ -155,12 +160,21 @@ Sources for docker image `gisaia/arlas-exploration-stack-initializer` are found 
 cd arlas-exploration-stack-initializer; docker build -t gisaia/arlas-exploration-stack-initializer .; cd -
 ```
 
-## TODO
+# Authors
+
+- Gisaïa - *Initial work* - [Gisaïa](http://gisaia.fr/)
+
+See also the list of [contributors](https://github.com/gisaia/ARLAS-Exploration-stack/graphs/contributors) who participated in this project.
+
+# License
+
+This project is licensed under the Apache License, Version 2.0 - see the [LICENSE.txt](LICENSE.txt) file for details.
+
+# TODO
 
 - split README:
   - README.md: github specific documentation
   - ARLAS-stack.md: general documentation, will be integrated to ARLAS documentation
 - add CI to publish `arlas-exploration-stack-initializer`
   - waiting for repository to be made public
-- license
 - disclaimer for AIS data
