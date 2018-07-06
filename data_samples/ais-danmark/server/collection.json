@@ -1,8 +1,10 @@
 {
   "index_name": "ais-danmark",
   "type_name": "doc",
-  "id_path": "vessel.mmsi",
+  "id_path": "id",
   "geometry_path": "course.segment.geometry.geometry",
   "centroid_path": "position.location",
-  "timestamp_path": "position.timestamp"
+  "timestamp_path": "position.timestamp",
+  "taggable_fields": "tags.trainingset,tags.predicted",
+  "update_max_hits": 1000
 }

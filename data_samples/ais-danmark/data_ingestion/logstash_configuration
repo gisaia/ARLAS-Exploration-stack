@@ -69,9 +69,11 @@ filter {
     rename => { "delta_heading" => "[course][delta][heading]" }
     remove_field => [ "@timestamp", "@version","message","host"]
   }
-  uuid {
+  fingerprint {
+    source    => ["[vessel][mmsi]","[position][timestamp]"]
     target    => "id"
-    overwrite => true
+    method    => "SHA256"
+    key       => "arlas"
   }
   date {
     match => [ "timestamp", "dd/MM/yyyy HH:mm:ss" ]
@@ -84,5 +86,4 @@ output {
     user=> "${elasticsearch_user:}"
     password=> "${elasticsearch_password:}"
   }
-  #stdout { codec => json }
 }

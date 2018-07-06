@@ -7,12 +7,14 @@
       "dynamic": false,
       "properties": {
         "id": {
-          "type": "keyword"
+          "type": "keyword",
+          "copy_to": "internal.fulltext"
         },
         "internal":{
           "properties": {
             "fulltext": {
-              "type": "text"
+              "type": "text",
+              "fielddata":true
             }
           }
         },
