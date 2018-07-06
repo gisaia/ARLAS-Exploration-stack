@@ -64,17 +64,17 @@ touch .env
 
 ### Docker Compose `env_file` mechanism
 
-We use [the Docker Compose's `env_file` mechanism](https://docs.docker.com/compose/compose-file/#env_file) to populate environment variables inside containers. Each container has its own distinct `env_file` s. Default values are found under [arlas-exploration-stack-manager/environment](arlas-exploration-stack-manager/environment). You can set new values, or override the defaults, by creating & filling files `arlas-server`, `arlas-wui` & `elasticsearch` under [environment](environment).
+We use [the Docker Compose's `env_file` mechanism](https://docs.docker.com/compose/compose-file/#env_file) to populate environment variables inside containers. Each container has its own distinct `env_file` s. Default values are found under [arlas-exploration-stack-manager/environment](arlas-exploration-stack-manager/environment). You can set new values, or override the defaults, by creating & the following files:
 
 ```bash
-touch environment/arlas-server environment/arlas-wui environment/elasticsearch
+touch environment/arlas-exploration-stack-server environment/arlas-exploration-stack-wui environment/arlas-exploration-stack-elasticsearch
 ```
 
 ## With an external elasticsearch deployment
 
 By default, ARLAS exploration stack runs an embedded elasticsearch container. You can choose not to deploy the latter, and instead connect the stack to your own elasticsearch deployment.
 
-1<sup>st</sup>, you need to configure the stack to connect to your elasticsearch cluster. In [environment/arlas-server](environment/arlas-server), change values for the following environment variables: 
+1<sup>st</sup>, you need to configure the stack to connect to your elasticsearch cluster. In [environment/arlas-exploration-stack-server](environment/arlas-exploration-stack-server), change values for the following environment variables: 
 
 - `ARLAS_ELASTIC_CLUSTER`
 - `ARLAS_ELASTIC_HOST`
@@ -117,12 +117,12 @@ The ARLAS Exploration stack initializer supports various environment variables.
 
 | Name | Default value | Description |
 |-|-|-|
-| elasticsearch | `http://elasticsearch:9200` | URL to the HTTP port of the elasticsearch server (`http://<hostname or IP>:<HTTP port>`). To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment). |
+| elasticsearch | `http://arlas-exploration-stack-elasticsearch:9200` | URL to the HTTP port of the elasticsearch server (`http://<hostname or IP>:<HTTP port>`). To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment). |
 | elasticsearch_index | `arlas-data` | Name of the elasticsearch index where your data will be indexed. |
 | elasticsearch_user | | Username for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
 | elasticsearch_password | | Password for connection to elasticsearch. To be used only if you are working with [an external elasticsearch deployment](#with-an-external-elasticsearch-deployment), and the latter is secured. |
 | server_collection_name | `data` | Name of the ARLAS server collection to create. |
-| server_URL_for_initializer | `http://arlas-server:9999` | Arlas server URL for the initialization container (`http://<hostname or IP>:<port>`). |
+| server_URL_for_initializer | `http://arlas-exploration-stack-server:9999` | Arlas server URL for the initialization container (`http://<hostname or IP>:<port>`). |
 | server_URL_for_client | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |
 
 ## Example: ais-danmark

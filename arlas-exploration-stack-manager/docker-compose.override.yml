@@ -3,10 +3,10 @@ version: "3"
 services:
   elasticsearch:
     env_file:
-      - /environment/default/elasticsearch
-      - /environment/user/elasticsearch
+      - /environment/default/arlas-exploration-stack-elasticsearch
+      - /environment/user/arlas-exploration-stack-elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:$ARLAS_STACK_ELASTICSEARCH_VERSION
-    container_name: elasticsearch
+    container_name: arlas-exploration-stack-elasticsearch
     ports:
       - $ARLAS_STACK_ELASTICSEARCH_HTTP_PORT:9200
       - $ARLAS_STACK_ELASTICSEARCH_TRANSPORT_PORT:9300

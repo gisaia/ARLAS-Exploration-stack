@@ -5,10 +5,8 @@ ADD .env ARLAS-Exploration-stack.bash docker-compose.override.yml docker-compose
 ADD  environment /environment/default
 
 RUN apt-get update && \
-    apt-get -y install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
+# Installing docker
+    apt-get -y install apt-transport-https ca-certificates curl \
     software-properties-common && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
     add-apt-repository \
@@ -17,7 +15,18 @@ RUN apt-get update && \
    stable" && \
    apt-get update && \
    apt-get -y install docker-ce && \
+# Installing docker compose
    curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && \
-   chmod +x /usr/local/bin/docker-compose
+   chmod +x /usr/local/bin/docker-compose && \
+# Installing jq (dependency of yq)
+   apt -y install jq && \
+# Installing python (dependency of pip)
+   apt -y install python && \
+# Installing pip (required to install a recent version of yq)
+   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+   python get-pip.py && \
+   rm -f get-pip.py && \
+# Installing yq
+   pip install yq
 
 ENTRYPOINT ["/bin/bash", "-e", "/ARLAS-Exploration-stack.bash"]

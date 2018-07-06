@@ -63,10 +63,18 @@ down () {
   fi
 }
 
+list_containers_names () {
+  docker_compose_files=( docker-compose.yml )
+  if ! [[ "$no_elasticsearch" == true ]]; then
+    docker_compose_files+=( docker-compose.override.yml )
+  fi
+  yq -r '.services[].container_name' "${docker_compose_files[@]}"
+}
+
 log () {
 
 # Special case of the 1st log line: we do not want to have a blank line between the command prompt & the 1st log line.
-  if ! [[ -v first_log_done ]]; then
+  if ! [[ "$first_log_done" == "true" ]]; then
     first_log_done=true
   else
     echo
@@ -111,6 +119,7 @@ parse_arguments () {
         shift
         ;;
       -e|--no-elasticsearch)
+        no_elasticsearch=true
         docker_compose_file_options="-f docker-compose.yml"
         shift
         ;;
@@ -149,6 +158,18 @@ parse_arguments () {
 
 up () {
   down
+
+  # Removing containers that would cause name conflicts
+  mapfile -t containers_names < <(list_containers_names)
+  for container in "${containers_names[@]}"; do
+    if docker inspect "$container" &>>/dev/null; then
+      containers_causing_name_conflict+=( "$container" )
+    fi
+  done
+  if (( ${#containers_causing_name_conflict} > 0 )); then
+    log "Removing containers which would cause name conflicts..."
+    docker rm -f "${containers_causing_name_conflict[@]}"
+  fi
 
   if ! [[ "$no_network" == true ]]; then
     log "Creating containers' network..."

@@ -1,4 +1,4 @@
 /.env
-environment/arlas-server
-environment/arlas-wui
-environment/elasticsearch
+environment/arlas-exploration-stack-server
+environment/arlas-exploration-stack-wui
+environment/arlas-exploration-stack-elasticsearch
