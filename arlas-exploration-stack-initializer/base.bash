@@ -111,11 +111,11 @@ script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 
 break_line='--------------'
 
-export elasticsearch=${elasticsearch:-http://elasticsearch:9200}
+export elasticsearch=${elasticsearch:-http://arlas-exploration-stack-elasticsearch:9200}
 export elasticsearch_index=${elasticsearch_index:-arlas-data}
 export server_collection_name=${server_collection_name:-data}
 export server_URL_for_client="${server_URL_for_client:-http://localhost:9999}"
-export server_URL_for_initializer="${server_URL_for_initializer:-http://arlas-server:9999}"
+export server_URL_for_initializer="${server_URL_for_initializer:-http://arlas-exploration-stack-server:9999}"
 
 [[ -n "${elasticsearch_password}" ]] && elasticsearch_options=" -u $elasticsearch_user:$elasticsearch_password"
 

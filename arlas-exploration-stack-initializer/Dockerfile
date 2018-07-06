@@ -12,6 +12,6 @@ RUN export logstash_archive="logstash-$logstash_version.tar.gz" && \
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-ADD content/base.bash /
+ADD base.bash /
 
 CMD /base.bash

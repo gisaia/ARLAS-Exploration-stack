@@ -5,9 +5,9 @@ script_directory="$(cd "$(dirname "${BASHSOURCE[0]}")"; pwd -P)"
 # Create user configuration files if they do not exist, otherwise the docker run command will fail
 mkdir -p environment
 for file in .env \
-  environment/arlas-server \
-  environment/arlas-wui \
-  environment/elasticsearch; do
+  environment/arlas-exploration-stack-server \
+  environment/arlas-exploration-stack-wui \
+  environment/arlas-exploration-stack-elasticsearch; do
   if ! [[ -f "$file" ]]; then
     touch "$file"
   fi
