@@ -50,6 +50,13 @@
             "id": "cluster-heat",
             "type": "heatmap",
             "source": "data_source",
+            "filter": [
+                "all",
+                [
+                    "has",
+                    "point_count_normalize"
+                ]
+            ],
             "paint": {
                 "heatmap-weight": [
                     "interpolate",
@@ -105,14 +112,7 @@
                     ],
                     [
                         "get",
-                        "heading",
-                        [
-                            "object",
-                            [
-                                "get",
-                                "course"
-                            ]
-                        ]
+                        "cours_heading"
                     ],
                     0,
                     0,
@@ -162,14 +162,7 @@
                     ],
                     [
                         "get",
-                        "sog",
-                        [
-                            "object",
-                            [
-                                "get",
-                                "course"
-                            ]
-                        ]
+                        "course_sog"
                     ],
                     0,
                     "#36a996",
@@ -199,6 +192,48 @@
             "layout": {
                 "line-cap": "round",
                 "line-join": "round"
+            }
+        },
+        {
+            "id": "features-line-select",
+            "type": "line",
+            "source": "data_source",
+            "layout": {
+                "visibility": "none"
+            },
+            "filter": [
+                "all",
+                [
+                    "!=",
+                    "$type",
+                    "Point"
+                ]
+            ],
+            "paint": {
+                "line-color": "#80CBC4",
+                "line-opacity": 1,
+                "line-width": 6
+            }
+        },
+        {
+            "id": "features-fill-hover",
+            "type": "line",
+            "source": "data_source",
+            "layout": {
+                "visibility": "none"
+            },
+            "filter": [
+                "all",
+                [
+                    "!=",
+                    "$type",
+                    "Point"
+                ]
+            ],
+            "paint": {
+                "line-color": "#80CBC4",
+                "line-opacity": 1,
+                "line-width": 6
             }
         },
         {
