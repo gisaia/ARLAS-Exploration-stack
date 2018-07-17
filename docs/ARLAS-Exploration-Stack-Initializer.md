@@ -34,6 +34,16 @@ Instructions:
   - inside this initialization directory, create the configuration files & write them. The initializer detects the files by their path & name, so be sure to respect the directory structure & the nomenclature of the files.
   - run the initializer with the initialization directory [bind-mounted](https://docs.docker.com/storage/bind-mounts/) onto it.
 
+This a diagram explaining roughly what the initializer will do upon being triggered:
+
+![Initialization](initialization.svg)
+
+1. Creation of elasticsearch index
+2. Indexation of data in elasticsearch using logstash. Data can come from anything that can be plugged into logstash (file, kafka topic, ...)
+3. Creation of the collection in the ARLAS server
+4. Injection of WUI configuration
+5. Injection of WUI map configuration
+
 ## Configuration
 
 The ARLAS Exploration stack initializer can be configured through environment variables.
