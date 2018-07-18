@@ -1,15 +1,10 @@
 #!/bin/bash -e
 
-###########
+################################################################################
 # Functions
-###########
+################################################################################
 
-index (){
-  log "Waiting for elasticsearch to be ready..."
-  # On single server configuration, the best status we can reach is yellow.
-  # See https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
-  wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $elasticsearch_options $elasticsearch/_cluster/health?wait_for_status=yellow) == 200 ))"
-
+create_elasticsearch_index () {
   get_index_response_http_code=$(curl -s -o /dev/null -w "%{http_code}" $elasticsearch_options "$elasticsearch/$elasticsearch_index")
   if (( $get_index_response_http_code == 200 )); then
     log "Deleting pre-existing index from elasticsearch..."
@@ -28,8 +23,35 @@ index (){
   if (( $elasticsearch_put_index_return_code != 200 )); then
     exit 1
   fi
+}
+
+create_server_collection (){
+  log "Force elasticsearch index in ARLAS server collection..."
+  jq -r ".index_name=\"$elasticsearch_index\"" /initialization/server/collection.json > /tmp/server_collection.json
+  mv /tmp/server_collection.json /initialization/server/collection.json
+
+  log_without_blank_line "Waiting for ARLAS-server to be ready..."
+  wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $server_URL_for_initializer/admin/healthcheck) == 200 ))"
+
+  log "Creating collection in ARLAS server..."
+  curl -s -X PUT --header 'Content-Type: application/json;charset=utf-8' --header 'Accept: application/json' -d@/initialization/server/collection.json "$server_URL_for_initializer/arlas/collections/$server_collection_name"
+  echo
+}
+
+index_data (){
   log "Indexing data in elasticsearch..."
-  cat /initialization/data_ingestion/data | "./logstash-$logstash_version/bin/logstash" -f "/initialization/data_ingestion/logstash_configuration"
+  if [[ -f /initialization/data_ingestion/data ]]; then
+    cat /initialization/data_ingestion/data | "./logstash-$logstash_version/bin/logstash" -f "/initialization/data_ingestion/logstash_configuration"
+  else
+    "./logstash-$logstash_version/bin/logstash" -f "/initialization/data_ingestion/logstash_configuration"
+  fi
+  
+}
+
+load_WUI_configuration () {
+  log "Loading WUI configuration..."
+  jq -r ".arlas.server.url=\"$server_URL_for_client/arlas\" | .arlas.server.collection.name=\"$server_collection_name\"" "/initialization/WUI/config.json" > /wui-configuration/config.json
+  cp "/initialization/WUI/config.map.json" /wui-configuration/config.map.json
 }
 
 log () {
@@ -49,25 +71,6 @@ log_error () {
 
 log_without_blank_line () {
   echo "> $1"
-}
-
-arlas (){
-  log "Force elasticsearch index in ARLAS server collection..."
-  jq -r ".index_name=\"$elasticsearch_index\"" /initialization/server/collection.json > /tmp/server_collection.json
-  mv /tmp/server_collection.json /initialization/server/collection.json
-
-  log_without_blank_line "Waiting for ARLAS-server to be ready..."
-  wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $server_URL_for_initializer/admin/healthcheck) == 200 ))"
-
-  log "Creating collection in ARLAS server..."
-  curl -s -X PUT --header 'Content-Type: application/json;charset=utf-8' --header 'Accept: application/json' -d@/initialization/server/collection.json "$server_URL_for_initializer/arlas/collections/$server_collection_name"
-  echo
-}
-
-load_WUI_configuration () {
-  log "Loading WUI configuration..."
-  jq -r ".arlas.server.url=\"$server_URL_for_client/arlas\" | .arlas.server.collection.name=\"$server_collection_name\"" "/initialization/WUI/config.json" > /wui-configuration/config.json
-  cp "/initialization/WUI/config.map.json" /wui-configuration/config.map.json
 }
 
 longest_string_length () {
@@ -102,10 +105,17 @@ log_error "  ${command}"
 return 1
 }
 
+wait_for_elasticsearch () {
+  log "Waiting for elasticsearch to be ready..."
+  # On single server configuration, the best status we can reach is yellow.
+  # See https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
+  wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $elasticsearch_options $elasticsearch/_cluster/health?wait_for_status=yellow) == 200 ))"
+}
 
-###########
+
+################################################################################
 # Script
-###########
+################################################################################
 
 script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 
@@ -138,15 +148,16 @@ for variable in ${variables[@]}; do
 
   if [[ -v "$variable" ]]; then
     printf "%s: %s %s\n" "$variable" "${padding:${#variable}}" "${!variable}"
-    #echo "$variable: ${!variable}"
   fi
 
 done
 
 echo "$break_line"
 
-index
-arlas
+wait_for_elasticsearch
+create_elasticsearch_index
+create_server_collection
 load_WUI_configuration
+index_data
 
 log_without_blank_line "Done"

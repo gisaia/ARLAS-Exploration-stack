@@ -20,14 +20,14 @@ Once you have ARLAS Exploration Stack running, you can use the initializer to re
 
 To be used, it requires to be provided with a certain set of files presented in the table below. We have implemented an initialization of ARLAS with [AIS](https://en.wikipedia.org/wiki/Automatic_identification_system) data (ships) around Denmark, and the corresponding files are given as examples in the table.
 
-| File name | Description | Example: ais-danmark |
-|-|-|-|
-| `data_ingestion/data` | File containing your data (csv, ...). | [data_samples/ais-danmark/data_ingestion/data](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/data_ingestion/data) |
-| `data_ingestion/elasticsearch_mapping.json` | Mapping for the elasticsearch index. In this file, it is required to define a property of type `geo_point` where you should store latitude & longitude. | [data_samples/ais-danmark/data_ingestion/elasticsearch_mapping.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/data_ingestion/elasticsearch_mapping.json) |
-| `data_ingestion/logstash_configuration` | Logstash configuration file for indexing the data set into elasticsearch. | [data_samples/ais-danmark/data_ingestion/logstash_configuration](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/data_ingestion/logstash_configuration) |
-| `server/collection.json` | Collection to create in the ARLAS server. This file should respect requirements stated in [the documentation](http://arlas.io/arlas-tech/current/arlas-collection-model/). | [data_samples/ais-danmark/server/collection.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/server/collection.json) |
-| `WUI/config.json` | WUI configuration file specifically crafted for your set of data. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [data_samples/ais-danmark/WUI/config.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/WUI/config.json) |
-| `WUI/config.map.json` | Additional WUI configuration, relative to the styles of data-layer you want to show on the map. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [data_samples/ais-danmark/WUI/config.map.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/WUI/config.map.json) |
+| File name | Optional | Description | Example: ais-danmark |
+|-|-|-|-|
+| `data_ingestion/data` | Optional | File containing your data (csv, ...). Optional, since your data may not be under the form of a file (ex: kafka topic, ...) | [data_samples/ais-danmark/data_ingestion/data](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/data_ingestion/data) |
+| `data_ingestion/elasticsearch_mapping.json` | | Mapping for the elasticsearch index. In this file, it is required to define a property of type `geo_point` where you should store latitude & longitude. | [data_samples/ais-danmark/data_ingestion/elasticsearch_mapping.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/data_ingestion/elasticsearch_mapping.json) |
+| `data_ingestion/logstash_configuration` | | Logstash configuration file for indexing the data set into elasticsearch. | [data_samples/ais-danmark/data_ingestion/logstash_configuration](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/data_ingestion/logstash_configuration) |
+| `server/collection.json` | | Collection to create in the ARLAS server. This file should respect requirements stated in [the documentation](http://arlas.io/arlas-tech/current/arlas-collection-model/). | [data_samples/ais-danmark/server/collection.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/server/collection.json) |
+| `WUI/config.json` | | WUI configuration file specifically crafted for your set of data. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [data_samples/ais-danmark/WUI/config.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/WUI/config.json) |
+| `WUI/config.map.json` | | Additional WUI configuration, relative to the styles of data-layer you want to show on the map. Documentation [here](http://arlas.io/arlas-tech/current/arlas-wui-configuration/). | [data_samples/ais-danmark/WUI/config.map.json](https://github.com/gisaia/ARLAS-Exploration-stack/blob/master/data_samples/ais-danmark/WUI/config.map.json) |
 
 Instructions:
   - create a directory
@@ -65,7 +65,7 @@ Example of initialization with the AIS data around Denmark provided in the repos
 @ [the repository's root](https://github.com/gisaia/ARLAS-Exploration-stack/tree/master):
 
 ```bash
-docker run \
+time docker run \
   -e elasticsearch_index=ais-danmark \
   -e server_collection_name=ais-danmark \
   -i \
