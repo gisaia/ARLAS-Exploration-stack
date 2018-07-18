@@ -71,6 +71,7 @@ time docker run \
   -i \
   --mount dst="/initialization",src="$PWD/data_samples/ais-danmark",type=bind \
   --mount type=volume,src=default_wui-configuration,dst=/wui-configuration \
+  --name arlas-exploration-stack-initializer \
   --net arlas \
   --rm \
   -t \
