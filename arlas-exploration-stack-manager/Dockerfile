@@ -1,10 +1,7 @@
 FROM ubuntu:18.04
 
-ADD .env ARLAS-Exploration-stack.bash docker-compose.override.yml docker-compose.yml /
-
-ADD  environment /environment/default
-
-RUN apt-get update && \
+RUN docker_compose_version=1.22.0 && \
+   apt-get update && \
 # Installing docker
     apt-get -y install apt-transport-https ca-certificates curl \
     software-properties-common && \
@@ -16,7 +13,7 @@ RUN apt-get update && \
    apt-get update && \
    apt-get -y install docker-ce && \
 # Installing docker compose
-   curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && \
+   curl -L "https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
    chmod +x /usr/local/bin/docker-compose && \
 # Installing jq (dependency of yq)
    apt -y install jq && \
@@ -28,5 +25,9 @@ RUN apt-get update && \
    rm -f get-pip.py && \
 # Installing yq
    pip install yq
+
+ADD .env ARLAS-Exploration-stack.bash docker-compose.override.yml docker-compose.yml /
+
+ADD  environment /environment/default
 
 ENTRYPOINT ["/bin/bash", "-e", "/ARLAS-Exploration-stack.bash"]

@@ -6,7 +6,7 @@ repository: https://github.com/gisaia/ARLAS-Exploration-stack/tree/master/arlas-
 
 # Prerequisites
 
-- [Docker CE](https://docs.docker.com/install/) (Community Edition)
+- [Docker CE](https://docs.docker.com/install/) (Community Edition) >=  18.02.0
 
 # Build
 
