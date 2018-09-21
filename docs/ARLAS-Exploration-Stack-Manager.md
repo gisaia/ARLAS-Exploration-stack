@@ -1,6 +1,8 @@
-The ARLAS Exploration Stack Manager aims at allowing to deploy the ARLAS Exploration Stack in an easy way.
+The ARLAS Exploration Stack Manager allows to manage a local instance of the ARLAS Exploration Stack in an easy way: launch it, shut it down, ...
 
-It consists in several [docker](https://docker.com) containers tied together using [Docker Compose](https://docs.docker.com/compose). The whole thing is user-controlled by script [ARLAS-Exploration-stack.bash](https://github.com/gisaia/ARLAS-Exploration-stack/tree/master/ARLAS-Exploration-stack.bash).
+It comes under the form of a script: [ARLAS-Exploration-stack.bash](https://github.com/gisaia/ARLAS-Exploration-stack/tree/master/ARLAS-Exploration-stack.bash).
+
+The local ARLAS Eploration Stack it controls consists in several [docker](https://docker.com) containers tied together using [Docker Compose](https://docs.docker.com/compose).
 
 repository: https://github.com/gisaia/ARLAS-Exploration-stack/tree/master/arlas-exploration-stack-manager
 
