@@ -7,6 +7,7 @@
 ## Usage
 
 global_options_string="Global options:
+  -d, --debug             Enable debug-level logging
   -h, --help"
 
 
@@ -96,8 +97,8 @@ parse_arguments () {
     exit 1
   fi
 
-  OPTIONS=hepn
-  LONGOPTIONS=help,no-elasticsearch,no-pull,no-network
+  OPTIONS=dhepn
+  LONGOPTIONS=debug,help,no-elasticsearch,no-pull,no-network
 
   # -temporarily store output to be able to check for errors
   # -e.g. use “--options” parameter by name to activate quoting/enhanced mode
@@ -114,8 +115,8 @@ parse_arguments () {
   # now enjoy the options in order and nicely split until we see --
   while true; do
     case "$1" in
-      -h|--help)
-        help=true
+      -d|--debug)
+        debug=true
         shift
         ;;
       -e|--no-elasticsearch)
@@ -123,12 +124,16 @@ parse_arguments () {
         docker_compose_file_options="-f docker-compose.yml"
         shift
         ;;
-      -p|--no-pull)
-        no_pull=true
+      -h|--help)
+        help=true
         shift
         ;;
       -n|--no-network)
         no_network=true
+        shift
+        ;;
+      -p|--no-pull)
+        no_pull=true
         shift
         ;;
       --)
@@ -192,6 +197,10 @@ up () {
 ##################
 
 parse_arguments $@
+
+if [[ "$debug" == true ]]; then
+  set -x
+fi
 
 if [[ -v help ]]; then
   if [[ -v command ]]; then
