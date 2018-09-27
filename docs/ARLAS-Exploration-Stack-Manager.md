@@ -29,7 +29,7 @@ cd arlas-exploration-stack-manager; docker build -t gisaia/arlas-exploration-sta
 # down
 ./ARLAS-Exploration-stack.bash down
 
-# List all available commands
+# List all available commands/options
 ./ARLAS-Exploration-stack.bash -h
 
 # You can use the `-h` option on any command to get more info on it
