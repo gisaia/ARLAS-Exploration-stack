@@ -728,7 +728,7 @@
         "components": {
             "mapgl": {
                 "input": {
-                    "style": "https://openmaptiles.github.io/osm-bright-gl-style/style-cdn.json",
+                    "style": "http://demo.arlas.io:82/styles/positron/style.json",
                     "margePanForLoad": 40,
                     "margePanForTest": 2,
                     "initZoom": 2,

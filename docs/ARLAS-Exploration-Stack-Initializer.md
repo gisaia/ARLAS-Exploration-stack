@@ -1,4 +1,6 @@
-The ARLAS Exploration Stack Initializer aims at allowing to register data in the ARLAS Exploration Stack in an easy way. It comes under the form of a [docker](https://docker.com) container.
+The ARLAS Exploration Stack Initializer allows to register data in the ARLAS Exploration Stack in an easy way. It can be used to initiialize the instance of the Stack controlled by the ARLAS Exploration Stack Manager.
+
+It comes under the form of a [docker](https://docker.com) container.
 
 repository: https://github.com/gisaia/ARLAS-Exploration-stack/tree/master/arlas-exploration-stack-initializer
 
@@ -59,6 +61,8 @@ The ARLAS Exploration stack initializer can be configured through environment va
 | server_URL_for_client | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |
 
 ## Example: ais-danmark
+
+**Warning**: This configuration sample connects the WUI to a hosted Gisaïa service, for providing the map background. The URL of this service is likely to change, hence old versions of this configuration sample may not work anymore in the future.
 
 Example of initialization with the AIS data around Denmark provided in the repository (*Estimated time: 2mn*).
 
