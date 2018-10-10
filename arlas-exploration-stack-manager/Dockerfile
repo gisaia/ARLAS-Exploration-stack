@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 
 RUN docker_compose_version=1.22.0 && \
+  docker_version=18.06.1~ce~3-0~ubuntu && \
    apt-get update && \
 # Installing docker
     apt-get -y install apt-transport-https ca-certificates curl \
@@ -11,7 +12,7 @@ RUN docker_compose_version=1.22.0 && \
    $(lsb_release -cs) \
    stable" && \
    apt-get update && \
-   apt-get -y install docker-ce && \
+   apt-get -y install docker-ce="$docker_version" && \
 # Installing docker compose
    curl -L "https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
    chmod +x /usr/local/bin/docker-compose && \
