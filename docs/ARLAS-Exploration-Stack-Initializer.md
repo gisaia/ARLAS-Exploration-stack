@@ -69,7 +69,7 @@ Example of initialization with the AIS data around Denmark provided in the repos
 @ [the repository's root](https://github.com/gisaia/ARLAS-Exploration-stack/tree/master):
 
 ```bash
-time docker run \
+docker run \
   -e elasticsearch_index=ais-danmark \
   -e server_collection_name=ais-danmark \
   -i \
