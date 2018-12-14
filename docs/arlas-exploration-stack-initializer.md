@@ -53,10 +53,12 @@ The ARLAS Exploration stack initializer can be configured through environment va
 
 | Name | Default value | Description |
 |-|-|-|
+| debug | | Enables BASH verbosity when set to `true`. |
 | elasticsearch | `http://arlas-exploration-stack-elasticsearch:9200` | URL to the HTTP port of the elasticsearch server (`http://<hostname or IP>:<HTTP port>`). To be used only if you are not working with the elasticsearch server deployed by the manager. |
 | elasticsearch_index | `arlas-data` | Name of the elasticsearch index where your data will be indexed. |
 | elasticsearch_user | | Username for connection to elasticsearch. To be used only if you are not working with the elasticsearch server deployed by the manager. |
 | elasticsearch_password | | Password for connection to elasticsearch. To be used only if you are not working with the elasticsearch server deployed by the manager. |
+| initialization_sequence | `es-index,server-collection,ui-conf,ui-map-conf,index-data` | Comma-separated list of initialization steps to perform, in order. |
 | server_collection_name | `data` | Name of the ARLAS server collection to create. |
 | server_URL_for_initializer | `http://arlas-exploration-stack-server:9999` | Arlas server URL for the initialization container (`http://<hostname or IP>:<port>`). |
 | server_URL_for_client | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |

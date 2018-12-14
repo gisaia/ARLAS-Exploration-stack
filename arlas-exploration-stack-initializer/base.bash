@@ -10,6 +10,7 @@ fi
 # Variables
 ################################################################################
 
+# Maps initialization steps to initialization functions
 declare -A initialization_steps_mapping
 initialization_steps_mapping['es-index']=create_elasticsearch_index
 initialization_steps_mapping['index-data']=index_data
@@ -30,8 +31,8 @@ create_elasticsearch_index () {
     log "Deleting pre-existing index from elasticsearch..."
     curl -s $elasticsearch_options -X DELETE "$elasticsearch/$elasticsearch_index"
     echo
-  elif (( $get_index_response_http_code == 404 )); then
     log "Done."
+  elif (( $get_index_response_http_code == 404 )); then
     :
   else
     log_error "Undefined response HTTP code while verifying if index is already existing, exiting."
@@ -53,9 +54,8 @@ create_server_collection (){
   mv /tmp/server_collection.json /initialization/server/collection.json
   log "Done."
 
-  log_without_blank_line "Waiting for ARLAS-server to be ready..."
+  log "Waiting for ARLAS-server to be ready..."
   wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $server_URL_for_initializer/admin/healthcheck) == 200 ))"
-  log "Ready."
 
   log "Creating collection in ARLAS server..."
   curl -s -X PUT --header 'Content-Type: application/json;charset=utf-8' --header 'Accept: application/json' -d@/initialization/server/collection.json "$server_URL_for_initializer/arlas/collections/$server_collection_name"
@@ -86,22 +86,11 @@ load_WUI_map_configuration () {
 }
 
 log () {
-
-# Special case of the 1st log line: we do not want to have a blank line between the command prompt & the 1st log line.
-  if ! [[ -v first_log_done ]]; then
-    first_log_done=true
-  else
-    echo
-  fi
-log_without_blank_line "$1"
+  echo "> $1"
 }
 
 log_error () {
   >&2 echo "[ERROR] $1" 
-}
-
-log_without_blank_line () {
-  echo "> $1"
 }
 
 longest_string_length () {
@@ -124,7 +113,7 @@ end=$(( start + timeout ))
 
 while (( $(date +%s) < $end )); do
   if eval "${command}"; then
-    log_without_blank_line "Ready!"
+    log "Ready."
     return 0
   fi
   echo .
@@ -141,7 +130,6 @@ wait_for_elasticsearch () {
   # On single server configuration, the best status we can reach is yellow.
   # See https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
   wait_for "(( \$(curl -s -o /dev/null -w \"%{http_code}\" $elasticsearch_options $elasticsearch/_cluster/health?wait_for_status=yellow) == 200 ))"
-  log "Ready."
 }
 
 
@@ -150,6 +138,8 @@ wait_for_elasticsearch () {
 ################################################################################
 
 script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+
+
 
 break_line='--------------'
 
@@ -215,4 +205,4 @@ for function in "${functions_sequence[@]}"; do
   eval "$function"
 done
 
-log_without_blank_line "Initialization finished."
+log "Initialization finished."

@@ -6,11 +6,23 @@ This component allows to manage a local instance of the ARLAS Exploration Stack 
 
 Documentation can be found [here](docs/arlas-exploration-stack-manager.md).
 
+## Build
+
+```bash
+cd arlas-exploration-stack-manager && docker build -t gisaia/arlas-exploration-stack-manager .; cd ..
+```
+
 # ARLAS Exploration Stack Initializer
 
 This component allows to register data in the ARLAS Exploration Stack in an easy way. It can be used to initialize the instance of the Stack controlled by the [ARLAS Exploration Stack Manager](#arlas-exploration-stack-manager).
 
 Documentation can be found [here](docs/arlas-exploration-stack-initializer.md).
+
+## Build
+
+```bash
+cd arlas-exploration-stack-initializer && docker build -t gisaia/arlas-exploration-stack-initializer .; cd ..
+```
 
 # Authors
 
