@@ -204,7 +204,7 @@
         "map$mapbox": {
           "identifier": "mapbox",
           "idFieldName": "id",
-          "drawtype": "RECTANGLE",
+          "geomStrategy": "centroid",
           "name": "Map",
           "initZoom": 4,
           "includeFeaturesFields": [
@@ -225,7 +225,9 @@
               "interval": {
                 "value": 3
               },
-              "withGeoCentroid": true
+              "fetchGeometry": {
+                "strategy": "centroid"
+              }
             }
           ],
           "zoomLevelFullData": 6,
@@ -347,37 +349,37 @@
             [
               14,
               8,
-              5
+              6
             ],
             [
               15,
               8,
-              5
+              6
             ],
             [
               16,
               8,
-              5
+              6
             ],
             [
               17,
               8,
-              5
+              6
             ],
             [
               18,
               8,
-              5
+              6
             ],
             [
               19,
               8,
-              5
+              6
             ],
             [
               20,
               8,
-              5
+              6
             ]
           ],
           "search_size": 10000
@@ -917,9 +919,7 @@
                 {
                   "id": "cluster",
                   "name": "Cluster",
-                  "base": [
-                    "geobox"
-                  ],
+                  "base": [],
                   "styles": [
                     {
                       "id": "heat",
@@ -927,7 +927,7 @@
                       "layerIds": [
                         "cluster-heat"
                       ],
-                      "drawType": "CIRCLE"
+                      "geomStrategy": "centroid"
                     },
                     {
                       "id": "fill",
@@ -935,7 +935,7 @@
                       "layerIds": [
                         "cluster-rect-fill"
                       ],
-                      "drawType": "RECTANGLE"
+                      "geomStrategy": "geohash"
                     }
                   ]
                 }

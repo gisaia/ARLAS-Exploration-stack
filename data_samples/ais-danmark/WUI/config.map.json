@@ -12,30 +12,13 @@
           "property": "point_count_normalize",
           "type": "exponential",
           "stops": [
-            [
-              0,
-              "#36a996"
-            ],
-            [
-              20,
-              "#3683a9"
-            ],
-            [
-              40,
-              "#3649a9"
-            ],
-            [
-              60,
-              "#5c36a9"
-            ],
-            [
-              80,
-              "#9636a9"
-            ],
-            [
-              100,
-              "#a93683"
-            ]
+            [0, "rgba(221, 221, 221,0.3)"],
+            [2, "rgb(209,229,240)"],
+            [10, "rgb(103,169,207)"],
+            [25, "rgb(33,102,172)"],
+            [50, "rgb(121, 28, 175)"],
+            [85, "rgb(150, 30, 140)"],
+            [100, "rgb(160,30,30)"]
           ]
         },
         "fill-opacity": 0.7
@@ -90,22 +73,22 @@
           [
             "heatmap-density"
           ],
-          0,
+          0.001,
           "rgba(33,102,172,0)",
           0.01,
-          "rgb(33,102,172)",
+          "rgba(209,229,240,0.8)",
           0.2,
-          "rgb(103,169,207)",
+          "rgba(103,169,207,0.8)",
           0.4,
-          "rgb(209,229,240)",
+          "rgba(33,102,172,0.8)",
           0.6,
-          "rgb(253,219,199)",
+          "rgb(121, 28, 175)",
           0.8,
-          "rgb(239,138,98)",
+          "rgb(150, 30, 140)",
           1,
-          "rgb(178,24,43)"
+          "rgb(160,30,30)"
         ],
-        "heatmap-radius": 50,
+        "heatmap-radius": 30,
         "heatmap-opacity": 0.6
       }
     },
@@ -323,44 +306,44 @@
           ["Military", "#a625e0"], ["Cargo", "#0099ff"], ["Passenger", "#a5c176"], ["Dredging", "#51a588"],
           ["Anti-pollution", "#00f4d0"], ["Pleasure", "#ad0084"], ["Towing", "#d37700"], ["Towing long/wide", "#d37700"],
           ["Sailing", "#edc77b"]
-        ]
-      },
-      "line-opacity": 1,
-      "line-width": 10
-    }
+          ]
+        },
+        "line-opacity": 1,
+        "line-width": 10
+      }
     },
     {
-      "id": "features-fill-hover",
-      "type": "line",
-      "source": "data_source",
-      "layout": {
-        "visibility": "none"
-      },
-      "filter": [
-        "all",
-        [
-          "!=",
-          "$type",
-          "Point"
-        ]
-      ],
-      "paint": {
-        "line-color": {
-          "property": "vessel_ship_type",
-          "type": "categorical",
-          "stops": [["Tanker", "#ff8ee8"], ["Fishing", "#86d8f7"],
-          ["Tug", "#f4df42"], ["SAR", "#03c6ac"], ["OTHER", "#c2c2c2"],
-          ["Other", "#c2c2c2"], ["Undefined", "#c2c2c2"], ["Category X", "#eab738"],
-          ["Category Y", "#ead538"], ["Category Z", "#ea8538"], ["Category OS", "#ed29d5"],
-          ["Pilot", "#e74b4b"], ["HSC", "#0086bd"], ["Law enforcement", "#00b4d3"],
-          ["Military", "#a625e0"], ["Cargo", "#0099ff"], ["Passenger", "#a5c176"], ["Dredging", "#51a588"],
-          ["Anti-pollution", "#00f4d0"], ["Pleasure", "#ad0084"], ["Towing", "#d37700"], ["Towing long/wide", "#d37700"],
-          ["Sailing", "#edc77b"]
-        ]
-      },
-      "line-opacity": 1,
-      "line-width": 10
-    }
+        "id": "features-fill-hover",
+        "type": "line",
+        "source": "data_source",
+        "layout": {
+          "visibility": "none"
+        },
+        "filter": [
+          "all",
+          [
+            "!=",
+            "$type",
+            "Point"
+          ]
+        ],
+        "paint": {
+          "line-color": {
+            "property": "vessel_ship_type",
+            "type": "categorical",
+            "stops": [["Tanker", "#ff8ee8"], ["Fishing", "#86d8f7"],
+            ["Tug", "#f4df42"], ["SAR", "#03c6ac"], ["OTHER", "#c2c2c2"],
+            ["Other", "#c2c2c2"], ["Undefined", "#c2c2c2"], ["Category X", "#eab738"],
+            ["Category Y", "#ead538"], ["Category Z", "#ea8538"], ["Category OS", "#ed29d5"],
+            ["Pilot", "#e74b4b"], ["HSC", "#0086bd"], ["Law enforcement", "#00b4d3"],
+            ["Military", "#a625e0"], ["Cargo", "#0099ff"], ["Passenger", "#a5c176"], ["Dredging", "#51a588"],
+            ["Anti-pollution", "#00f4d0"], ["Pleasure", "#ad0084"], ["Towing", "#d37700"], ["Towing long/wide", "#d37700"],
+            ["Sailing", "#edc77b"]
+            ]
+          },
+          "line-opacity": 1,
+          "line-width": 10
+        }
     },
     {
       "id": "geobox",
