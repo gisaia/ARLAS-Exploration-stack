@@ -38,7 +38,7 @@ docker run \
   -e elasticsearch_index=ais-danmark \
   -e server_collection_name=ais-danmark \
   -i \
-  --mount dst="/initialization",src="$PWD/ais-danmark",type=bind \
+  --mount dst="/initialization",src="$PWD/data_samples/ais-danmark",type=bind \
   --mount type=volume,src=default_wui-configuration,dst=/wui-configuration \
   --name arlas-exploration-stack-initializer \
   --net arlas \
