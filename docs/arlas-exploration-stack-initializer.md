@@ -44,8 +44,7 @@ This diagram explains what actions the initializer performs upon being triggered
 1. Creation of elasticsearch index
 2. Creation of the collection in the ARLAS server
 3. Injection of WUI configuration
-4. Injection of WUI map configuration
-5. Indexation of data in elasticsearch using logstash. Data can come from anything that can be plugged into logstash (file, kafka topic, ...)
+4. Indexation of data in elasticsearch using logstash. Data can come from anything that can be plugged into logstash (file, kafka topic, ...)
 
 ## Configuration
 
@@ -58,7 +57,7 @@ The ARLAS Exploration stack initializer can be configured through environment va
 | elasticsearch_index | `arlas-data` | Name of the elasticsearch index where your data will be indexed. |
 | elasticsearch_user | | Username for connection to elasticsearch. To be used only if you are not working with the elasticsearch server deployed by the manager. |
 | elasticsearch_password | | Password for connection to elasticsearch. To be used only if you are not working with the elasticsearch server deployed by the manager. |
-| initialization_sequence | `es-index,server-collection,ui-conf,ui-map-conf,index-data` | Comma-separated list of initialization steps to perform, in order. |
+| initialization_sequence | `es-index,server-collection,ui-conf,index-data` | Comma-separated list of initialization steps to perform, in order. See diagram under [Usage](#usage) section. |
 | server_collection_name | `data` | Name of the ARLAS server collection to create. |
 | server_URL_for_initializer | `http://arlas-exploration-stack-server:9999` | Arlas server URL for the initialization container (`http://<hostname or IP>:<port>`). |
 | server_URL_for_client | `http://localhost:9999` | Arlas server URL for the client (`http://<hostname or IP>:<port>`). |
