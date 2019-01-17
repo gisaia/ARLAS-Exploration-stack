@@ -16,8 +16,6 @@ initialization_steps_mapping['es-index']=create_elasticsearch_index
 initialization_steps_mapping['index-data']=index_data
 initialization_steps_mapping['server-collection']=create_server_collection
 initialization_steps_mapping['ui-conf']=load_WUI_configuration
-initialization_steps_mapping['ui-map-conf']=load_WUI_map_configuration
-
 
 ################################################################################
 # Functions
@@ -74,14 +72,25 @@ index_data () {
 }
 
 load_WUI_configuration () {
-  log "Loading WUI configuration..."
-  jq -r ".arlas.server.url=\"$server_URL_for_client/arlas\" | .arlas.server.collection.name=\"$server_collection_name\"" "/initialization/WUI/config.json" > /wui-configuration/config.json
-  log "Done."
-}
+  log "Initiating loading of WUI configuration..."
 
-load_WUI_map_configuration () {
-  log "Loading WUI map configuration..."
-  cp "/initialization/WUI/config.map.json" /wui-configuration/config.map.json
+  cd /initialization/WUI
+
+  # Special case: config.json
+  if [[ -f config.json ]]; then
+    log "WUI file \`config.json\` detected, loading it..."
+    jq -r ".arlas.server.url=\"$server_URL_for_client/arlas\" | .arlas.server.collection.name=\"$server_collection_name\"" config.json > /wui-configuration/config.json
+  fi
+  
+  # All other files
+  for file in "$(find ! -name config.json -type f)"; do
+    # Remove './' prefix added by `find` command
+    file="${file#./}"
+    log "WUI file \`$file\` detected, loading it..."    
+    cp --parents "$file" /wui-configuration/
+  done
+
+  cd -
   log "Done."
 }
 
@@ -185,7 +194,6 @@ else
       es-index
       server-collection
       ui-conf
-      ui-map-conf
       index-data
     )
 fi
