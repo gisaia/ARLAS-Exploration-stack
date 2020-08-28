@@ -3,11 +3,11 @@
 set -o errexit -o pipefail
 
 usage(){
-	echo "Usage: ./start.sh  [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node] [--dump-data]"
-	echo " -apu |--arlas-persistence-url url of a arlas-persistence service to used"
-	echo " -asu|--arlas-server-url       url of a arlas-server service to used (if setted, --es-cluster --es-node and --dump-data will be ignored)"
-	echo " -esc|--es-cluster             es-cluster to use (if setted  --dump-data will be ignored and --es-node is mandatory )"
-	echo " -esn|--es-node                es-node to use (if setted  --dump-data will be ignored and --es-cluster is mandatory ) "
+	echo "Usage: ./start.sh  [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node]"
+	echo " -apu |--arlas-persistence-url url of a arlas-persistence service to use"
+	echo " -asu|--arlas-server-url       url of a arlas-server service to use (if set, --es-cluster  and--es-node will be ignored)"
+	echo " -esc|--es-cluster             es-cluster to use (if set --es-node is mandatory )"
+	echo " -esn|--es-node                es-node to use (if set  --es-cluster is mandatory ) "
     echo " -essl|--es-enable-ssl         Whether to use SSL to connect to ES Cluster (true or false)"
     echo " -esnif|--es-enable-sniffing   Whether to active sniffing in ES Cluster (true or false)"
     echo " -escdr|--es-credentials       Credential to use to connect to ES Cluster"
@@ -86,11 +86,11 @@ fi
 
 if [ ! -z ${ARLAS_PERSISTENCE_URL+x} ];
     then
-        persitence_running_msg="External ARLAS PERSISTENCE SERVER is running on ARLAS_PERSISTENCE_URL   "
+        persistence_running_msg="External ARLAS PERSISTENCE SERVER is running on ARLAS_PERSISTENCE_URL   "
         unset docker_compose_services_array[5];
     else
         export ARLAS_PERSISTENCE_URL="http://$LOCAL_HOST:19997/arlas-persistence-server"
-        persitence_running_msg="ARLAS PERSISTENCE SERVER in version $ARLAS_PERSISTENCE_VERSION is running on $ARLAS_PERSISTENCE_URL"
+        persistence_running_msg="ARLAS PERSISTENCE SERVER in version $ARLAS_PERSISTENCE_VERSION is running on $ARLAS_PERSISTENCE_URL"
 fi
 
 if [ ! -z ${ARLAS_SERVER_URL+x} ];
@@ -114,7 +114,7 @@ if [ ! -z ${ES_CLUSTER+x} ];
                     echo "ERROR : --es-cluster and --es-node are both mandatory to connect to an ES Cluster. "
                     exit 1
             fi    
-            es_running_msg="ELASTICSEARCH is runnin on cluster $ES_CLUSTER"
+            es_running_msg="ELASTICSEARCH is running on cluster $ES_CLUSTER"
             unset docker_compose_services_array[4]
         fi
     else
@@ -178,7 +178,7 @@ echo "ARLAS BUILDER  in version $ARLAS_BUILDER_VERSION is running on http://$LOC
 echo "############################################"
 echo "                                            "
 echo "############################################"
-echo $persitence_running_msg
+echo $persistence_running_msg
 echo $arlas_server_running_msg
 echo "############################################"
 echo "                                            "

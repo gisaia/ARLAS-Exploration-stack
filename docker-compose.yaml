@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3'
 services:
     arlas-wui:
         image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.0.0-beta.1}
@@ -73,7 +73,6 @@ services:
             - 'esdata1:/usr/share/elasticsearch/data'
         ports:
             - '9200:9200'
-            - '9300:9300'
         networks:
             - esnet
     arlas-server:
