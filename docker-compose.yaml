@@ -1,0 +1,105 @@
+version: '2.2'
+services:
+    arlas-wui:
+        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.0.0-beta.1}
+        container_name: arlas-wui
+        environment:
+            - ARLAS_USE_AUTHENT=false
+            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:19997/arlas-persistence-server}
+        ports:
+            - 8096:80
+        networks:
+            - esnet
+    arlas-hub:
+        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-0.0.3-beta.1}
+        container_name: arlas-hub
+        environment:
+            - ARLAS_USE_AUTHENT=false
+            - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:8096
+            - ARLAS_BUILDER_URL=http://${LOCAL_HOST-localhost}:8095
+            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:19997/arlas-persistence-server}
+        ports:
+            - 8094:80
+        networks:
+            - esnet
+    arlas-builder:
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-0.0.6-beta.1}
+        container_name: arlas-builder
+        environment:
+            - ARLAS_USE_AUTHENT=false
+            - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:8096
+            - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-http://localhost:19999/arlas}
+            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:19997/arlas-persistence-server}
+        ports:
+            - 8095:80
+        networks:
+            - esnet
+    arlas-persistence-server:
+        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-13.0.0-beta.4}
+        container_name: arlas-persistence-server
+        environment:
+            - ARLAS_PERSISTENCE_PORT=9997
+            - ARLAS_PERSISTENCE_PREFIX=/arlas-persistence-server
+            - ARLAS_PERSISTENCE_APP_PATH=/
+            - ARLAS_AUTH_ENABLED=false
+            - ARLAS_PERSISTENCE_ENGINE=file
+            - ARLAS_PERSISTENCE_LOCAL_FOLDER="${ARLAS_PERSISTENCE_LOCAL_FOLDER:-/tmp/persist/}"
+        expose:
+            - "9997"
+        ports:
+            - 19997:9997
+        volumes:
+            - ${ARLAS_PERSISTENCE_LOCAL_FOLDER_HOST:-/tmp/persist/}:${ARLAS_PERSISTENCE_LOCAL_FOLDER:-/tmp/persist/}:rw
+        networks:
+            - esnet
+    elasticsearch:
+        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.4.0'
+        container_name: elasticsearch
+        environment:
+            - cluster.name=docker-cluster
+            - node.name=docker-node
+            - cluster.initial_master_nodes=docker-node
+            - cluster.routing.allocation.disk.threshold_enabled=false
+            - bootstrap.memory_lock=true
+            - xpack.security.enabled=false
+            - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+        ulimits:
+            memlock: {soft: -1, hard: -1}
+            nofile:
+                soft: 65536
+                hard: 65536
+        mem_limit: 2g
+        volumes:
+            - 'esdata1:/usr/share/elasticsearch/data'
+        ports:
+            - '9200:9200'
+            - '9300:9300'
+        networks:
+            - esnet
+    arlas-server:
+        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-14.7.0-beta.1}
+        environment:
+            - ARLAS_ELASTIC_CLUSTER=${ES_CLUSTER:-docker-cluster}
+            - ARLAS_ELASTIC_NODES=${ES_NODE:-elasticsearch:9200}
+            - ARLAS_ELASTIC_ENABLE_SSL=${ES_ENABLE_SSL:-false}
+            - ARLAS_ELASTIC_SNIFFING=${ES_SNIFFING:-false}
+            - ARLAS_ELASTIC_CREDENTIALS=${ES_CREDENTIALS:-""}
+            - ARLAS_SERVICE_WFS_ENABLE=true
+            - ARLAS_CORS_ENABLED=true
+            - ARLAS_SERVICE_CSW_ENABLE=true
+            - ARLAS_SERVICE_RASTER_TILES_ENABLE=true
+            - ARLAS_PREFIX=/arlas
+            - ARLAS_ELASTIC_INDEX=${ARLAS_ELASTIC_INDEX:-.arlas}
+            - ARLAS_APP_PATH=/
+            - ARLAS_BASE_URI=http://${LOCAL_HOST-localhost}:19999/arlas/
+        command: ["/opt/app/wait-for-elasticsearch.sh"]
+        ports:
+            - '19999:9999'
+        networks:
+            - esnet
+volumes:
+    esdata1:
+        driver: local
+networks:
+    esnet:
+

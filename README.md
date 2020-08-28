@@ -1,35 +1,59 @@
-This project contains two components:
+This project contains :
 
-# ARLAS Exploration Stack Manager
+# Docker-compose file
+This docker-compose contains 6 services :
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 14.0.0-beta.1
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 0.0.3-beta.2
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 0.0.6-beta.1
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 13.0.0-beta.4
+- [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.4.0
+- [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 14.7.0-beta.1
 
-This component allows to manage a local instance of the ARLAS Exploration Stack in an easy way: launch it, shut it down, ...
+# Start.sh script
+This script run execute the docker-compose accordind to parameters.
+If no parameters are provided, all the services are started locally.
 
-Documentation can be found [here](docs/arlas-exploration-stack-manager.md).
+````
+Usage: ./start.sh  [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node] [--dump-data]
+ -apu |--arlas-persistence-url url of a arlas-persistence service to used
+ -asu|--arlas-server-url       url of a arlas-server service to used (if setted, --es-cluster --es-node and --dump-data will be ignored)
+ -esc|--es-cluster             es-cluster to use (if setted  --dump-data will be ignored and --es-node is mandatory )
+ -esn|--es-node                es-node to use (if setted  --dump-data will be ignored and --es-cluster is mandatory ) 
+ -essl|--es-enable-ssl         Whether to use SSL to connect to ES Cluster (true or false)
+ -esnif|--es-enable-sniffing   Whether to active sniffing in ES Cluster (true or false)
+ -escdr|--es-credentials       Credential to use to connect to ES Cluster
+ -esidx|--es-arlas-index       ES Index using by arlas to index collection
+ -h|--help                     Display manual 
+ ````
 
-## Build
+Run ./start.sh whitout param returns :
 
-```bash
-cd arlas-exploration-stack-manager && docker build -t gisaia/arlas-exploration-stack-manager .; cd ..
-```
+````
+DOCKER COMPOSE SERVICES RUNNING : arlas-wui arlas-builder arlas-hub arlas-server elasticsearch arlas-persistence-server
+############################################
+                                            
+############################################
+ARLAS WUI in version 14.0.0-beta.1 is running on http://localhost:8096
+ARLAS HUB in  version 0.0.3-beta.2 is running on http://localhost:8094
+ARLAS BUILDER  in version 0.0.6-beta.1 is running on http://localhost:8095
+############################################
+                                            
+############################################
+ARLAS PERSISTENCE SERVER in version 13.0.0-beta.4 is running on http://localhost:19997/arlas-persistence-server
+ARLAS SERVER in version 14.7.0-beta.1 is running on http://localhost:19999/arlas
+############################################
+                                            
+############################################
+ELASTICSEARCH is running on http://localhost:9200
+ELASTICSEARCH options enable sniffing : false
+ELASTICSEARCH options enable SSL : false
+ELASTICSEARCH credentials :
+ARLAS ELASTICSEARCH index : .arlas
+````
+```localhost``` could be replace by env variable LOCAL_HOST with  version.env file
 
-# ARLAS Exploration Stack Initializer
+# Stop.sh script
+This script shutdowns all services of the docker-compose.
 
-This component allows to register data in the ARLAS Exploration Stack in an easy way. It can be used to initialize the instance of the Stack controlled by the [ARLAS Exploration Stack Manager](#arlas-exploration-stack-manager).
-
-Documentation can be found [here](docs/arlas-exploration-stack-initializer.md).
-
-## Build
-
-```bash
-cd arlas-exploration-stack-initializer && docker build -t gisaia/arlas-exploration-stack-initializer .; cd ..
-```
-
-# Authors
-
-- Gisaïa - *Initial work* - [Gisaïa](http://gisaia.fr/)
-
-See also the list of [contributors](https://github.com/gisaia/ARLAS-Exploration-stack/graphs/contributors) who participated in this project.
-
-# License
-
-This project is licensed under the Apache License, Version 2.0 - see the [LICENSE.txt](LICENSE.txt) file for details.
+# versions.env
+This file is used by the start.sh script to set version of each component.
