@@ -50,10 +50,11 @@ ELASTICSEARCH options enable SSL : false
 ELASTICSEARCH credentials :
 ARLAS ELASTICSEARCH index : .arlas
 ````
-```localhost``` could be replaced by env variable LOCAL_HOST with version.env file
+```localhost``` could be replaced by env variable LOCAL_HOST with .env file
 
 # Stop.sh script
 This script shutdowns all services of the docker-compose.
 
-# versions.env
-This file is used by the start.sh script to set version of each component.
+# .env
+This file is used by the start.sh script to set some env variable of each component.
+ARLAS_PERSISTENCE_LOCAL_FOLDER_HOST allows you to choose the folder where arlas configurations will be stored on your computer.

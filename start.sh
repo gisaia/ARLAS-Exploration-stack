@@ -17,7 +17,7 @@ usage(){
 }
 
 #Set variables in version.env as env variable
-export $(egrep -v '^#' version.env | xargs)
+export $(egrep -v '^#' .env | xargs)
 
 unset ARLAS_PERSISTENCE_URL
 unset ARLAS_SERVER_URL
