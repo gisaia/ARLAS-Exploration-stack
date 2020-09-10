@@ -1,6 +1,48 @@
 
 #!/bin/bash
-set -o errexit -o pipefail
+set - pipefail
+
+spin()
+{
+  spinner="/|\\-/|\\-"
+  while :
+  do
+    for i in `seq 0 7`
+    do
+      echo -n "${spinner:$i:1}"
+      echo -en "\010"
+      sleep 1
+    done
+  done
+}
+
+ready_message(){
+        echo "############################################"
+        echo "THE ARLAS STACK IS READY"
+        echo "############################################"
+        echo "                                            "
+        echo "############################################"
+        echo "ARLAS WUI in version $ARLAS_WUI_VERSION is running on http://$LOCAL_HOST:8096"
+        echo "ARLAS HUB in  version $ARLAS_HUB_VERSION is running on http://$LOCAL_HOST:8094"
+        echo "ARLAS BUILDER  in version $ARLAS_BUILDER_VERSION is running on http://$LOCAL_HOST:8095"
+        echo "############################################"
+        echo "                                            "
+        echo "############################################"
+        echo $persistence_running_msg
+        echo $arlas_server_running_msg
+        echo "############################################"
+        echo "                                            "
+        echo "############################################"
+        if [ "$ignore_es" = false ]; 
+            then
+                echo $es_running_msg
+                echo $es_running_node_msg
+                echo $es_enables_sniffing_msg
+                echo $es_enable_ssl_msg
+                echo $es_credentials_msg
+            echo $es_index_msg
+        fi
+}
 
 usage(){
 	echo "Usage: ./start.sh  [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node]"
@@ -32,6 +74,10 @@ docker_compose_services="arlas-wui, arlas-builder, arlas-hub, arlas-server, elas
 IFS=', ' read -r -a docker_compose_services_array <<< "$docker_compose_services"
 
 ignore_es=false
+ignore_arlas=false
+ignore_persistence=false
+use_es_credential=false
+
 
 
 for i in "$@"
@@ -88,6 +134,7 @@ if [ ! -z ${ARLAS_PERSISTENCE_URL+x} ];
     then
         persistence_running_msg="External ARLAS PERSISTENCE SERVER is running on ARLAS_PERSISTENCE_URL   "
         unset docker_compose_services_array[5];
+        ignore_persistence=true
     else
         export ARLAS_PERSISTENCE_URL="http://$LOCAL_HOST:19997/arlas-persistence-server"
         persistence_running_msg="ARLAS PERSISTENCE SERVER in version $ARLAS_PERSISTENCE_VERSION is running on $ARLAS_PERSISTENCE_URL"
@@ -99,6 +146,7 @@ if [ ! -z ${ARLAS_SERVER_URL+x} ];
         unset docker_compose_services_array[3]
         unset docker_compose_services_array[4]
         ignore_es=true
+        ignore_arlas=true
     else
         export ARLAS_SERVER_URL="http://$LOCAL_HOST:19999/arlas"
         arlas_server_running_msg="ARLAS SERVER in version $ARLAS_SERVER_VERSION is running on $ARLAS_SERVER_URL"
@@ -134,6 +182,7 @@ if [ ! -z ${ES_NODE+x} ];
             es_running_node_msg="ELASTICSEARCH is running on node $ES_NODE"
         fi
     else
+        ES_NODE="localhost:9200"
         es_running_msg="ELASTICSEARCH is running on http://localhost:9200"
 fi
 
@@ -153,6 +202,7 @@ fi
 
 if [ ! -z ${ES_CREDENTIALS+x} ];
     then
+        use_es_credential=true
         es_credentials_msg="ELASTICSEARCH credentials : $ES_CREDENTIALS"
     else
         es_credentials_msg="ELASTICSEARCH credentials : """
@@ -165,35 +215,50 @@ if [ ! -z ${ARLAS_ELASTIC_INDEX+x} ];
         es_index_msg="ARLAS ELASTICSEARCH index : .arlas"
 fi
 
-
-
-
 echo "DOCKER COMPOSE SERVICES RUNNING : ${docker_compose_services_array[@]}"
-echo "############################################"
-echo "                                            "
-echo "############################################"
-echo "ARLAS WUI in version $ARLAS_WUI_VERSION is running on http://$LOCAL_HOST:8096"
-echo "ARLAS HUB in  version $ARLAS_HUB_VERSION is running on http://$LOCAL_HOST:8094"
-echo "ARLAS BUILDER  in version $ARLAS_BUILDER_VERSION is running on http://$LOCAL_HOST:8095"
-echo "############################################"
-echo "                                            "
-echo "############################################"
-echo $persistence_running_msg
-echo $arlas_server_running_msg
-echo "############################################"
-echo "                                            "
-echo "############################################"
-if [ "$ignore_es" = false ]; 
-    then
-        echo $es_running_msg
-        echo $es_running_node_msg
-        echo $es_enables_sniffing_msg
-        echo $es_enable_ssl_msg
-        echo $es_credentials_msg
-        echo $es_index_msg
-fi
-
 #Run Docker-compose services
 eval "docker-compose up -d ${docker_compose_services_array[@]}"
+# Start the Spinner:
+spin &
+# Make a note of its Process ID (PID):
+SPIN_PID=$!
+# Kill the spinner on any signal, including our own exit.
+trap "kill -9 $SPIN_PID" `seq 0 15`
 
-
+#We need to stop useless local services started because of depends_on value in docker_compose.yaml
+if [ "$ignore_persistence" = true ]; 
+    then
+        eval "docker-compose stop arlas-persistence-server"
+        eval "docker-compose rm -f arlas-persistence-server"
+fi
+if [ "$ignore_es" = true ]; 
+    then
+        eval "docker-compose stop elasticsearch"
+        eval "docker-compose rm -f elasticsearch"
+fi
+if [ "$ignore_arlas" = true ]; 
+    then
+        eval "docker-compose stop arlas-server"
+        eval "docker-compose rm -f arlas-server"
+        #No local service to waiting for
+        ready_message
+    else
+        code=""
+        echo "############################################"
+        echo "Waiting for ARLAS STACK UP AND RUNNING"
+        echo "############################################"
+        code_OK="OK"
+        #Wait for local ES Up and running
+        while [[ "$code" != *$code_OK* ]];do
+            if [ "$use_es_credential" = true ];
+                then
+                    code="$(curl -IL --silent  $ES_NODE --user $ES_CREDENTIALS | grep "^HTTP\/")"
+                else
+                    code="$(curl -IL --silent $ES_NODE | grep "^HTTP\/")"
+            fi
+            eval "sleep 5"
+        done 
+        #Restart Arlas server when we are sure thar ES is UP
+        eval "docker-compose restart arlas-server"
+        ready_message
+fi
