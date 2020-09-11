@@ -1,0 +1,7 @@
+{
+    "index_name": "${INDEX}",
+    "id_path": "${ID_PATH}",
+    "timestamp_path": "${TIMESTAMP_PATH}",
+    "centroid_path": "${CENTROID_PATH}",
+    "geomatry_path": "${GEOMETRY_PATH}"
+}
