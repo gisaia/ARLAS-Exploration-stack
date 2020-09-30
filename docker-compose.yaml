@@ -1,7 +1,7 @@
 version: '3'
 services:
     arlas-wui:
-        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.0.0-beta.1}
+        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.0.0-rc.1}
         container_name: arlas-wui
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -14,7 +14,7 @@ services:
         networks:
             - esnet
     arlas-hub:
-        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-0.0.3-beta.1}
+        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-14.0.0-rc.1}
         container_name: arlas-hub
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -30,7 +30,7 @@ services:
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-0.0.6-beta.1}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.0.0-rc.1}
         container_name: arlas-builder
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -85,7 +85,7 @@ services:
         networks:
             - esnet
     arlas-server:
-        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-14.7.0-beta.1}
+        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-14.7.0-rc.1}
         container_name: arlas-server
         environment:
             - ARLAS_ELASTIC_CLUSTER=${ES_CLUSTER:-docker-cluster}
