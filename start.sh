@@ -1,6 +1,5 @@
 
 #!/bin/bash
-set - pipefail
 
 spin()
 {
@@ -33,15 +32,12 @@ ready_message(){
         echo "############################################"
         echo "                                            "
         echo "############################################"
-        if [ "$ignore_es" = false ]; 
-            then
-                echo $es_running_msg
-                echo $es_running_node_msg
-                echo $es_enables_sniffing_msg
-                echo $es_enable_ssl_msg
-                echo $es_credentials_msg
-            echo $es_index_msg
-        fi
+        echo $es_running_msg
+        echo $es_running_node_msg
+        echo $es_enables_sniffing_msg
+        echo $es_enable_ssl_msg
+        echo $es_credentials_msg
+        echo $es_index_msg
 }
 
 usage(){
@@ -178,7 +174,8 @@ if [ ! -z ${ES_NODE+x} ];
                 then
                     echo "ERROR : --es-cluster and --es-node are both mandatory to connect to an ES Cluster. "
                     exit 1
-            fi    
+            fi   
+            ignore_es=true 
             es_running_node_msg="ELASTICSEARCH is running on node $ES_NODE"
         fi
     else
@@ -226,15 +223,11 @@ SPIN_PID=$!
 trap "kill -9 $SPIN_PID" `seq 0 15`
 
 #We need to stop useless local services started because of depends_on value in docker_compose.yaml
+
 if [ "$ignore_persistence" = true ]; 
     then
         eval "docker-compose stop arlas-persistence-server"
         eval "docker-compose rm -f arlas-persistence-server"
-fi
-if [ "$ignore_es" = true ]; 
-    then
-        eval "docker-compose stop elasticsearch"
-        eval "docker-compose rm -f elasticsearch"
 fi
 if [ "$ignore_arlas" = true ]; 
     then
@@ -242,6 +235,14 @@ if [ "$ignore_arlas" = true ];
         eval "docker-compose rm -f arlas-server"
         #No local service to waiting for
         ready_message
+        exit 0
+fi
+if [ "$ignore_es" = true ]; 
+    then
+        eval "docker-compose stop elasticsearch"
+        eval "docker-compose rm -f elasticsearch"
+        ready_message
+        exit 0
     else
         code=""
         echo "############################################"
@@ -261,4 +262,5 @@ if [ "$ignore_arlas" = true ];
         #Restart Arlas server when we are sure thar ES is UP
         eval "docker-compose restart arlas-server"
         ready_message
+
 fi
