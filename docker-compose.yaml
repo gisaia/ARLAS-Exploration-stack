@@ -1,11 +1,12 @@
 version: '3'
 services:
     arlas-wui:
-        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.0.0-rc.1}
+        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.0.0-rc.3}
         container_name: arlas-wui
         environment:
             - ARLAS_USE_AUTHENT=false
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:19997/arlas-persistence-server}
+            - ARLAS_HUB_URL=http://${LOCAL_HOST-localhost}:8094
         depends_on:
             - arlas-persistence-server
             - arlas-server
@@ -30,7 +31,7 @@ services:
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.0.0-rc.1}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.0.0-rc.3}
         container_name: arlas-builder
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -45,7 +46,7 @@ services:
         networks:
             - esnet
     arlas-persistence-server:
-        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-13.0.0-beta.4}
+        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-14.0.0-rc.1}
         container_name: arlas-persistence-server
         environment:
             - ARLAS_PERSISTENCE_PORT=9997
