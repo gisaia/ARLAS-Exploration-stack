@@ -2,12 +2,12 @@ This project contains :
 
 # Docker-compose file
 This docker-compose contains 6 services :
-- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 14.0.0-rc.4
-- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 14.0.0-rc.1
-- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 14.0.0-rc.7
-- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 14.0.0-rc.1
-- [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.4.0
-- [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 14.7.0-rc.1
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 14.0.1
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 14.0.0
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 14.0.1
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 14.0.0
+- [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.9.2
+- [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 14.7.0
 
 # Start.sh script
 This script executes the docker-compose according to parameters.
@@ -34,14 +34,14 @@ DOCKER COMPOSE SERVICES RUNNING : arlas-wui arlas-builder arlas-hub arlas-server
 ############################################
                                             
 ############################################
-ARLAS WUI in version 14.0.0-rc.4 is running on http://localhost:8096
-ARLAS HUB in  version 14.0.0-rc.1 is running on http://localhost:8094
-ARLAS BUILDER  in version 14.0.0-rc.7 is running on http://localhost:8095
+ARLAS WUI in version 14.0.1 is running on http://localhost:8096
+ARLAS HUB in  version 14.0.0 is running on http://localhost:8094
+ARLAS BUILDER  in version 14.0.1 is running on http://localhost:8095
 ############################################
                                             
 ############################################
-ARLAS PERSISTENCE SERVER in version 14.0.0-rc.1 is running on http://localhost:19997/arlas-persistence-server
-ARLAS SERVER in version 14.7.0-rc.1 is running on http://localhost:19999/arlas
+ARLAS PERSISTENCE SERVER in version 14.0.0 is running on http://localhost:19997/arlas-persistence-server
+ARLAS SERVER in version 14.7.0 is running on http://localhost:19999/arlas
 ############################################
                                             
 ############################################
