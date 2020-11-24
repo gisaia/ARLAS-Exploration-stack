@@ -31,7 +31,7 @@ services:
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.0.1}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.0.2-beta.0}
         container_name: arlas-builder
         environment:
             - ARLAS_USE_AUTHENT=false
