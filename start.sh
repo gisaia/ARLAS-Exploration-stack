@@ -21,9 +21,9 @@ ready_message(){
         echo "############################################"
         echo "                                            "
         echo "############################################"
-        echo "ARLAS WUI in version $ARLAS_WUI_VERSION is running on http://$LOCAL_HOST:8096"
-        echo "ARLAS HUB in  version $ARLAS_HUB_VERSION is running on http://$LOCAL_HOST:8094"
-        echo "ARLAS BUILDER  in version $ARLAS_BUILDER_VERSION is running on http://$LOCAL_HOST:8095"
+        echo "ARLAS WUI in version $ARLAS_WUI_VERSION is running on http://$LOCAL_HOST:81/wui"
+        echo "ARLAS HUB in  version $ARLAS_HUB_VERSION is running on http://$LOCAL_HOST:81/hub"
+        echo "ARLAS BUILDER  in version $ARLAS_BUILDER_VERSION is running on http://$LOCAL_HOST:81/builder"
         echo "############################################"
         echo "                                            "
         echo "############################################"
@@ -66,7 +66,7 @@ unset ES_SNIFFING
 unset ES_CREDENTIALS
 unset ARLAS_ELASTIC_INDEX
 
-docker_compose_services="arlas-wui, arlas-builder, arlas-hub, arlas-server, elasticsearch, arlas-persistence-server"
+docker_compose_services="arlas-wui, arlas-builder, arlas-hub, nginx, arlas-server, elasticsearch, arlas-persistence-server"
 IFS=', ' read -r -a docker_compose_services_array <<< "$docker_compose_services"
 
 ignore_es=false
@@ -129,22 +129,22 @@ fi
 if [ ! -z ${ARLAS_PERSISTENCE_URL+x} ];
     then
         persistence_running_msg="External ARLAS PERSISTENCE SERVER is running on ARLAS_PERSISTENCE_URL   "
-        unset docker_compose_services_array[5];
+        unset docker_compose_services_array[6];
         ignore_persistence=true
     else
-        export ARLAS_PERSISTENCE_URL="http://$LOCAL_HOST:19997/arlas-persistence-server"
+        export ARLAS_PERSISTENCE_URL="http://$LOCAL_HOST:81/persist/"
         persistence_running_msg="ARLAS PERSISTENCE SERVER in version $ARLAS_PERSISTENCE_VERSION is running on $ARLAS_PERSISTENCE_URL"
 fi
 
 if [ ! -z ${ARLAS_SERVER_URL+x} ];
     then
         arlas_server_running_msg="External ARLAS SERVER is running on $ARLAS_SERVER_URL"
-        unset docker_compose_services_array[3]
         unset docker_compose_services_array[4]
+        unset docker_compose_services_array[5]
         ignore_es=true
         ignore_arlas=true
     else
-        export ARLAS_SERVER_URL="http://$LOCAL_HOST:19999/arlas"
+        export ARLAS_SERVER_URL="http://$LOCAL_HOST:81/server/"
         arlas_server_running_msg="ARLAS SERVER in version $ARLAS_SERVER_VERSION is running on $ARLAS_SERVER_URL"
 fi
 
@@ -159,7 +159,7 @@ if [ ! -z ${ES_CLUSTER+x} ];
                     exit 1
             fi    
             es_running_msg="ELASTICSEARCH is running on cluster $ES_CLUSTER"
-            unset docker_compose_services_array[4]
+            unset docker_compose_services_array[5]
         fi
     else
         es_running_msg="ELASTICSEARCH is running on http://$LOCAL_HOST:9200"
@@ -214,7 +214,7 @@ fi
 
 echo "DOCKER COMPOSE SERVICES RUNNING : ${docker_compose_services_array[@]}"
 #Run Docker-compose services
-eval "docker-compose up -d ${docker_compose_services_array[@]}"
+eval "docker-compose up --build -d ${docker_compose_services_array[@]}"
 # Start the Spinner:
 spin &
 # Make a note of its Process ID (PID):

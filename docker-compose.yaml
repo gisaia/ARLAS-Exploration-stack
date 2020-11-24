@@ -5,8 +5,9 @@ services:
         container_name: arlas-wui
         environment:
             - ARLAS_USE_AUTHENT=false
-            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:19997/arlas-persistence-server}
-            - ARLAS_HUB_URL=http://${LOCAL_HOST-localhost}:8094
+            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
+            - ARLAS_HUB_URL=http://${LOCAL_HOST-localhost}:81/hub
+            - ARLAS_WUI_BASE_HREF=/wui
         depends_on:
             - arlas-persistence-server
             - arlas-server
@@ -19,9 +20,10 @@ services:
         container_name: arlas-hub
         environment:
             - ARLAS_USE_AUTHENT=false
-            - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:8096
-            - ARLAS_BUILDER_URL=http://${LOCAL_HOST-localhost}:8095
-            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:19997/arlas-persistence-server}
+            - ARLAS_HUB_BASE_HREF=/hub
+            - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:81/wui
+            - ARLAS_BUILDER_URL=http://${LOCAL_HOST-localhost}:81/builder
+            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
         depends_on:
             - arlas-persistence-server
             - arlas-wui
@@ -34,10 +36,11 @@ services:
         image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.0.2-beta.0}
         container_name: arlas-builder
         environment:
+            - ARLAS_BUILDER_BASE_HREF=/builder
             - ARLAS_USE_AUTHENT=false
-            - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:8096
-            - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-http://localhost:19999/arlas}
-            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:19997/arlas-persistence-server}
+            - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:81/wui
+            - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-http://localhost:81/server}
+            - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
         depends_on:
             - arlas-persistence-server
             - arlas-wui 
@@ -101,7 +104,7 @@ services:
             - ARLAS_PREFIX=/arlas
             - ARLAS_ELASTIC_INDEX=${ARLAS_ELASTIC_INDEX:-.arlas}
             - ARLAS_APP_PATH=/
-            - ARLAS_BASE_URI=http://${LOCAL_HOST-localhost}:19999/arlas/
+            - ARLAS_BASE_URI=http://${LOCAL_HOST-localhost}:81/server/
         depends_on:
             - elasticsearch
         command: ["/opt/app/wait-for-elasticsearch.sh"]
@@ -109,6 +112,18 @@ services:
             - '19999:9999'
         networks:
             - esnet
+    nginx:
+        build: ./nginx
+        ports:
+            - "81:81"
+        networks:
+            - esnet
+        links:
+            - arlas-wui
+            - arlas-builder
+            - arlas-hub
+            - arlas-server            
+            - arlas-persistence-server
 volumes:
     esdata1:
         driver: local
