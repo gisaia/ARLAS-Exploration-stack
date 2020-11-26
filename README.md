@@ -30,22 +30,24 @@ Usage: ./start.sh  [--arlas-persistence-url] [--arlas-server-url] [--es-cluster]
 Run ./start.sh without passing any parameters returns :
 
 ````
-DOCKER COMPOSE SERVICES RUNNING : arlas-wui arlas-builder arlas-hub arlas-server elasticsearch arlas-persistence-server
+############################################
+THE ARLAS STACK IS READY
 ############################################
                                             
 ############################################
-ARLAS WUI in version 14.0.1 is running on http://localhost:8096
-ARLAS HUB in  version 14.0.0 is running on http://localhost:8094
-ARLAS BUILDER  in version 14.0.2-beta.0 is running on http://localhost:8095
+ARLAS WUI in version 14.0.1 is running on http://localhost:81/wui
+ARLAS HUB in  version 14.0.0 is running on http://localhost:81/hub
+ARLAS BUILDER  in version 14.0.2-beta.0 is running on http://localhost:81/builder
 ############################################
                                             
 ############################################
-ARLAS PERSISTENCE SERVER in version 14.0.0 is running on http://localhost:19997/arlas-persistence-server
-ARLAS SERVER in version 14.7.0 is running on http://localhost:19999/arlas
+ARLAS PERSISTENCE SERVER in version 14.0.0 is running on http://localhost:81/persist/
+ARLAS SERVER in version 14.7.0 is running on http://localhost:81/server/
 ############################################
                                             
 ############################################
 ELASTICSEARCH is running on http://localhost:9200
+
 ELASTICSEARCH options enable sniffing : false
 ELASTICSEARCH options enable SSL : false
 ELASTICSEARCH credentials :

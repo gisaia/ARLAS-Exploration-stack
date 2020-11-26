@@ -5,8 +5,8 @@ SCRIPT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
 PROJECT_ROOT_DIRECTORY="$SCRIPT_DIRECTORY"
 
 usage(){
-	echo "Usage: ./start.sh [--arlas-server-url] [--es-cluster] [--es-credentials]"
-	echo " -asu|--arlas-server-url       URL of a arlas-server service to use. If not set, $LOCAL_HOST:19999/arlas is considered"
+	echo "Usage: ./add_data.sh [--arlas-server-url] [--es-cluster] [--es-credentials]"
+	echo " -asu|--arlas-server-url       URL of a arlas-server service to use. If not set, $LOCAL_HOST:81/server is considered"
 	echo " -esc|--es-cluster             ES cluster to use. If not set, $LOCAL_HOST:9200 is considered"
 	echo " -escdr|--es-credentials       Credential to use to connect to ES Cluster (if necessary)"
     echo " -h|--help                     Display manual"
@@ -55,24 +55,50 @@ if [ ! -z ${ARLAS_SERVER_URL+x} ];
     then
         echo "ARLAS-server is running on $ARLAS_SERVER_URL"
     else
-        ARLAS_SERVER_URL=$LOCAL_HOST:19999/arlas
-        echo "ARLAS-server is running on $LOCAL_HOST:19999/arlas"
+        ARLAS_SERVER_URL=$LOCAL_HOST:81/server
+        echo "ARLAS-server is running on $LOCAL_HOST:81/server"
 fi 
 
-echo "## Deleting 'airport_index' in case it already exists"
-curl -f --user ${ES_CREDENTIALS} -X DELETE "${ES_CLUSTER}/airport_index?pretty"  || echo " !!! Couldn't reach Elasticsearch at ${ES_CLUSTER}"; echo ""; usage; exit -1;
+if [ ! -z ${ES_CREDENTIALS+x} ];
+    then
+        use_es_credential=true
+    else
+        ARLAS_SERVER_URL=$LOCAL_HOST:81/server
+        echo "ARLAS-server is running on $LOCAL_HOST:81/server"
+        use_es_credential=false
+fi
 
-echo "## Creating 'airport_index'"
-curl -f --user ${ES_CREDENTIALS} -XPUT \
-  -H 'Content-Type: application/json' \
-  "${ES_CLUSTER}/airport_index?pretty" \
-  --data @$SCRIPT_DIRECTORY/data/airport_mapping.json || echo " !!! Couldn't reach Elasticsearch at ${ES_CLUSTER}"; echo ""; usage; exit -1;
+if [ "$use_es_credential" = true ];
+                then
+
+
+                    echo "## Creating 'airport_index'"
+                    curl -f --user ${ES_CREDENTIALS} -XPUT \
+                    -H 'Content-Type: application/json' \
+                    "${ES_CLUSTER}/airport_index?pretty" \
+                    --data @$SCRIPT_DIRECTORY/data/airport_mapping.json 
+                    echo "## Adding data to 'airport_index'"
+                    curl -s -H "Content-Type: application/json" \
+                    --user ${ES_CREDENTIALS} -XPOST "${ES_CLUSTER}/airport_index/_bulk?pretty&refresh" \
+                    --data-binary @${SCRIPT_DIRECTORY}/data/data.txt > /dev/null
+                    echo "   -> Data added"
+                else
+
+
+                    echo "## Creating 'airport_index'"
+                    curl -f  -XPUT \
+                    -H 'Content-Type: application/json' \
+                    "${ES_CLUSTER}/airport_index?pretty" \
+                    --data @$SCRIPT_DIRECTORY/data/airport_mapping.json 
   
-echo "## Adding data to 'airport_index'"
-curl -s -H "Content-Type: application/json" \
-  --user ${ES_CREDENTIALS} -XPOST "${ES_CLUSTER}/airport_index/_bulk?pretty&refresh" \
-  --data-binary @${SCRIPT_DIRECTORY}/data/data.txt > /dev/null
-echo "   -> Data added"
+                    echo "## Adding data to 'airport_index'"
+                    curl -s -H "Content-Type: application/json" \
+                     -XPOST "${ES_CLUSTER}/airport_index/_bulk?pretty&refresh" \
+                    --data-binary @${SCRIPT_DIRECTORY}/data/data.txt > /dev/null
+                    echo "   -> Data added"
+            fi
+
+
 
 echo "## Referecing 'airport_index' in ARLAS-server"
 bash ${SCRIPT_DIRECTORY}/collections/create_collection.sh -asu=${ARLAS_SERVER_URL} -n="airport_collection" -i="airport_index" -ip="id" -tp="startdate" -gp="geometry" -cp="centroid"
