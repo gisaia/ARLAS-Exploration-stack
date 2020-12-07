@@ -1,7 +1,7 @@
 version: '3'
 services:
     arlas-wui:
-        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.0.1}
+        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.1.0}
         container_name: arlas-wui
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -16,7 +16,7 @@ services:
         networks:
             - esnet
     arlas-hub:
-        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-14.0.0}
+        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-14.1.0}
         container_name: arlas-hub
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -33,7 +33,7 @@ services:
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.0.2-beta.0}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.1.0}
         container_name: arlas-builder
         environment:
             - ARLAS_BUILDER_BASE_HREF=/builder
