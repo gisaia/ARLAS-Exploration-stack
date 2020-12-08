@@ -54,8 +54,13 @@ usage(){
 	exit 1
 }
 
-#Set variables in version.env as env variable
-export $(eval "echo \"$(cat .env)\"" | xargs)
+#Set env variables using env.sh
+source ./env.sh;
+#Set variables in .env as env variable id .env file exist
+envFile=.env
+if [ -f "$envFile" ];then
+    export $(eval "echo \"$(cat .env)\"" | xargs)
+fi
 
 unset ARLAS_PERSISTENCE_URL
 unset ARLAS_SERVER_URL
