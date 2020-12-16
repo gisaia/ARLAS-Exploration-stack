@@ -1,10 +1,12 @@
 #!/bin/bash
 set -o errexit -o pipefail
+SCRIPT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd)"
+
 #Set env variables using env.sh
-source ./env.sh;
+source $SCRIPT_DIRECTORY/env.sh;
 #Set variables in .env as env variable id .env file exist
-envFile=.env
+envFile=$SCRIPT_DIRECTORY/.env
 if [ -f "$envFile" ];then
     export $(eval "echo \"$(cat .env)\"" | xargs)
 fi
-eval "docker-compose down"
+eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml down"
