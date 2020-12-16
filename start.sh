@@ -1,6 +1,6 @@
 
 #!/bin/bash
-
+SCRIPT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd)"
 spin()
 {
   spinner="/|\\-/|\\-"
@@ -55,9 +55,9 @@ usage(){
 }
 
 #Set env variables using env.sh
-source ./env.sh;
+source $SCRIPT_DIRECTORY/env.sh;
 #Set variables in .env as env variable id .env file exist
-envFile=.env
+envFile=$SCRIPT_DIRECTORY/.env
 if [ -f "$envFile" ];then
     export $(eval "echo \"$(cat .env)\"" | xargs)
 fi
@@ -219,7 +219,7 @@ fi
 
 echo "DOCKER COMPOSE SERVICES RUNNING : ${docker_compose_services_array[@]}"
 #Run Docker-compose services
-eval "docker-compose up --build -d ${docker_compose_services_array[@]}"
+eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml up --build -d ${docker_compose_services_array[@]}"
 # Start the Spinner:
 spin &
 # Make a note of its Process ID (PID):
@@ -231,21 +231,21 @@ trap "kill -9 $SPIN_PID" `seq 0 15`
 
 if [ "$ignore_persistence" = true ]; 
     then
-        eval "docker-compose stop arlas-persistence-server"
-        eval "docker-compose rm -f arlas-persistence-server"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-persistence-server"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-persistence-server"
 fi
 if [ "$ignore_arlas" = true ]; 
     then
-        eval "docker-compose stop arlas-server"
-        eval "docker-compose rm -f arlas-server"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-server"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-server"
         #No local service to waiting for
         ready_message
         exit 0
 fi
 if [ "$ignore_es" = true ]; 
     then
-        eval "docker-compose stop elasticsearch"
-        eval "docker-compose rm -f elasticsearch"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop elasticsearch"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force elasticsearch"
         ready_message
         exit 0
     else
@@ -265,7 +265,7 @@ if [ "$ignore_es" = true ];
             eval "sleep 5"
         done 
         #Restart Arlas server when we are sure thar ES is UP
-        eval "docker-compose restart arlas-server"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml restart arlas-server"
         ready_message
 
 fi
