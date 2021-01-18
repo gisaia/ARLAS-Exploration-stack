@@ -2,10 +2,11 @@ This project contains :
 
 # Docker-compose file
 This docker-compose contains 6 services :
-- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 14.1.2
-- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 14.1.2
-- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 14.1.2
-- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 14.0.0
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 14.2.1
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 14.2.1
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 14.2.1
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 14.0.1
+- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions) version >= 14.0.2
 - [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.9.2
 - [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 14.7.0
 
@@ -15,8 +16,9 @@ This script executes the docker-compose according to parameters.
 If no parameters are provided, all the services are started locally.
 
 ````
-Usage: ./start.sh  [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node] [--help]
+Usage: ./start.sh [--arlas-permissions-url] [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node] [--help]
  -apu |--arlas-persistence-url url of a arlas-persistence service to use
+ -apermu |--arlas-permissions-url url of a arlas-permissions service to use
  -asu|--arlas-server-url       url of a arlas-server service to use (if set, --es-cluster and --es-node  will be ignored)
  -esc|--es-cluster             es-cluster to use (if set --es-node is mandatory )
  -esn|--es-node                es-node to use (if set --es-cluster is mandatory ) 
@@ -35,13 +37,14 @@ THE ARLAS STACK IS READY
 ############################################
                                             
 ############################################
-ARLAS WUI in version 14.1.2 is running on http://localhost:81/wui
-ARLAS HUB in  version 14.1.2 is running on http://localhost:81/hub
-ARLAS BUILDER  in version 14.1.2 is running on http://localhost:81/builder
+ARLAS WUI in version 14.2.1 is running on http://localhost:81/wui
+ARLAS HUB in  version 14.2.1 is running on http://localhost:81/hub
+ARLAS BUILDER  in version 14.2.1 is running on http://localhost:81/builder
 ############################################
                                             
 ############################################
-ARLAS PERSISTENCE SERVER in version 14.0.0 is running on http://localhost:81/persist/
+ARLAS PERSISTENCE SERVER in version 14.0.1 is running on http://localhost:81/persist/
+ARLAS PERMISSIONS SERVER in version 14.0.2 is running on http://localhost:81/permissions/
 ARLAS SERVER in version 14.7.0 is running on http://localhost:81/server/
 ############################################
                                             
