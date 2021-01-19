@@ -24,7 +24,7 @@ services:
             - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:81/wui
             - ARLAS_BUILDER_URL=http://${LOCAL_HOST-localhost}:81/builder
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
-            - ARLAS_PERMISSIONS_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/permissions}
+            - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-http://localhost:81/permissions}
         depends_on:
             - arlas-persistence-server
             - arlas-wui
@@ -42,7 +42,7 @@ services:
             - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:81/wui
             - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-http://localhost:81/server}
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
-            - ARLAS_PERMISSIONS_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/permissions}
+            - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-http://localhost:81/permissions}
             - ARLAS_BASEMAPS=""
         depends_on:
             - arlas-persistence-server
