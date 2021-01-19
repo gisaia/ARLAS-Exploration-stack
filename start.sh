@@ -28,6 +28,7 @@ ready_message(){
         echo "                                            "
         echo "############################################"
         echo $persistence_running_msg
+        echo $permissions_running_msg
         echo $arlas_server_running_msg
         echo "############################################"
         echo "                                            "
@@ -41,8 +42,9 @@ ready_message(){
 }
 
 usage(){
-	echo "Usage: ./start.sh  [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node]"
+	echo "Usage: ./start.sh  [--arlas-permissions-url] [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node]"
 	echo " -apu |--arlas-persistence-url url of a arlas-persistence service to use"
+	echo " -apermu |--arlas-permissions-url url of a arlas-permissions service to use"
 	echo " -asu|--arlas-server-url       url of a arlas-server service to use (if set, --es-cluster  and--es-node will be ignored)"
 	echo " -esc|--es-cluster             es-cluster to use (if set --es-node is mandatory )"
 	echo " -esn|--es-node                es-node to use (if set  --es-cluster is mandatory ) "
@@ -63,6 +65,7 @@ if [ -f "$envFile" ];then
 fi
 
 unset ARLAS_PERSISTENCE_URL
+unset ARLAS_PERMISSIONS_URL
 unset ARLAS_SERVER_URL
 unset ES_CLUSTER
 unset ES_NODE
@@ -71,12 +74,13 @@ unset ES_SNIFFING
 unset ES_CREDENTIALS
 unset ARLAS_ELASTIC_INDEX
 
-docker_compose_services="arlas-wui, arlas-builder, arlas-hub, nginx, arlas-server, elasticsearch, arlas-persistence-server"
+docker_compose_services="arlas-wui, arlas-builder, arlas-hub, nginx, arlas-server, elasticsearch, arlas-persistence-server, arlas-permissions-server"
 IFS=', ' read -r -a docker_compose_services_array <<< "$docker_compose_services"
 
 ignore_es=false
 ignore_arlas=false
 ignore_persistence=false
+ignore_permissions=false
 use_es_credential=false
 
 
@@ -90,6 +94,10 @@ case $i in
     ;;
     -apu=*|--arlas-persistence-url=*)
     export ARLAS_PERSISTENCE_URL="${i#*=}"
+    shift # past argument=value
+    ;;
+    -apermu=*|--arlas-permissions-url=*)
+    export ARLAS_PERMISSIONS_URL="${i#*=}"
     shift # past argument=value
     ;;
     -asu=*|--arlas-server-url=*)
@@ -139,6 +147,16 @@ if [ ! -z ${ARLAS_PERSISTENCE_URL+x} ];
     else
         export ARLAS_PERSISTENCE_URL="http://$LOCAL_HOST:81/persist/"
         persistence_running_msg="ARLAS PERSISTENCE SERVER in version $ARLAS_PERSISTENCE_VERSION is running on $ARLAS_PERSISTENCE_URL"
+fi
+
+if [ ! -z ${ARLAS_PERMISSIONS_URL+x} ];
+    then
+        permissions_running_msg="External ARLAS PERMISSIONS SERVER is running on ARLAS_PERMISSIONS_URL   "
+        unset docker_compose_services_array[6];
+        ignore_permissions=true
+    else
+        export ARLAS_PERMISSIONS_URL="http://$LOCAL_HOST:81/permissions/"
+        permissions_running_msg="ARLAS PERMISSIONS SERVER in version $ARLAS_PERMISSIONS_VERSIONS is running on $ARLAS_PERMISSIONS_URL"
 fi
 
 if [ ! -z ${ARLAS_SERVER_URL+x} ];
@@ -234,6 +252,13 @@ if [ "$ignore_persistence" = true ];
         eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-persistence-server"
         eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-persistence-server"
 fi
+
+if [ "$ignore_permissions" = true ]; 
+    then
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-permissions-server"
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-permissions-server"
+fi
+
 if [ "$ignore_arlas" = true ]; 
     then
         eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-server"

@@ -1,7 +1,7 @@
 version: '3'
 services:
     arlas-wui:
-        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.1.2}
+        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-14.2.1}
         container_name: arlas-wui
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -16,7 +16,7 @@ services:
         networks:
             - esnet
     arlas-hub:
-        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-14.1.2}
+        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-14.2.1}
         container_name: arlas-hub
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -24,6 +24,7 @@ services:
             - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:81/wui
             - ARLAS_BUILDER_URL=http://${LOCAL_HOST-localhost}:81/builder
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
+            - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-http://localhost:81/permissions}
         depends_on:
             - arlas-persistence-server
             - arlas-wui
@@ -33,7 +34,7 @@ services:
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.1.2}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-14.2.1}
         container_name: arlas-builder
         environment:
             - ARLAS_BUILDER_BASE_HREF=/builder
@@ -41,6 +42,8 @@ services:
             - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:81/wui
             - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-http://localhost:81/server}
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
+            - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-http://localhost:81/permissions}
+            - ARLAS_BASEMAPS=""
         depends_on:
             - arlas-persistence-server
             - arlas-wui 
@@ -49,7 +52,7 @@ services:
         networks:
             - esnet
     arlas-persistence-server:
-        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-14.0.0}
+        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-14.0.1}
         container_name: arlas-persistence-server
         environment:
             - ARLAS_PERSISTENCE_PORT=9997
@@ -89,7 +92,7 @@ services:
         networks:
             - esnet
     arlas-server:
-        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-14.7.0}
+        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-14.7.1}
         container_name: arlas-server
         environment:
             - ARLAS_ELASTIC_CLUSTER=${ES_CLUSTER:-docker-cluster}
@@ -112,6 +115,20 @@ services:
             - '19999:9999'
         networks:
             - esnet
+    arlas-permissions-server:
+        image: gisaia/arlas-permissions-server:${ARLAS_PERMISSIONS_VERSION:-14.0.2}
+        container_name: arlas-permissions-server
+        environment:
+            - ARLAS_PERMISSIONS_PORT=9996
+            - ARLAS_PERMISSIONS_PREFIX=/arlas-permissions-server
+            - ARLAS_PERMISSIONS_APP_PATH=/
+            - ARLAS_AUTH_ENABLED=false
+        expose:
+            - "9996"
+        ports:
+            - 19996:9996
+        networks:
+            - esnet
     nginx:
         build: ./nginx
         ports:
@@ -124,6 +141,7 @@ services:
             - arlas-hub
             - arlas-server            
             - arlas-persistence-server
+            - arlas-permissions-server
 volumes:
     esdata1:
         driver: local
