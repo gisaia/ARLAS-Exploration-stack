@@ -2,13 +2,13 @@ This project contains :
 
 # Docker-compose file
 This docker-compose contains 6 services :
-- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 14.3.1
-- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 14.3.1
-- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 14.3.1
-- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 14.0.1
-- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions) version >= 14.0.2
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 15.0.0
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 15.0.0
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 15.0.0
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 15.0.0
+- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions) version >= 15.0.0
 - [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.9.2
-- [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 14.7.2
+- [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 15.7.0
 
 # Start.sh script
 This script executes the docker-compose according to parameters.
@@ -37,15 +37,15 @@ THE ARLAS STACK IS READY
 ############################################
                                             
 ############################################
-ARLAS WUI in version 14.3.1 is running on http://localhost:81/wui
-ARLAS HUB in  version 14.3.1 is running on http://localhost:81/hub
-ARLAS BUILDER  in version 14.3.1 is running on http://localhost:81/builder
+ARLAS WUI in version 15.0.0 is running on http://localhost:81/wui
+ARLAS HUB in  version 15.0.0 is running on http://localhost:81/hub
+ARLAS BUILDER  in version 15.0.0 is running on http://localhost:81/builder
 ############################################
                                             
 ############################################
-ARLAS PERSISTENCE SERVER in version 14.0.1 is running on http://localhost:81/persist/
-ARLAS PERMISSIONS SERVER in version 14.0.2 is running on http://localhost:81/permissions/
-ARLAS SERVER in version 14.7.2 is running on http://localhost:81/server/
+ARLAS PERSISTENCE SERVER in version 15.0.0 is running on http://localhost:81/persist/
+ARLAS PERMISSIONS SERVER in version 15.0.0 is running on http://localhost:81/permissions/
+ARLAS SERVER in version 15.7.0 is running on http://localhost:81/server/
 ############################################
                                             
 ############################################
