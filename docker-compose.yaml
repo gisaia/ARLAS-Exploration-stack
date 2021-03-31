@@ -1,7 +1,7 @@
 version: '3'
 services:
     arlas-wui:
-        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-15.0.2}
+        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-16.0.1}
         container_name: arlas-wui
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -16,7 +16,7 @@ services:
         networks:
             - esnet
     arlas-hub:
-        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-15.0.0}
+        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-16.0.0}
         container_name: arlas-hub
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -34,7 +34,7 @@ services:
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-15.0.2}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-16.0.1}
         container_name: arlas-builder
         environment:
             - ARLAS_BUILDER_BASE_HREF=/builder
@@ -43,7 +43,7 @@ services:
             - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-http://localhost:81/server}
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
             - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-http://localhost:81/permissions}
-            - ARLAS_BASEMAPS=[{"name":"Basic","url":"https://api.maptiler.com/maps/basic/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/basic.png"},{"name":"Bright","url":"https://api.maptiler.com/maps/bright/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/bright.png"},{"name":"Outdoor","url":"https://api.maptiler.com/maps/outdoor/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/outdoor.png"},{"name":"Pastel","url":"https://api.maptiler.com/maps/pastel/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/pastel.png"},{"name":"Satellite Hybrid","url":"https://api.maptiler.com/maps/hybrid/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/hybrid.png"},{"name":"Streets","url":"https://api.maptiler.com/maps/streets/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/streets.png"},{"name":"Toner","url":"https://api.maptiler.com/maps/toner/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/toner.png"},{"name":"Topo","url":"https://api.maptiler.com/maps/topo/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/topo.png"},{"name":"Topographique","url":"https://api.maptiler.com/maps/topographique/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/topographique.png"},{"name":"Voyager","url":"https://api.maptiler.com/maps/voyager/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/voyager.png"},{"name":"Positron","url":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=kO3nZIVLnPvIVn8AEnuk"}]
+            - ARLAS_BASEMAPS=[{"name":"Basic","url":"https://api.maptiler.com/maps/basic/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/basic.png"},{"name":"Bright","url":"https://api.maptiler.com/maps/bright/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/bright.png"},{"name":"Outdoor","url":"https://api.maptiler.com/maps/outdoor/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/outdoor.png"},{"name":"Pastel","url":"https://api.maptiler.com/maps/pastel/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/pastel.png"},{"name":"Satellite Hybrid","url":"https://api.maptiler.com/maps/hybrid/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/hybrid.png"},{"name":"Streets","url":"https://api.maptiler.com/maps/streets/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/streets.png"},{"name":"Toner","url":"https://api.maptiler.com/maps/toner/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/toner.png"},{"name":"Topo","url":"https://api.maptiler.com/maps/topo/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/topo.png"},{"name":"Topographique","url":"https://api.maptiler.com/maps/topographique/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/topographique.png"},{"name":"Voyager","url":"https://api.maptiler.com/maps/voyager/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://cloud.maptiler.com/static/img/maps/voyager.png"},{"name":"Positron","url":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=kO3nZIVLnPvIVn8AEnuk"},{"name":"Dark Topo","url":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/style.json?key=kO3nZIVLnPvIVn8AEnuk","image":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/0/0/0.png?key=kO3nZIVLnPvIVn8AEnuk"}]
         depends_on:
             - arlas-persistence-server
             - arlas-wui 
@@ -52,7 +52,7 @@ services:
         networks:
             - esnet
     arlas-persistence-server:
-        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-15.0.0}
+        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-16.0.1}
         container_name: arlas-persistence-server
         environment:
             - ARLAS_PERSISTENCE_PORT=9997
@@ -92,7 +92,7 @@ services:
         networks:
             - esnet
     arlas-server:
-        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-15.7.0}
+        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-16.7.0}
         container_name: arlas-server
         environment:
             - ARLAS_ELASTIC_CLUSTER=${ES_CLUSTER:-docker-cluster}
@@ -116,7 +116,7 @@ services:
         networks:
             - esnet
     arlas-permissions-server:
-        image: gisaia/arlas-permissions-server:${ARLAS_PERMISSIONS_VERSION:-15.0.0}
+        image: gisaia/arlas-permissions-server:${ARLAS_PERMISSIONS_VERSION:-16.0.1}
         container_name: arlas-permissions-server
         environment:
             - ARLAS_PERMISSIONS_PORT=9996
