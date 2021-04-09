@@ -34,7 +34,7 @@ services:
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-16.0.2}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-16.0.3}
         container_name: arlas-builder
         environment:
             - ARLAS_BUILDER_BASE_HREF=/builder
