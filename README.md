@@ -2,9 +2,9 @@ This project contains :
 
 # Docker-compose file
 This docker-compose contains 6 services :
-- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 16.0.2
-- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 16.0.0
-- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 16.0.4
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 16.1.0
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 16.1.0
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 16.1.0
 - [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 16.0.1
 - [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions) version >= 16.0.1
 - [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.9.2
@@ -37,9 +37,9 @@ THE ARLAS STACK IS READY
 ############################################
                                             
 ############################################
-ARLAS WUI in version 16.0.2 is running on http://localhost:81/wui
-ARLAS HUB in  version 16.0.0 is running on http://localhost:81/hub
-ARLAS BUILDER  in version 16.0.4 is running on http://localhost:81/builder
+ARLAS WUI in version 16.1.0 is running on http://localhost:81/wui
+ARLAS HUB in  version 16.1.0 is running on http://localhost:81/hub
+ARLAS BUILDER  in version 16.1.0 is running on http://localhost:81/builder
 ############################################
                                             
 ############################################
