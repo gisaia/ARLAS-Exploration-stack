@@ -32,6 +32,8 @@ ready_message(){
         echo $arlas_server_running_msg
         echo "############################################"
         echo "                                            "
+        if [ "$ignore_es" = false ];
+        then
         echo "############################################"
         echo $es_running_msg
         echo $es_running_node_msg
@@ -39,6 +41,11 @@ ready_message(){
         echo $es_enable_ssl_msg
         echo $es_credentials_msg
         echo $es_index_msg
+        echo "############################################"
+        echo "                                            "
+        fi
+        echo "############################################"
+        echo "pgAdmin is running on http://localhost:8080/browser/"
 }
 
 usage(){
@@ -74,7 +81,7 @@ unset ES_SNIFFING
 unset ES_CREDENTIALS
 unset ARLAS_ELASTIC_INDEX
 
-docker_compose_services="arlas-wui, arlas-builder, arlas-hub, nginx, arlas-server, elasticsearch, arlas-persistence-server, arlas-permissions-server"
+docker_compose_services="arlas-wui, arlas-builder, arlas-hub, nginx, arlas-server, elasticsearch, arlas-persistence-server, arlas-permissions-server, postgis, pgadmin"
 IFS=', ' read -r -a docker_compose_services_array <<< "$docker_compose_services"
 
 ignore_es=false
@@ -174,7 +181,7 @@ fi
 if [ ! -z ${ES_CLUSTER+x} ];
     then
         if [ "$ignore_es" != false ]; then
-            echo "WARNING : You have setted an arlas-server url, all the paramaters link to elasticsearch are ignored. "
+            echo "WARNING : You have set an arlas-server url, all the paramaters link to elasticsearch are ignored. "
         else
             if [  -z ${ES_NODE+x} ];
                 then
@@ -264,9 +271,8 @@ if [ "$ignore_arlas" = true ];
         eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-server"
         eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-server"
         #No local service to waiting for
-        ready_message
-        exit 0
 fi
+
 if [ "$ignore_es" = true ]; 
     then
         eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop elasticsearch"
