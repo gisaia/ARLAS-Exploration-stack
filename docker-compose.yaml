@@ -1,7 +1,7 @@
 version: '3'
 services:
     arlas-wui:
-        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-17.1.0}
+        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-17.1.1}
         container_name: arlas-wui
         environment:
             - ARLAS_USE_AUTHENT=false
