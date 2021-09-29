@@ -39,6 +39,8 @@ ready_message(){
         echo $es_enable_ssl_msg
         echo $es_credentials_msg
         echo $es_index_msg
+        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml restart nginx"
+
 }
 
 usage(){
@@ -294,3 +296,4 @@ if [ "$ignore_es" = true ];
         ready_message
 
 fi
+
