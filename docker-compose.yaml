@@ -125,7 +125,6 @@ services:
             - ARLAS_BASE_URI=http://${LOCAL_HOST-localhost}:81/server/
         depends_on:
             - elasticsearch
-        command: ["/opt/app/wait-for-elasticsearch.sh"]
         ports:
             - '19999:9999'
         networks:
