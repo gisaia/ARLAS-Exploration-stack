@@ -85,7 +85,7 @@ services:
         networks:
             - esnet
     elasticsearch:
-        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.9.2'
+        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.17.4}
         container_name: elasticsearch
         environment:
             - cluster.name=docker-cluster

@@ -7,7 +7,7 @@ This docker-compose contains 6 services :
 - [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 23.0.0
 - [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 23.0.0
 - [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions) version >= 23.0.0
-- [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.9.2
+- [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.17.4
 - [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 23.0.0
 
 # Start.sh script
