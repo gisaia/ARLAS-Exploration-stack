@@ -74,7 +74,7 @@ unset ES_SNIFFING
 unset ES_CREDENTIALS
 unset ARLAS_ELASTIC_INDEX
 
-docker_compose_services="arlas-wui, arlas-builder, arlas-hub, nginx, arlas-server, elasticsearch, arlas-persistence-server, arlas-permissions-server"
+docker_compose_services="arlas-wui-dc3, arlas-builder, arlas-hub, nginx, arlas-server, elasticsearch, arlas-persistence-server, arlas-permissions-server,arlas-datacube-builder"
 IFS=', ' read -r -a docker_compose_services_array <<< "$docker_compose_services"
 
 ignore_es=false

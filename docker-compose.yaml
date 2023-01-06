@@ -1,8 +1,8 @@
 version: '3'
 services:
-    arlas-wui:
-        image: gisaia/arlas-wui:${ARLAS_WUI_VERSION:-23.1.0}
-        container_name: arlas-wui
+    arlas-wui-dc3:
+        image: gisaia/arlas-wui-dc3:${ARLAS_WUI_DC3_VERSION:-0.0.1}
+        container_name: arlas-wui-dc3
         environment:
             - ARLAS_USE_AUTHENT=false
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
@@ -11,12 +11,24 @@ services:
         depends_on:
             - arlas-persistence-server
             - arlas-server
+            - arlas-datacube-builder
         ports:
             - 8096:80
         networks:
             - esnet
+    arlas-datacube-builder:
+        image: arlas-datacube-builder:${ARLAS_DATACUBE_BUILDER_VERSION:-latest}
+        container_name: arlas-datacube-builder
+        env_file:
+            - credentials
+        ports:
+            - 8080:5000
+        volumes:
+            - ${ARLAS_DATACUBE_BUILDER_LOCAL_FOLDER_HOST:-/tmp/}:/app/tmp/:rw
+        networks:
+            - esnet
     arlas-hub:
-        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-23.1.0}
+        image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-23.0.3}
         container_name: arlas-hub
         environment:
             - ARLAS_USE_AUTHENT=false
@@ -27,18 +39,19 @@ services:
             - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-http://localhost:81/permissions}
         depends_on:
             - arlas-persistence-server
-            - arlas-wui
+            - arlas-wui-dc3
             - arlas-builder
         ports:
             - 8094:80
         networks:
             - esnet
     arlas-builder:
-        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-23.1.0}
+        image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-23.0.3}
         container_name: arlas-builder
         environment:
             - ARLAS_BUILDER_BASE_HREF=/builder
             - ARLAS_USE_AUTHENT=false
+            - ARLAS_EXTERNAL_NODE_PAGE=true
             - ARLAS_WUI_URL=http://${LOCAL_HOST-localhost}:81/wui
             - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-http://localhost:81/server}
             - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-http://localhost:81/persist}
@@ -61,13 +74,13 @@ services:
                 ]
         depends_on:
             - arlas-persistence-server
-            - arlas-wui 
+            - arlas-wui-dc3
         ports:
             - 8095:80
         networks:
             - esnet
     arlas-persistence-server:
-        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-23.0.2}
+        image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-23.0.0}
         container_name: arlas-persistence-server
         environment:
             - ARLAS_PERSISTENCE_PORT=9997
@@ -85,7 +98,7 @@ services:
         networks:
             - esnet
     elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.17.7}
+        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.17.4}
         container_name: elasticsearch
         environment:
             - cluster.name=docker-cluster
@@ -107,7 +120,7 @@ services:
         networks:
             - esnet
     arlas-server:
-        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-23.0.7}
+        image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-23.0.2}
         container_name: arlas-server
         environment:
             - ARLAS_ELASTIC_CLUSTER=${ES_CLUSTER:-docker-cluster}
@@ -130,7 +143,7 @@ services:
         networks:
             - esnet
     arlas-permissions-server:
-        image: gisaia/arlas-permissions-server:${ARLAS_PERMISSIONS_VERSION:-23.0.2}
+        image: gisaia/arlas-permissions-server:${ARLAS_PERMISSIONS_VERSION:-23.0.0}
         container_name: arlas-permissions-server
         environment:
             - ARLAS_PERMISSIONS_PORT=9996
@@ -150,19 +163,21 @@ services:
         networks:
             - esnet
         links:
-            - arlas-wui
+            - arlas-wui-dc3
             - arlas-builder
             - arlas-hub
             - arlas-server            
             - arlas-persistence-server
             - arlas-permissions-server
+            - arlas-datacube-builder
         depends_on:
-            - arlas-wui
+            - arlas-wui-dc3
             - arlas-builder
             - arlas-hub
             - arlas-server            
             - arlas-persistence-server
             - arlas-permissions-server
+            - arlas-datacube-builder
 volumes:
     esdata1:
         driver: local

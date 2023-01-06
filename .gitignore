@@ -1,2 +1,5 @@
 .env
 .DS_Store
+credentials
+credentials*
+credentials.*
