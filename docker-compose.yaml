@@ -17,7 +17,7 @@ services:
         networks:
             - esnet
     arlas-datacube-builder:
-        image: arlas-datacube-builder:${ARLAS_DATACUBE_BUILDER_VERSION:-latest}
+        image: gisaia/arlas-datacube-builder:${ARLAS_DATACUBE_BUILDER_VERSION:-1.2}
         container_name: arlas-datacube-builder
         env_file:
             - credentials
