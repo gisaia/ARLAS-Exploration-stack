@@ -85,16 +85,16 @@ services:
         networks:
             - esnet
     elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.17.7}
+        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-8.7.0}
         container_name: elasticsearch
         environment:
+            - discovery.type=single-node
             - cluster.name=docker-cluster
             - node.name=docker-node
-            - cluster.initial_master_nodes=docker-node
-            - cluster.routing.allocation.disk.threshold_enabled=false
-            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
             - xpack.security.enabled=false
-            - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+            - xpack.security.http.ssl.enabled=false
+            - xpack.security.transport.ssl.enabled=false
         ulimits:
             memlock: {soft: -1, hard: -1}
             nofile:
@@ -117,6 +117,7 @@ services:
             - ARLAS_ELASTIC_CREDENTIALS=${ES_CREDENTIALS:-""}
             - ARLAS_SERVICE_WFS_ENABLE=true
             - ARLAS_CORS_ENABLED=true
+            - ARLAS_CORS_ALLOWED_HEADERS="arlas-user,arlas-groups,arlas-organization,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User,partition-filter"
             - ARLAS_SERVICE_CSW_ENABLE=true
             - ARLAS_SERVICE_RASTER_TILES_ENABLE=true
             - ARLAS_PREFIX=/arlas
@@ -126,7 +127,7 @@ services:
         depends_on:
             - elasticsearch
         ports:
-            - '19999:9999'
+            - '29999:9999'
         networks:
             - esnet
     arlas-permissions-server:
