@@ -1,0 +1,19 @@
+version: '3'
+services:
+
+#################
+# NGINX
+#################
+  nginx:
+    build: ./nginx
+    ports:
+      - "81:81"
+    networks:
+      - arlas-net
+    depends_on:
+      - arlas-wui
+      - arlas-builder
+      - arlas-hub
+      - arlas-server      
+      - arlas-persistence-server
+

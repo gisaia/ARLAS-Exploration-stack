@@ -1,0 +1,29 @@
+version: '3'
+services:
+
+#################
+# ARLAS PERSISTENCE
+#################
+  arlas-persistence-server:
+    image: gisaia/arlas-persistence-server:${ARLAS_PERSISTENCE_VERSION:-latest}
+    container_name: arlas-persistence-server
+    restart: always
+    expose:
+      - "9997"
+    volumes:
+      - ${ARLAS_PERSISTENCE_LOCAL_FOLDER_HOST:-/tmp/persist/}:/persist/:rw
+    networks:
+      - arlas-net
+    healthcheck:
+      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9997/admin/healthcheck"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    environment:
+      - ARLAS_PERSISTENCE_PORT=9997
+      - ARLAS_PERSISTENCE_PREFIX=/arlas-persistence-server
+      - ARLAS_PERSISTENCE_APP_PATH=/
+      - ARLAS_AUTH_ENABLED=false
+      - ARLAS_PERSISTENCE_ENGINE=file
+      - ARLAS_PERSISTENCE_LOCAL_FOLDER=/persist/
+      - ARLAS_CACHE_TIMEOUT="${ARLAS_CACHE_TIMEOUT:-5}"

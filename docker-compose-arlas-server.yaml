@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+#################
+# ARLAS SERVER
+#################
+  arlas-server:
+    image: gisaia/arlas-server:${ARLAS_SERVER_VERSION:-latest}
+    container_name: arlas-server
+    restart: always
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    expose:
+      - "9999"
+    ports:
+      - '9999:9999' # !EXPOSE!
+    networks:
+      - arlas-net
+    healthcheck:
+      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9999/admin/healthcheck"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    environment:
+      - ARLAS_ELASTIC_CLUSTER=${ES_CLUSTER:-arlas-es-cluster}
+      - ARLAS_ELASTIC_NODES=${ES_NODE:-elasticsearch:9200}
+      - ARLAS_ELASTIC_ENABLE_SSL=${ES_ENABLE_SSL:-false}
+      - ARLAS_ELASTIC_SNIFFING=${ES_SNIFFING:-false}
+      - ARLAS_ELASTIC_CREDENTIALS=${ES_CREDENTIALS:-""}
+      - ARLAS_BASE_URI=../server/
+      - ARLAS_SERVICE_WFS_ENABLE=${ARLAS_SERVICE_WFS_ENABLE:-false}
+      - ARLAS_SERVICE_CSW_ENABLE=${ARLAS_SERVICE_CSW_ENABLE:-false}
+      - ARLAS_SERVICE_RASTER_TILES_ENABLE=${ARLAS_SERVICE_RASTER_TILES_ENABLE:-false}
+      - ARLAS_CORS_ENABLED=true
+      - ARLAS_CORS_ALLOWED_HEADERS="arlas-user,arlas-groups,arlas-organization,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User,partition-filter"
+      - ARLAS_PREFIX=/arlas
+      - ARLAS_ELASTIC_INDEX=${ARLAS_ELASTIC_INDEX:-.arlas}
+      - ARLAS_APP_PATH=/

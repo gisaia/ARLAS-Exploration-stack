@@ -1,19 +1,6 @@
 
 #!/bin/bash
 SCRIPT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd)"
-spin()
-{
-  spinner="/|\\-/|\\-"
-  while :
-  do
-    for i in `seq 0 7`
-    do
-      echo -n "${spinner:$i:1}"
-      echo -en "\010"
-      sleep 1
-    done
-  done
-}
 
 ready_message(){
         echo "############################################"
@@ -237,40 +224,35 @@ fi
 
 echo "DOCKER COMPOSE SERVICES RUNNING : ${docker_compose_services_array[@]}"
 #Run Docker-compose services
-eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml up --build -d ${docker_compose_services_array[@]}"
-# Start the Spinner:
-spin &
+eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml up --build -d ${docker_compose_services_array[@]}"
 # Make a note of its Process ID (PID):
-SPIN_PID=$!
-# Kill the spinner on any signal, including our own exit.
-trap "kill -9 $SPIN_PID" `seq 0 15`
 
 #We need to stop useless local services started because of depends_on value in docker_compose.yaml
 
 if [ "$ignore_persistence" = true ]; 
     then
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-persistence-server"
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-persistence-server"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop arlas-persistence-server"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force arlas-persistence-server"
 fi
 
 if [ "$ignore_permissions" = true ]; 
     then
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-permissions-server"
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-permissions-server"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop arlas-permissions-server"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force arlas-permissions-server"
 fi
 
 if [ "$ignore_arlas" = true ]; 
     then
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop arlas-server"
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force arlas-server"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop arlas-server"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force arlas-server"
         #No local service to waiting for
         ready_message
         exit 0
 fi
 if [ "$ignore_es" = true ]; 
     then
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml stop elasticsearch"
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml rm --force elasticsearch"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop elasticsearch"
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force elasticsearch"
         ready_message
         exit 0
     else
@@ -289,8 +271,8 @@ if [ "$ignore_es" = true ];
             fi
             eval "sleep 5"
         done 
-        #Restart Arlas server when we are sure thar ES is UP
-        eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml restart arlas-server"
+        #Restart Arlas server when we are sure that ES is UP
+        eval "docker-compose -p arlas_exploration_stack  -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml restart arlas-server"
         ready_message
 
 fi

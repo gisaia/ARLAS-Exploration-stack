@@ -1,19 +1,10 @@
-This project contains :
+# ARLAS Exploration Stack
 
-# Docker-compose file
-This docker-compose contains 6 services :
-- [arlas-wui](https://github.com/gisaia/ARLAS-wui) version >= 24.3.0
-- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub) version >= 24.3.0
-- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder) version >= 24.3.0
-- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence) version >= 24.0.4
-- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions) version >= 24.0.4
-- [elasticsearch](https://github.com/elastic/elasticsearch) version >= 7.17.7
-- [arlas-server](https://github.com/gisaia/ARLAS-server) version >= 24.1.0
+ARLAS Exploration Stack is a set of micro services started with docker compose for running the opensource ARLAS web application.
 
-# Start.sh script
-This script executes the docker-compose according to parameters.
+## Starting the stack
 
-If no parameters are provided, all the services are started locally.
+`start.sh` starts the ARLAS Exploration Stack composed of containerized services. If no parameters are provided, all the services are started locally.
 
 ````
 Usage: ./start.sh [--arlas-permissions-url] [--arlas-persistence-url] [--arlas-server-url] [--es-cluster] [--es-node] [--help]
@@ -29,38 +20,31 @@ Usage: ./start.sh [--arlas-permissions-url] [--arlas-persistence-url] [--arlas-s
  -h|--help                     Display manual 
  ````
 
-Run ./start.sh without passing any parameters returns :
+## Stopping the stack
 
-````
-############################################
-THE ARLAS STACK IS READY
-############################################
-                                            
-############################################
-ARLAS WUI in version 24.3.0 is running on http://localhost:81/wui
-ARLAS HUB in  version 24.3.0 is running on http://localhost:81/hub
-ARLAS BUILDER  in version 24.3.0 is running on http://localhost:81/builder
-############################################
-                                            
-############################################
-ARLAS PERSISTENCE SERVER in version 24.0.4 is running on http://localhost:81/persist/
-ARLAS PERMISSIONS SERVER in version 24.0.4 is running on http://localhost:81/permissions/
-ARLAS SERVER in version 24.1.0 is running on http://localhost:81/server/
-############################################
-                                            
-############################################
-ELASTICSEARCH is running on http://localhost:9200
+`stop.sh` shuts down all services of the docker-compose.
 
-ELASTICSEARCH options enable sniffing : false
-ELASTICSEARCH options enable SSL : false
-ELASTICSEARCH credentials :
-ARLAS ELASTICSEARCH index : .arlas
-````
-```localhost``` can be replaced by an env variable __$LOCAL_HOST__ in `.env` file
+## Services
 
-# Stop.sh script
-This script shutdowns all services of the docker-compose.
+The stack contains 6 services :
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui)
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub)
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder)
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence)
+- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
+- [elasticsearch](https://github.com/elastic/elasticsearch)
+- [arlas-server](https://github.com/gisaia/ARLAS-server)
 
-# .env
-This file is used by the start.sh script to set some env variables of each component.
-$ARLAS_PERSISTENCE_LOCAL_FOLDER_HOST allows you to choose the folder where arlas configurations will be stored on your computer.
+
+## Configuration
+
+### env.sh
+The `env.sh` exports a set of variables for setting the service versions. This file changes over time, when new releases of ARLAS services are made available.
+Also, `$ARLAS_PERSISTENCE_LOCAL_FOLDER_HOST` allows you to choose the folder where arlas configurations should be stored .
+
+### .env
+This file is used by the start.sh script to overwrite environement variables. This file is not provided in the git repo and is ignored by git. It is the best place to set your custom values.
+
+## Adding data
+
+If you want to create an ARLAS collection with some data, the best place to start is `arlas_cli`: https://gisaia.github.io/arlas_cli/
