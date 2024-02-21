@@ -224,7 +224,7 @@ fi
 
 echo "DOCKER COMPOSE SERVICES RUNNING : ${docker_compose_services_array[@]}"
 #Run Docker-compose services
-eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml up --build -d ${docker_compose_services_array[@]}"
+eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml up -d ${docker_compose_services_array[@]}"
 # Make a note of its Process ID (PID):
 
 #We need to stop useless local services started because of depends_on value in docker_compose.yaml

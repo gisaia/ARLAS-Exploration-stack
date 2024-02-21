@@ -5,7 +5,8 @@ services:
 # NGINX
 #################
   nginx:
-    build: ./nginx
+    image: gisaia/arlas-stack-nginx:${ARLAS_NGINX_VERSION:-latest}
+    container_name: arlas-stack-nginx
     ports:
       - "81:81"
     networks:
@@ -16,4 +17,3 @@ services:
       - arlas-hub
       - arlas-server      
       - arlas-persistence-server
-
