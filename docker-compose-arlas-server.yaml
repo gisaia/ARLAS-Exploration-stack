@@ -13,8 +13,6 @@ services:
         condition: service_healthy
     expose:
       - "9999"
-    ports:
-      - '9999:9999' # !EXPOSE!
     networks:
       - arlas-net
     healthcheck:

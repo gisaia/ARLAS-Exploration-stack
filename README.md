@@ -26,7 +26,7 @@ Usage: ./start.sh [--arlas-permissions-url] [--arlas-persistence-url] [--arlas-s
 
 ## Services
 
-The stack contains 6 services :
+The stack contains 7 services :
 - [arlas-wui](https://github.com/gisaia/ARLAS-wui)
 - [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub)
 - [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder)
