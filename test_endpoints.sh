@@ -13,6 +13,7 @@ test_status (){
         echo $endpoint "ok: " $verb " is " $computed
     fi
 }
+sleep 10
 
 test_status GET "http://localhost:81/hub/assets/hub-icon.png" 200
 test_status GET "http://localhost:81/permissions/authorize/resources" 200
