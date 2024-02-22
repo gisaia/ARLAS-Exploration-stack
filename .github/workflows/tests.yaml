@@ -8,8 +8,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Start stack
-      run: start.sh
+      run: ./start.sh
     - name: Run endpoints tests
-      run: test_endpoints.sh
+      run: ./test_endpoints.sh
     - name: Stop stack
-      run: stop.sh
+      run: ./stop.sh
