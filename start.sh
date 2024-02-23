@@ -269,6 +269,7 @@ if [ "$ignore_es" = true ];
                 else
                     code="$(curl -IL --silent $ES_NODE | grep "^HTTP\/")"
             fi
+            echo "ARLAS CODE: $code"
             eval "sleep 5"
         done 
         #Restart ARLAS server when we are sure that ES is UP
