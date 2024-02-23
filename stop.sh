@@ -9,4 +9,5 @@ envFile=$SCRIPT_DIRECTORY/.env
 if [ -f "$envFile" ];then
     export $(eval "echo \"$(cat .env)\"" | xargs)
 fi
-eval "docker-compose -f $SCRIPT_DIRECTORY/docker-compose.yaml down"
+
+eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml down"

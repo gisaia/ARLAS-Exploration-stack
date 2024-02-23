@@ -1,0 +1,30 @@
+version: '3'
+services:
+
+#################
+# ARLAS BUILDER
+#################
+  arlas-builder:
+    image: gisaia/arlas-wui-builder:${ARLAS_BUILDER_VERSION:-latest}
+    container_name: arlas-builder
+    restart: always
+    depends_on:
+      arlas-persistence-server:
+        condition: service_healthy
+      arlas-server:
+        condition: service_healthy
+      arlas-permissions-server:
+        condition: service_healthy          
+    expose:
+      - "80"
+    networks:
+      - arlas-net
+    environment:
+      - ARLAS_BUILDER_BASE_HREF=/builder
+      - ARLAS_USE_AUTHENT=false
+      - ARLAS_WUI_URL=../wui
+      - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-../server}
+      - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-../persist}
+      - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-../permissions}
+      - ARLAS_EXTERNAL_NODE_PAGE=true
+      - ARLAS_BASEMAPS=[{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]

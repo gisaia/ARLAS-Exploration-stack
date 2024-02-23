@@ -1,0 +1,5 @@
+version: '3'
+
+networks:
+  arlas-net:
+    name: arlas-net

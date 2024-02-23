@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+#################
+# ARLAS HUB
+#################
+  arlas-hub:
+    image: gisaia/arlas-wui-hub:${ARLAS_HUB_VERSION:-latest}
+    container_name: arlas-hub
+    restart: always
+    depends_on:
+      arlas-persistence-server:
+        condition: service_healthy
+      arlas-server:
+        condition: service_healthy
+      arlas-permissions-server:
+        condition: service_healthy          
+    environment:
+      - ARLAS_HUB_BASE_HREF=/hub
+      - ARLAS_USE_AUTHENT=false
+      - ARLAS_WUI_URL=../wui
+      - ARLAS_BUILDER_URL=../builder
+      - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-../persist}
+      - ARLAS_PERMISSIONS_URL=${ARLAS_PERMISSIONS_URL:-../permissions}
+    expose:
+      - "80"
+    networks:
+      - arlas-net

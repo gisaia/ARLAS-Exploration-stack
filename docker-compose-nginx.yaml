@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+#################
+# NGINX
+#################
+  nginx:
+    image: gisaia/arlas-stack-nginx:${ARLAS_NGINX_VERSION:-latest}
+    container_name: arlas-stack-nginx
+    ports:
+      - "81:81"
+    networks:
+      - arlas-net
+    depends_on:
+      arlas-wui:
+        condition: service_healthy
+      arlas-builder:
+        condition: service_healthy
+      arlas-hub:
+        condition: service_healthy
+      arlas-server  :
+        condition: service_healthy    
+      arlas-persistence-server:
+        condition: service_healthy
