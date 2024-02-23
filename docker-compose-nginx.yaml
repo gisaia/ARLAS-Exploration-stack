@@ -12,8 +12,13 @@ services:
     networks:
       - arlas-net
     depends_on:
-      - arlas-wui
-      - arlas-builder
-      - arlas-hub
-      - arlas-server      
-      - arlas-persistence-server
+      arlas-wui:
+        condition: service_healthy
+      arlas-builder:
+        condition: service_healthy
+      arlas-hub:
+        condition: service_healthy
+      arlas-server  :
+        condition: service_healthy    
+      arlas-persistence-server:
+        condition: service_healthy

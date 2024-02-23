@@ -11,6 +11,10 @@ services:
     depends_on:
       arlas-persistence-server:
         condition: service_healthy
+      arlas-server:
+        condition: service_healthy
+      arlas-permissions-server:
+        condition: service_healthy          
     expose:
       - "80"
     networks:
