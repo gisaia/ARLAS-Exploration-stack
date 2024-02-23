@@ -1,0 +1,15 @@
+name: Test ARLAS Exploration stack
+
+on: push
+
+jobs:
+  endpoint-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start stack
+      run: ./start.sh
+    - name: Run endpoints tests
+      run: ./test_endpoints.sh
+    - name: Stop stack
+      run: ./stop.sh

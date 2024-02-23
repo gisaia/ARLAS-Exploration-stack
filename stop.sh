@@ -10,4 +10,8 @@ if [ -f "$envFile" ];then
     export $(eval "echo \"$(cat .env)\"" | xargs)
 fi
 
-eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml down"
+DOCKER_COMPOSE_FILES="-f $SCRIPT_DIRECTORY/docker-compose-arlas-builder.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-hub.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-permissions.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-persistence.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-server.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-wui.yaml -f $SCRIPT_DIRECTORY/docker-compose-elasticsearch.yaml -f $SCRIPT_DIRECTORY/docker-compose-net.yaml -f $SCRIPT_DIRECTORY/docker-compose-nginx.yaml -f $SCRIPT_DIRECTORY/docker-compose-volumes.yaml"
+
+#Run Docker-compose services
+eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES down"
+

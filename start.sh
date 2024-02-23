@@ -1,5 +1,7 @@
 
 #!/bin/bash
+set -o errexit -o pipefail
+
 SCRIPT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd)"
 
 ready_message(){
@@ -223,36 +225,39 @@ if [ ! -z ${ARLAS_ELASTIC_INDEX+x} ];
 fi
 
 echo "DOCKER COMPOSE SERVICES RUNNING : ${docker_compose_services_array[@]}"
+
+DOCKER_COMPOSE_FILES="-f $SCRIPT_DIRECTORY/docker-compose-arlas-builder.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-hub.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-permissions.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-persistence.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-server.yaml -f $SCRIPT_DIRECTORY/docker-compose-arlas-wui.yaml -f $SCRIPT_DIRECTORY/docker-compose-elasticsearch.yaml -f $SCRIPT_DIRECTORY/docker-compose-net.yaml -f $SCRIPT_DIRECTORY/docker-compose-nginx.yaml -f $SCRIPT_DIRECTORY/docker-compose-volumes.yaml"
+
 #Run Docker-compose services
-eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml up -d ${docker_compose_services_array[@]}"
+eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES up -d ${docker_compose_services_array[@]}"
 # Make a note of its Process ID (PID):
 
 #We need to stop useless local services started because of depends_on value in docker_compose.yaml
 
 if [ "$ignore_persistence" = true ]; 
     then
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop arlas-persistence-server"
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force arlas-persistence-server"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES stop arlas-persistence-server"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES rm --force arlas-persistence-server"
 fi
 
 if [ "$ignore_permissions" = true ]; 
     then
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop arlas-permissions-server"
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force arlas-permissions-server"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES stop arlas-permissions-server"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES rm --force arlas-permissions-server"
 fi
 
 if [ "$ignore_arlas" = true ]; 
     then
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop arlas-server"
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force arlas-server"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES stop arlas-server"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES rm --force arlas-server"
         #No local service to waiting for
         ready_message
         exit 0
 fi
 if [ "$ignore_es" = true ]; 
     then
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml stop elasticsearch"
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml rm --force elasticsearch"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES stop elasticsearch"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES rm --force elasticsearch"
         ready_message
         exit 0
     else
@@ -269,10 +274,11 @@ if [ "$ignore_es" = true ];
                 else
                     code="$(curl -IL --silent $ES_NODE | grep "^HTTP\/")"
             fi
+            echo "ARLAS CODE: $code"
             eval "sleep 5"
         done 
         #Restart ARLAS server when we are sure that ES is UP
-        eval "docker-compose -p arlas_exploration_stack -f $SCRIPT_DIRECTORY/docker-compose-arlas-stack.yaml restart arlas-server"
+        eval "docker-compose -p arlas_exploration_stack $DOCKER_COMPOSE_FILES restart arlas-server"
         ready_message
 
 fi
