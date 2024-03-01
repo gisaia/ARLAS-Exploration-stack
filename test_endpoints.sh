@@ -15,11 +15,11 @@ test_status (){
 }
 sleep 10
 
-test_status GET "http://localhost:81/hub/assets/hub-icon.png" 200
-test_status GET "http://localhost:81/permissions/authorize/resources" 200
-test_status GET "http://localhost:81/permissions/authorize/resources" 200
-test_status GET "http://localhost:81/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
-test_status GET "http://localhost:81/server/collections/" 200
-test_status GET "http://localhost:81/wui/favicon.ico" 200
-test_status GET "http://localhost:81/builder/favicon.ico" 200
+test_status GET "http://localhost:80/hub/assets/hub-icon.png" 200
+test_status GET "http://localhost:80/permissions/authorize/resources" 200
+test_status GET "http://localhost:80/permissions/authorize/resources" 200
+test_status GET "http://localhost:80/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
+test_status GET "http://localhost:80/server/collections/" 200
+test_status GET "http://localhost:80/wui/favicon.ico" 200
+test_status GET "http://localhost:80/builder/favicon.ico" 200
 test_status GET "http://localhost:9999" 000

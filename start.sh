@@ -10,9 +10,9 @@ ready_message(){
         echo "############################################"
         echo "                                            "
         echo "############################################"
-        echo "ARLAS WUI in version $ARLAS_WUI_VERSION is running on http://$LOCAL_HOST:81/wui"
-        echo "ARLAS HUB in  version $ARLAS_HUB_VERSION is running on http://$LOCAL_HOST:81/hub"
-        echo "ARLAS BUILDER  in version $ARLAS_BUILDER_VERSION is running on http://$LOCAL_HOST:81/builder"
+        echo "ARLAS WUI in version $ARLAS_WUI_VERSION is running on http://$LOCAL_HOST:80/wui"
+        echo "ARLAS HUB in  version $ARLAS_HUB_VERSION is running on http://$LOCAL_HOST:80/hub"
+        echo "ARLAS BUILDER  in version $ARLAS_BUILDER_VERSION is running on http://$LOCAL_HOST:80/builder"
         echo "############################################"
         echo "                                            "
         echo "############################################"
@@ -134,7 +134,7 @@ if [ ! -z ${ARLAS_PERSISTENCE_URL+x} ];
         unset docker_compose_services_array[6];
         ignore_persistence=true
     else
-        export ARLAS_PERSISTENCE_URL="http://$LOCAL_HOST:81/persist/"
+        export ARLAS_PERSISTENCE_URL="http://$LOCAL_HOST:80/persist/"
         persistence_running_msg="ARLAS PERSISTENCE SERVER in version $ARLAS_PERSISTENCE_VERSION is running on $ARLAS_PERSISTENCE_URL"
 fi
 
@@ -144,7 +144,7 @@ if [ ! -z ${ARLAS_PERMISSIONS_URL+x} ];
         unset docker_compose_services_array[6];
         ignore_permissions=true
     else
-        export ARLAS_PERMISSIONS_URL="http://$LOCAL_HOST:81/permissions/"
+        export ARLAS_PERMISSIONS_URL="http://$LOCAL_HOST:80/permissions/"
         permissions_running_msg="ARLAS PERMISSIONS SERVER in version $ARLAS_PERMISSIONS_VERSIONS is running on $ARLAS_PERMISSIONS_URL"
 fi
 
@@ -156,7 +156,7 @@ if [ ! -z ${ARLAS_SERVER_URL+x} ];
         ignore_es=true
         ignore_arlas=true
     else
-        export ARLAS_SERVER_URL="http://$LOCAL_HOST:81/server/"
+        export ARLAS_SERVER_URL="http://$LOCAL_HOST:80/server/"
         arlas_server_running_msg="ARLAS SERVER in version $ARLAS_SERVER_VERSION is running on $ARLAS_SERVER_URL"
 fi
 
