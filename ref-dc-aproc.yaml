@@ -1,0 +1,29 @@
+services:
+  aproc-ingest:
+    image: ${ARLAS_APROC_INGESTER_VERSION}
+    container_name: aproc-ingest
+    restart: ${ARLAS_APROC_RESTART_STRATEGY:-always}
+    environment:
+      - APROC_ENDPOINT=${APROC_ENDPOINT:-http://aproc-service:8001/aproc}
+      - APROC_RESOURCE_ID_HASH_STARTS_AT=${APROC_RESOURCE_ID_HASH_STARTS_AT:-3}
+      - CATALOG=${AIRS_CATALOG}
+      - COLLECTION=${AIRS_COLLECTION}
+      - DRIVERS_CONFIGURATION_FILE=/app/conf/drivers.yaml
+      - DRY_RUN=${AIRS_DRY_RUN:-False}
+      - ELASTIC_APM_APPLICATION_PACKAGES=io.arlas
+      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT}
+      - ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST=${ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST:-*}
+      - ELASTIC_APM_LOG_ECS_REFORMATTING=${ELASTIC_APM_LOG_ECS_REFORMATTING:-OVERRIDE}
+      - ELASTIC_APM_SECRET_TOKEN=${ELASTIC_APM_SECRET_TOKEN}
+      - ELASTIC_APM_SERVER_URLS=${ELASTIC_APM_SERVER_URLS:-http://apm-server:8200}
+      - ELASTIC_APM_SERVICE_NAME=aproc-ingest
+      - ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS=GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*
+      - ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME=${ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME:-true}
+      - INGESTED_FOLDER=/inputs
+      - OUTPUT_FILE=/outbox/ingest-results.csv
+    networks:
+      - arlas-net
+    volumes:
+      - ${APROC_INPUT_DIR}:/inputs:ro
+      - ${APROC_CONF_DIR}/drivers.yaml:/app/conf/drivers.yaml:ro
+      - ${APROC_DOWNLOAD_DIR}:/outbox

@@ -1,0 +1,15 @@
+services:
+  arlas-server:
+    extends:
+      file: ref-dc-arlas.yml
+      service: arlas-server
+      depends_on:
+        elasticsearch:
+          condition: service_healthy
+        auth-server:
+          condition: service_healthy
+      environment:
+        - ARLAS_AUTH_KEYCLOAK_REALM=${ARLAS_AUTH_KEYCLOAK_REALM:-}
+        - ARLAS_AUTH_KEYCLOAK_RESOURCE=${ARLAS_AUTH_KEYCLOAK_RESOURCE:-}
+        - ARLAS_AUTH_KEYCLOAK_SECRET=${ARLAS_AUTH_KEYCLOAK_SECRET:-}
+        - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}

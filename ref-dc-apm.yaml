@@ -1,0 +1,57 @@
+services:
+  apm-server:
+    depends_on:
+      elasticsearch-logs:
+        condition: service_healthy
+      kibana-logs:
+        condition: service_healthy
+    image: ${APM_VERSION}
+    container_name: apm-server
+    restart: ${APM_RESTART_STRATEGY:-always}
+    expose:
+      - "8200"
+    networks:
+      - arlas-net
+    volumes:
+      - arlas-es-certs:/usr/share/apm-server/certs
+    command: >
+      apm-server -e
+         -E apm-server.auth.secret_token=${APM_SECRET_TOKEN}
+         -E setup.kibana.host=kibana-logs:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E logging.level=warning
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host="https://kibana-logs:5601"
+         -E apm-server.kibana.username=elastic
+         -E apm-server.kibana.password=${ELASTIC_PASSWORD}
+         -E apm-server.kibana.ssl.enabled=true
+         -E apm-server.kibana.ssl.certificate_authorities="/usr/share/apm-server/certs/ca/ca.crt"
+         -E apm-server.kibana.ssl.certificate="/usr/share/apm-server/certs/kibana-logs/kibana-logs.crt"
+         -E apm-server.kibana.ssl.key="/usr/share/apm-server/certs/kibana-logs/kibana-logs.key"
+         -E output.elasticsearch.hosts=["https://elasticsearch-logs:9200"]
+         -E output.elasticsearch.username=elastic
+         -E output.elasticsearch.password=${ELASTIC_PASSWORD}
+         -E output.elasticsearch.ssl.enabled=true
+         -E output.elasticsearch.ssl.certificate_authorities=/usr/share/apm-server/certs/ca/ca.crt
+         -E output.elasticsearch.ssl.certificate=/usr/share/apm-server/certs/elasticsearch-logs/elasticsearch-logs.crt
+         -E output.elasticsearch.ssl.key=/usr/share/apm-server/certs/elasticsearch-logs/elasticsearch-logs.key
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - SETGID
+      - SETUID
+    healthcheck:
+      test: ["CMD-SHELL", "! apm-server test output",
+        "-E output.elasticsearch.hosts=['https://elasticsearch-logs:9200']",
+        "-E output.elasticsearch.ssl.enabled=true",
+        "-E output.elasticsearch.ssl.certificate_authorities=/usr/share/apm-server/certs/ca/ca.crt",
+        "-E output.elasticsearch.ssl.certificate=/usr/share/apm-server/certs/elasticsearch-logs/elasticsearch-logs.crt",
+        "-E output.elasticsearch.ssl.key=/usr/share/apm-server/certs/elasticsearch-logs/elasticsearch-logs.key",
+        "-E output.elasticsearch.username=elastic",
+        "-E output.elasticsearch.password=${ELASTIC_PASSWORD}",
+        "| grep -q ERROR" ]
+      interval: 10s
+      timeout: 10s
+      retries: 120

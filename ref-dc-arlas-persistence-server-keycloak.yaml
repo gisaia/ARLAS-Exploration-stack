@@ -1,0 +1,15 @@
+services:
+  arlas-persistence-server:
+    extends:
+      file: ref-dc-arlas-persistence-server.yaml
+      service: arlas-persistence-server
+    depends_on:
+      db:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+    environment:
+      - ARLAS_AUTH_KEYCLOAK_REALM=${ARLAS_AUTH_KEYCLOAK_REALM}
+      - ARLAS_AUTH_KEYCLOAK_RESOURCE=${ARLAS_AUTH_KEYCLOAK_RESOURCE}
+      - ARLAS_AUTH_KEYCLOAK_SECRET=${ARLAS_AUTH_KEYCLOAK_SECRET}
+      - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}

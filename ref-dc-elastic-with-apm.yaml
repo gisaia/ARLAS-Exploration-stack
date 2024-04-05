@@ -1,0 +1,50 @@
+services:
+  elasticsearch:
+    image: ${ELASTIC_VERSION}
+    container_name: elasticsearch
+    restart: ${ELASTIC_RESTART_STRATEGY:-always}
+    environment:
+      - "ES_JAVA_OPTS=${ES_JAVA_OPTS}"
+      - cluster.name=arlas-es-cluster
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - node.name=arlas-data-node-1
+      - path.repo=/usr/share/elasticsearch/backup
+      - tracing.apm.agent.environment=${APM_ENV}
+      - tracing.apm.agent.server_url="http://apm-server:8200"
+      - tracing.apm.enabled=true
+      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+      - xpack.security.http.ssl.certificate=certs/elasticsearch/elasticsearch.crt
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=certs/elasticsearch/elasticsearch.key
+      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=certs/elasticsearch/elasticsearch.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=certs/elasticsearch/elasticsearch.key
+      - xpack.security.transport.ssl.verification_mode=certificate
+    ulimits:
+      memlock: {soft: -1, hard: -1}
+      nofile:
+        soft: 65536
+        hard: 65536
+    expose:
+      - "9200"
+    networks:
+      - arlas-net
+    volumes:
+      - ${ELASTIC_BACKUP_DIR:-/tmp/elastic/backup}/elasticsearch/:/usr/share/elasticsearch/backup
+      - ${ELASTIC_CERTS_DIRECTORY}:/usr/share/elasticsearch/config/certs
+      - ${ELASTIC_CONF_DIRECTORY}:/usr/share/elasticsearch/config
+      - ${ELASTIC_DATA_DIRECTORY:-/tmp/elastic/data}:/usr/share/elasticsearch/data
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: "curl -s --user ${ELASTIC_USER}:${ELASTIC_PASSWORD} -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+      interval: 10s
+      timeout: 10s
+      retries: 24
+

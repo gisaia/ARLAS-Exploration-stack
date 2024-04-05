@@ -1,0 +1,46 @@
+services:
+  auth-server:
+    image: ${ARLAS_IAM_SERVER_VERSION}
+    container_name: arlas-iam-server
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: ${ARLAS_IAM_RESTART_STRATEGY:-always}
+    environment:
+      - ARLAS_ACCESS_TOKEN_TTL=600000
+      - ARLAS_ANONYMOUS_VALUE="${ARLAS_ANONYMOUS_VALUE:-anonymous}"
+      - ARLAS_AUTH_INIT_ADMIN="${ARLAS_AUTH_INIT_ADMIN}"
+      - ARLAS_AUTH_INIT_PASSWORD="${ARLAS_AUTH_INIT_PASSWORD}"
+      - ARLAS_CACHE_TIMEOUT="${ARLAS_CACHE_TIMEOUT:-5}"
+      - ARLAS_IAM_CACHE_FACTORY_CLASS="${ARLAS_IAM_CACHE_FACTORY_CLASS:-io.arlas.commons.cache.NoCacheFactory}"
+      - ARLAS_IAM_HIBERNATE_PASSWORD="${POSTGRES_PASSWORD}"
+      - ARLAS_IAM_HIBERNATE_URL="${ARLAS_IAM_HIBERNATE_URL:-jdbc:postgresql://db:5432/arlas}"
+      - ARLAS_IAM_HIBERNATE_USER="${POSTGRES_USER}"
+      - ARLAS_IAM_LOGGING_CONSOLE_LEVEL="${ARLAS_IAM_LOGGING_CONSOLE_LEVEL}"
+      - ARLAS_IAM_LOGGING_LEVEL="${ARLAS_IAM_LOGGING_LEVEL}"
+      - ARLAS_IAM_PORT="${ARLAS_IAM_PORT:-9998}"
+      - ARLAS_IAM_VERIFY_EMAIL="${ARLAS_IAM_VERIFY_EMAIL}"
+      - ARLAS_REFRESH_TOKEN_TTL=600000
+      - ARLAS_SERVER_URL="http://arlas-server:9999/arlas/"
+      - ARLAS_SMTP_ACTIVATED="${ARLAS_SMTP_ACTIVATED}"
+      - ARLAS_SMTP_FROM="${ARLAS_SMTP_FROM}"
+      - ARLAS_SMTP_HOST="${ARLAS_SMTP_HOST}"
+      - ARLAS_SMTP_PASSWORD="${ARLAS_SMTP_PASSWORD}"
+      - ARLAS_SMTP_PORT="${ARLAS_SMTP_PORT:-25}"
+      - ARLAS_SMTP_RESET_LINK="http://${HOST}/hub/reset/%s/user/%s"
+      - ARLAS_SMTP_USERNAME="${ARLAS_SMTP_USERNAME}"
+      - ARLAS_SMTP_VERIFY_LINK="http://${HOST}/hub/verify/%s/user/%s"
+      - JDK_JAVA_OPTIONS=${ARLAS_IAM_JDK_JAVA_OPTIONS}
+    expose:
+      - "9998"
+    networks:
+      - arlas-net
+    healthcheck:
+      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9998/admin/healthcheck"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
