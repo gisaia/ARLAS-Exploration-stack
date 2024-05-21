@@ -24,3 +24,23 @@ services:
       - ARLAS_HUB_URL=../hub
       - ARLAS_WUI_BASE_HREF=/wui
       - ARLAS_USE_AUTHENT=false
+      - ARLAS_TICKETING_KEY="support@gisaia.com"
+      - ARLAS_TAB_NAME='ARLAS'
+      - ARLAS_WUI_DASHBOARDS_SHORTCUT=false
+      - ARLAS_STATIC_LINKS=[]
+      - ARLAS_PROCESS_URL=toto
+      - ARLAS_USE_AUTHENT=false
+      - ARLAS_GEOCODING_ENABLED=false
+      - ARLAS_GEOCODING_FIND_PLACE_URL="-"
+      - ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO=11
+      - ARLAS_WUI_DASHBOARDS_SHORTCUT=false
+      - ARLAS_AUTHENT_FORCE_CONNECT=false
+      - ARLAS_AUTHENT_REDIRECT_URI=/hub/
+      - ARLAS_PROCESS_URL=/aproc/processes/download/execution
+      - ARLAS_PROCESS_CHECK_URL=/aproc/processes/download
+      - ARLAS_PROCESS_SETTINGS_URL=/assets/processes/download.json
+      - ARLAS_PROCESS_STATUS_URL=/aproc/processes/jobs
+      - ARLAS_PROCESS_MAX_ITEMS=10
+      - RESULTLIST_ENABLE_EXPORT=true
+      - RESULTLIST_EXPORT_SIZE=10000
+
