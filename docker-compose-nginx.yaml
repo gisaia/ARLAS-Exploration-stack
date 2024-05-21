@@ -8,7 +8,7 @@ services:
     image: gisaia/arlas-stack-nginx:${ARLAS_NGINX_VERSION:-latest}
     container_name: arlas-stack-nginx
     ports:
-      - "80:80"
+      - "80:81"
     networks:
       - arlas-net
     depends_on:
