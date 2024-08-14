@@ -1,4 +1,3 @@
-version: '3'
 services:
 
 #################
@@ -14,7 +13,7 @@ services:
       arlas-server:
         condition: service_healthy
       arlas-permissions-server:
-        condition: service_healthy          
+        condition: service_healthy
     expose:
       - "80"
     networks:

@@ -1,4 +1,3 @@
-version: '3'
 include:
   - docker-compose-arlas-builder.yaml
   - docker-compose-arlas-hub.yaml

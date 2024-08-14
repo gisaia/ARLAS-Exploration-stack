@@ -1,4 +1,3 @@
-version: '3'
 volumes:
   elasticsearch_data_node1:
     driver: local
