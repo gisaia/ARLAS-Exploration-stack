@@ -1,0 +1,9 @@
+services:
+  apisix:
+    extends:
+      file: ref-dc-apisix.yaml
+      service: apisix
+    ports:  # SHOULD WE OPEN 80 FOR REDIRECTION ON 443?
+      - "443:9443" # !EXPOSE!
+    extra_hosts:
+      - ${HOST}:host-gateway

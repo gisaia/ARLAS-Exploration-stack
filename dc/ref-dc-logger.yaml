@@ -1,0 +1,6 @@
+services:
+  log-rotated:
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"

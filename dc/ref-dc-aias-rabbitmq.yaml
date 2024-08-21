@@ -1,0 +1,19 @@
+services:
+  rabbitmq:
+    extends:
+      file: ref-dc-logger.yaml
+      service: log-rotated
+    image: ${ARLAS_VERSION_RABBITMQ}
+    container_name: rabbitmq
+    restart: always
+    expose:
+      - "5672"
+    networks:
+      - arlas-net
+    volumes:
+      - arlas-data-rabbimq:/var/lib/rabbitmq/mnesia
+    healthcheck:
+      test: "rabbitmq-diagnostics check_port_connectivity"
+      interval: 15s
+      timeout: 15s
+      retries: 30

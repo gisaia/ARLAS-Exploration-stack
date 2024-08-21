@@ -1,0 +1,71 @@
+routes:
+  -
+    uri: /builder
+    upstream:
+      nodes:
+        "arlas-builder:80": 1
+  -
+    uri: /builder/*
+    upstream:
+      nodes:
+        "arlas-builder:80": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/builder/(.*)", "/$1"]
+  -
+    uri: /
+    plugins:
+      redirect:
+        uri: /hub/
+  -
+    uri: /hub
+    upstream:
+      nodes:
+        "arlas-hub:80": 1
+  -
+    uri: /hub/*
+    upstream:
+      nodes:
+        "arlas-hub:80": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/hub/(.*)", "/$1"]
+  -
+    uri: /iam
+    upstream:
+      nodes:
+        "arlas-wui-iam:80": 1
+  -
+    uri: /iam/*
+    upstream:
+      nodes:
+        "arlas-wui-iam:80": 1
+  -
+    uri: /wui
+    upstream:
+      nodes:
+        "arlas-wui:80": 1
+  -
+    uri: /wui/*
+    upstream:
+      nodes:
+        "arlas-wui:80": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/wui/(.*)", "/$1"]
+  -
+    uri: /arlas_permissions_server/*
+    upstream:
+      nodes:
+        "arlas-permissions-server:9996": 1
+  -
+    uri: /persist/*
+    upstream:
+      nodes:
+        "arlas-persistence-server:9997": 1
+  -
+    uri: /arlas/*
+    upstream:
+      nodes:
+        "arlas-server:9999": 1
+#END

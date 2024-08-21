@@ -1,0 +1,33 @@
+services:
+  elasticsearch:
+    image: ${ELASTIC_VERSION}
+    container_name: elasticsearch
+    restart: ${ELASTIC_RESTART_STRATEGY:-always}
+    environment:
+      - discovery.type=single-node
+      - cluster.name=arlas-es-cluster
+      - node.name=arlas-data-node-1
+      - ES_JAVA_OPTS=${ES_JAVA_OPTS}
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - tracing.apm.enabled=false
+    ulimits:
+      memlock: {soft: -1, hard: -1}
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 9200:9200 # !EXPOSE!
+    expose:
+      - "9200"
+    networks:
+      - arlas-net
+    volumes:
+      - arlas-data-es:/usr/share/elasticsearch/data
+    healthcheck:
+      test: "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+      interval: 10s
+      timeout: 10s
+      retries: 120
+

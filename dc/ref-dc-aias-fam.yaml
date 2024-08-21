@@ -1,0 +1,24 @@
+services:
+  fam-service:
+    extends:
+      file: ref-dc-logger.yaml
+      service: log-rotated
+    image: ${ARLAS_VERSION_FAM}
+    container_name: fam-service
+    restart: always
+    environment:
+      - FAM_LOGGER_LEVEL=${FAM_LOGGER_LEVEL:-INFO}
+      - FAM_PREFIX=/fam
+      - INGESTED_FOLDER=/inputs
+      - APROC_RESOURCE_ID_HASH_STARTS_AT=3
+    volumes:
+      - ${APROC_INPUT_DIR}:/inputs:ro
+    expose:
+      - "8005"
+    networks:
+      - arlas-net
+    healthcheck:
+      test: "curl -f http://localhost:8005/fam/healthcheck"
+      interval: 5s
+      timeout: 3s
+      retries: 30

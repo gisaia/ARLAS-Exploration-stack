@@ -1,0 +1,25 @@
+services:
+  minio:
+    image: ${ARLAS_VERSION_MINIO}
+    container_name: minio
+    restart: ${MINIO_RESTART_STRATEGY:-always}
+    command: server /data
+    environment:
+      - MINIO_BROWSER=off
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+    expose:
+      - "9000"
+    networks:
+      - arlas-net
+    volumes:
+      - ${AIRS_STORAGE_DIRECTORY:-/tmp/minio}:/data
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: "mc alias set myminio http://localhost:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; mc ping -x myminio"
+      interval: 5s
+      timeout: 10s
+      retries: 3

@@ -1,0 +1,85 @@
+inputs_directory: $INGESTED_FOLDER|/inputs
+
+max_number_of_archive_for_ingest: 1000000
+aproc_endpoint: $APROC_ENDPOINT_FROM_APROC|http://localhost:8001
+resource_id_hash_starts_at: $APROC_RESOURCE_ID_HASH_STARTS_AT|1
+
+drivers:
+  -
+    name: dimap
+    class_name: extensions.aproc.proc.ingest.drivers.impl.dimap
+    assets_dir: /tmp/aproc/dimap
+    configuration:
+    priority: 1
+  -
+    name: geoeye
+    class_name: extensions.aproc.proc.ingest.drivers.impl.geoeye
+    assets_dir: /tmp/aproc/geoeye
+    configuration:
+    priority: 2
+  -
+    name: digitalglobe
+    class_name: extensions.aproc.proc.ingest.drivers.impl.digitalglobe
+    assets_dir: /tmp/aproc/digitalglobe
+    configuration:
+    priority: 3
+  -
+    name: ast_dem
+    class_name: extensions.aproc.proc.ingest.drivers.impl.ast_dem
+    assets_dir: /tmp/aproc/ast_dem
+    configuration:
+    priority: 4
+  -
+    name: rapideye
+    class_name: extensions.aproc.proc.ingest.drivers.impl.rapideye
+    assets_dir: /tmp/aproc/rapideye
+    configuration:
+    priority: 5
+  -
+    name: spot5
+    class_name: extensions.aproc.proc.ingest.drivers.impl.spot5
+    assets_dir: /tmp/aproc/spot5
+    configuration:
+    priority: 6
+  -
+    name: terrasarx
+    class_name: extensions.aproc.proc.ingest.drivers.impl.terrasarx
+    assets_dir: /tmp/aproc/terrasarx
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 7
+  -
+    name: cosmoskymed
+    class_name: extensions.aproc.proc.ingest.drivers.impl.cosmoskymed
+    assets_dir: /tmp/aproc/cosmoskymed
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 8
+
+
+  -
+    name: theia
+    class_name: extensions.aproc.proc.ingest.drivers.impl.theia
+    assets_dir: /tmp/aproc/theia
+    configuration:
+      token_url: https://theia.cnes.fr/atdistrib/services/authenticate/
+      login: $THEIA_LOGIN
+      pwd: $THEIA_PWD
+      manage_data: false
+    priority: 7
+
+  # -
+  #   name: tiff
+  #   class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
+  #   assets_dir: /tmp/aproc/tiff
+  #   configuration:
+  #     tmp_directory: $TMP_FOLDER|/tmp
+  #   priority: 9
+
+  # -
+  #   name: jpeg2000
+  #   class_name: extensions.aproc.proc.ingest.drivers.impl.jpeg2000
+  #   assets_dir: /tmp/aproc/jpeg2000
+  #   configuration:
+  #     tmp_directory: $TMP_FOLDER|/tmp
+  #   priority: 10

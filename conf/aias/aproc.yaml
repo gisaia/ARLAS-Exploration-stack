@@ -1,0 +1,19 @@
+celery_broker_url: $CELERY_BROKER_URL|pyamqp://guest:guest@127.0.0.1:5672//
+celery_result_backend: $CELERY_RESULT_BACKEND|redis://127.0.0.1:6379/0
+airs_endpoint: $AIRS_ENDPOINT|http://127.0.0.1:8000/arlas/airs
+processes:
+  -
+    name: ingest
+    class_name: extensions.aproc.proc.ingest.ingest_process
+    configuration:
+      drivers: conf/drivers.yaml
+  -
+    name: directory_ingest
+    class_name: extensions.aproc.proc.ingest.directory_ingest_process
+    configuration:
+      drivers: conf/drivers.yaml
+  -
+    name: download
+    class_name: extensions.aproc.proc.download.download_process
+    configuration:
+      drivers: conf/download_drivers.yaml

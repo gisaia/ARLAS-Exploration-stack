@@ -1,0 +1,36 @@
+services:
+  arlas-permissions-server:
+    image: ${ARLAS_PERMISSIONS_VERSION}
+    container_name: arlas-permissions-server
+    restart: ${ARLAS_PERMISSION_RESTART_STRATEGY:-always}
+    environment:
+      - ARLAS_AUTH_ENABLED=${ARLAS_AUTH_ENABLED:-false}
+      - ARLAS_PERMISSIONS_APP_PATH=/
+      - ARLAS_PERMISSIONS_PREFIX=/arlas_permissions_server
+      - ARLAS_CACHE_TIMEOUT="${ARLAS_CACHE_TIMEOUT:-5}"
+      - ARLAS_PERMISSIONS_LOGGING_CONSOLE_LEVEL="${ARLAS_PERMISSIONS_LOGGING_CONSOLE_LEVEL}"
+      - ARLAS_PERMISSIONS_LOGGING_LEVEL="${ARLAS_PERMISSIONS_LOGGING_LEVEL}"
+      - ARLAS_PERMISSIONS_PORT="${ARLAS_PERMISSIONS_PORT:-9996}"
+      - ELASTIC_APM_APPLICATION_PACKAGES=io.arlas
+      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT}
+      - ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST=${ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST:-*}
+      - ELASTIC_APM_LOG_ECS_REFORMATTING=${ELASTIC_APM_LOG_ECS_REFORMATTING:-OVERRIDE}
+      - ELASTIC_APM_SECRET_TOKEN=${ELASTIC_APM_SECRET_TOKEN}
+      - ELASTIC_APM_SERVER_URLS=${ELASTIC_APM_SERVER_URLS:-http://apm-server:8200}
+      - ELASTIC_APM_SERVICE_NAME=arlas-permission-server
+      - ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS=GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*
+      - ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME=${ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME:-true}
+      - JDK_JAVA_OPTIONS=${ARLAS_PERMISSIONS_JDK_JAVA_OPTIONS}
+    expose:
+      - "9996"
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9996/admin/healthcheck"]
+      interval: 5s
+      timeout: 10s
+      retries: 3

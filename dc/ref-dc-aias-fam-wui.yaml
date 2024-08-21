@@ -1,0 +1,33 @@
+services:
+  arlas-fam-wui:
+    extends:
+      file: ref-dc-logger.yaml
+      service: log-rotated
+    image: ${ARLAS_VERSION_FAM_WUI}
+    container_name: fam-wui
+    restart: always
+    depends_on:
+      arlas-server:
+        condition: service_healthy
+      fam-service:
+        condition: service_healthy
+    environment:
+      - FAM_WUI_BASE_HREF=/fam-wui
+      - ARLAS_USE_AUTHENT=true
+      - ARLAS_AUTHENT_MODE=iam
+      - ARLAS_IAM_SERVER_URL=https://${ARLAS_HOST}/arlas_iam_server
+      - ARLAS_AUTHENT_THRESHOLD=60000
+      - ARLAS_TAB_NAME="ARLAS FAM Wui"
+      - FAM_SERVER_URL=https://${ARLAS_HOST}/fam
+      - FAM_DEFAULT_PATH=''
+      - FAM_COLLECTION=${AIAS_COLLECTION_NAME}
+      - APROC_SERVER_URL=https://${ARLAS_HOST}/aproc
+      - APROC_COLLECTION=${AIAS_COLLECTION_NAME}
+      - APROC_CATALOG=${AIAS_CATALOG_NAME}
+      - AIRS_SERVER_URL=https://${ARLAS_HOST}/airs
+      - AIRS_COLLECTION=${AIAS_COLLECTION_NAME}
+      - 'ARLAS_STATIC_LINKS=${ARLAS_FAM_LINKS}'
+    expose:
+      - "80"
+    networks:
+      - arlas-net
