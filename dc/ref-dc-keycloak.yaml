@@ -3,9 +3,9 @@ services:
     image: ${KEYCLOAK_VERSION}
     container_name: auth-server
     command: ["start-dev", "--import-realm", "--http-relative-path", "/auth", "--proxy", "edge"]
-    restart: ${ARLAS_KEYCLOAK_RESTART_STRATEGY:-unless-stopped}# TODO : WHY NOT ALWAYS ?
+    restart: ${ARLAS_KEYCLOAK_RESTART_STRATEGY:-unless-stopped} # TODO : WHY NOT ALWAYS ?
     environment:
-      - KC_HEALTH_ENABLED=true
+      - KC_HEALTH_ENABLED=true # This is to enable kubernetes healthchecks
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN_LOGIN}
     expose:

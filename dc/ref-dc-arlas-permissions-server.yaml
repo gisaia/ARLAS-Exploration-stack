@@ -4,6 +4,8 @@ services:
     container_name: arlas-permissions-server
     restart: ${ARLAS_PERMISSION_RESTART_STRATEGY:-always}
     environment:
+      - ARLAS_AUTH_POLICY_CLASS=${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer}
+      - ARLAS_AUTH_PERMISSION_URL="${ARLAS_AUTH_PERMISSION_URL}"
       - ARLAS_AUTH_ENABLED=${ARLAS_AUTH_ENABLED:-false}
       - ARLAS_PERMISSIONS_APP_PATH=/
       - ARLAS_PERMISSIONS_PREFIX=/arlas_permissions_server

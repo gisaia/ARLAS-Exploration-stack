@@ -1,3 +1,4 @@
+services:
   metricbeat:
     image: ${METRICBEAT_VERSION}
     container_name: metricbeat

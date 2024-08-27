@@ -92,13 +92,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 120
-
-volumes:
-  arlas-data-es:
-    name: arlas-data-es
-  arlas-data-es-logs:
-    name: arlas-data-es-logs
-  arlas-es-certs:
-    name: arlas-es-certs
-  arlas-es-config:
-    name: arlas-es-config

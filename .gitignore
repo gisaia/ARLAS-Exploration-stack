@@ -3,6 +3,6 @@
 sample/sample.json
 conf/server.crt
 conf/server.key
-conf/domains.generated.ext
-conf/apisix.generated.yaml
-conf/apisix.generated.tmp.yaml
+conf/apisix/domains.generated.ext
+conf/apisix/apisix.generated.yaml
+conf/apisix/apisix.generated.tmp.yaml

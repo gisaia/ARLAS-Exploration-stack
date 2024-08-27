@@ -4,7 +4,9 @@ services:
     container_name: arlas-persistence-server
     restart: ${ARLAS_PERSISTENCE_RESTART_STRATEGY:-always}
     environment:
+      - ARLAS_AUTH_POLICY_CLASS=${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer}
       - ARLAS_AUTH_ENABLED=${ARLAS_AUTH_ENABLED:-false}
+      - ARLAS_AUTH_PERMISSION_URL=${ARLAS_AUTH_PERMISSION_URL:-}
       - ARLAS_CACHE_TIMEOUT=${ARLAS_CACHE_TIMEOUT:-5}
       - ARLAS_PERSISTENCE_APP_PATH=${ARLAS_PERSISTENCE_APP_PATH:-/}
       - ARLAS_PERSISTENCE_ENGINE=${ARLAS_PERSISTENCE_ENGINE:-hibernate}
