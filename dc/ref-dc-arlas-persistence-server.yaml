@@ -5,6 +5,7 @@ services:
     restart: ${ARLAS_PERSISTENCE_RESTART_STRATEGY:-always}
     environment:
       - ARLAS_AUTH_PUBLIC_URIS=swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,collections/demo_.*:GET,authorize/resources:GET
+      - ARLAS_AUTH_PERMISSION_URL="${ARLAS_AUTH_PERMISSION_URL}"
       - ARLAS_AUTH_ENABLED=${ARLAS_AUTH_ENABLED:-false}
       - ARLAS_CACHE_TIMEOUT=${ARLAS_CACHE_TIMEOUT:-5}
       - ARLAS_PERSISTENCE_APP_PATH=${ARLAS_PERSISTENCE_APP_PATH:-/}
