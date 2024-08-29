@@ -40,7 +40,7 @@ def __extract_env_pattern__(v, env_variables) -> tuple[str, str, str]:
         env_settings = __get_env_setting__(env_variables, variable)
         return (variable, default, env_settings)
     else:
-        return (truncate(v), "", None)
+        return (truncate(v), "", "")
 
 
 def generate(yaml_files: list[str], env_files: list[str]):
@@ -56,16 +56,27 @@ def generate(yaml_files: list[str], env_files: list[str]):
                         env_variables[k] = env_variables.get(k, [])
                         env_variables[k].append((v, f))
 
+    print("## Services:")
     for f in yaml_files:
         with open(f, 'r') as file:
-            print("## File: {}".format(f))
             content = file.read().rstrip()
             yaml = YAML(typ='rt')
             doc = yaml.load(content)
             services = doc.get("services", [])
             for service in services:
                 service: CommentedMap = service
-                print("### Service: {}".format(service))
+                print("- [{}](#service-{})".format(service, service))
+
+    for f in yaml_files:
+        with open(f, 'r') as file:
+            print("## File {}".format(f))
+            content = file.read().rstrip()
+            yaml = YAML(typ='rt')
+            doc = yaml.load(content)
+            services = doc.get("services", [])
+            for service in services:
+                service: CommentedMap = service
+                print("### Service {}".format(service))
                 cs = services.get(service).ca.comment
                 if cs and len(cs) > 0:
                     c: CommentToken = cs[0]
@@ -96,11 +107,14 @@ def generate(yaml_files: list[str], env_files: list[str]):
                             c = cs[0]
                             if c.column > 0:
                                 description = description + " " + c.value.lstrip('#').lstrip(' ').rstrip()
-                    else:
-                        variable = truncate(v)
-                        default = ""
+                    variable = truncate(variable)
                     print("| `{}` | `{}` | `{}` | {} | {} |".format(escape(k), escape(variable), escape(default), escape(description), escape(env_settings)))
-
+                volumes = services.get(service).get("volumes", None)
+                if volumes:
+                    print()
+                    print("List of volumes:")
+                    for volume in volumes:
+                        print("- " + volume)
 
 yaml_files: list[str] = []
 env_files: list[str] = []

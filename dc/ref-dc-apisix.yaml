@@ -1,5 +1,5 @@
 services:
-  apisix:
+  apisix: # APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
     image: ${APISIX_VERSION}
     container_name: apisix
     depends_on:

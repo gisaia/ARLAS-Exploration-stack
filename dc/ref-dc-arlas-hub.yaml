@@ -1,5 +1,5 @@
 services:
-  arlas-hub:
+  arlas-hub: # ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
     image: ${ARLAS_HUB_VERSION}
     container_name: arlas-hub
     depends_on:

@@ -21,13 +21,16 @@ then
     test_status GET "http://localhost/builder/favicon.ico" 200
     test_status GET "http://localhost/arlas/collections/" 200
     test_status GET "http://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
+    test_status GET "http://localhost/arlas_permissions_server/authorize/resources?filter=persist%2Fresource%2F&pretty=false" 200
+
 fi
 
 if [ "$1" = "iam" ]
 then
-    test_status GET "http://localhost/hub/assets/hub-icon.png" 200
-    test_status GET "http://localhost/wui/favicon.ico" 200
-    test_status GET "http://localhost/builder/favicon.ico" 200
-    test_status GET "http://localhost/arlas/collections/" 200
-    test_status GET "http://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
+    test_status GET "https://localhost/hub/assets/hub-icon.png" 200
+    test_status GET "https://localhost/wui/favicon.ico" 200
+    test_status GET "https://localhost/builder/favicon.ico" 200
+    test_status GET "https://localhost/arlas/collections/" 200
+    test_status GET "https://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
+    test_status GET "https://localhost/arlas_permissions_server/authorize/resources?filter=persist%2Fresource%2F&pretty=false" 200
 fi

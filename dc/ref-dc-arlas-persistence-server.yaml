@@ -1,9 +1,10 @@
 services:
-  arlas-persistence-server:
+  arlas-persistence-server: # ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
     image: ${ARLAS_PERSISTENCE_VERSION}
     container_name: arlas-persistence-server
     restart: ${ARLAS_PERSISTENCE_RESTART_STRATEGY:-always}
     environment:
+      - ARLAS_AUTH_POLICY_CLASS="${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer}"
       - ARLAS_AUTH_PUBLIC_URIS=swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,collections/demo_.*:GET,authorize/resources:GET
       - ARLAS_AUTH_PERMISSION_URL="${ARLAS_AUTH_PERMISSION_URL}"
       - ARLAS_AUTH_ENABLED=${ARLAS_AUTH_ENABLED:-false}

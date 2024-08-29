@@ -1,5 +1,5 @@
 services:
-  aproc-proc:
+  aproc-proc: # ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
     extends:
       file: ref-dc-logger.yaml
       service: log-rotated

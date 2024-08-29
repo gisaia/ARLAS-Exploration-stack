@@ -1,5 +1,5 @@
 services:
-  arlas-builder:
+  arlas-builder: # ARLAS Builder is the interface for elaborating ARLAS Dashboards.
     image: ${ARLAS_BUILDER_VERSION}
     container_name: arlas-builder
     depends_on:

@@ -1,5 +1,5 @@
 services:
-  aproc-service:
+  aproc-service: # ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
     extends:
       file: ref-dc-logger.yaml
       service: log-rotated

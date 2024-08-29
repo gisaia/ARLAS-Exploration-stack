@@ -1,5 +1,5 @@
 services:
-  arlas-fam-wui:
+  arlas-fam-wui: # ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
     extends:
       file: ref-dc-logger.yaml
       service: log-rotated

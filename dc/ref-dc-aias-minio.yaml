@@ -1,5 +1,5 @@
 services:
-  minio:
+  minio: #Minio is an object store
     image: ${ARLAS_VERSION_MINIO}
     container_name: minio
     restart: ${MINIO_RESTART_STRATEGY:-always}

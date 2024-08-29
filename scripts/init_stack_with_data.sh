@@ -1,8 +1,14 @@
 #!/bin/bash
-[ -z "$1" ] && echo "Please provide the configuration name" && exit 1;
+set -o errexit -o pipefail
 
+
+[ -z "$1" ] && echo "Please provide the configuration name" && exit 1;
+USER_CONF=local
 CONF=$1
+GROUPS_PARAMS=""
 if [ ${CONF} == "local.iam.admin" ]; then
+    GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
+    USER_CONF="local.iam.user"
     echo "create user"
     USERID=`arlas_cli --config-file /tmp/arlas-cli.yaml iam --config ${CONF} users add user@org.com`
     echo "create organisation"
@@ -23,8 +29,13 @@ if [ ${CONF} == "local.iam.admin" ]; then
     curl -kX POST https://localhost/arlas_iam_server/users/${USERID}/reset/${TOKEN} -H 'Content-Type: application/json;charset=utf-8' -d "secret"
 fi
 
+echo "Fetch sample data"
 curl https://raw.githubusercontent.com/gisaia/arlas_cli/master/tests/sample.json -o sample/sample.json
+echo "create mapping for courses"
 arlas_cli --config-file /tmp/arlas-cli.yaml indices --config ${CONF} mapping sample/sample.json --nb-lines 200 --field-mapping track.timestamps.center:date-epoch_second --field-mapping track.timestamps.start:date-epoch_second --field-mapping track.timestamps.end:date-epoch_second --no-fulltext cargo_type --push-on courses
+echo "index courses"
 arlas_cli --config-file /tmp/arlas-cli.yaml indices --config ${CONF} data courses sample/sample.json
-arlas_cli --config-file /tmp/arlas-cli.yaml collections --config ${CONF} create courses --index courses --display-name courses --id-path track.id --centroid-path track.location --geometry-path track.trail --date-path track.timestamps.center --public --owner org.com
-arlas_cli --config-file /tmp/arlas-cli.yaml persist --config ${CONF} add sample/dashboard.json config.json --name "Course Dashboard" --reader "group/config.json/org.com"
+echo "create courses collection"
+arlas_cli --config-file /tmp/arlas-cli.yaml collections --config ${CONF} create courses --index courses --display-name courses --id-path track.id --centroid-path track.location --geometry-path track.trail --date-path track.timestamps.center --no-public --owner org.com --orgs org.com
+echo "crearte dashboard"
+arlas_cli --config-file /tmp/arlas-cli.yaml persist --config ${USER_CONF} add sample/dashboard.json config.json --name "Course Dashboard" $GROUPS_PARAMS

@@ -1,10 +1,10 @@
 services:
-  arlas-permissions-server:
+  arlas-permissions-server: # ARLAS Permissions is a service for listing user's permissions
     image: ${ARLAS_PERMISSIONS_VERSION}
     container_name: arlas-permissions-server
     restart: ${ARLAS_PERMISSION_RESTART_STRATEGY:-always}
     environment:
-      - ARLAS_AUTH_POLICY_CLASS=${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer}
+      - ARLAS_AUTH_POLICY_CLASS="${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer}"
       - ARLAS_AUTH_PERMISSION_URL="${ARLAS_AUTH_PERMISSION_URL}"
       - ARLAS_AUTH_ENABLED=${ARLAS_AUTH_ENABLED:-false}
       - ARLAS_PERMISSIONS_APP_PATH=/

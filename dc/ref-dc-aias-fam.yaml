@@ -1,5 +1,5 @@
 services:
-  fam-service:
+  fam-service: # ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
     extends:
       file: ref-dc-logger.yaml
       service: log-rotated

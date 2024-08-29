@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 
 set +e
 arlas_cli --config-file /tmp/arlas-cli.yaml
@@ -21,6 +22,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.admin \
     --auth-password admin \
     --auth-arlas-iam 
 
+# ajouter  --header "arlas-org-filter:org.com" 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.user \
     --server https://localhost/arlas \
     --headers "Content-Type:application/json" \
@@ -33,6 +35,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.user \
     --auth-headers "Content-Type:application/json" \
     --auth-login user@org.com \
     --auth-password secret \
+    --auth-org org.com \
     --auth-arlas-iam 
 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local \

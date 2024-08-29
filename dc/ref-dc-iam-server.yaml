@@ -1,5 +1,5 @@
 services:
-  auth-server:
+  auth-server: # ARLAS IAM is the ARLAS Identity and Access Management service.
     image: ${ARLAS_IAM_SERVER_VERSION}
     container_name: arlas-iam-server
     depends_on:
