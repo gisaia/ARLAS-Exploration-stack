@@ -29,5 +29,4 @@ services:
       test: "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
       interval: 10s
       timeout: 10s
-      retries: 120
-
+      retries: 3
