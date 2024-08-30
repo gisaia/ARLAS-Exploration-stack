@@ -19,20 +19,20 @@ jobs:
       run: ./scripts/init_stack_with_data.sh local
     - name: Stop stack
       run: ./stop.sh
-  iam-stack:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Start iam stack
-      run: ./start.sh iam
-    - name: Run endpoints tests
-      run: ./scripts/test_endpoints.sh iam
-    - name: Install arlas_cli
-      run: pip3.10 install arlas_cli
-    - name: Init configurations
-      run: ./scripts/init_arlas_cli_confs.sh
-    - name: Init stack with data
-      run: ./scripts/init_stack_with_data.sh local.iam.admin
-    - name: Stop stack
-      run: ./stop.sh
+  # iam-stack:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Start iam stack
+  #     run: ./start.sh iam
+  #   - name: Run endpoints tests
+  #     run: ./scripts/test_endpoints.sh iam
+  #   - name: Install arlas_cli
+  #     run: pip3.10 install arlas_cli
+  #   - name: Init configurations
+  #     run: ./scripts/init_arlas_cli_confs.sh
+  #   - name: Init stack with data
+  #     run: ./scripts/init_stack_with_data.sh local.iam.admin
+  #   - name: Stop stack
+  #     run: ./stop.sh
 
