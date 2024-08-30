@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rm -r /tmp/elastic /tmp/persist /tmp/postgres
+rm -r ${PWD}/tmp/elastic ${PWD}/tmp/persist ${PWD}/tmp/postgres

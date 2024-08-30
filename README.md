@@ -41,7 +41,7 @@ A simple dashboard with AIS data is then available.
 
 Stop the stack with `./stop.sh`. 
 
-Note: by default, data are persisted in /tmp/. Remove `/tmp/persist` and `/tmp/elastic` to reset the stack's data, once it's stopped.
+Note: by default, data are persisted in `${PWD}/tmp/`. User `scripts/reset_data.sh` to clean the `${PWD}/tmp/` subdirectories, once the stack stoped.
 
 # ARLAS IAM deployment
 
