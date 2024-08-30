@@ -34,6 +34,7 @@ fi
 #    docker compose -p arlas-exploration-stack $ENV_FILES -f dc/ref-dc-elastic-init.yaml -f dc/ref-dc-elastic.yaml -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
 #    set -e
 set +e
+mkdir -p tmp/elastic
 docker compose -p arlas-exploration-stack $ENV_FILES $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES
 set -e
 docker logs elasticsearch
