@@ -35,4 +35,3 @@ jobs:
   #     run: ./scripts/init_stack_with_data.sh local.iam.admin
   #   - name: Stop stack
   #     run: ./stop.sh
-

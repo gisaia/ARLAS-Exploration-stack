@@ -124,9 +124,19 @@ The current configurations are for tests only. These variables have to be change
 - `ELASTIC_STORAGE` (`conf/elastic.env`)
 - `ARLAS_PERSISTENCE_STORAGE` (`conf/persistence-file.env`)
 - `POSTGRES_STORAGE` (`conf/postgres.env`)
-- `POSTGRES_BACKUP_DIR` (`conf/postgres.env`)
+- `POSTGRES_BACKUP_STORAGE` (`conf/postgres.env`)
 
 And for AIAS:
 - `APROC_DOWNLOAD_DIR` (`conf/aias.env`)
 - `APROC_INPUT_DIR` (`conf/aias.env`)
 - `APROC_EMAIL_PATH_PREFIX_ADD` (`conf/aias.env`)
+
+## Developers
+
+To release, run:
+```shell
+./scripts/release.sh X.Y
+```
+where `X.Y` is the version of the stack. `X` must be aligned with the majar version ARLAS (WUI and Server) while `Y` is the increment of the stack.
+
+To update the version of the dependencies, such as ARLAS containers, edit `conf/versions.env`.

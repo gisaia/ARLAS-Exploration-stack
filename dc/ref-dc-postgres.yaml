@@ -20,7 +20,7 @@ services:
     networks:
       - arlas-net
     volumes:
-      - ${POSTGRES_BACKUP_DIR}/postgresql/:/backup/
+      - ${POSTGRES_BACKUP_STORAGE}:/backup/
       - ${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro
       - ${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro
       - ${POSTGRES_STORAGE}:/var/lib/postgresql/data
