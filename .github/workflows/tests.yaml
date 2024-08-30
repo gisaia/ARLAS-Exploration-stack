@@ -22,6 +22,7 @@ jobs:
   iam-stack:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Start iam stack
       run: ./start.sh iam
     - name: Run endpoints tests
