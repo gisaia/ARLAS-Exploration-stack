@@ -22,7 +22,6 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.admin \
     --auth-password admin \
     --auth-arlas-iam 
 
-# ajouter  --header "arlas-org-filter:org.com" 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.user \
     --server https://localhost/arlas \
     --headers "Content-Type:application/json" \

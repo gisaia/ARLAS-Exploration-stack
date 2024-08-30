@@ -23,8 +23,8 @@ services:
       - "9200"
     networks:
       - arlas-net
-#    volumes:
-#      - ${ELASTIC_STORAGE:-arlas-data-es}:/usr/share/elasticsearch/data
+    volumes:
+      - ${ELASTIC_STORAGE:-arlas-data-es}:/usr/share/elasticsearch/data
     healthcheck:
       test: "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
       interval: 10s
