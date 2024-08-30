@@ -11,6 +11,8 @@ jobs:
       run: ./start.sh
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh
+    - name: Install arlas_cli
+      run: pip3.10 install arlas_cli
     - name: Init configurations
       run: ./scripts/init_arlas_cli_confs.sh
     - name: Init stack with data
@@ -24,6 +26,8 @@ jobs:
       run: ./start.sh iam
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh iam
+    - name: Install arlas_cli
+      run: pip3.10 install arlas_cli
     - name: Init configurations
       run: ./scripts/init_arlas_cli_confs.sh
     - name: Init stack with data
