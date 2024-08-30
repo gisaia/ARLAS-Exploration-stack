@@ -37,3 +37,5 @@ set +e
 docker compose -p arlas-exploration-stack $ENV_FILES $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES
 set -e
 docker logs elasticsearch
+ls -l tmp/
+ls -l tmp/elastic/
