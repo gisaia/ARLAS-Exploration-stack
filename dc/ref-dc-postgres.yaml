@@ -23,7 +23,7 @@ services:
       - ${POSTGRES_BACKUP_DIR}/postgresql/:/backup/
       - ${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro
       - ${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro
-      - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
+      - ${POSTGRES_STORAGE}:/var/lib/postgresql/data
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:

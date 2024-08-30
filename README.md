@@ -41,7 +41,11 @@ A simple dashboard with AIS data is then available.
 
 Stop the stack with `./stop.sh`. 
 
-Note: by default, data are persisted in `${PWD}/tmp/`. User `scripts/reset_data.sh` to clean the `${PWD}/tmp/` subdirectories, once the stack stoped.
+Note: by default, data are persisted in docker volumes prefixed with `arlas-test- ...`. To reset the volumes, run:
+
+```shell
+docker volume rm arlas-test-data-es arlas-test-persist arlas-test-postgres
+```
 
 # ARLAS IAM deployment
 
@@ -71,7 +75,12 @@ pip3.10 install arlas-cli
 ./scripts/init_stack_with_data.sh local.iam.admin
 ```
 
-A simple dashboard with AIS data is then available.
+A simple dashboard with AIS data is then available. You can login with:
+- username: `user@org.com`
+- password: `secret`
+or as admin:
+- username: `tech@gisaia.com`
+- password: `admin`
 
 # Configuration
 
@@ -86,6 +95,7 @@ A significant number of parameters can be configured. Parameters are configured 
 - conf/restart_strategy.env: configuration of the restart strategy for every service
 - conf/stack.env: general parameters of the stack
 - conf/versions.env: version of every single service (docker image)
+
 
 [ARLAS with IAM configuration](docker_compose_services_iam.md):
 - conf/arlas_iam.env: configuration of the IAM
@@ -109,3 +119,14 @@ ARLAS Items and Assets Services (aias) Stack:
 - conf/stack.env: general parameters of the stack
 - conf/versions.env: version of every single service (docker image)
 
+
+The current configurations are for tests only. These variables have to be changed for storing the data in reliable places:
+- `ELASTIC_STORAGE` (`conf/elastic.env`)
+- `ARLAS_PERSISTENCE_STORAGE` (`conf/persistence-file.env`)
+- `POSTGRES_STORAGE` (`conf/postgres.env`)
+- `POSTGRES_BACKUP_DIR` (`conf/postgres.env`)
+
+And for AIAS:
+- `APROC_DOWNLOAD_DIR` (`conf/aias.env`)
+- `APROC_INPUT_DIR` (`conf/aias.env`)
+- `APROC_EMAIL_PATH_PREFIX_ADD` (`conf/aias.env`)

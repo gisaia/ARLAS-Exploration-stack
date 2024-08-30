@@ -30,7 +30,7 @@ services:
       - ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME=${ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME:-true}
       - JDK_JAVA_OPTIONS=${ARLAS_PERSISTENCE_JDK_JAVA_OPTIONS}
     volumes:
-      - ${ARLAS_PERSISTENCE_LOCAL_FOLDER_HOST:-/tmp/persist/}:/persist/:rw
+      - ${ARLAS_PERSISTENCE_STORAGE}:/persist/
     expose:
       - "9997"
     networks:
