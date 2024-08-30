@@ -10,7 +10,7 @@ jobs:
     - name: Start simple stack
       run: ./start.sh
     - name: Run endpoints tests
-      run: ./test_endpoints.sh
+      run: ./scripts/test_endpoints.sh
     - name: Init configurations
       run: ./scripts/init_arlas_cli_confs.sh
     - name: Init stack with data
@@ -23,7 +23,7 @@ jobs:
     - name: Start iam stack
       run: ./start.sh iam
     - name: Run endpoints tests
-      run: ./test_endpoints.sh iam
+      run: ./scripts/test_endpoints.sh iam
     - name: Init configurations
       run: ./scripts/init_arlas_cli_confs.sh
     - name: Init stack with data
