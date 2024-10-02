@@ -55,6 +55,6 @@ services:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
     healthcheck:
       test: "curl -f http://localhost:8000/airs/healthcheck"
-      interval: 5s
-      timeout: 3s
-      retries: 30
+      interval: 10s
+      timeout: 10s
+      retries: 10

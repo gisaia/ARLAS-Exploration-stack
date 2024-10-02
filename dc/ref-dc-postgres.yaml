@@ -31,5 +31,5 @@ services:
     healthcheck:
       test: "pg_isready -d arlas"
       interval: 10s
-      timeout: 3s
-      retries: 30
+      timeout: 10s
+      retries: 10

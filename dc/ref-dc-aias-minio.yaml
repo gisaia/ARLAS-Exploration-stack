@@ -20,6 +20,6 @@ services:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
     healthcheck:
       test: "mc alias set myminio http://localhost:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; mc ping -x myminio"
-      interval: 5s
+      interval: 10s
       timeout: 10s
-      retries: 3
+      retries: 10

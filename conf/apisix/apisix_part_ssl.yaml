@@ -1,0 +1,9 @@
+ssls:
+  -
+    snis:
+      - "localhost"
+      - "${ARLAS_HOST}"
+    cert: |
+${SSL_CERT}
+    key: |
+${SSL_KEY}

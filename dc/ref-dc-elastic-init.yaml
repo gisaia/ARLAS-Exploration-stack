@@ -90,5 +90,5 @@ services:
     healthcheck:
       test: "[ -f config/certs/elasticsearch/elasticsearch.crt ]"
       interval: 10s
-      timeout: 5s
-      retries: 120
+      timeout: 10s
+      retries: 10

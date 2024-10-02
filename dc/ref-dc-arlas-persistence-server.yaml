@@ -41,6 +41,6 @@ services:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
     healthcheck:
       test: ["CMD","java","HttpHealthcheck.java","http://localhost:9997/admin/healthcheck"]
-      interval: 5s
+      interval: 10s
       timeout: 10s
-      retries: 3
+      retries: 10

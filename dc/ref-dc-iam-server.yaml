@@ -41,9 +41,9 @@ services:
       - arlas-net
     healthcheck:
       test: ["CMD","java","HttpHealthcheck.java","http://localhost:9998/admin/healthcheck"]
-      interval: 5s
+      interval: 10s
       timeout: 10s
-      retries: 3
+      retries: 10
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:

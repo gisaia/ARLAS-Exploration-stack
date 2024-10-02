@@ -64,6 +64,6 @@ services:
       - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
     healthcheck:
       test: "curl -f http://localhost:8001/aproc/healthcheck"
-      interval: 5s
-      timeout: 3s
-      retries: 30
+      interval: 10s
+      timeout: 10s
+      retries: 10

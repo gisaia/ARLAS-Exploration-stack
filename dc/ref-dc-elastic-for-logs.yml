@@ -35,4 +35,4 @@
       test: "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'"
       interval: 10s
       timeout: 10s
-      retries: 120
+      retries: 10

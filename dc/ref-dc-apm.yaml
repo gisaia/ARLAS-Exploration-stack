@@ -54,4 +54,4 @@ services:
         "| grep -q ERROR" ]
       interval: 10s
       timeout: 10s
-      retries: 120
+      retries: 10

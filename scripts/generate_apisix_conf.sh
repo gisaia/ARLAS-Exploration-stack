@@ -6,7 +6,6 @@ then
     exit 0
 fi
 
-APISIX_CONF_FILE=$1
 if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
 then
     echo "creating conf/server.crt and conf/server.key ..."
@@ -20,4 +19,4 @@ export SSL_KEY=`cat conf/server.key | sed 's/^/      /'`
 . conf/stack.env
 echo "ARLAS HOST: ${ARLAS_HOST}"
 export ARLAS_HOST=$ARLAS_HOST
-envsubst '$SSL_CERT,$SSL_KEY,$ARLAS_HOST' < ${APISIX_CONF_FILE} > conf/apisix/apisix.generated.yaml
+envsubst '$SSL_CERT,$SSL_KEY,$ARLAS_HOST' < conf/apisix/apisix.yaml > conf/apisix/apisix.generated.yaml
