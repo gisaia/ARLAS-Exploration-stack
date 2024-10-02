@@ -1,0 +1,23 @@
+index:
+  endpoint_url: $AIRS_INDEX_ENDPOINT_URL|http://localhost:9200
+  collection_prefix: $AIRS_INDEX_COLLECTION_PREFIX|airs
+  login: $AIRS_INDEX_LOGIN
+  pwd: $AIRS_INDEX_PWD
+
+s3:
+  bucket: $AIRS_S3_BUCKET|arlaseo
+  access_key_id: $AIRS_S3_ACCESS_KEY_ID
+  secret_access_key: $AIRS_S3_SECRET_ACCESS_KEY
+  region: $AIRS_S3_REGION|None
+  tier: $AIRS_S3_TIER|"Standard"
+  platform: $AIRS_S3_PLATFORM
+
+# asset_http_endpoint_url must look like https://storage.googleapis.com/{}/{}
+# first element is the bucket, second is the path to the object
+  asset_http_endpoint_url: $AIRS_S3_ASSET_HTTP_ENDPOINT_URL
+
+# if you don't use aws s3, then please prov
+  endpoint_url: $AIRS_S3_ENDPOINT_URL
+
+arlaseo_mapping_url: $AIRS_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/mapping.json"
+arlaseo_collection_url: $AIRS_COLLECTION_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/collection.json"

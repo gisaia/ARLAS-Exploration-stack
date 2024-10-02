@@ -1,0 +1,46 @@
+services:
+  arlas-persistence-server: # ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
+    image: ${ARLAS_PERSISTENCE_VERSION}
+    container_name: arlas-persistence-server
+    restart: ${ARLAS_PERSISTENCE_RESTART_STRATEGY:-always}
+    environment:
+      - ARLAS_AUTH_POLICY_CLASS="${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer}"
+      - ARLAS_AUTH_PUBLIC_URIS=swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,collections/demo_.*:GET,authorize/resources:GET
+      - ARLAS_AUTH_PERMISSION_URL="${ARLAS_AUTH_PERMISSION_URL}"
+      - ARLAS_AUTH_ENABLED=${ARLAS_AUTH_ENABLED:-false}
+      - ARLAS_CACHE_TIMEOUT=${ARLAS_CACHE_TIMEOUT:-5}
+      - ARLAS_PERSISTENCE_APP_PATH=${ARLAS_PERSISTENCE_APP_PATH:-/}
+      - ARLAS_PERSISTENCE_ENGINE=${ARLAS_PERSISTENCE_ENGINE:-hibernate}
+      - ARLAS_PERSISTENCE_HIBERNATE_PASSWORD=${POSTGRES_PASSWORD}
+      - ARLAS_PERSISTENCE_HIBERNATE_URL=${ARLAS_PERSISTENCE_HIBERNATE_URL:-jdbc:postgresql://db:5432/arlas}
+      - ARLAS_PERSISTENCE_HIBERNATE_USER=${POSTGRES_USER}
+      - ARLAS_PERSISTENCE_LOCAL_FOLDER=/persist/
+      - ARLAS_PERSISTENCE_LOGGING_CONSOLE_LEVEL=${ARLAS_PERSISTENCE_LOGGING_CONSOLE_LEVEL}
+      - ARLAS_PERSISTENCE_LOGGING_LEVEL=${ARLAS_PERSISTENCE_LOGGING_LEVEL}
+      - ARLAS_PERSISTENCE_PORT=${ARLAS_PERSISTENCE_PORT:-9997}
+      - ARLAS_PERSISTENCE_PREFIX=${ARLAS_PERSISTENCE_PREFIX:-/arlas-persistence-server}
+      - ELASTIC_APM_APPLICATION_PACKAGES=io.arlas
+      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT}
+      - ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST=${ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST:-*}
+      - ELASTIC_APM_LOG_ECS_REFORMATTING=${ELASTIC_APM_LOG_ECS_REFORMATTING:-OVERRIDE}
+      - ELASTIC_APM_SECRET_TOKEN=${ELASTIC_APM_SECRET_TOKEN}
+      - ELASTIC_APM_SERVER_URLS=${ELASTIC_APM_SERVER_URLS:-http://apm-server:8200}
+      - ELASTIC_APM_SERVICE_NAME=arlas-persistence-server
+      - ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS=GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*
+      - ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME=${ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME:-true}
+      - JDK_JAVA_OPTIONS=${ARLAS_PERSISTENCE_JDK_JAVA_OPTIONS}
+    volumes:
+      - ${ARLAS_PERSISTENCE_STORAGE}:/persist/
+    expose:
+      - "9997"
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9997/admin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 10

@@ -1,0 +1,54 @@
+
+services:
+  arlas-wui: # ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
+    image: ${ARLAS_WUI_VERSION}
+    container_name: arlas-wui
+    depends_on:
+#      arlas-persistence-server: # Persistence is not necessarily deployed
+#        condition: service_healthy
+      arlas-server:
+        condition: service_healthy
+    restart: ${ARLAS_WUI_RESTART_STRATEGY:-always}
+    environment:
+      - ARLAS_AUTHENT_CLEAR_HASH=${ARLAS_AUTHENT_CLEAR_HASH:-true}
+      - ARLAS_AUTHENT_CLIENT_ID=${ARLAS_AUTHENT_CLIENT_ID:-}
+      - ARLAS_AUTHENT_DISABLE_AT_HASH_CHECK=${ARLAS_AUTHENT_DISABLE_AT_HASH_CHECK:-true}
+      - ARLAS_AUTHENT_ENABLE_SESSION_CHECKS=${ARLAS_AUTHENT_ENABLE_SESSION_CHECKS:-true}
+      - ARLAS_AUTHENT_FORCE_CONNECT=${ARLAS_AUTHENT_FORCE_CONNECT}
+      - ARLAS_AUTHENT_ISSUER=${ARLAS_AUTHENT_ISSUER}
+      - ARLAS_AUTHENT_LOGIN_URL=${ARLAS_AUTHENT_LOGIN_URL}
+      - ARLAS_AUTHENT_LOGOUT_URL=${ARLAS_AUTHENT_LOGOUT_URL}
+      - ARLAS_AUTHENT_MODE=${ARLAS_AUTHENT_MODE}
+      - ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI=${ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI}
+      - ARLAS_AUTHENT_REDIRECT_URI=${ARLAS_AUTHENT_REDIRECT_URI:-/wui/callback}
+      - ARLAS_AUTHENT_REQUIRE_HTTPS=${ARLAS_AUTHENT_REQUIRE_HTTPS:-false}
+      - ARLAS_AUTHENT_RESPONSE_TYPE=${ARLAS_AUTHENT_RESPONSE_TYPE:-code}
+      - ARLAS_AUTHENT_SCOPE=${ARLAS_AUTHENT_SCOPE:-profile}
+      - ARLAS_AUTHENT_SHOW_DEBUG=${ARLAS_AUTHENT_SHOW_DEBUG:-false}
+      - ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI=${ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI}
+      - ARLAS_AUTHENT_SILENT_REFRESH_TIMEOUT=${ARLAS_AUTHENT_SILENT_REFRESH_TIMEOUT:-10000}
+      - ARLAS_AUTHENT_STORAGE=${ARLAS_AUTHENT_STORAGE:-memorystorage}
+      - ARLAS_AUTHENT_THRESHOLD=${ARLAS_AUTHENT_THRESHOLD}
+      - ARLAS_AUTHENT_TIMEOUT_FACTOR=${ARLAS_AUTHENT_TIMEOUT_FACTOR:-0.75}
+      - ARLAS_AUTHENT_USE_DISCOVERY=${ARLAS_AUTHENT_USE_DISCOVERY}
+      - ARLAS_GEOCODING_FIND_PLACE_URL=${ARLAS_GEOCODING_FIND_PLACE_URL}
+      - ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO=${ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO:-10}
+      - ARLAS_HUB_URL=${ARLAS_HUB_URL:-/hub/}
+      - ARLAS_IAM_SERVER_URL=${ARLAS_IAM_SERVER_URL:-/arlas_iam_server}
+      - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-/arlas_persistence_server}
+      - ARLAS_USE_AUTHENT=${ARLAS_USE_AUTHENT}
+      - ARLAS_WUI_BASE_HREF=${ARLAS_WUI_BASE_HREF:-/wui}
+      - PUBLIC_HOST=${ARLAS_HOST}
+    expose:
+      - "80"
+    networks:
+      - arlas-net
+    volumes:
+      - ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
+      - ${PWD}/conf/protomaps/glyphs:/usr/share/nginx/html/assets/basemap/glyphs
+      - ${PWD}/conf/protomaps/quicklook:/usr/share/nginx/html/assets/basemap/quicklook
+      - ${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}

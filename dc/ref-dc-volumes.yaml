@@ -1,0 +1,18 @@
+volumes:
+# Elasticsearch
+  arlas-test-data-es:
+    name: arlas-test-data-es
+  arlas-test-data-es-logs:
+    name: arlas-test-data-es-logs
+  arlas-test-es-certs:
+    name: arlas-test-es-certs
+  arlas-test-es-config:
+    name: arlas-test-es-config
+
+# Persistence
+  arlas-test-persist:
+    name: arlas-test-persist
+
+# Postgres
+  arlas-test-postgres:
+    name: arlas-test-postgres

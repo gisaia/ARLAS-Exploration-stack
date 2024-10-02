@@ -1,0 +1,48 @@
+services:
+  arlas-server: # ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
+    image: ${ARLAS_SERVER_VERSION}
+    container_name: arlas-server
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: ${ARLAS_SERVER_RESTART_STRATEGY:-always}
+    environment:
+      - ARLAS_AUTH_POLICY_CLASS=${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer} # Specify a PolicyEnforcer class to load in order to activate Authentication if needed
+      - ARLAS_AUTH_PUBLIC_URIS=swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,collections/demo_.*:GET,authorize/resources:GET
+      - ARLAS_AUTH_PERMISSION_URL="${ARLAS_AUTH_PERMISSION_URL}"
+      - ARLAS_APP_PATH=/
+      - ARLAS_BASE_URI="${ARLAS_BASE_URI:-http://arlas-server:9999/arlas/}" # Arlas base uri
+      - ARLAS_CACHE_TIMEOUT=${ARLAS_CACHE_TIMEOUT:-5} # TTL in seconds of items in the cache
+      - ARLAS_CORS_ALLOWED_HEADERS="arlas-user,arlas-groups,arlas-organization,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User,partition-filter,arlas-org-filter" # Comma-separated list of allowed headers
+      - ARLAS_CORS_ENABLED="${ARLAS_CORS_ENABLED:-true}" # Whether to configure cors or not
+      - ARLAS_ELASTIC_CLUSTER=${ARLAS_ELASTIC_CLUSTER:-arlas-es-cluster}
+      - ARLAS_ELASTIC_ENABLE_SSL=false # use SSL to connect to elasticsearch
+      - ARLAS_ELASTIC_INDEX="${ARLAS_ELASTIC_INDEX:-.arlas}" # name of the index that is used for storing ARLAS configuration
+      - ARLAS_ELASTIC_NODES=${ARLAS_ELASTIC_NODES:-elasticsearch:9200} # comma separated list of elasticsearch nodes as host:port values
+      - ARLAS_ELASTIC_SKIP_MASTER="${ARLAS_ELASTIC_SKIP_MASTER:-true}"
+      - ARLAS_ELASTIC_SNIFFING=${ES_SNIFFING:-false}
+      - ARLAS_INSPIRE_ENABLED="${ARLAS_INSPIRE_ENABLED:-false}" # Whether to activate INSPIRE compliant response elements
+      - ARLAS_LOGGING_CONSOLE_LEVEL="${ARLAS_LOGGING_CONSOLE_LEVEL}"
+      - ARLAS_LOGGING_LEVEL="${ARLAS_LOGGING_LEVEL}"
+      - ARLAS_PREFIX=/arlas
+      - ARLAS_SERVICE_CSW_ENABLE="${ARLAS_SERVICE_CSW_ENABLE:-false}" # Whether the CSW service is enabled or not
+      - ARLAS_SERVICE_RASTER_TILES_ENABLE="${ARLAS_SERVICE_RASTER_TILES_ENABLE:-false}" # Whether the RASTER tile service is enabled or not
+      - ARLAS_SERVICE_WFS_ENABLE="${ARLAS_SERVICE_WFS_ENABLE:-false}" # Whether the WFS service is enabled or not
+      - JDK_JAVA_OPTIONS=${ARLAS_SERVER_JDK_JAVA_OPTIONS}
+      - ARLAS_AUTH_KEYCLOAK_REALM=${ARLAS_AUTH_KEYCLOAK_REALM:-}
+      - ARLAS_AUTH_KEYCLOAK_RESOURCE=${ARLAS_AUTH_KEYCLOAK_RESOURCE:-}
+      - ARLAS_AUTH_KEYCLOAK_SECRET=${ARLAS_AUTH_KEYCLOAK_SECRET:-}
+      - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}
+    expose:
+      - "9999"
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9999/admin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 10

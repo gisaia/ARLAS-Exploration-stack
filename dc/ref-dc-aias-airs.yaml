@@ -1,0 +1,60 @@
+services:
+  airs-server: # AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
+    image: ${ARLAS_VERSION_AIRS}
+    container_name: airs-server
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    restart: ${ARLAS_AIRS_RESTART_STRATEGY:-always}
+#    labels:
+#???      co.elastic.logs/enabled: true
+#      co.elastic.logs/json.keys_under_root: true
+#      co.elastic.logs/json.overwrite_keys: true
+#      co.elastic.logs/json.add_error_key: true
+#      co.elastic.logs/json.expand_keys: true
+    environment:
+      - AIRS_COLLECTION_URL=${AIRS_COLLECTION_URL:-https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/collection.json}
+      - AIRS_CORS_HEADERS=${AIRS_CORS_HEADERS:-*}
+      - AIRS_CORS_METHODS=${AIRS_CORS_METHODS:-*}
+      - AIRS_CORS_ORIGINS=${AIRS_CORS_ORIGINS:-*}
+      - AIRS_HOST=${AIRS_HOST:-0.0.0.0}
+      - AIRS_INDEX_COLLECTION_PREFIX=${AIRS_INDEX_COLLECTION_PREFIX:-airs}
+      - AIRS_INDEX_ENDPOINT_URL=${AIRS_INDEX_ENDPOINT_URL}
+      - AIRS_INDEX_LOGIN=${ELASTIC_USER}
+      - AIRS_INDEX_PWD=${ELASTIC_PASSWORD}
+      - AIRS_LOGGER_LEVEL=${AIRS_LOGGER_LEVEL}
+      - AIRS_MAPPING_URL=${AIRS_MAPPING_URL:-/app/conf/mapping.json}
+      - AIRS_PORT=${AIRS_PORT:-8000}
+      - AIRS_PREFIX=${AIRS_PREFIX:-/airs}
+      - AIRS_S3_ACCESS_KEY_ID=${AIRS_S3_ACCESS_KEY_ID}
+      - AIRS_S3_ASSET_HTTP_ENDPOINT_URL=${AIRS_S3_ASSET_HTTP_ENDPOINT_URL}
+      - AIRS_S3_BUCKET=${AIRS_S3_BUCKET:-airs-storage}
+      - AIRS_S3_ENDPOINT_URL=${AIRS_S3_ENDPOINT_URL:-http://minio:9000}
+      - AIRS_S3_PLATFORM=${AIRS_S3_PLATFORM:-MINIO}
+      - AIRS_S3_REGION=${AIRS_S3_REGION:-Standart}
+      - AIRS_S3_SECRET_ACCESS_KEY=${AIRS_S3_SECRET_ACCESS_KEY}
+      - AIRS_S3_TIER=${AIRS_S3_TIER:-Standard}
+      - ELASTIC_APM_APPLICATION_PACKAGES=io.arlas
+      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT}
+      - ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST=${ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST:-*}
+      - ELASTIC_APM_LOG_ECS_REFORMATTING=${ELASTIC_APM_LOG_ECS_REFORMATTING:-OVERRIDE}
+      - ELASTIC_APM_SECRET_TOKEN=${ELASTIC_APM_SECRET_TOKEN}
+      - ELASTIC_APM_SERVER_URLS=${ELASTIC_APM_SERVER_URLS:-http://apm-server:8200}
+      - ELASTIC_APM_SERVICE_NAME=airs-server
+      - ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS=GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*
+      - ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME=${ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME:-true}
+    expose:
+      - "8000"
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: "curl -f http://localhost:8000/airs/healthcheck"
+      interval: 10s
+      timeout: 10s
+      retries: 10

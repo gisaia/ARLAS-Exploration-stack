@@ -1,0 +1,144 @@
+routes:
+  -
+    uri: /builder
+    upstream:
+      nodes:
+        "arlas-builder:80": 1
+  -
+    uri: /builder/*
+    upstream:
+      nodes:
+        "arlas-builder:80": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/builder/(.*)", "/$1"]
+  -
+    uri: /
+    plugins:
+      redirect:
+        uri: /hub/
+  -
+    uri: /hub
+    upstream:
+      nodes:
+        "arlas-hub:80": 1
+  -
+    uri: /hub/*
+    upstream:
+      nodes:
+        "arlas-hub:80": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/hub/(.*)", "/$1"]
+  -
+    uri: /iam
+    upstream:
+      nodes:
+        "arlas-wui-iam:80": 1
+  -
+    uri: /iam/*
+    upstream:
+      nodes:
+        "arlas-wui-iam:80": 1
+  -
+    uri: /wui
+    upstream:
+      nodes:
+        "arlas-wui:80": 1
+  -
+    uri: /wui/*
+    upstream:
+      nodes:
+        "arlas-wui:80": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/wui/(.*)", "/$1"]
+  -
+    uri: /arlas_permissions_server/*
+    upstream:
+      nodes:
+        "arlas-permissions-server:9996": 1
+  -
+    uri: /persist/*
+    upstream:
+      nodes:
+        "arlas-persistence-server:9997": 1
+  -
+    uri: /arlas/*
+    upstream:
+      nodes:
+        "arlas-server:9999": 1
+  -
+    uri: /agate/healthcheck
+    methods: ["GET"]
+    upstream:
+      nodes:
+        "agate:8004": 1
+  -
+    uri: /airs-storage/*
+    methods: ["GET"]
+    upstream:
+      nodes:
+        "minio:9000": 1
+    plugins:
+      forward-auth:
+        uri: http://agate:8004/agate/authorization
+        request_headers: ["Authorization", "arlas-org-filter"]
+  -
+    uri: /fam-wui
+    plugins:
+      redirect:
+        uri: /fam-wui/
+  -
+    uri: /fam-wui/*
+    upstream:
+      nodes:
+        "arlas-fam-wui:80": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/fam-wui/(.*)", "/$1"]
+  -
+    uri: /airs/collections/*
+    upstream:
+      nodes:
+        "airs-server:8000": 1
+    plugins:
+      forward-auth:
+        uri: http://arlas-iam-server:9998/arlas_iam_server/auth
+        request_headers: ["Authorization", "arlas-org-filter"]
+  -
+    uri: /aproc/processes/*
+    upstream:
+      nodes:
+        "aproc-service:8001": 1
+    plugins:
+      forward-auth:
+        uri: http://arlas-iam-server:9998/arlas_iam_server/auth
+        request_headers: ["Authorization", "arlas-org-filter"]
+  -
+    uri: /aproc/jobs
+    upstream:
+      nodes:
+        "aproc-service:8001": 1
+    plugins:
+      forward-auth:
+        uri: http://arlas-iam-server:9998/arlas_iam_server/auth
+        request_headers: ["Authorization", "arlas-org-filter"]
+  -
+    uri: /aproc/jobs/*
+    upstream:
+      nodes:
+        "aproc-service:8001": 1
+    plugins:
+      forward-auth:
+        uri: http://arlas-iam-server:9998/arlas_iam_server/auth
+        request_headers: ["Authorization", "arlas-org-filter"]
+ssls:
+  -
+    snis:
+      - "localhost"
+    cert: |
+${SSL_CERT}
+    key: |
+${SSL_KEY}
+#END

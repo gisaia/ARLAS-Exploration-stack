@@ -1,0 +1,35 @@
+services:
+  # https://hub.docker.com/_/postgres
+  db:
+    image: ${POSTGRES_VERSION}
+    container_name: db
+    restart: ${POSTGRES_RESTART_STRATEGY:-always}
+    environment:
+      - DAY_OF_WEEK_TO_KEEP=${POSTGRES_DAY_OF_WEEK_TO_KEEP} 
+      - DAYS_TO_KEEP=${POSTGRES_DAYS_TO_KEEP}
+      - WEEKS_TO_KEEP=${POSTGRES_WEEKS_TO_KEEP}
+      - PG_BACKUP_DIR=/backup/
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+      - PGUSER=${POSTGRES_USER}
+      - POSTGRES_DB=arlas
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+    expose:
+      - "5432"
+    networks:
+      - arlas-net
+    volumes:
+      - ${POSTGRES_BACKUP_STORAGE}:/backup/
+      - ${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro
+      - ${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro
+      - ${POSTGRES_STORAGE}:/var/lib/postgresql/data
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: "pg_isready -d arlas"
+      interval: 10s
+      timeout: 10s
+      retries: 10

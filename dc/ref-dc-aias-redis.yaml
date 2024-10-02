@@ -1,0 +1,19 @@
+services:
+  redis:
+    extends:
+      file: ref-dc-logger.yaml
+      service: log-rotated
+    image: ${ARLAS_VERSION_REDIS}
+    container_name: redis
+    restart: always
+    expose:
+      - "6379"
+    networks:
+      - arlas-net
+    volumes:
+      - arlas-data-redis:/data
+    healthcheck:
+      test: "redis-cli ping"
+      interval: 10s
+      timeout: 10s
+      retries: 10

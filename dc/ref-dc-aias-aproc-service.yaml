@@ -1,0 +1,69 @@
+services:
+  aproc-service: # ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
+    extends:
+      file: ref-dc-logger.yaml
+      service: log-rotated
+    depends_on:
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    image: ${ARLAS_VERSION_APROC_SERVICE}
+    container_name: aproc-service
+    restart: always
+    labels:
+      co.elastic.logs/enabled: true
+      co.elastic.logs/json.keys_under_root: true
+      co.elastic.logs/json.overwrite_keys: true
+      co.elastic.logs/json.add_error_key: true
+      co.elastic.logs/json.expand_keys: true
+    environment:
+      - APROC_LOGGER_LEVEL=${APROC_LOGGER_LEVEL:-INFO}
+      - APROC_HOST=0.0.0.0
+      - APROC_PORT=8001
+      - APROC_PREFIX=/aproc
+      - APROC_CONFIGURATION_FILE=/app/conf/aproc.yaml
+      - CELERY_BROKER_URL=pyamqp://guest:guest@rabbitmq:5672//
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - AIRS_ENDPOINT=http://airs-server:8000/airs
+      - ARLAS_SMTP_ACTIVATED="${ARLAS_SMTP_ACTIVATED:-false}"
+      - ARLAS_SMTP_HOST="${ARLAS_SMTP_HOST}"
+      - ARLAS_SMTP_PORT="${ARLAS_SMTP_PORT:-25}"
+      - ARLAS_SMTP_USERNAME="${ARLAS_SMTP_USERNAME}"
+      - ARLAS_SMTP_PASSWORD="${ARLAS_SMTP_PASSWORD}"
+      - ARLAS_SMTP_FROM="${ARLAS_SMTP_FROM}"
+      - APROC_DOWNLOAD_ADMIN_EMAILS="${APROC_DOWNLOAD_ADMIN_EMAILS}"
+      - APROC_DOWNLOAD_OUTBOX_DIR="/outbox"
+      - APROC_DOWNLOAD_CONTENT_USER=${APROC_DOWNLOAD_CONTENT_USER}
+      - APROC_DOWNLOAD_SUBJECT_USER=${APROC_DOWNLOAD_SUBJECT_USER}
+      - APROC_DOWNLOAD_CONTENT_ERROR=${APROC_DOWNLOAD_CONTENT_ERROR}
+      - APROC_DOWNLOAD_SUBJECT_ERROR=${APROC_DOWNLOAD_SUBJECT_ERROR}
+      - APROC_DOWNLOAD_CONTENT_ADMIN=${APROC_DOWNLOAD_CONTENT_ADMIN}
+      - APROC_DOWNLOAD_SUBJECT_ADMIN=${APROC_DOWNLOAD_SUBJECT_ADMIN}
+      - APROC_DOWNLOAD_REQUEST_SUBJECT_USER=${APROC_DOWNLOAD_REQUEST_SUBJECT_USER}
+      - APROC_DOWNLOAD_REQUEST_CONTENT_USER=${APROC_DOWNLOAD_REQUEST_CONTENT_USER}
+      - APROC_DOWNLOAD_REQUEST_SUBJECT_ADMIN=${APROC_DOWNLOAD_REQUEST_SUBJECT_ADMIN}
+      - APROC_DOWNLOAD_REQUEST_CONTENT_ADMIN=${APROC_DOWNLOAD_REQUEST_CONTENT_ADMIN}
+      - APROC_EMAIL_PATH_PREFIX_ADD=${APROC_EMAIL_PATH_PREFIX_ADD}
+      - APROC_PATH_TO_WINDOWS=${APROC_PATH_TO_WINDOWS}
+      - ARLAS_URL_SEARCH=${ARLAS_URL_SEARCH}
+      - AIRS_INDEX_COLLECTION_PREFIX=${AIRS_INDEX_COLLECTION_PREFIX}
+      - APROC_INDEX_ENDPOINT_URL=http://elasticsearch:9200
+      - APROC_INDEX_NAME=${APROC_INDEX_NAME}
+#      - APROC_INDEX_LOGIN=elastic
+#      - APROC_INDEX_PWD=${ELASTIC_PASSWORD}
+      - APROC_RESOURCE_ID_HASH_STARTS_AT=3
+    expose:
+      - "8001"
+    networks:
+      - arlas-net
+    volumes:
+      - ${APROC_INPUT_DIR}:/inputs:ro
+      - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
+    healthcheck:
+      test: "curl -f http://localhost:8001/aproc/healthcheck"
+      interval: 10s
+      timeout: 10s
+      retries: 10

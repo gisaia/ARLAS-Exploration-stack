@@ -1,0 +1,16 @@
+
+volumes:
+  arlas-data-db:
+    name: arlas-data-db
+  arlas-data-pg:
+    name: arlas-data-pg
+  arlas-config-pg:
+    name: arlas-config-pg
+  arlas-data-minio:
+    name: arlas-data-minio
+  arlas-data-mc-conf:
+    name: arlas-data-mc-conf
+  arlas-data-rabbimq:
+    name: arlas-data-rabbitmq
+  arlas-data-redis:
+    name: arlas-data-redis

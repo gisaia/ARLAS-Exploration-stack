@@ -1,0 +1,51 @@
+services:
+  elasticsearch:
+    image: ${ELASTIC_VERSION}
+    container_name: elasticsearch
+    restart: ${ELASTIC_RESTART_STRATEGY:-always}
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - APM_SECRET_TOKEN=${APM_SECRET_TOKEN}
+      - discovery.type=single-node
+      - cluster.name=arlas-es-cluster
+      - node.name=arlas-data-node-1
+      - ES_JAVA_OPTS=${ES_JAVA_OPTS}
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=certs/elasticsearch/elasticsearch.key
+      - xpack.security.http.ssl.certificate=certs/elasticsearch/elasticsearch.crt
+      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=certs/elasticsearch/elasticsearch.key
+      - xpack.security.transport.ssl.certificate=certs/elasticsearch/elasticsearch.crt
+      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - path.repo=/usr/share/elasticsearch/backup
+      - tracing.apm.enabled=false
+    ulimits:
+      memlock: {soft: -1, hard: -1}
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 9200:9200 # !EXPOSE!
+      - 9300:9300 # !EXPOSE!
+    expose:
+      - "9200"
+      - "9300"
+    networks:
+      - arlas-net
+    volumes:
+      - arlas-data-es:/usr/share/elasticsearch/data
+      - arlas-es-certs:/usr/share/elasticsearch/config/certs
+      - arlas-es-config:/usr/share/elasticsearch/config
+      - ${ELASTIC_BACKUP_DIR:-/tmp/elastic/backup}/elasticsearch/:/usr/share/elasticsearch/backup
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'"
+      interval: 10s
+      timeout: 10s
+      retries: 10

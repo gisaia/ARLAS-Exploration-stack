@@ -1,0 +1,54 @@
+arlas_url_search: $ARLAS_URL_SEARCH
+arlaseo_mapping_url: $ARLASEO_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/mapping.json"
+download_mapping_url: $DOWNLOAD_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/downloads_mapping.json"
+
+outbox_directory: $APROC_DOWNLOAD_OUTBOX_DIR
+notification_admin_emails: $APROC_DOWNLOAD_ADMIN_EMAILS
+
+# Usable variables in messages: {target_projection}, {target_format}, {arlas-user-email}, {item_id}, {asset_name}, {collection}, {target_directory}, {file_name}
+# Usable variables in messages: {error}
+
+email_subject_user: $APROC_DOWNLOAD_SUBJECT_USER
+email_content_user: $APROC_DOWNLOAD_CONTENT_USER
+email_subject_error_download: $APROC_DOWNLOAD_SUBJECT_ERROR
+email_content_error_download: $APROC_DOWNLOAD_CONTENT_ERROR
+email_subject_admin: $APROC_DOWNLOAD_SUBJECT_ADMIN
+email_content_admin: $APROC_DOWNLOAD_CONTENT_ADMIN
+
+email_request_subject_user: $APROC_DOWNLOAD_REQUEST_SUBJECT_USER
+email_request_content_user: $APROC_DOWNLOAD_REQUEST_CONTENT_USER
+email_request_subject_admin: $APROC_DOWNLOAD_REQUEST_SUBJECT_ADMIN
+email_request_content_admin: $APROC_DOWNLOAD_REQUEST_CONTENT_ADMIN
+
+email_path_prefix_add: $APROC_EMAIL_PATH_PREFIX_ADD
+email_path_to_windows: $APROC_PATH_TO_WINDOWS
+
+smtp:
+  host: $ARLAS_SMTP_HOST
+  port: $ARLAS_SMTP_PORT
+  login: $ARLAS_SMTP_USERNAME
+  password: $ARLAS_SMTP_PASSWORD
+  from_addr: $ARLAS_SMTP_FROM
+
+index_for_download:
+  endpoint_url: $APROC_INDEX_ENDPOINT_URL|http://localhost:9200
+  index_name: $APROC_INDEX_NAME|aproc_downloads
+  login: $APROC_INDEX_LOGIN
+  pwd: $APROC_INDEX_PWD
+
+drivers:
+  -
+    name: simple_copy
+    class_name: extensions.aproc.proc.download.drivers.impl.simple_copy
+    configuration:
+    priority: 3
+  -
+    name: met_file
+    class_name: extensions.aproc.proc.download.drivers.impl.met_file
+    configuration:
+    priority: 1
+  -
+    name: image_file
+    class_name: extensions.aproc.proc.download.drivers.impl.image_file
+    configuration:
+    priority: 2

@@ -1,0 +1,51 @@
+services:
+  arlas-server:
+    image: ${ARLAS_SERVER_VERSION}
+    container_name: arlas-server
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: ${ARLAS_SERVER_RESTART_STRATEGY:-always}
+    environment:
+      - ARLAS_APP_PATH=/
+      - ARLAS_BASE_URI="${ARLAS_BASE_URI:-http://arlas-server:9999/arlas/}"
+      - ARLAS_CACHE_TIMEOUT="${ARLAS_CACHE_TIMEOUT:-5}"
+      - ARLAS_CORS_ALLOWED_HEADERS="arlas-user,arlas-groups,arlas-organization,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User,partition-filter,arlas-org-filter"
+      - ARLAS_CORS_ENABLED="${ARLAS_CORS_ENABLED:-true}"
+      - ARLAS_ELASTIC_CLUSTER=${ARLAS_ELASTIC_CLUSTER:-arlas-es-cluster}
+      - ARLAS_ELASTIC_CREDENTIALS="${ELASTIC_USER}:${ELASTIC_PASSWORD}"
+      - ARLAS_ELASTIC_ENABLE_SSL="${ARLAS_ELASTIC_ENABLE_SSL:-true}"
+      - ARLAS_ELASTIC_INDEX="${ARLAS_ELASTIC_INDEX:-.arlas}"
+      - ARLAS_ELASTIC_NODES=${ARLAS_ELASTIC_NODES:-elasticsearch:9200}
+      - ARLAS_ELASTIC_SKIP_MASTER="${ARLAS_ELASTIC_SKIP_MASTER:-true}"
+      - ARLAS_ELASTIC_SNIFFING=${ES_SNIFFING:-false}
+      - ARLAS_INSPIRE_ENABLED="${ARLAS_INSPIRE_ENABLED:-false}"
+      - ARLAS_LOGGING_CONSOLE_LEVEL="${ARLAS_LOGGING_CONSOLE_LEVEL}"
+      - ARLAS_LOGGING_LEVEL="${ARLAS_LOGGING_LEVEL}"
+      - ARLAS_PREFIX=/arlas
+      - ARLAS_SERVICE_CSW_ENABLE="${ARLAS_SERVICE_CSW_ENABLE:-false}"
+      - ARLAS_SERVICE_RASTER_TILES_ENABLE="${ARLAS_SERVICE_RASTER_TILES_ENABLE:-false}"
+      - ARLAS_SERVICE_WFS_ENABLE="${ARLAS_SERVICE_WFS_ENABLE:-false}"
+      - ELASTIC_APM_APPLICATION_PACKAGES=io.arlas
+      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT}
+      - ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST=${ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST:-*}
+      - ELASTIC_APM_LOG_ECS_REFORMATTING=${ELASTIC_APM_LOG_ECS_REFORMATTING:-OVERRIDE}
+      - ELASTIC_APM_SECRET_TOKEN=${ELASTIC_APM_SECRET_TOKEN}
+      - ELASTIC_APM_SERVER_URLS=${ELASTIC_APM_SERVER_URLS:-http://apm-server:8200}
+      - ELASTIC_APM_SERVICE_NAME=arlas-server
+      - ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS=GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*
+      - ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME=${ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME:-true}
+      - JDK_JAVA_OPTIONS=${ARLAS_SERVER_JDK_JAVA_OPTIONS}
+    expose:
+      - "9999"
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9999/admin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 10

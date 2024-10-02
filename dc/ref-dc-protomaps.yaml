@@ -1,0 +1,16 @@
+services:
+  protomaps:
+    image: ${PROTOMAP_VERSION}
+    container_name: protomaps
+    restart: ${PROTOMAP_RESTART_STRATEGY:-always}
+    entrypoint: ['/go-pmtiles', 'serve', '/protomaps/']
+    expose:
+      - 8080
+    volumes:
+      - ${PWD}/conf/protomaps/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}

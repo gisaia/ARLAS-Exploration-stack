@@ -1,2 +1,10 @@
 .env
 .DS_Store
+sample/sample.json
+conf/server.crt
+conf/server.key
+conf/apisix/apisix.yaml
+conf/apisix/domains.generated.ext
+conf/apisix/apisix.generated.yaml
+conf/apisix/apisix.generated.tmp.yaml
+tmp/

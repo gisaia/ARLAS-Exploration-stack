@@ -1,0 +1,22 @@
+services:
+  apisix: # APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
+    image: ${APISIX_VERSION}
+    container_name: apisix
+    depends_on:
+      arlas-server:
+        condition: service_healthy
+      arlas-wui:
+        condition: service_healthy
+    restart: ${APISIX_RESTART_STRATEGY:-always}
+    environment:
+      - APISIX_STAND_ALONE=${APISIX_STAND_ALONE:-true}
+    ports:  
+      - "80:9080" # !EXPOSE!
+    volumes:
+      - ${APISIX_CONF_FILE}:/usr/local/apisix/conf/apisix.yaml:ro
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}

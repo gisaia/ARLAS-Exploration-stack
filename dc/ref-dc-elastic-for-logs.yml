@@ -1,0 +1,38 @@
+  elasticsearch-logs:
+    image: ${ELASTIC_VERSION}
+    container_name: elasticsearch-logs
+    restart: ${ELASTIC_RESTART_STRATEGY:-always}
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - discovery.type=single-node
+      - cluster.name=arlas-data-es-logs-cluster
+      - node.name=arlas-logs-node-1
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=certs/elasticsearch-logs/elasticsearch-logs.key
+      - xpack.security.http.ssl.certificate=certs/elasticsearch-logs/elasticsearch-logs.crt
+      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=certs/elasticsearch-logs/elasticsearch-logs.key
+      - xpack.security.transport.ssl.certificate=certs/elasticsearch-logs/elasticsearch-logs.crt
+      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - tracing.apm.enabled=false
+    ulimits:
+      memlock: {soft: -1, hard: -1}
+      nofile:
+        soft: 65536
+        hard: 65536
+    expose:
+      - "9200"
+    networks:
+      - arlas-net
+    volumes:
+      - ${ELASTIC_LOGS_STORAGE_DIRECTORY:-/tmp/elastic_logs/data}:/usr/share/elasticsearch/data
+      - ${ELASTIC_CERTS_DIRECTORY}:/usr/share/elasticsearch/config/certs
+    healthcheck:
+      test: "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'"
+      interval: 10s
+      timeout: 10s
+      retries: 10
