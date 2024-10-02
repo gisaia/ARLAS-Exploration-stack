@@ -120,6 +120,17 @@ ARLAS Items and Assets Services (aias) Stack:
 - conf/versions.env: version of every single service (docker image)
 
 
+## Host and domain
+
+By default, the stack is deployed on `http(s)://localhost/`. To deploy the ARLAS Stack on a different domain, simply change the `ARLAS_HOST` environement variable in [conf/stack.env](conf/stack.env):
+```shell
+ARLAS_HOST=localhost
+````
+
+If you are using `arlas_cli` you need to run `scripts/init_arlas_cli_confs.sh` to create again the `arlas_cli` configuration file.
+
+## Variables
+
 The current configurations are for tests only. These variables have to be changed for storing the data in reliable places:
 - `ELASTIC_STORAGE` (`conf/elastic.env`)
 - `ARLAS_PERSISTENCE_STORAGE` (`conf/persistence-file.env`)
@@ -140,3 +151,7 @@ To release, run:
 where `X.Y` is the version of the stack. `X` must be aligned with the majar version ARLAS (WUI and Server) while `Y` is the increment of the stack.
 
 To update the version of the dependencies, such as ARLAS containers, edit `conf/versions.env`.
+
+## Basemap
+
+The basemap provided with the ARLAS Stack is the first zoom levels of protomaps. [Download](https://maps.protomaps.com/builds/) and replace [conf/protomaps/world.pmtiles](conf/protomaps/) to get all zoom levels.

@@ -21,5 +21,5 @@ services:
       options:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
     extra_hosts:
-      - ${HOST}:host-gateway
+      - ${ARLAS_HOST}:host-gateway
 

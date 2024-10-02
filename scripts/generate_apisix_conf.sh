@@ -17,9 +17,7 @@ fi
 export SSL_CERT=`cat conf/server.crt | sed 's/^/      /'`
 export SSL_KEY=`cat conf/server.key | sed 's/^/      /'`
 
-envsubst '$SSL_CERT' < ${APISIX_CONF_FILE} > conf/apisix/apisix.generated.tmp.yaml
-mv conf/apisix/apisix.generated.tmp.yaml conf/apisix/apisix.generated.yaml
-envsubst '$SSL_KEY' < conf/apisix/apisix.generated.yaml > conf/apisix/apisix.generated.tmp.yaml
-mv conf/apisix/apisix.generated.tmp.yaml conf/apisix/apisix.generated.yaml
-envsubst '$ARLAS_HOST' < conf/apisix/apisix.generated.yaml > conf/apisix/apisix.generated.tmp.yaml
-mv conf/apisix/apisix.generated.tmp.yaml conf/apisix/apisix.generated.yaml
+. conf/stack.env
+echo "ARLAS HOST: ${ARLAS_HOST}"
+export ARLAS_HOST=$ARLAS_HOST
+envsubst '$SSL_CERT,$SSL_KEY,$ARLAS_HOST' < ${APISIX_CONF_FILE} > conf/apisix/apisix.generated.yaml

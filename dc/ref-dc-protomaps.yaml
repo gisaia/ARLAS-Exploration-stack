@@ -5,9 +5,9 @@ services:
     restart: ${PROTOMAP_RESTART_STRATEGY:-always}
     entrypoint: ['/go-pmtiles', 'serve', '/protomaps/']
     expose:
-      - "8080"
+      - 8080
     volumes:
-      - ${PROTOMAP_DATA_DIR}/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro
+      - ${PWD}/conf/protomaps/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro
     networks:
       - arlas-net
     logging:

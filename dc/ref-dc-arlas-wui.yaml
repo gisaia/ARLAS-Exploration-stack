@@ -38,11 +38,16 @@ services:
       - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-/arlas_persistence_server}
       - ARLAS_USE_AUTHENT=${ARLAS_USE_AUTHENT}
       - ARLAS_WUI_BASE_HREF=${ARLAS_WUI_BASE_HREF:-/wui}
-      - PUBLIC_HOST=${HOST}
+      - PUBLIC_HOST=${ARLAS_HOST}
     expose:
       - "80"
     networks:
       - arlas-net
+    volumes:
+      - ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
+      - ${PWD}/conf/protomaps/glyphs:/usr/share/nginx/html/assets/basemap/glyphs
+      - ${PWD}/conf/protomaps/quicklook:/usr/share/nginx/html/assets/basemap/quicklook
+      - ${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:
