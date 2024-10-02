@@ -47,7 +47,8 @@ python3.10 scripts/generate_dc_doc.py \
     conf/postgres.env \
     > docker_compose_services_iam.md
 
-git add docker_compose_services.md
-git commit -m "update docker_compose_services.md"
+git add docker_compose_services_simple.md
+git add docker_compose_services_iam.md
+git commit -m "update docker doc"
 git tag -a ${VERSION} -m "ARLAS Exploration stack ${VERSION}"
 git push origin ${VERSION}
