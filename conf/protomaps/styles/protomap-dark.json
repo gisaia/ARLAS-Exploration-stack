@@ -8,9 +8,10 @@
   "sources": {
     "arlas_protomaps_source": {
       "attribution": "Powered by ARLAS - <a href=\"https://protomaps.com/\" target=\"_blank\">Protomaps</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap</a>",
-      "type": "vector",
-      "tiles": ["https://${PUBLIC_HOST}/basemaps/world/{z}/{x}/{y}.mvt"],
-      "maxzoom": 13
+      "type": "pmtiles-type",
+      "tiles": [
+          "pmtiles:///wui/assets/basemap/world.pmtiles/{z}/{x}/{y}"
+      ]
     }
   },
   "layers": [
