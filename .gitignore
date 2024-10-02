@@ -7,4 +7,5 @@ conf/apisix/apisix.yaml
 conf/apisix/domains.generated.ext
 conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
+sample/dashboard.generated.json
 tmp/

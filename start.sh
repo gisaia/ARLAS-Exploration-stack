@@ -31,11 +31,15 @@ if [ "$1" = "aias" ]
 then
     echo "START STACK WITH AIAS AND IAM"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-arlas-server-iam.yaml -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-minio-init.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-fam-wui.yaml"
+    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-fam-wui.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-minio-init.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-volumes.yaml"
+    COMPOSE_SERVICES=${COMPOSE_SERVICES}" auth-server arlas-wui-iam db"
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" airs-server aproc-service aproc-proc redis rabbitmq fam-service arlas-fam-wui"
+    ENV_FILES=${ENV_FILES}" --env-file conf/arlas_iam.env --env-file conf/postgres.env"
     ENV_FILES=${ENV_FILES}" --env-file conf/aias.env"
 
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.yaml
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.yaml
+    cat conf/apisix/apisix_part_aias_services.yaml >> conf/apisix/apisix.yaml
     cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.yaml
     echo "#END" >> conf/apisix/apisix.yaml
     ./scripts/generate_apisix_conf.sh conf/apisix/apisix_with_aias.yaml

@@ -24,7 +24,7 @@ To start the ARLAS stack in simple mode, run:
 ./start.sh
 ```
 
-Once started, you can open ARLAS in your browser: [http://localhost/](http://localhost/).
+Once started, you can open ARLAS in your browser: [http://localhost/](http://localhost/). If you changed `ARLAS_HOST` in `conf/stack.env`, then open instead http://${ARLAS_HOST} .
 You can add a sample data set and a configured dashboard by running:
 
 ## Test
@@ -66,7 +66,7 @@ To start, run:
 ```shell
 ./start.sh iam
 ```
-Once started, you can open ARLAS in your browser: [https://localhost/](https://localhost/).
+Once started, you can open ARLAS in your browser: [https://localhost/](https://localhost/). If you changed `ARLAS_HOST` in `conf/stack.env`, then open instead https://${ARLAS_HOST} .
 You can add a sample data set and a configured dashboard by running:
 
 ```shell
