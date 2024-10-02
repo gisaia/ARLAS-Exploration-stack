@@ -34,7 +34,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:25.1.0` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.1` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -68,7 +68,7 @@ Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:25.1.0` in `conf/version
 ### Service arlas-persistence-server
 Description: ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
 
-Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:25.0.0` in `conf/versions.env`
+Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:26.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -99,12 +99,12 @@ Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:25.0.0`
 | `JDK_JAVA_OPTIONS` | `ARLAS_PERSISTENCE_JDK_JAVA_OPTIONS` | `` |  |  |
 
 List of volumes:
-- ${ARLAS_PERSISTENCE_LOCAL_FOLDER_HOST:-/tmp/persist/}:/persist/:rw
+- ${ARLAS_PERSISTENCE_STORAGE}:/persist/
 ## File dc/ref-dc-arlas-permissions-server.yaml
 ### Service arlas-permissions-server
 Description: ARLAS Permissions is a service for listing user's permissions
 
-Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:25.0.0` in `conf/versions.env`
+Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:26.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -132,7 +132,7 @@ Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:25.0.0`
 ### Service auth-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
 
-Image: `ARLAS_IAM_SERVER_VERSION` with `docker.cloudsmith.io/gisaia/private/arlas-iam-serv ...` in `conf/versions.env`
+Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -156,9 +156,9 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `docker.cloudsmith.io/gisaia/private/arla
 | `ARLAS_SMTP_HOST` | `ARLAS_SMTP_HOST` | `` |  | empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_PASSWORD` | `ARLAS_SMTP_PASSWORD` | `` |  | empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_PORT` | `ARLAS_SMTP_PORT` | `25` |  |  |
-| `ARLAS_SMTP_RESET_LINK` | `HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `ARLAS_SMTP_RESET_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_SMTP_USERNAME` | `ARLAS_SMTP_USERNAME` | `` |  | empty value in `conf/arlas_iam.env` |
-| `ARLAS_SMTP_VERIFY_LINK` | `HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `ARLAS_SMTP_VERIFY_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `JDK_JAVA_OPTIONS` | `ARLAS_IAM_JDK_JAVA_OPTIONS` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_REALM` | `ARLAS_AUTH_KEYCLOAK_REALM` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `` |  |  |
@@ -168,7 +168,7 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `docker.cloudsmith.io/gisaia/private/arla
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `docker.cloudsmith.io/gisaia/private/arlas-wui-iam: ...` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.1` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -183,7 +183,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `docker.cloudsmith.io/gisaia/private/arlas-w
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:25.1.0` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.4` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -193,7 +193,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:25.1.0` in `conf/v
 | `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `true` |  |  |
 | `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_FORCE_CONNECT` | `` |  | `false` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_ISSUER` | `` |  |  |
-| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_LOGIN_URL` | `` |  | `https://localhost/hub/login` in `conf/arlas_iam.env` |
+| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_LOGIN_URL` | `` |  | `https://${ARLAS_HOST}/hub/login` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `iam` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `` |  |  |
@@ -214,15 +214,15 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:25.1.0` in `conf/v
 | `ARLAS_EXTERNAL_NODE_PAGE` | `ARLAS_EXTERNAL_NODE_PAGE` | `true` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIONS_URL` | `/arlas_permissions_server` |  |  |
-| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://localhost/persist` in `conf/arlas_iam.env` |
-| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `https://localhost/arlas` in `conf/arlas_iam.env` |
+| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_iam.env` |
+| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `https://${ARLAS_HOST}/arlas` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
-| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://localhost/wui/` in `conf/arlas_iam.env` |
+| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:25.1.0` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.1` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -245,18 +245,18 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:25.1.0` in `conf/versions.
 | `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_THRESHOLD` | `` |  | `60000` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `0.75` |  |  |
 | `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_USE_DISCOVERY` | `` |  | `true` in `conf/arlas_iam.env` |
-| `ARLAS_BUILDER_URL` | `ARLAS_BUILDER_URL` | `/builder/` |  | `https://localhost/builder/` in `conf/arlas_iam.env` |
+| `ARLAS_BUILDER_URL` | `ARLAS_BUILDER_URL` | `/builder/` |  | `https://${ARLAS_HOST}/builder/` in `conf/arlas_iam.env` |
 | `ARLAS_HUB_BASE_HREF` | `ARLAS_HUB_BASE_HREF` | `/hub` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIONS_URL` | `/arlas_permissions_server` |  |  |
-| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/persist` |  | `/persist` in `conf/persistence-file.env`<br>`https://localhost/persist` in `conf/arlas_iam.env` |
+| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/persist` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
-| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://localhost/wui/` in `conf/arlas_iam.env` |
+| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 ## File dc/ref-dc-arlas-wui.yaml
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:25.1.0` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.0.6-no-analytics` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -266,7 +266,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:25.1.0` in `conf/versions.env`
 | `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `true` |  |  |
 | `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_FORCE_CONNECT` | `` |  | `false` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_ISSUER` | `` |  |  |
-| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_LOGIN_URL` | `` |  | `https://localhost/hub/login` in `conf/arlas_iam.env` |
+| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_LOGIN_URL` | `` |  | `https://${ARLAS_HOST}/hub/login` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `iam` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `` |  |  |
@@ -285,17 +285,23 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:25.1.0` in `conf/versions.env`
 | `ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO` | `ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO` | `10` |  |  |
 | `ARLAS_HUB_URL` | `ARLAS_HUB_URL` | `/hub/` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
-| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://localhost/persist` in `conf/arlas_iam.env` |
+| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+
+List of volumes:
+- ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
+- ${PWD}/conf/protomaps/glyphs:/usr/share/nginx/html/assets/basemap/glyphs
+- ${PWD}/conf/protomaps/quicklook:/usr/share/nginx/html/assets/basemap/quicklook
+- ${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles
 ## File dc/ref-dc-protomaps.yaml
 ### Service protomaps
 Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.19.0` in `conf/versions.env`
 
 
 List of volumes:
-- ${PROTOMAP_DATA_DIR}/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro
+- ${PWD}/conf/protomaps/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro
 ## File dc/ref-dc-apisix.yaml
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
@@ -326,7 +332,7 @@ Image: `POSTGRES_VERSION` with `postgres:16.1` in `conf/versions.env`
 | `POSTGRES_USER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
 
 List of volumes:
-- ${POSTGRES_BACKUP_DIR}/postgresql/:/backup/
+- ${POSTGRES_BACKUP_STORAGE}:/backup/
 - ${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro
 - ${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro
-- ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
+- ${POSTGRES_STORAGE}:/var/lib/postgresql/data
