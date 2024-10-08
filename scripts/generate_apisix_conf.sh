@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
-if [ -z "$1" ]
-then
-    echo "Error: no apisix configuration file provided"
-    exit 0
-fi
 
 if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
 then

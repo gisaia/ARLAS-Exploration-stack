@@ -62,23 +62,31 @@
       forward-auth:
         uri: http://arlas-iam-server:9998/arlas_iam_server/auth
         request_headers: ["Authorization", "arlas-org-filter"]
-      proxy-rewrite:
-        headers: 
-          set:
-            # Fix CWE Id: 1021
-            Access-Control-Allow-Origin: "https://${ARLAS_HOST}"
-      response-rewrite:
-        headers: 
-          set:
-            # Fix CWE Id: 693
-            Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
-            # Fix CWE Id: 200
-            Server: "ARLAS services"
-            # Fix CWE Id: 319 // Value recommended by https://hstspreload.org/
-            Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-            # Fix CWE Id: 693
-            X-Content-Type-Options: nosniff
-            
+  -
+    uri: /fam/files
+    upstream:
+      nodes:
+        "fam-service:8005": 1
+    plugins:
+      forward-auth:
+        uri: http://arlas-iam-server:9998/arlas_iam_server/auth
+        request_headers: ["Authorization", "arlas-org-filter"]
+      # proxy-rewrite:
+      #   headers: 
+      #     set:
+      #       # Fix CWE Id: 1021
+      #       Access-Control-Allow-Origin: "https://${ARLAS_HOST}"
+      # response-rewrite:
+      #   headers: 
+      #     set:
+      #       # Fix CWE Id: 693
+      #       Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
+      #       # Fix CWE Id: 200
+      #       Server: "ARLAS services"
+      #       # Fix CWE Id: 319 // Value recommended by https://hstspreload.org/
+      #       Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+      #       # Fix CWE Id: 693
+      #       X-Content-Type-Options: nosniff
   -
     uri: /airs/healthcheck
     methods: ["GET"]

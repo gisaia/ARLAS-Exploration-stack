@@ -9,3 +9,4 @@ conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
 sample/dashboard.generated.json
 tmp/
+docker-compose.env

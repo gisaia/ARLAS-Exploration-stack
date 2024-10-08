@@ -78,7 +78,7 @@ services:
         echo "Create backup SLM policy";
         curl -s -X PUT --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" \
           -H "Content-Type: application/json" https://elasticsearch:9200/_slm/policy/nightly-snapshots \
-          -d "{\"schedule\":\"0 30 1 * * ?\",\"name\":\"<nightly-snap-{now/d}>\",\"repository\":\"backup\",\"config\":{\"indices\":\"${AIRS_INDEX_COLLECTION_PREFIX}_${AIAS_COLLECTION_NAME},.arlas,${APROC_INDEX_NAME}\",\"include_global_state\":true},\"retention\":{\"expire_after\":\"1m\",\"min_count\":5,\"max_count\":10}}"
+          -d "{\"schedule\":\"0 30 1 * * ?\",\"name\":\"<nightly-snap-{now/d}>\",\"repository\":\"backup\",\"config\":{\"indices\":\"${AIRS_INDEX_COLLECTION_PREFIX}_*,.arlas,${APROC_INDEX_NAME}\",\"include_global_state\":true},\"retention\":{\"expire_after\":\"1m\",\"min_count\":5,\"max_count\":10}}"
         echo ""
         echo "Configure SLM retention task";
         curl -s -X PUT --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" \
