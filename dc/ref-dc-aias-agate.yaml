@@ -1,0 +1,22 @@
+services:
+  agate: # AGATE is a forward authorization service for accessing resources such as images
+    depends_on:
+      arlas-server:
+        condition: service_healthy
+    image: ${ARLAS_VERSION_AGATE}
+    container_name: 'agate'
+    restart: ${ARLAS_AGATE_RESTART_STRATEGY:-always}
+    environment:
+      - AGATE_LOGGER_LEVEL=${AGATE_LOGGER_LEVEL:-INFO}
+      - ARLAS_URL_SEARCH=${ARLAS_URL_SEARCH}
+      - AGATE_PREFIX=/agate
+      - AGATE_HOST=${AGATE_HOST:-0.0.0.0}
+      - AGATE_PORT=${AGATE_PORT:-8004}
+      - AGATE_URL_HEADER=X-Forwarded-Uri
+      - AGATE_URL_HEADER_PREFIX=/${AIRS_S3_BUCKET}
+      - ASSET_MINIO_PATTERN="/(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)"
+      - ASSET_MINIO_PUBLIC_PATTERN="/(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail"
+    expose:
+      - "8004"
+    networks:
+      - arlas-net

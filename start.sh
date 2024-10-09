@@ -30,9 +30,9 @@ if [ "$1" = "aias" ]
 then
     echo "START STACK WITH AIAS AND IAM"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-iam-wui.yaml -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-iam-server.yaml -f dc/ref-dc-postgres.yaml"
-    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-fam-wui.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-volumes.yaml"
+    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-fam-wui.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-aias-agate.yaml"
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" arlas-iam-server arlas-wui-iam db"
-    COMPOSE_SERVICES=${COMPOSE_SERVICES}" airs-server aproc-service aproc-proc redis rabbitmq fam-service arlas-fam-wui minio"
+    COMPOSE_SERVICES=${COMPOSE_SERVICES}" airs-server aproc-service aproc-proc redis rabbitmq fam-service arlas-fam-wui minio agate"
     ENV_FILES=${ENV_FILES}" conf/arlas_iam.env conf/postgres.env"
     ENV_FILES=${ENV_FILES}" conf/aias.env conf/minio.env"
 
