@@ -5,7 +5,7 @@ services:
     depends_on:
       arlas-server:
         condition: service_healthy
-      auth-server:
+      arlas-iam-server:
         condition: service_healthy
     restart: ${ARLAS_WUI_IAM_RESTART_STRATEGY:-always}
     environment:
@@ -16,6 +16,7 @@ services:
       - ARLAS_USE_AUTHENT=${ARLAS_USE_AUTHENT}
       - ARLAS_WUI_IAM_APP_PATH=/iam
       - ARLAS_WUI_IAM_BASE_HREF=/iam
+      - 'ARLAS_STATIC_LINKS=${ARLAS_IAM_LINKS}'
     expose:
       - "80"
     networks:

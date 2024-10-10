@@ -39,6 +39,7 @@ services:
       - ARLAS_USE_AUTHENT=${ARLAS_USE_AUTHENT}
       - ARLAS_WUI_BASE_HREF=${ARLAS_WUI_BASE_HREF:-/wui}
       - PUBLIC_HOST=${ARLAS_HOST}
+      - 'ARLAS_STATIC_LINKS=${ARLAS_WUI_LINKS}'
     expose:
       - "80"
     networks:

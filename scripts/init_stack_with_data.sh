@@ -6,7 +6,10 @@ set -o errexit -o pipefail
 USER_CONF=local
 CONF=$1
 GROUPS_PARAMS=""
+. conf/stack.env
+export ARLAS_SERVER_URL=http://$ARLAS_HOST
 if [ ${CONF} == "local.iam.admin" ]; then
+    export ARLAS_SERVER_URL=https://$ARLAS_HOST
     GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
     USER_CONF="local.iam.user"
     echo "Create user"
@@ -38,4 +41,6 @@ arlas_cli --config-file /tmp/arlas-cli.yaml indices --config ${CONF} data course
 echo "Create courses collection"
 arlas_cli --config-file /tmp/arlas-cli.yaml collections --config ${CONF} create courses --index courses --display-name courses --id-path track.id --centroid-path track.location --geometry-path track.trail --date-path track.timestamps.center --no-public --owner org.com --orgs org.com
 echo "Create dashboard"
-arlas_cli --config-file /tmp/arlas-cli.yaml persist --config ${USER_CONF} add sample/dashboard.json config.json --name "Course Dashboard" $GROUPS_PARAMS
+
+envsubst '$ARLAS_SERVER_URL' < sample/dashboard.json > sample/dashboard.generated.json
+arlas_cli --config-file /tmp/arlas-cli.yaml persist --config ${USER_CONF} add sample/dashboard.generated.json config.json --name "Course Dashboard" $GROUPS_PARAMS

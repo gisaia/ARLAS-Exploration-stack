@@ -33,6 +33,7 @@ services:
       - ARLAS_PERSISTENCE_URL=${ARLAS_PERSISTENCE_URL:-/persist}
       - ARLAS_USE_AUTHENT=${ARLAS_USE_AUTHENT}
       - ARLAS_WUI_URL=${ARLAS_WUI_URL:-/wui/}
+      - 'ARLAS_STATIC_LINKS=${ARLAS_HUB_LINKS}'
     expose:
       - "80"
     networks:

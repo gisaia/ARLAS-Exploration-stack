@@ -10,7 +10,7 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
     volumes:
-      - ${MINIO_MC_CONF_DIR:-/tmp}:/root
+      - ${MINIO_MC_CONF_DIR:-arlas-data-mc-conf}:/root
     networks:
       - arlas-net
     logging:

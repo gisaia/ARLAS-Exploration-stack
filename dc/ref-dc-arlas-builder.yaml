@@ -38,6 +38,7 @@ services:
       - ARLAS_SERVER_URL=${ARLAS_SERVER_URL:-/arlas}
       - ARLAS_USE_AUTHENT=${ARLAS_USE_AUTHENT}
       - ARLAS_WUI_URL=${ARLAS_WUI_URL:-/wui/}
+      - 'ARLAS_STATIC_LINKS=${ARLAS_BUILDER_LINKS}'
     expose:
       - "80"
     networks:

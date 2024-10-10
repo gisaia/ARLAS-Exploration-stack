@@ -7,6 +7,8 @@ services:
     container_name: fam-wui
     restart: always
     depends_on:
+      arlas-iam-server:
+        condition: service_healthy
       arlas-server:
         condition: service_healthy
       fam-service:
@@ -17,15 +19,18 @@ services:
       - ARLAS_AUTHENT_MODE=iam
       - ARLAS_IAM_SERVER_URL=https://${ARLAS_HOST}/arlas_iam_server
       - ARLAS_AUTHENT_THRESHOLD=60000
+      - ARLAS_AUTHENT_SIGN_UP_ENABLED=false
       - ARLAS_TAB_NAME="ARLAS FAM Wui"
       - FAM_SERVER_URL=https://${ARLAS_HOST}/fam
       - FAM_DEFAULT_PATH=''
-      - FAM_COLLECTION=${AIAS_COLLECTION_NAME}
+      - FAM_COLLECTION=${AIRS_COLLECTION}
+      - FAM_ARCHIVES_PAGES_SIZE=${FAM_ARCHIVES_PAGES_SIZE}
+      - FAM_FILES_PAGES_SIZE=${FAM_FILES_PAGES_SIZE}
       - APROC_SERVER_URL=https://${ARLAS_HOST}/aproc
-      - APROC_COLLECTION=${AIAS_COLLECTION_NAME}
+      - APROC_COLLECTION=${AIRS_COLLECTION}
       - APROC_CATALOG=${AIAS_CATALOG_NAME}
       - AIRS_SERVER_URL=https://${ARLAS_HOST}/airs
-      - AIRS_COLLECTION=${AIAS_COLLECTION_NAME}
+      - AIRS_COLLECTION=${AIRS_COLLECTION}
       - 'ARLAS_STATIC_LINKS=${ARLAS_FAM_LINKS}'
     expose:
       - "80"

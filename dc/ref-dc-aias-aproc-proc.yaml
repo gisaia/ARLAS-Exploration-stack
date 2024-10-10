@@ -64,4 +64,4 @@ services:
     volumes:
       - ${APROC_INPUT_DIR}:/inputs:ro
       - ${APROC_DOWNLOAD_DIR}:/outbox
-      - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
+      - ${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro
