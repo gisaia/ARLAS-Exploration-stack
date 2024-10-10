@@ -16,6 +16,7 @@ The simple deployment has:
 - [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
 - [arlas-server](https://github.com/gisaia/ARLAS-server)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
+- [protomaps](https://protomaps.com/)
 
 
 ## Start
@@ -61,6 +62,7 @@ The IAM deployment has:
 - [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
 - [arlas-server](https://github.com/gisaia/ARLAS-server)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
+- [protomaps](https://protomaps.com/)
 
 To start, run: 
 ```shell
@@ -81,6 +83,47 @@ A simple dashboard with AIS data is then available. You can login with:
 or as admin:
 - username: `tech@gisaia.com`
 - password: `admin`
+
+# ARLAS AIAS deployment
+
+The AIAS (ARLAS Item and Asset Services) deployment has:
+- [apisix](https://apisix.apache.org/)
+- [arlas-wui-iam](https://github.com/gisaia/ARLAS-wui-iam)
+- [arlas-iam-server](https://github.com/gisaia/ARLAS-IAM)
+- [postgres](https://www.postgresql.org/)
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui)
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub)
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder)
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence)
+- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
+- [arlas-server](https://github.com/gisaia/ARLAS-server)
+- [agate](https://github.com/gisaia/aias)
+- [fam](https://github.com/gisaia/aias)
+- [fam-wui](https://github.com/gisaia/aias)
+- [aproc-service](https://github.com/gisaia/aias)
+- [aproc-proc](https://github.com/gisaia/aias)
+- [elasticsearch](https://github.com/elastic/elasticsearch)
+- [protomaps](https://protomaps.com/)
+- [minio](https://min.io)
+- [redis](https://redis.io)
+- [rabbitmq](https://www.rabbitmq.com)
+
+To start, run: 
+```shell
+./start.sh aias
+```
+
+You can access ARLAS just like the IAM deployement. You can also use the same script for initializing the stack with users and data.
+
+To setup an ARLAS EO catalog:
+1) place some geotiff files in ${APROC_INPUT_DIR} configured in [conf/aias.env](conf/aias.env). 
+2) go to the **Import** page (top right menu) to add the geotiff file in the catalog.
+3) once added, run :
+
+`./scripts/init_aias_catalog.sh local.iam.user catalog airs_main` 
+
+This will init the collection and the dashboard for the catalog.
+
 
 # Configuration
 
@@ -107,18 +150,10 @@ A significant number of parameters can be configured. Parameters are configured 
 - conf/stack.env: general parameters of the stack
 - conf/versions.env: version of every single service (docker image)
 
-ARLAS Items and Assets Services (aias) Stack:
+[ARLAS Items and Assets Services (aias) configuration][]:
+- same as ARLAS IAM and ...
 - conf/aias.env: configuration of AIAS
-- conf/aproc.env: configuration of the processing (download / ingest)
-- conf/arlas.env: general parameters of ARLAS Server
-- conf/elastic.env: configuration of elasticsearch
 - conf/minio.env: configuration of the minio object store
-- conf/permissions.env: configurartion of the service delivering permission descriptions
-- conf/persistence-file.env and conf/persistence-postgres.env: configuration of the persistence services
-- conf/restart_strategy.env: configuration of the restart strategy for every service
-- conf/stack.env: general parameters of the stack
-- conf/versions.env: version of every single service (docker image)
-
 
 ## Host and domain
 

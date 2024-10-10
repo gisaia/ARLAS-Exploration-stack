@@ -8,7 +8,7 @@ ORG=org.com
 [ ! -z "$4" ] && ORG=$4 ;
 
 CONF=$1
-COLLECTION=$2
+export COLLECTION=$2
 INDEX=$3
 
 GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
@@ -25,3 +25,6 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --no-public \
     --owner ${ORG} \
     --orgs ${ORG}
+
+envsubst '$COLLECTION' < conf/aias/dashboard.json > sample/dashboard.generated.json
+arlas_cli --config-file /tmp/arlas-cli.yaml persist --config ${USER_CONF} add sample/dashboard.generated.json config.json --name "${COLLECTION}" $GROUPS_PARAMS
