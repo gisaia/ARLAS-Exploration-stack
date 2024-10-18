@@ -1,2 +1,2 @@
 #!/bin/bash
-docker volume rm arlas-test-data-es arlas-test-persist arlas-test-postgres arlas-test-data-minio
+docker volume rm arlas-data-es arlas-persist arlas-postgres arlas-data-minio
