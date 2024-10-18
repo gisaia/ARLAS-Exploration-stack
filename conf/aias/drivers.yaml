@@ -56,30 +56,18 @@ drivers:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 8
 
+  -
+    name: tiff
+    class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
+    assets_dir: /tmp/aproc/tiff
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 9
 
   -
-    name: theia
-    class_name: extensions.aproc.proc.ingest.drivers.impl.theia
-    assets_dir: /tmp/aproc/theia
+    name: jpeg2000
+    class_name: extensions.aproc.proc.ingest.drivers.impl.jpeg2000
+    assets_dir: /tmp/aproc/jpeg2000
     configuration:
-      token_url: https://theia.cnes.fr/atdistrib/services/authenticate/
-      login: $THEIA_LOGIN
-      pwd: $THEIA_PWD
-      manage_data: false
-    priority: 7
-
-  # -
-  #   name: tiff
-  #   class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
-  #   assets_dir: /tmp/aproc/tiff
-  #   configuration:
-  #     tmp_directory: $TMP_FOLDER|/tmp
-  #   priority: 9
-
-  # -
-  #   name: jpeg2000
-  #   class_name: extensions.aproc.proc.ingest.drivers.impl.jpeg2000
-  #   assets_dir: /tmp/aproc/jpeg2000
-  #   configuration:
-  #     tmp_directory: $TMP_FOLDER|/tmp
-  #   priority: 10
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 10

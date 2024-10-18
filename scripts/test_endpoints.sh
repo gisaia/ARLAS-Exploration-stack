@@ -22,15 +22,25 @@ then
     test_status GET "http://localhost/arlas/collections/" 200
     test_status GET "http://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
     test_status GET "http://localhost/arlas_permissions_server/authorize/resources?filter=persist%2Fresource%2F&pretty=false" 200
-
+    echo "All good."
 fi
 
-if [ "$1" = "iam" ]
+if [ "$1" = "iam" ] || [ "$1" = "aias" ]
 then
     test_status GET "https://localhost/hub/assets/hub-icon.png" 200
     test_status GET "https://localhost/wui/favicon.ico" 200
     test_status GET "https://localhost/builder/favicon.ico" 200
-    test_status GET "https://localhost/arlas/collections/" 200
+    test_status GET "https://localhost/arlas/healthcheck" 200
     test_status GET "https://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
     test_status GET "https://localhost/arlas_permissions_server/authorize/resources?filter=persist%2Fresource%2F&pretty=false" 200
+    echo "All good for iam."
+fi
+
+
+if [ "$1" = "aias" ]
+then
+    test_status GET "https://sylvains-macbook-air.lan/aproc/healthcheck" 200
+    test_status GET "https://sylvains-macbook-air.lan/agate/healthcheck" 200
+    test_status GET "https://sylvains-macbook-air.lan/airs/healthcheck" 200
+    echo "All good for aias."
 fi

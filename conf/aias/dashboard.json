@@ -1,0 +1,1705 @@
+{
+    "arlas": {
+        "web": {
+            "contributors": [
+                {
+                    "type": "map",
+                    "identifier": "${COLLECTION}",
+                    "name": "Map ${COLLECTION}",
+                    "collection": "${COLLECTION}",
+                    "geo_query_op": "Intersects",
+                    "geo_query_field": "geometry",
+                    "icon": "check_box_outline_blank",
+                    "layers_sources": [
+                        {
+                            "id": "arlas_id:Produits:1700142131933",
+                            "name": "Produits",
+                            "source": "feature-geometry-wide-${COLLECTION}",
+                            "minzoom": 1,
+                            "maxzoom": 23,
+                            "include_fields": [
+                                "properties.constellation"
+                            ],
+                            "short_form_fields": [],
+                            "colors_from_fields": [],
+                            "provided_fields": [],
+                            "normalization_fields": [],
+                            "metrics": [],
+                            "maxfeatures": 1000,
+                            "returned_geometry": "geometry",
+                            "render_mode": "wide"
+                        },
+                        {
+                            "id": "arlas_id:Produits visible en vignettes:1699027673349",
+                            "name": "Produits visible en vignettes",
+                            "source": "feature-geometry-window-${COLLECTION}",
+                            "minzoom": 1,
+                            "maxzoom": 23,
+                            "include_fields": [
+                                "properties.constellation",
+                                "properties.constellation"
+                            ],
+                            "short_form_fields": [],
+                            "colors_from_fields": [],
+                            "provided_fields": [],
+                            "normalization_fields": [],
+                            "metrics": [],
+                            "returned_geometry": "geometry",
+                            "render_mode": "window"
+                        },
+                        {
+                            "id": "arlas_id:Densité de produits:1700142110783",
+                            "name": "Densité de produits",
+                            "source": "cluster-centroid-Finest-tile-centroid-${COLLECTION}",
+                            "minzoom": 1,
+                            "maxzoom": 23,
+                            "include_fields": [],
+                            "short_form_fields": [],
+                            "colors_from_fields": [],
+                            "provided_fields": [],
+                            "normalization_fields": [],
+                            "metrics": [
+                                {
+                                    "field": "",
+                                    "metric": "count",
+                                    "normalize": true
+                                }
+                            ],
+                            "agg_geo_field": "centroid",
+                            "aggType": "tile",
+                            "granularity": "Finest",
+                            "minfeatures": 1000,
+                            "aggregated_geometry": "centroid"
+                        }
+                    ]
+                },
+                {
+                    "type": "chipssearch",
+                    "identifier": "chipssearch",
+                    "collection": "${COLLECTION}",
+                    "search_field": "internal.fulltext",
+                    "name": "Search...",
+                    "icon": "search",
+                    "autocomplete_field": "internal.autocomplete",
+                    "autocomplete_size": 10
+                },
+                {
+                    "type": "histogram",
+                    "identifier": "timeline",
+                    "collection": "${COLLECTION}",
+                    "name": "Timeline",
+                    "icon": "watch_later",
+                    "isOneDimension": false,
+                    "useUtc": true,
+                    "numberOfBuckets": 50,
+                    "aggregationmodels": [
+                        {
+                            "type": "datehistogram",
+                            "field": "properties.datetime"
+                        }
+                    ],
+                    "additionalCollections": []
+                },
+                {
+                    "identifier": "${COLLECTION}-id-50-Constellation-Acquisition-Satellite-Produit-Caractéristiques-Temporalité-",
+                    "name": "Images",
+                    "title": "Images",
+                    "collection": "${COLLECTION}",
+                    "icon": "table_chart",
+                    "type": "resultlist",
+                    "search_size": 50,
+                    "fieldsConfiguration": {
+                        "idFieldName": "id",
+                        "titleFieldNames": [
+                            {
+                                "fieldPath": "properties.datetime",
+                                "process": "(new Date(1000*result)).toUTCString().split(',')[1] !== undefined ? (new Date(1000*result)).toUTCString().split(',')[1].replace('GMT', '').substring(0,12) :'undefined'"
+                            }
+                        ],
+                        "tooltipFieldNames": [
+                            {
+                                "fieldPath": "properties.constellation",
+                                "process": ""
+                            }
+                        ],
+                        "iconColorFieldName": "properties.constellation",
+                        "useHttpQuicklooks": true,
+                        "urlThumbnailTemplate": "{assets.thumbnail.href}",
+                        "urlImageTemplates": [
+                            {
+                                "url": "{assets.overview.href}",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "columns": [
+                        {
+                            "columnName": "Constellation",
+                            "fieldName": "properties.constellation",
+                            "dataType": "",
+                            "process": "",
+                            "useColorService": true,
+                            "sort": ""
+                        },
+                        {
+                            "columnName": "Acquisition",
+                            "fieldName": "properties.datetime",
+                            "dataType": "",
+                            "process": "(new Date(1000*result)).toUTCString().split(',')[1] !== undefined ? (new Date(1000*result)).toUTCString().split(',')[1].replace('GMT', '') :'undefined'",
+                            "useColorService": false,
+                            "sort": ""
+                        }
+                    ],
+                    "details": [
+                        {
+                            "name": "Satellite",
+                            "order": 1,
+                            "fields": [
+                                {
+                                    "path": "properties.constellation",
+                                    "label": "Constellation",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.instrument",
+                                    "label": "Instrument",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.sensor",
+                                    "label": "Capteur",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.sensor_type",
+                                    "label": "Type de capteur",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.gsd",
+                                    "label": "Résolution",
+                                    "process": "Math.round(result * 100) / 100 +\"m\""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Produit",
+                            "order": 2,
+                            "fields": [
+                                {
+                                    "path": "properties.item_format",
+                                    "label": "Format source",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.main_asset_format",
+                                    "label": "Format fichier",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.observation_type",
+                                    "label": "Type d'acquisition",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.processing__level",
+                                    "label": "Niveau de traitement",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "id",
+                                    "label": "Identifiant",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.item_type",
+                                    "label": "Type de données",
+                                    "process": ""
+                                },
+                                {
+                                    "path": "properties.annotations",
+                                    "label": "Annotations",
+                                    "process": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Caractéristiques",
+                            "order": 3,
+                            "fields": [
+                                {
+                                    "path": "properties.eo__cloud_cover",
+                                    "label": "Couverture nuageuse",
+                                    "process": "Math.round(result * 100) / 100 +\"%\""
+                                },
+                                {
+                                    "path": "properties.view__incidence_angle",
+                                    "label": "Angle d'incidence",
+                                    "process": "Math.round(result * 100) / 100 +\"°\""
+                                },
+                                {
+                                    "path": "properties.view__azimuth",
+                                    "label": "Azimut",
+                                    "process": "Math.round(result * 100) / 100 +\"°\""
+                                },
+                                {
+                                    "path": "properties.view__sun_azimuth",
+                                    "label": "Azimut soleil",
+                                    "process": "Math.round(result * 100) / 100 +\"°\""
+                                },
+                                {
+                                    "path": "properties.view__sun_elevation",
+                                    "label": "Elévation soleil",
+                                    "process": "Math.round(result * 100) / 100 +\"°\""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Temporalité",
+                            "order": 4,
+                            "fields": [
+                                {
+                                    "path": "properties.datetime",
+                                    "label": "Date d'acquisition",
+                                    "process": "(new Date(1000*result)).toUTCString().split(',')[1] !== undefined ? (new Date(1000*result)).toUTCString().split(',')[1].replace('GMT', '') :'undefined'"
+                                },
+                                {
+                                    "path": "properties.start_datetime",
+                                    "label": "Date de début d'acquisition",
+                                    "process": "(new Date(1000*result)).toUTCString().split(',')[1] !== undefined ? (new Date(1000*result)).toUTCString().split(',')[1].replace('GMT', '') :'undefined'"
+                                },
+                                {
+                                    "path": "properties.end_datetime",
+                                    "label": "Date de fin d'acquisition",
+                                    "process": "(new Date(1000*result)).toUTCString().split(',')[1] !== undefined ? (new Date(1000*result)).toUTCString().split(',')[1].replace('GMT', '') :'undefined'"
+                                },
+                                {
+                                    "path": "properties.generated__season",
+                                    "label": "Saison",
+                                    "process": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "includeMetadata": []
+                },
+                {
+                    "type": "detailedhistogram",
+                    "identifier": "detailedTimeline",
+                    "collection": "${COLLECTION}",
+                    "name": "Timeline",
+                    "icon": "watch_later",
+                    "isOneDimension": false,
+                    "useUtc": true,
+                    "numberOfBuckets": 50,
+                    "aggregationmodels": [
+                        {
+                            "type": "datehistogram",
+                            "field": "properties.datetime"
+                        }
+                    ],
+                    "annexedContributorId": "timeline",
+                    "selectionExtentPercentage": 0.02,
+                    "additionalCollections": []
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.constellation-15-properties.sensor_type-10-",
+                    "name": "Constellation",
+                    "title": "Constellation",
+                    "collection": "${COLLECTION}",
+                    "icon": "camera_alt",
+                    "type": "tree",
+                    "aggregationmodels": [
+                        {
+                            "field": "properties.constellation",
+                            "size": 15,
+                            "type": "term"
+                        },
+                        {
+                            "field": "properties.sensor_type",
+                            "size": 10,
+                            "type": "term"
+                        }
+                    ]
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.constellation-21-Count-desc-count",
+                    "name": "Constellation",
+                    "title": "Constellation",
+                    "collection": "${COLLECTION}",
+                    "icon": "camera_alt",
+                    "type": "tree",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "term",
+                            "field": "properties.constellation",
+                            "size": 21,
+                            "order": "desc",
+                            "on": "count"
+                        }
+                    ],
+                    "filterOperator": "Eq",
+                    "allowOperatorChange": true
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.sensor-10-Count-desc-count",
+                    "name": "Capteur",
+                    "title": "Capteur",
+                    "collection": "${COLLECTION}",
+                    "icon": "camera",
+                    "type": "tree",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "term",
+                            "field": "properties.sensor",
+                            "size": 10,
+                            "order": "desc",
+                            "on": "count"
+                        }
+                    ],
+                    "filterOperator": "Eq",
+                    "allowOperatorChange": true
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.sensor_type-10-Count-desc-count",
+                    "name": "Type de capteur",
+                    "title": "Type de capteur",
+                    "collection": "${COLLECTION}",
+                    "icon": "camera",
+                    "type": "tree",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "term",
+                            "field": "properties.sensor_type",
+                            "size": 10,
+                            "order": "desc",
+                            "on": "count"
+                        }
+                    ],
+                    "filterOperator": "Eq",
+                    "allowOperatorChange": true
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.instrument-10-Count-desc-count",
+                    "name": "Instrument",
+                    "title": "Instrument",
+                    "collection": "${COLLECTION}",
+                    "icon": "camera",
+                    "type": "tree",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "term",
+                            "field": "properties.instrument",
+                            "size": 10,
+                            "order": "desc",
+                            "on": "count"
+                        }
+                    ],
+                    "filterOperator": "Eq",
+                    "allowOperatorChange": true
+                },
+                {
+                    "identifier": "4fef8be4-b803-4bf2-af91-cd561fb75dd5",
+                    "name": "Couverture nuageuse",
+                    "title": "Couverture nuageuse",
+                    "collection": "${COLLECTION}",
+                    "icon": "cloud",
+                    "charttype": "bars",
+                    "isOneDimension": false,
+                    "type": "histogram",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "histogram",
+                            "field": "properties.eo__cloud_cover",
+                            "interval": {
+                                "value": 1
+                            }
+                        }
+                    ],
+                    "linked_contributor_id": "${COLLECTION}-properties.eo__cloud_cover-numeric-interval-Count--1-",
+                    "numberOfBuckets": 20
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.eo__cloud_cover-numeric-interval-Count--1-",
+                    "name": "Couverture nuageuse",
+                    "title": "Couverture nuageuse",
+                    "collection": "${COLLECTION}",
+                    "icon": "cloud",
+                    "charttype": "bars",
+                    "isOneDimension": false,
+                    "type": "histogram",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "histogram",
+                            "field": "properties.eo__cloud_cover",
+                            "interval": {
+                                "value": 1
+                            }
+                        }
+                    ],
+                    "linked_contributor_id": "4fef8be4-b803-4bf2-af91-cd561fb75dd5"
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.view__incidence_angle-numeric-interval-Count--1-",
+                    "name": "Angle d'incidence",
+                    "title": "Angle d'incidence",
+                    "collection": "${COLLECTION}",
+                    "icon": "call_missed_outgoing",
+                    "charttype": "bars",
+                    "isOneDimension": false,
+                    "type": "histogram",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "histogram",
+                            "field": "properties.view__incidence_angle",
+                            "interval": {
+                                "value": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.view__azimuth-numeric-interval-Count--1-",
+                    "name": "Azimuth",
+                    "title": "Azimuth",
+                    "collection": "${COLLECTION}",
+                    "icon": "explore",
+                    "charttype": "bars",
+                    "isOneDimension": false,
+                    "type": "histogram",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "histogram",
+                            "field": "properties.view__azimuth",
+                            "interval": {
+                                "value": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.view__sun_elevation-numeric-interval-Count--1-",
+                    "name": "Elévation du soleil",
+                    "title": "Elévation du soleil",
+                    "collection": "${COLLECTION}",
+                    "icon": "wb_sunny",
+                    "charttype": "bars",
+                    "isOneDimension": false,
+                    "type": "histogram",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "histogram",
+                            "field": "properties.view__sun_elevation",
+                            "interval": {
+                                "value": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "identifier": "${COLLECTION}-properties.view__sun_azimuth-numeric-interval-Count--1-",
+                    "name": "Azimuth du soleil",
+                    "title": "Azimuth du soleil",
+                    "collection": "${COLLECTION}",
+                    "icon": "brightness_medium",
+                    "charttype": "bars",
+                    "isOneDimension": false,
+                    "type": "histogram",
+                    "jsonpath": "$.count",
+                    "aggregationmodels": [
+                        {
+                            "type": "histogram",
+                            "field": "properties.view__sun_azimuth",
+                            "interval": {
+                                "value": 1
+                            }
+                        }
+                    ]
+                }
+            ],
+            "components": {
+                "timeline": {
+                    "contributorId": "timeline",
+                    "componentType": "histogram",
+                    "uuid": "",
+                    "input": {
+                        "id": "histogram-timeline",
+                        "xTicks": 9,
+                        "yTicks": 2,
+                        "xLabels": 9,
+                        "yLabels": 2,
+                        "xUnit": "",
+                        "yUnit": "",
+                        "chartXLabel": "",
+                        "shortYLabels": false,
+                        "chartTitle": "Timeline",
+                        "customizedCssClass": "arlas-timeline",
+                        "multiselectable": true,
+                        "brushHandlesHeightWeight": 0.8,
+                        "dataType": "time",
+                        "isHistogramSelectable": true,
+                        "ticksDateFormat": "%b %d %Y  %H:%M",
+                        "chartType": "bars",
+                        "chartHeight": 128,
+                        "chartWidth": null,
+                        "xAxisPosition": "bottom",
+                        "yAxisStartsFromZero": true,
+                        "descriptionPosition": "top",
+                        "showXTicks": true,
+                        "showYTicks": true,
+                        "showXLabels": true,
+                        "showYLabels": true,
+                        "showHorizontalLines": false,
+                        "isSmoothedCurve": true,
+                        "barWeight": 0.8,
+                        "topOffsetRemoveInterval": 10
+                    }
+                },
+                "mapgl": {
+                    "allowMapExtend": true,
+                    "nbVerticesLimit": 100,
+                    "input": {
+                        "defaultBasemapStyle": {
+                            "name": "Streets-light",
+                            "styleFile": "/wui/assets/basemap/styles/protomap-light.json",
+                            "image": "/wui/assets/basemap/quicklook/light.png",
+                            "type": "protomap"
+                        },
+                        "basemapStyles": [
+                            {
+                                "name": "Streets-contrast",
+                                "styleFile": "/wui/assets/basemap/styles/protomap-contrast.json",
+                                "image": "/wui/assets/basemap/quicklook/contrast.png",
+                                "type": "protomap"
+                            },
+                            {
+                                "name": "Streets-dark",
+                                "styleFile": "/wui/assets/basemap/styles/protomap-dark.json",
+                                "image": "/wui/assets/basemap/quicklook/dark.png",
+                                "type": "protomap"
+                            },
+                            {
+                                "name": "Streets-grayscale",
+                                "styleFile": "/wui/assets/basemap/styles/protomap-grayscale.json",
+                                "image": "/wui/assets/basemap/quicklook/grayscale.png",
+                                "type": "protomap"
+                            },
+                            {
+                                "name": "Streets-light",
+                                "styleFile": "/wui/assets/basemap/styles/protomap-light.json",
+                                "image": "/wui/assets/basemap/quicklook/light.png",
+                                "type": "protomap"
+                            },
+                            {
+                                "name": "Streets-white",
+                                "styleFile": "/wui/assets/basemap/styles/protomap-white.json",
+                                "image": "/wui/assets/basemap/quicklook/white.png",
+                                "type": "protomap"
+                            }
+                        ],
+                        "margePanForLoad": 5,
+                        "margePanForTest": 5,
+                        "initZoom": 5,
+                        "initCenter": [
+                            -8,
+                            29
+                        ],
+                        "displayScale": true,
+                        "displayCurrentCoordinates": true,
+                        "idFeatureField": "deprecated, to be removed",
+                        "mapLayers": {
+                            "layers": [
+                                {
+                                    "id": "arlas_id:Produits:1700142131933",
+                                    "type": "line",
+                                    "source": "feature-geometry-wide-${COLLECTION}",
+                                    "minzoom": 1,
+                                    "maxzoom": 23,
+                                    "layout": {
+                                        "visibility": "visible",
+                                        "line-cap": "round",
+                                        "line-join": "round"
+                                    },
+                                    "paint": {
+                                        "line-opacity": 0.7,
+                                        "line-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ],
+                                        "line-width": 1,
+                                        "line-dasharray": [
+                                            2,
+                                            5
+                                        ]
+                                    },
+                                    "metadata": {
+                                        "collection": "${COLLECTION}",
+                                        "collection-display-name": "${COLLECTION}",
+                                        "is-scrollable-layer": false
+                                    },
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "id": "arlas_id:Produits visible en vignettes:1699027673349",
+                                    "type": "fill",
+                                    "source": "feature-geometry-window-${COLLECTION}",
+                                    "minzoom": 1,
+                                    "maxzoom": 23,
+                                    "layout": {
+                                        "visibility": "visible"
+                                    },
+                                    "paint": {
+                                        "fill-opacity": 0.1,
+                                        "fill-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ]
+                                    },
+                                    "metadata": {
+                                        "collection": "${COLLECTION}",
+                                        "collection-display-name": "${COLLECTION}",
+                                        "stroke": {
+                                            "color": [
+                                                "match",
+                                                [
+                                                    "get",
+                                                    "properties_constellation"
+                                                ],
+                                                "SPOT",
+                                                "#5919f8",
+                                                "WV03",
+                                                "#ff43ff",
+                                                "IKONOS-2",
+                                                "#ff6c6a",
+                                                "PHR",
+                                                "#192efa",
+                                                "QB02",
+                                                "#1e197c",
+                                                "AM-1",
+                                                "#c3194c",
+                                                "PNEO",
+                                                "#197bcd",
+                                                "RE00",
+                                                "#9cdaff",
+                                                "#fff619"
+                                            ],
+                                            "width": 2.5,
+                                            "opacity": 0.8
+                                        },
+                                        "is-scrollable-layer": true
+                                    },
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "id": "arlas_id:Densité de produits:1700142110783",
+                                    "type": "heatmap",
+                                    "source": "cluster-centroid-Finest-tile-centroid-${COLLECTION}",
+                                    "minzoom": 1,
+                                    "maxzoom": 23,
+                                    "layout": {
+                                        "visibility": "visible"
+                                    },
+                                    "paint": {
+                                        "heatmap-color": [
+                                            "interpolate",
+                                            [
+                                                "linear"
+                                            ],
+                                            [
+                                                "heatmap-density"
+                                            ],
+                                            0,
+                                            "rgba(0, 0, 0, 0)",
+                                            1e-12,
+                                            "#cee897",
+                                            0.05,
+                                            "#9dc95b",
+                                            0.1,
+                                            "#4bc71e",
+                                            0.15,
+                                            "#1bc473",
+                                            0.2,
+                                            "#16ccc9",
+                                            0.25,
+                                            "#3619cf",
+                                            0.3,
+                                            "#9317d1",
+                                            0.6,
+                                            "#d11799",
+                                            1,
+                                            "#cf1919"
+                                        ],
+                                        "heatmap-opacity": 0.3,
+                                        "heatmap-intensity": 3,
+                                        "heatmap-weight": [
+                                            "interpolate",
+                                            [
+                                                "linear"
+                                            ],
+                                            [
+                                                "get",
+                                                "count_:normalized"
+                                            ],
+                                            0,
+                                            0,
+                                            0.2,
+                                            0.2,
+                                            0.4,
+                                            0.4,
+                                            0.6,
+                                            0.6,
+                                            0.8,
+                                            0.8,
+                                            1,
+                                            1
+                                        ],
+                                        "heatmap-radius": 77
+                                    },
+                                    "metadata": {
+                                        "collection": "${COLLECTION}",
+                                        "collection-display-name": "${COLLECTION}"
+                                    },
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "id": "arlas-select-arlas_id:Produits:1700142131933",
+                                    "type": "line",
+                                    "source": "feature-geometry-wide-${COLLECTION}",
+                                    "minzoom": 1,
+                                    "maxzoom": 23,
+                                    "layout": {
+                                        "visibility": "none"
+                                    },
+                                    "paint": {
+                                        "line-opacity": 0.7,
+                                        "line-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ],
+                                        "line-width": 13,
+                                        "line-dasharray": [
+                                            2,
+                                            5
+                                        ]
+                                    },
+                                    "metadata": {
+                                        "collection": "${COLLECTION}",
+                                        "collection-display-name": "${COLLECTION}",
+                                        "is-scrollable-layer": false
+                                    },
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "source": "feature-geometry-window-${COLLECTION}",
+                                    "id": "arlas-select-arlas-fill_stroke-Produits visible en vignettes:1699027673349",
+                                    "type": "line",
+                                    "maxzoom": 23,
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ],
+                                    "minzoom": 1,
+                                    "layout": {
+                                        "visibility": "none"
+                                    },
+                                    "paint": {
+                                        "line-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ],
+                                        "line-opacity": 0.8,
+                                        "line-width": 14.5
+                                    }
+                                },
+                                {
+                                    "id": "arlas-hover-arlas_id:Produits:1700142131933",
+                                    "type": "line",
+                                    "source": "feature-geometry-wide-${COLLECTION}",
+                                    "minzoom": 1,
+                                    "maxzoom": 23,
+                                    "layout": {
+                                        "visibility": "none"
+                                    },
+                                    "paint": {
+                                        "line-opacity": 0.7,
+                                        "line-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ],
+                                        "line-width": 13,
+                                        "line-dasharray": [
+                                            2,
+                                            5
+                                        ]
+                                    },
+                                    "metadata": {
+                                        "collection": "${COLLECTION}",
+                                        "collection-display-name": "${COLLECTION}",
+                                        "is-scrollable-layer": false
+                                    },
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "source": "feature-geometry-window-${COLLECTION}",
+                                    "id": "arlas-hover-arlas-fill_stroke-Produits visible en vignettes:1699027673349",
+                                    "type": "line",
+                                    "maxzoom": 23,
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ],
+                                    "minzoom": 1,
+                                    "layout": {
+                                        "visibility": "none"
+                                    },
+                                    "paint": {
+                                        "line-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ],
+                                        "line-opacity": 0.8,
+                                        "line-width": 14.5
+                                    }
+                                },
+                                {
+                                    "source": "feature-geometry-window-${COLLECTION}",
+                                    "id": "arlas-fill_stroke-Produits visible en vignettes:1699027673349",
+                                    "type": "line",
+                                    "maxzoom": 23,
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ],
+                                    "minzoom": 1,
+                                    "layout": {
+                                        "visibility": "visible"
+                                    },
+                                    "paint": {
+                                        "line-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ],
+                                        "line-opacity": 0.8,
+                                        "line-width": 2.5
+                                    }
+                                },
+                                {
+                                    "source": "feature-geometry-window-${COLLECTION}",
+                                    "id": "scrollable_arlas_id:Produits visible en vignettes:1699027673349",
+                                    "type": "fill",
+                                    "maxzoom": 23,
+                                    "minzoom": 1,
+                                    "metadata": {
+                                        "collection": "${COLLECTION}",
+                                        "collection-display-name": "${COLLECTION}",
+                                        "is-scrollable-layer": false
+                                    },
+                                    "filter": [
+                                        "all",
+                                        [
+                                            "all"
+                                        ]
+                                    ],
+                                    "layout": {
+                                        "visibility": "visible"
+                                    },
+                                    "paint": {
+                                        "fill-opacity": 0.1,
+                                        "fill-color": [
+                                            "match",
+                                            [
+                                                "get",
+                                                "properties_constellation"
+                                            ],
+                                            "SPOT",
+                                            "#5919f8",
+                                            "WV03",
+                                            "#ff43ff",
+                                            "IKONOS-2",
+                                            "#ff6c6a",
+                                            "PHR",
+                                            "#192efa",
+                                            "QB02",
+                                            "#1e197c",
+                                            "AM-1",
+                                            "#c3194c",
+                                            "PNEO",
+                                            "#197bcd",
+                                            "RE00",
+                                            "#9cdaff",
+                                            "#fff619"
+                                        ]
+                                    }
+                                }
+                            ],
+                            "events": {
+                                "zoomOnClick": [],
+                                "emitOnClick": [
+                                    "arlas_id:Produits visible en vignettes:1699027673349",
+                                    "scrollable_arlas_id:Produits visible en vignettes:1699027673349"
+                                ],
+                                "onHover": [
+                                    "arlas_id:Produits visible en vignettes:1699027673349",
+                                    "scrollable_arlas_id:Produits visible en vignettes:1699027673349"
+                                ]
+                            },
+                            "externalEventLayers": [
+                                {
+                                    "id": "arlas-hover-arlas_id:Produits:1700142131933",
+                                    "on": "hover"
+                                },
+                                {
+                                    "id": "arlas-hover-arlas-fill_stroke-Produits visible en vignettes:1699027673349",
+                                    "on": "hover"
+                                },
+                                {
+                                    "id": "arlas-select-arlas_id:Produits:1700142131933",
+                                    "on": "select"
+                                },
+                                {
+                                    "id": "arlas-select-arlas-fill_stroke-Produits visible en vignettes:1699027673349",
+                                    "on": "select"
+                                }
+                            ]
+                        },
+                        "visualisations_sets": [
+                            {
+                                "name": "Produits",
+                                "layers": [
+                                    "arlas_id:Produits:1700142131933",
+                                    "arlas_id:Produits visible en vignettes:1699027673349",
+                                    "arlas_id:Densité de produits:1700142110783"
+                                ],
+                                "enabled": true
+                            }
+                        ]
+                    }
+                },
+                "resultlists": [
+                    {
+                        "componentType": "resultlist",
+                        "input": {
+                            "id": "${COLLECTION}-id-50-Constellation-Acquisition-Satellite-Produit-Caractéristiques-Temporalité-",
+                            "tableWidth": 445,
+                            "globalActionsList": [],
+                            "searchSize": 50,
+                            "nLastLines": 3,
+                            "detailedGridHeight": 300,
+                            "nbGridColumns": 3,
+                            "displayFilters": false,
+                            "hasGridMode": true,
+                            "defautMode": "grid",
+                            "visualisationLink": "",
+                            "downloadLink": "",
+                            "isBodyHidden": false,
+                            "isGeoSortActived": true,
+                            "isAutoGeoSortActived": null,
+                            "selectedItemsEvent": null,
+                            "consultedItemEvent": null,
+                            "actionOnItemEvent": null,
+                            "globalActionEvent": 300,
+                            "useColorService": true,
+                            "cellBackgroundStyle": "filled",
+                            "options": {
+                                "showActionsOnhover": "true",
+                                "showDetailIconName": "keyboard_arrow_down",
+                                "hideDetailIconName": "keyboard_arrow_up",
+                                "icon": "camera_alt",
+                                "showName": true,
+                                "showIcon": true
+                            }
+                        },
+                        "contributorId": "${COLLECTION}-id-50-Constellation-Acquisition-Satellite-Produit-Caractéristiques-Temporalité-",
+                        "uuid": "91f767d4-7c20-4c3b-a30c-6dfa56c23768",
+                        "usage": "analytics"
+                    }
+                ],
+                "detailedTimeline": {
+                    "contributorId": "detailedTimeline",
+                    "componentType": "histogram",
+                    "uuid": "",
+                    "input": {
+                        "id": "histogram-detailed-timeline",
+                        "xTicks": 5,
+                        "yTicks": 2,
+                        "xLabels": 5,
+                        "yLabels": 2,
+                        "xUnit": "",
+                        "yUnit": "",
+                        "chartXLabel": "",
+                        "shortYLabels": false,
+                        "chartTitle": "Detailed timeline",
+                        "customizedCssClass": "arlas-detailed-timeline",
+                        "multiselectable": false,
+                        "brushHandlesHeightWeight": 0.8,
+                        "dataType": "time",
+                        "isHistogramSelectable": true,
+                        "ticksDateFormat": "%b %d %Y  %H:%M",
+                        "chartType": "bars",
+                        "chartHeight": 60,
+                        "chartWidth": null,
+                        "xAxisPosition": "top",
+                        "yAxisStartsFromZero": true,
+                        "descriptionPosition": "bottom",
+                        "showXTicks": true,
+                        "showYTicks": true,
+                        "showXLabels": true,
+                        "showYLabels": true,
+                        "showHorizontalLines": false,
+                        "isSmoothedCurve": true,
+                        "barWeight": 0.8
+                    }
+                }
+            },
+            "analytics": [
+                {
+                    "groupId": "Produits-0",
+                    "title": "Constellation",
+                    "tab": "Produits",
+                    "icon": "camera_alt",
+                    "components": [
+                        {
+                            "componentType": "donut",
+                            "showExportCsv": "",
+                            "input": {
+                                "id": "${COLLECTION}-properties.constellation-15-properties.sensor_type-10-",
+                                "customizedCssClass": "arlas-donuts-analytics",
+                                "diameter": 170,
+                                "containerWidth": 223,
+                                "multiselectable": true,
+                                "opacity": 0.4
+                            },
+                            "contributorId": "${COLLECTION}-properties.constellation-15-properties.sensor_type-10-",
+                            "uuid": "dbdd15f7-e60d-44cf-afdf-e6db0e1af361",
+                            "usage": "analytics"
+                        },
+                        {
+                            "showExportCsv": false,
+                            "componentType": "powerbars",
+                            "input": {
+                                "chartTitle": "Constellation",
+                                "powerbarTitle": "Constellation",
+                                "displayFilter": false,
+                                "scrollable": true,
+                                "filterOperator": {
+                                    "value": "Eq",
+                                    "display": true
+                                },
+                                "useColorService": true,
+                                "useColorFromData": false,
+                                "unit": "",
+                                "chartWidth": 217
+                            },
+                            "contributorId": "${COLLECTION}-properties.constellation-21-Count-desc-count",
+                            "uuid": "65fa215a-7ce8-430e-80e1-e508737e2c42",
+                            "usage": "both"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "Produits-1",
+                    "title": "Sensor",
+                    "tab": "Produits",
+                    "icon": "camera",
+                    "components": [
+                        {
+                            "showExportCsv": true,
+                            "componentType": "powerbars",
+                            "input": {
+                                "chartTitle": "Capteur",
+                                "powerbarTitle": "Capteur",
+                                "displayFilter": true,
+                                "scrollable": true,
+                                "filterOperator": {
+                                    "value": "Eq",
+                                    "display": true
+                                },
+                                "useColorService": false,
+                                "useColorFromData": false,
+                                "unit": "",
+                                "chartWidth": 143
+                            },
+                            "contributorId": "${COLLECTION}-properties.sensor-10-Count-desc-count",
+                            "uuid": "8c9cfd2e-ceb8-42ba-819f-a806513559e6",
+                            "usage": "analytics"
+                        },
+                        {
+                            "showExportCsv": true,
+                            "componentType": "powerbars",
+                            "input": {
+                                "chartTitle": "Type de capteur",
+                                "powerbarTitle": "Type de capteur",
+                                "displayFilter": true,
+                                "scrollable": true,
+                                "filterOperator": {
+                                    "value": "Eq",
+                                    "display": true
+                                },
+                                "useColorService": false,
+                                "useColorFromData": false,
+                                "unit": "",
+                                "chartWidth": 143
+                            },
+                            "contributorId": "${COLLECTION}-properties.sensor_type-10-Count-desc-count",
+                            "uuid": "4e47abd9-025f-4605-a9fe-de64f178baf1",
+                            "usage": "analytics"
+                        },
+                        {
+                            "showExportCsv": true,
+                            "componentType": "powerbars",
+                            "input": {
+                                "chartTitle": "Instrument",
+                                "powerbarTitle": "Instrument",
+                                "displayFilter": true,
+                                "scrollable": true,
+                                "filterOperator": {
+                                    "value": "Eq",
+                                    "display": true
+                                },
+                                "useColorService": false,
+                                "useColorFromData": false,
+                                "unit": "",
+                                "chartWidth": 143
+                            },
+                            "contributorId": "${COLLECTION}-properties.instrument-10-Count-desc-count",
+                            "uuid": "157b813d-96a4-4d17-b09c-f4a222d748d2",
+                            "usage": "analytics"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "Nuages-0",
+                    "title": "Couverture nuageuse",
+                    "tab": "Nuages",
+                    "icon": "cloud",
+                    "components": [
+                        {
+                            "input": {
+                                "id": "${COLLECTION}-properties.eo__cloud_cover-numeric-interval-Count--1-",
+                                "isHistogramSelectable": true,
+                                "multiselectable": true,
+                                "topOffsetRemoveInterval": 40,
+                                "leftOffsetRemoveInterval": 18,
+                                "brushHandlesHeightWeight": 0.8,
+                                "yAxisStartsFromZero": true,
+                                "chartType": "bars",
+                                "chartTitle": "Couverture nuageuse",
+                                "chartHeight": 100,
+                                "chartWidth": 445,
+                                "xAxisPosition": "bottom",
+                                "descriptionPosition": "bottom",
+                                "xTicks": 4,
+                                "yTicks": 1,
+                                "xLabels": 4,
+                                "yLabels": 4,
+                                "xUnit": "",
+                                "yUnit": "",
+                                "chartXLabel": "",
+                                "shortYLabels": false,
+                                "showXTicks": true,
+                                "showYTicks": true,
+                                "showXLabels": true,
+                                "showYLabels": true,
+                                "showHorizontalLines": true,
+                                "barWeight": 0.8,
+                                "dataType": "numeric",
+                                "customizedCssClass": "arlas-histogram-analytics",
+                                "isSmoothedCurve": false
+                            },
+                            "componentType": "histogram",
+                            "showExportCsv": "",
+                            "contributorId": "${COLLECTION}-properties.eo__cloud_cover-numeric-interval-Count--1-",
+                            "uuid": "4fef8be4-b803-4bf2-af91-cd561fb75dd5",
+                            "usage": "both"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "Prise de vue-0",
+                    "title": "Angle d'incidence",
+                    "tab": "Prise de vue",
+                    "icon": "call_missed_outgoing",
+                    "components": [
+                        {
+                            "input": {
+                                "id": "${COLLECTION}-properties.view__incidence_angle-numeric-interval-Count--1-",
+                                "isHistogramSelectable": true,
+                                "multiselectable": true,
+                                "topOffsetRemoveInterval": 40,
+                                "leftOffsetRemoveInterval": 18,
+                                "brushHandlesHeightWeight": 0.8,
+                                "yAxisStartsFromZero": true,
+                                "chartType": "bars",
+                                "chartTitle": "Angle d'incidence",
+                                "chartHeight": 100,
+                                "chartWidth": 445,
+                                "xAxisPosition": "bottom",
+                                "descriptionPosition": "bottom",
+                                "xTicks": 4,
+                                "yTicks": 1,
+                                "xLabels": 4,
+                                "yLabels": 4,
+                                "xUnit": "",
+                                "yUnit": "",
+                                "chartXLabel": "",
+                                "shortYLabels": false,
+                                "showXTicks": true,
+                                "showYTicks": true,
+                                "showXLabels": true,
+                                "showYLabels": true,
+                                "showHorizontalLines": true,
+                                "barWeight": 0.8,
+                                "dataType": "numeric",
+                                "customizedCssClass": "arlas-histogram-analytics",
+                                "isSmoothedCurve": false
+                            },
+                            "componentType": "histogram",
+                            "showExportCsv": "",
+                            "contributorId": "${COLLECTION}-properties.view__incidence_angle-numeric-interval-Count--1-",
+                            "uuid": "a2ee6b39-676d-40ab-9c3e-ff7ff39b12c4",
+                            "usage": "analytics"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "Prise de vue-1",
+                    "title": "Azimuth",
+                    "tab": "Prise de vue",
+                    "icon": "explore",
+                    "components": [
+                        {
+                            "input": {
+                                "id": "${COLLECTION}-properties.view__azimuth-numeric-interval-Count--1-",
+                                "isHistogramSelectable": true,
+                                "multiselectable": true,
+                                "topOffsetRemoveInterval": 40,
+                                "leftOffsetRemoveInterval": 18,
+                                "brushHandlesHeightWeight": 0.8,
+                                "yAxisStartsFromZero": true,
+                                "chartType": "bars",
+                                "chartTitle": "Azimuth",
+                                "chartHeight": 100,
+                                "chartWidth": 445,
+                                "xAxisPosition": "bottom",
+                                "descriptionPosition": "bottom",
+                                "xTicks": 4,
+                                "yTicks": 1,
+                                "xLabels": 4,
+                                "yLabels": 4,
+                                "xUnit": "",
+                                "yUnit": "",
+                                "chartXLabel": "",
+                                "shortYLabels": false,
+                                "showXTicks": true,
+                                "showYTicks": true,
+                                "showXLabels": true,
+                                "showYLabels": true,
+                                "showHorizontalLines": true,
+                                "barWeight": 0.8,
+                                "dataType": "numeric",
+                                "customizedCssClass": "arlas-histogram-analytics",
+                                "isSmoothedCurve": false
+                            },
+                            "componentType": "histogram",
+                            "showExportCsv": "",
+                            "contributorId": "${COLLECTION}-properties.view__azimuth-numeric-interval-Count--1-",
+                            "uuid": "f1d1329c-1cfa-48f0-a19b-d11fa1f2eee7",
+                            "usage": "analytics"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "Prise de vue-2",
+                    "title": "Elévation du soleil",
+                    "tab": "Prise de vue",
+                    "icon": "wb_sunny",
+                    "components": [
+                        {
+                            "input": {
+                                "id": "${COLLECTION}-properties.view__sun_elevation-numeric-interval-Count--1-",
+                                "isHistogramSelectable": true,
+                                "multiselectable": true,
+                                "topOffsetRemoveInterval": 40,
+                                "leftOffsetRemoveInterval": 18,
+                                "brushHandlesHeightWeight": 0.8,
+                                "yAxisStartsFromZero": true,
+                                "chartType": "bars",
+                                "chartTitle": "Elévation du soleil",
+                                "chartHeight": 100,
+                                "chartWidth": 445,
+                                "xAxisPosition": "bottom",
+                                "descriptionPosition": "bottom",
+                                "xTicks": 4,
+                                "yTicks": 1,
+                                "xLabels": 4,
+                                "yLabels": 4,
+                                "xUnit": "",
+                                "yUnit": "",
+                                "chartXLabel": "",
+                                "shortYLabels": false,
+                                "showXTicks": true,
+                                "showYTicks": true,
+                                "showXLabels": true,
+                                "showYLabels": true,
+                                "showHorizontalLines": true,
+                                "barWeight": 0.8,
+                                "dataType": "numeric",
+                                "customizedCssClass": "arlas-histogram-analytics",
+                                "isSmoothedCurve": false
+                            },
+                            "componentType": "histogram",
+                            "showExportCsv": "",
+                            "contributorId": "${COLLECTION}-properties.view__sun_elevation-numeric-interval-Count--1-",
+                            "uuid": "df601a24-a6bd-4f01-a439-fe2befa86c7f",
+                            "usage": "analytics"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "Prise de vue-3",
+                    "title": "Azimuth du soleil",
+                    "tab": "Prise de vue",
+                    "icon": "brightness_medium",
+                    "components": [
+                        {
+                            "input": {
+                                "id": "${COLLECTION}-properties.view__sun_azimuth-numeric-interval-Count--1-",
+                                "isHistogramSelectable": true,
+                                "multiselectable": true,
+                                "topOffsetRemoveInterval": 40,
+                                "leftOffsetRemoveInterval": 18,
+                                "brushHandlesHeightWeight": 0.8,
+                                "yAxisStartsFromZero": true,
+                                "chartType": "bars",
+                                "chartTitle": "Azimuth du soleil",
+                                "chartHeight": 100,
+                                "chartWidth": 445,
+                                "xAxisPosition": "bottom",
+                                "descriptionPosition": "bottom",
+                                "xTicks": 4,
+                                "yTicks": 1,
+                                "xLabels": 4,
+                                "yLabels": 4,
+                                "xUnit": "",
+                                "yUnit": "",
+                                "chartXLabel": "",
+                                "shortYLabels": false,
+                                "showXTicks": true,
+                                "showYTicks": true,
+                                "showXLabels": true,
+                                "showYLabels": true,
+                                "showHorizontalLines": true,
+                                "barWeight": 0.8,
+                                "dataType": "numeric",
+                                "customizedCssClass": "arlas-histogram-analytics",
+                                "isSmoothedCurve": false
+                            },
+                            "componentType": "histogram",
+                            "showExportCsv": "",
+                            "contributorId": "${COLLECTION}-properties.view__sun_azimuth-numeric-interval-Count--1-",
+                            "uuid": "b53bf833-5dac-4ec0-8364-53960eeb69b6",
+                            "usage": "analytics"
+                        }
+                    ]
+                }
+            ],
+            "filters_shortcuts": [
+                {
+                    "uuid": "65fa215a-7ce8-430e-80e1-e508737e2c42",
+                    "title": "Constellation",
+                    "order": 1
+                },
+                {
+                    "uuid": "4fef8be4-b803-4bf2-af91-cd561fb75dd5",
+                    "title": "Couverture nuageuse",
+                    "order": 2
+                }
+            ],
+            "colorGenerator": {
+                "keysToColors": [
+                    [
+                        "SPOT",
+                        "#5919f8"
+                    ],
+                    [
+                        "WV03",
+                        "#ff43ff"
+                    ],
+                    [
+                        "IKONOS-2",
+                        "#ff6c6a"
+                    ],
+                    [
+                        "PHR",
+                        "#192efa"
+                    ],
+                    [
+                        "QB02",
+                        "#1e197c"
+                    ],
+                    [
+                        "AM-1",
+                        "#c3194c"
+                    ],
+                    [
+                        "GeoEye-1",
+                        "#e94dff"
+                    ],
+                    [
+                        "PNEO",
+                        "#197bcd"
+                    ],
+                    [
+                        "RE00",
+                        "#9cdaff"
+                    ],
+                    [
+                        "OTHER",
+                        "#fff619"
+                    ]
+                ]
+            },
+            "options": {
+                "drag_items": true,
+                "zoom_to_data": true,
+                "indicators": true,
+                "spinner": {
+                    "show": true,
+                    "color": "accent",
+                    "diameter": 50
+                },
+                "tabs": [
+                    {
+                        "name": "Produits",
+                        "icon": "camera_alt",
+                        "showIcon": true,
+                        "showName": true
+                    },
+                    {
+                        "name": "Nuages",
+                        "icon": "cloud",
+                        "showIcon": true,
+                        "showName": true
+                    },
+                    {
+                        "name": "Prise de vue",
+                        "icon": "remove_red_eye",
+                        "showIcon": true,
+                        "showName": true
+                    }
+                ]
+            },
+            "externalNode": {
+                "download": true
+            }
+        },
+        "server": {
+            "url": "/arlas",
+            "max_age_cache": 120,
+            "collection": {
+                "name": "${COLLECTION}"
+            }
+        }
+    },
+    "arlas-wui": {
+        "web": {
+            "app": {
+                "components": {
+                    "chipssearch": {
+                        "name": "Search...",
+                        "icon": "search"
+                    }
+                },
+                "name": "ARLAS",
+                "units": [
+                    {
+                        "collection": "${COLLECTION}",
+                        "unit": "Produits",
+                        "ignored": false
+                    }
+                ],
+                "name_background_color": "#FF4081"
+            }
+        }
+    }
+}

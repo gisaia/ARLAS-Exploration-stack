@@ -13,8 +13,11 @@ services:
       - APROC_RESOURCE_ID_HASH_STARTS_AT=3
     volumes:
       - ${APROC_INPUT_DIR}:/inputs:ro
+      - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
     expose:
       - "8005"
+    ports:
+      - 8005:8005
     networks:
       - arlas-net
     healthcheck:
