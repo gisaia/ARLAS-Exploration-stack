@@ -9,7 +9,7 @@ CREATE TABLE user_data (
     lastUpdateDate TIMESTAMP,
     docValue JSON
 );
-CREATE UNIQUE INDEX doc_key_idx_orga ON user_data (docKey, docZone,docOrganization);
+CREATE INDEX doc_key_idx_orga ON user_data (docKey, docZone,docOrganization);
 
 DROP TABLE IF EXISTS user_data_readers;
 
