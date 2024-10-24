@@ -3,7 +3,7 @@
 - [arlas-server](#service-arlas-server)
 - [arlas-persistence-server](#service-arlas-persistence-server)
 - [arlas-permissions-server](#service-arlas-permissions-server)
-- [auth-server](#service-auth-server)
+- [arlas-iam-server](#service-arlas-iam-server)
 - [arlas-wui-iam](#service-arlas-wui-iam)
 - [arlas-builder](#service-arlas-builder)
 - [arlas-hub](#service-arlas-hub)
@@ -34,7 +34,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.1` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -129,7 +129,7 @@ Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:26.0.0`
 | `ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME` | `ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME` | `true` |  |  |
 | `JDK_JAVA_OPTIONS` | `ARLAS_PERMISSIONS_JDK_JAVA_OPTIONS` | `` |  | empty value in `conf/permissions.env` |
 ## File dc/ref-dc-iam-server.yaml
-### Service auth-server
+### Service arlas-iam-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
 
 Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.0` in `conf/versions.env`
@@ -179,6 +179,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.1` in `conf/versi
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_IAM_APP_PATH` | `/iam` | `` |  |  |
 | `ARLAS_WUI_IAM_BASE_HREF` | `/iam` | `` |  |  |
+| `ARLAS_STATIC_LINKS` | `ARLAS_IAM_LINKS` | `` |  | `'` in `conf/arlas_iam.env` |
 ## File dc/ref-dc-arlas-builder.yaml
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
@@ -218,6 +219,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.4` in `conf/v
 | `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `https://${ARLAS_HOST}/arlas` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
@@ -252,6 +254,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.1` in `conf/versions.
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/persist` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env` |
 ## File dc/ref-dc-arlas-wui.yaml
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
@@ -289,6 +292,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.0.6-no-analytics` in `conf/
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
 | `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
 
 List of volumes:
 - ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
@@ -306,7 +310,7 @@ List of volumes:
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
 
-Image: `APISIX_VERSION` with `apache/apisix:3.8.0-debian` in `conf/versions.env`
+Image: `APISIX_VERSION` with `apache/apisix:3.9.1-debian` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
