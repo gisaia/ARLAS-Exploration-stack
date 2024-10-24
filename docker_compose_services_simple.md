@@ -31,7 +31,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.1` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -164,6 +164,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.4` in `conf/v
 | `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  |  |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  |  |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  |  |
+| `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
@@ -198,6 +199,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.1` in `conf/versions.
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/persist` |  | `/persist` in `conf/persistence-file.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  |  |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  |  |
+| `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env` |
 ## File dc/ref-dc-arlas-wui.yaml
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
@@ -235,6 +237,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.0.6-no-analytics` in `conf/
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  |  |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
 | `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
 
 List of volumes:
 - ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
@@ -252,7 +255,7 @@ List of volumes:
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
 
-Image: `APISIX_VERSION` with `apache/apisix:3.8.0-debian` in `conf/versions.env`
+Image: `APISIX_VERSION` with `apache/apisix:3.9.1-debian` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |

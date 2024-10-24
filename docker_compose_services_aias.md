@@ -557,7 +557,7 @@ Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.4.17` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `AGATE_LOGGER_LEVEL` | `AGATE_LOGGER_LEVEL` | `INFO` |  |  |
+| `AGATE_LOGGER_LEVEL` | `AGATE_LOGGER_LEVEL` | `INFO` |  | `DEBUG` in `conf/aias.env` |
 | `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARCH` | `` |  | `"http://arlas-server:9999/arlas/explore/{collectio ...` in `conf/aias.env` |
 | `AGATE_PREFIX` | `/agate` | `` |  |  |
 | `AGATE_HOST` | `AGATE_HOST` | `0.0.0.0` |  |  |
