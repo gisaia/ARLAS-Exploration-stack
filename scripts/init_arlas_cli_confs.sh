@@ -2,10 +2,8 @@
 set -o errexit -o pipefail
 
 set +e
-arlas_cli --config-file /tmp/arlas-cli.yaml
-arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local
-arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local.iam.admin
-arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local.iam.user
+rm /tmp/arlas-cli.yaml
+arlas_cli --config-file /tmp/arlas-cli.yaml --version
 set -e
 
 . conf/stack.env
@@ -38,6 +36,8 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.user \
     --auth-password secret \
     --auth-org org.com \
     --auth-arlas-iam 
+
+arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local
 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local \
     --server http://${ARLAS_HOST}/arlas \
