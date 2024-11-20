@@ -2,9 +2,16 @@ arlas_url_search: $ARLAS_URL_SEARCH
 arlaseo_mapping_url: $ARLASEO_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/mapping.json"
 download_mapping_url: $DOWNLOAD_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/downloads_mapping.json"
 
+clean_outbox_directory: $CLEAN_DOWNLOAD_OUTBOX_DIR|True
 outbox_directory: $APROC_DOWNLOAD_OUTBOX_DIR
-notification_admin_emails: $APROC_DOWNLOAD_ADMIN_EMAILS
+outbox_s3:
+  bucket: $DOWNLOAD_S3_BUCKET
+  access_key_id: $DOWNLOAD_S3_ACCESS_KEY_ID
+  secret_access_key: $DOWNLOAD_S3_SECRET_ACCESS_KEY
+  asset_http_endpoint_url: $DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL
+  endpoint_url: $DOWNLOAD_S3_ENDPOINT_URL
 
+notification_admin_emails: $APROC_DOWNLOAD_ADMIN_EMAILS
 # Usable variables in messages: {target_projection}, {target_format}, {arlas-user-email}, {item_id}, {asset_name}, {collection}, {target_directory}, {file_name}
 # Usable variables in messages: {error}
 
@@ -41,14 +48,27 @@ drivers:
     name: simple_copy
     class_name: extensions.aproc.proc.download.drivers.impl.simple_copy
     configuration:
-    priority: 3
+    priority: 4
   -
     name: met_file
     class_name: extensions.aproc.proc.download.drivers.impl.met_file
     configuration:
-    priority: 1
+    priority: 2
   -
     name: image_file
     class_name: extensions.aproc.proc.download.drivers.impl.image_file
     configuration:
-    priority: 2
+    priority: 3
+  -
+    name: zarr_download
+    class_name: extensions.aproc.proc.download.drivers.impl.zarr_download
+    configuration:
+      input:
+        type: $APROC_INPUT_STORAGE_TYPE
+        bucket: $APROC_INPUT_STORAGE_BUCKET
+        api_key:
+          project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
+          private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
+          private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
+        headers:
+    priority: 1
