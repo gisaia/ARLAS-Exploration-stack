@@ -1,0 +1,14 @@
+services:
+  titiler: # Titiler generates tiles for COG files
+    image: ${TITILER_VERSION}
+    platform: linux/x86_64
+    container_name: 'titiler'
+    restart: ${TITILER_RESTART_STRATEGY:-always}
+    environment:
+      - PORT=8000
+      - TITILER_API_CORS_ORIGIN=*
+      - WORKERS_PER_CORE=1
+    expose:
+      - "8000"
+    networks:
+      - arlas-net
