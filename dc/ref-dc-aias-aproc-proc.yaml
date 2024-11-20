@@ -76,3 +76,6 @@ services:
       - ${APROC_INPUT_DIR}:/inputs:ro
       - ${APROC_DOWNLOAD_DIR}:/outbox
       - ${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro
+      - ${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro
+      - ${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro
+      - ${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro

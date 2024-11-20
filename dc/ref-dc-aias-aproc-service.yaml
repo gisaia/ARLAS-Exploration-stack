@@ -73,6 +73,9 @@ services:
     volumes:
       - ${APROC_INPUT_DIR}:/inputs:ro
       - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
+      - ${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro
+      - ${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro
+      - ${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro
     healthcheck:
       test: "curl -f http://localhost:8001/aproc/healthcheck"
       interval: 10s
