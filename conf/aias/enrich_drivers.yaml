@@ -1,0 +1,15 @@
+drivers:
+  -
+    name: safe
+    class_name: extensions.aproc.proc.enrich.drivers.impl.safe
+    assets_dir: /tmp/aproc/safe
+    configuration:
+      input:
+        type: $APROC_INPUT_STORAGE_TYPE
+        bucket: $APROC_INPUT_STORAGE_BUCKET
+        api_key:
+          project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
+          private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
+          private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
+        headers:
+    priority: 1
