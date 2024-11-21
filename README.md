@@ -84,6 +84,8 @@ or as admin:
 - username: `tech@gisaia.com`
 - password: `admin`
 
+IMPORTANT: when using IAM, users can create collections only on indices prefixed with their organisation's name followed by `@`. For instance, a user in the organisation `gisaia.com`, who creates an index containing car gps data can name the index `gisaia.com@car_gps_locations`.
+
 # ARLAS AIAS deployment
 
 The AIAS (ARLAS Item and Asset Services) deployment has:
