@@ -59,9 +59,23 @@ services:
 #      - APROC_INDEX_PWD=${ELASTIC_PASSWORD}
       - APROC_RESOURCE_ID_HASH_STARTS_AT=3
       - TMP_FOLDER="/outbox"
+      - DOWNLOAD_S3_ENDPOINT_URL=${DOWNLOAD_S3_ENDPOINT_URL:-http://minio:9000}
+      - DOWNLOAD_S3_BUCKET=${DOWNLOAD_S3_BUCKET}
+      - DOWNLOAD_S3_ACCESS_KEY_ID=${DOWNLOAD_S3_ACCESS_KEY_ID:-airs}
+      - DOWNLOAD_S3_SECRET_ACCESS_KEY=${DOWNLOAD_S3_SECRET_ACCESS_KEY:-airssecret}
+      - DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL=${DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL:-http://minio:9000/{}/{}}
+      - CLEAN_DOWNLOAD_OUTBOX_DIR=${CLEAN_DOWNLOAD_OUTBOX_DIR:-True}
+      - APROC_INPUT_STORAGE_TYPE=${APROC_INPUT_STORAGE_TYPE}
+      - APROC_INPUT_STORAGE_BUCKET=${APROC_INPUT_STORAGE_BUCKET}
+      - APROC_INPUT_STORAGE_API_KEY_PROJECT=${APROC_INPUT_STORAGE_API_KEY_PROJECT}
+      - APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID=${APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID}
+      - APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY=${APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY}
     networks:
       - arlas-net
     volumes:
       - ${APROC_INPUT_DIR}:/inputs:ro
       - ${APROC_DOWNLOAD_DIR}:/outbox
       - ${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro
+      - ${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro
+      - ${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro
+      - ${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro

@@ -3,7 +3,7 @@
 This projects contains reference docker compose files for all the ARLAS microservices and third party services for running the ARLAS Stack. It also contains the script for starting the stack in different modes:
 - simple : ARLAS without authentication, on HTTP
 - with ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
-- with ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance. [WORK IN PROGRESS]
+- with ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 
 # ARLAS Simple deployment
 
@@ -124,6 +124,18 @@ To setup an ARLAS EO catalog:
 
 This will init the collection and the dashboard for the catalog.
 
+## Data from GEODES
+
+You can register data from GEODES:
+
+```shell
+docker run --rm --network arlas-net gisaia/stac-geodes:latest add https://geodes-portal.cnes.fr/api/stac/items http://airs-server:8000/airs geodes S2L1C --start-date "2023-04-05T08:58:40.737+00:00" --max 1000
+```
+
+This will register in the `airs_geodes` index the first 1000 `S2L1C` data that were acquired after 2023-04-05T08:58. Then, you can create the catalog:
+```shell
+./scripts/init_aias_catalog.sh local.iam.user catalog airs_geodes`
+```
 
 # Configuration
 

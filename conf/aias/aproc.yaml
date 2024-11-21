@@ -17,3 +17,8 @@ processes:
     class_name: extensions.aproc.proc.download.download_process
     configuration:
       drivers: conf/download_drivers.yaml
+  -
+    name: enrich
+    class_name: extensions.aproc.proc.enrich.enrich_process
+    configuration:
+      drivers: conf/enrich_drivers.yaml
