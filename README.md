@@ -84,6 +84,8 @@ or as admin:
 - username: `tech@gisaia.com`
 - password: `admin`
 
+IMPORTANT: when using IAM, users can create collections only on indices prefixed with their organisation's name followed by `@`. For instance, a user in the organisation `gisaia.com`, who creates an index containing car gps data can name the index `gisaia.com@car_gps_locations`.
+
 # ARLAS AIAS deployment
 
 The AIAS (ARLAS Item and Asset Services) deployment has:
@@ -129,7 +131,7 @@ This will init the collection and the dashboard for the catalog.
 You can register data from GEODES:
 
 ```shell
-docker run --rm --network arlas-net gisaia/stac-geodes:latest add https://geodes-portal.cnes.fr/api/stac/items http://airs-server:8000/airs geodes S2L1C --start-date "2023-04-05T08:58:40.737+00:00" --max 1000
+docker run --rm --network arlas-net gisaia/stac-geodes:latest add https://geodes-portal.cnes.fr/api/stac/items http://airs-server:8000/airs org.com@airs_geodes S2L1C --start-date "2023-04-05T08:58:40.737+00:00" --max 1000
 ```
 
 This will register in the `airs_geodes` index the first 1000 `S2L1C` data that were acquired after 2023-04-05T08:58. Then, you can create the catalog:
