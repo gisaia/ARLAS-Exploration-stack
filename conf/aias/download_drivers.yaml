@@ -72,4 +72,6 @@ drivers:
           private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
         headers:
           Content-Type: application/json;charset=utf-8
+        domain: $APROC_INPUT_STORAGE_DOMAIN
+        force_download: $APROC_INPUT_STORAGE_FORCE_DOWNLOAD
     priority: 1
