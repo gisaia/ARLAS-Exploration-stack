@@ -131,12 +131,13 @@ This will init the collection and the dashboard for the catalog.
 You can register data from GEODES:
 
 ```shell
-docker run --rm --network arlas-net gisaia/stac-geodes:latest add https://geodes-portal.cnes.fr/api/stac/items http://airs-server:8000/airs org.com@airs_geodes S2L1C --start-date "2023-04-05T08:58:40.737+00:00" --max 1000
+docker run --rm --network arlas-net gisaia/stac-geodes:latest add https://geodes-portal.cnes.fr/api/stac/items http://airs-server:8000/airs geodes S2L1C --start-date "2023-04-05T08:58:40.737+00:00" --max 1000
 ```
 
-This will register in the `airs_geodes` index the first 1000 `S2L1C` data that were acquired after 2023-04-05T08:58. Then, you can create the catalog:
+This will register in the `org.com@airs_geodes` index the first 1000 `S2L1C` data that were acquired after 2023-04-05T08:58. Then, you can create the catalog:
+
 ```shell
-./scripts/init_aias_catalog.sh local.iam.user catalog airs_geodes`
+./scripts/init_aias_catalog.sh local.iam.user catalog org.com@airs_geodes`
 ```
 
 # Configuration
