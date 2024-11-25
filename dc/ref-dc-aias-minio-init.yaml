@@ -6,7 +6,7 @@ services:
       minio:
         condition: service_healthy
     environment:
-      - AIRS_S3_BUCKET=${AIRS_S3_BUCKET}
+      - BUCKET_NAME=${BUCKET_NAME}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
     volumes:
