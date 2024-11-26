@@ -45,6 +45,18 @@ then
 
     echo "Initialising Minio configuration..."
     set +e
+
+
+    export BUCKET_NAME=$AIRS_S3_BUCKET
+    docker compose  -p arlas-exploration-stack \
+        --env-file conf/versions.env  \
+        --env-file conf/stack.env \
+        --env-file conf/aias.env \
+        --env-file conf/minio.env \
+        -f dc/ref-dc-net.yaml -f dc/ref-dc-aias-minio-init.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-volumes.yaml \
+    up -d --wait --wait-timeout 300 minio createbuckets
+
+    export BUCKET_NAME=$DOWNLOAD_S3_BUCKET
     docker compose  -p arlas-exploration-stack \
         --env-file conf/versions.env  \
         --env-file conf/stack.env \

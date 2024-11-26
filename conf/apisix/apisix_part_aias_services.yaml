@@ -1,5 +1,5 @@
   -
-    uri: /titiler/*
+    uri: /cog/*
     upstream:
       nodes:
         "titiler:8000": 1
@@ -20,7 +20,7 @@
         #     # Fix CWE Id: 693
         #     X-Content-Type-Options: nosniff
       proxy-rewrite:
-        regex_uri: ["/titiler/(.*)", "/$1"]
+        regex_uri: ["/(.*)", "/$1"]
 
   -
     uri: /fam-wui

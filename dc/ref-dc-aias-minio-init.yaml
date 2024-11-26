@@ -6,7 +6,7 @@ services:
       minio:
         condition: service_healthy
     environment:
-      - AIRS_S3_BUCKET=${AIRS_S3_BUCKET}
+      - BUCKET_NAME=${BUCKET_NAME}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
     volumes:
@@ -20,7 +20,9 @@ services:
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc config host add myminio http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD;
-      /usr/bin/mc mb myminio/$$AIRS_S3_BUCKET;
-      /usr/bin/mc anonymous set public myminio/$$AIRS_S3_BUCKET;
+      echo create bucket $$BUCKET_NAME;
+      /usr/bin/mc mb myminio/$$BUCKET_NAME;
+      /usr/bin/mc anonymous set public myminio/$$BUCKET_NAME;
+      /usr/bin/mc ls myminio
       exit 0;
       "

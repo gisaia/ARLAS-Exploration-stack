@@ -20,7 +20,7 @@ The simple deployment has:
 
 
 ## Start
-To start the ARLAS stack in simple mode, run: 
+To start the ARLAS stack in simple mode, run:
 ```shell
 ./start.sh
 ```
@@ -40,7 +40,7 @@ A simple dashboard with AIS data is then available.
 
 ## Stop
 
-Stop the stack with `./stop.sh`. 
+Stop the stack with `./stop.sh`.
 
 Note: by default, data are persisted in docker volumes prefixed with `arlas-test- ...`. To reset the volumes, run:
 
@@ -64,7 +64,7 @@ The IAM deployment has:
 - [elasticsearch](https://github.com/elastic/elasticsearch)
 - [protomaps](https://protomaps.com/)
 
-To start, run: 
+To start, run:
 ```shell
 ./start.sh iam
 ```
@@ -110,7 +110,7 @@ The AIAS (ARLAS Item and Asset Services) deployment has:
 - [redis](https://redis.io)
 - [rabbitmq](https://www.rabbitmq.com)
 
-To start, run: 
+To start, run:
 ```shell
 ./start.sh aias
 ```
@@ -119,12 +119,16 @@ You can access ARLAS just like the IAM deployement. You can also use the same sc
 
 To setup an ARLAS EO catalog:
 1) place some geotiff files in ${APROC_INPUT_DIR} configured in [conf/aias.env](conf/aias.env). 
-2) Go to the web page of ARLAS, then click the **Import** link (top right menu). This brings you to the import page. Add the geotiff file in the catalog by clicking on the + icon next to the tiff file.
+2) Go to the web page of ARLAS, then click the **Import** link (top right menu). This brings you to the import page. Add the geotiff file in the catalog by clicking on the + icon next to the tiff file. This will create and automatically feed an index named "org.com@airs_catalog"
 3) once added, run :
 
-`./scripts/init_aias_catalog.sh local.iam.user catalog airs_main` 
+`./scripts/init_aias_catalog.sh local.iam.user catalog org.com` 
 
 This will init the collection and the dashboard for the catalog.
+
+IMPORTANT: Naming convention: the index name has the form `org`@airs_`name`
+For instance, the collection "geodes" for the organisation "org.com" has its index in "org.com@airs_geodes"
+
 
 ## Data from GEODES
 
@@ -137,7 +141,7 @@ docker run --rm --network arlas-net gisaia/stac-geodes:latest add https://geodes
 This will register in the `org.com@airs_geodes` index the first 1000 `S2L1C` data that were acquired after 2023-04-05T08:58. Then, you can create the catalog:
 
 ```shell
-./scripts/init_aias_catalog.sh local.iam.user catalog org.com@airs_geodes`
+./scripts/init_aias_catalog.sh local.iam.user catalog org.com@airs_geodes
 ```
 
 # Configuration
@@ -159,7 +163,7 @@ A significant number of parameters can be configured. Parameters are configured 
 - conf/arlas_iam.env: configuration of the IAM
 - conf/arlas.env: general parameters of ARLAS Server
 - conf/elastic.env: configuration of elasticsearch
-- conf/permissions.env: configurartion of the service delivering permission descriptions- 
+- conf/permissions.env: configurartion of the service delivering permission descriptions
 - conf/persistence-file.env and conf/persistence-postgres.env: configuration of the persistence services
 - conf/restart_strategy.env: configuration of the restart strategy for every service
 - conf/stack.env: general parameters of the stack
