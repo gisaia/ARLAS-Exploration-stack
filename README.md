@@ -119,12 +119,16 @@ You can access ARLAS just like the IAM deployement. You can also use the same sc
 
 To setup an ARLAS EO catalog:
 1) place some geotiff files in ${APROC_INPUT_DIR} configured in [conf/aias.env](conf/aias.env). 
-2) Go to the web page of ARLAS, then click the **Import** link (top right menu). This brings you to the import page. Add the geotiff file in the catalog by clicking on the + icon next to the tiff file.
+2) Go to the web page of ARLAS, then click the **Import** link (top right menu). This brings you to the import page. Add the geotiff file in the catalog by clicking on the + icon next to the tiff file. This will create an automatically feed an index named "org.com@airs_catalog"
 3) once added, run :
 
-`./scripts/init_aias_catalog.sh local.iam.user catalog airs_main` 
+`./scripts/init_aias_catalog.sh local.iam.user catalog org.com` 
 
 This will init the collection and the dashboard for the catalog.
+
+IMPORTANT: Naming convention: the index name has the form `org`@airs_`name`
+For instance, the collection "geodes" for the organisation "org.com" has its index in "org.com@airs_geodes"
+
 
 ## Data from GEODES
 
