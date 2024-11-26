@@ -43,7 +43,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.2` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.6` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -141,7 +141,7 @@ Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:26.0.0`
 ### Service arlas-iam-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
 
-Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.0` in `conf/versions.env`
+Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -177,7 +177,7 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.0` in `conf
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.1` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -193,7 +193,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.1` in `conf/versi
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.4` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -233,7 +233,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.4` in `conf/v
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.1` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -268,7 +268,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.1` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.0.6-no-analytics` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.1.0-rc.2-no-analytics` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -302,6 +302,16 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.0.6-no-analytics` in `conf/
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
 | `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
+| `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_PROCESS_URL` | `` |  | `/aproc/processes/download/execution` in `conf/arlas.env` |
+| `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/download` in `conf/arlas.env` |
+| `ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS` | `ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS` | `` |  |  |
+| `ARLAS_DOWNLOAD_PROCESS_SETTINGS_URL` | `ARLAS_DOWNLOAD_PROCESS_SETTINGS_URL` | `` |  |  |
+| `ARLAS_DOWNLOAD_PROCESS_STATUS_URL` | `ARLAS_DOWNLOAD_PROCESS_STATUS_URL` | `` |  | `/aproc/jobs` in `conf/arlas.env` |
+| `ARLAS_ENRICH_PROCESS_URL` | `ARLAS_ENRICH_PROCESS_URL` | `` |  | `/aproc/processes/enrich/execution` in `conf/arlas.env` |
+| `ARLAS_ENRICH_PROCESS_CHECK_URL` | `ARLAS_ENRICH_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/enrich` in `conf/arlas.env` |
+| `ARLAS_ENRICH_PROCESS_MAX_ITEMS` | `ARLAS_ENRICH_PROCESS_MAX_ITEMS` | `` |  |  |
+| `ARLAS_ENRICH_PROCESS_SETTINGS_URL` | `ARLAS_ENRICH_PROCESS_SETTINGS_URL` | `` |  |  |
+| `ARLAS_ENRICH_PROCESS_STATUS_URL` | `ARLAS_ENRICH_PROCESS_STATUS_URL` | `` |  | `/aproc/jobs` in `conf/arlas.env` |
 
 List of volumes:
 - ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
@@ -353,7 +363,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.4.17` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.5.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -362,7 +372,7 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.4.17` in `conf/versions.env`
 | `AIRS_CORS_METHODS` | `AIRS_CORS_METHODS` | `*` |  |  |
 | `AIRS_CORS_ORIGINS` | `AIRS_CORS_ORIGINS` | `*` |  |  |
 | `AIRS_HOST` | `AIRS_HOST` | `0.0.0.0` |  |  |
-| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLLECTION_PREFIX` | `airs` |  |  |
+| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLLECTION_PREFIX` | `airs` |  | `org.com@airs` in `conf/aias.env` |
 | `AIRS_INDEX_ENDPOINT_URL` | `AIRS_INDEX_ENDPOINT_URL` | `` |  | `http://elasticsearch:9200` in `conf/aias.env` |
 | `AIRS_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
 | `AIRS_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
@@ -391,7 +401,7 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.4.17` in `conf/versions.env`
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.4.17` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.5.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -423,21 +433,37 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.4.17` in `conf/versi
 | `APROC_EMAIL_PATH_PREFIX_ADD` | `APROC_EMAIL_PATH_PREFIX_ADD` | `` |  | `"/tmp/"` in `conf/aias.env` |
 | `APROC_PATH_TO_WINDOWS` | `APROC_PATH_TO_WINDOWS` | `` |  | `false` in `conf/aias.env` |
 | `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARCH` | `` |  | `"http://arlas-server:9999/arlas/explore/{collectio ...` in `conf/aias.env` |
-| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLLECTION_PREFIX` | `` |  |  |
+| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLLECTION_PREFIX` | `` |  | `org.com@airs` in `conf/aias.env` |
 | `APROC_INDEX_ENDPOINT_URL` | `http://elasticsearch:9200` | `` |  |  |
 | `APROC_INDEX_NAME` | `APROC_INDEX_NAME` | `` |  | `aproc_downloads` in `conf/aias.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 | `TMP_FOLDER` | `"/outbox"` | `` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
+| `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |
+| `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
+| `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
+| `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID` | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_DOMAIN` | `APROC_INPUT_STORAGE_DOMAIN` | `` |  | `geodes-portal.cnes.fr` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `True` |  | `True` in `conf/aias.env` |
 
 List of volumes:
 - ${APROC_INPUT_DIR}:/inputs:ro
 - ${APROC_DOWNLOAD_DIR}:/outbox
 - ${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro
+- ${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro
+- ${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro
+- ${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro
 ## File dc/ref-dc-aias-aproc-service.yaml
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.4.17` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.5.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -470,19 +496,35 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.4.17` in `conf
 | `APROC_EMAIL_PATH_PREFIX_ADD` | `APROC_EMAIL_PATH_PREFIX_ADD` | `` |  | `"/tmp/"` in `conf/aias.env` |
 | `APROC_PATH_TO_WINDOWS` | `APROC_PATH_TO_WINDOWS` | `` |  | `false` in `conf/aias.env` |
 | `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARCH` | `` |  | `"http://arlas-server:9999/arlas/explore/{collectio ...` in `conf/aias.env` |
-| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLLECTION_PREFIX` | `` |  |  |
+| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLLECTION_PREFIX` | `` |  | `org.com@airs` in `conf/aias.env` |
 | `APROC_INDEX_ENDPOINT_URL` | `http://elasticsearch:9200` | `` |  |  |
 | `APROC_INDEX_NAME` | `APROC_INDEX_NAME` | `` |  | `aproc_downloads` in `conf/aias.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
+| `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |
+| `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
+| `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
+| `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID` | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_DOMAIN` | `APROC_INPUT_STORAGE_DOMAIN` | `` |  | `geodes-portal.cnes.fr` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `True` |  | `True` in `conf/aias.env` |
 
 List of volumes:
 - ${APROC_INPUT_DIR}:/inputs:ro
 - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
+- ${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro
+- ${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro
+- ${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro
 ## File dc/ref-dc-aias-fam-wui.yaml
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.4.17` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.5.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -508,7 +550,7 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.4.17` in `conf/versi
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.4.17` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.5.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -553,11 +595,11 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.4.17` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.5.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `AGATE_LOGGER_LEVEL` | `AGATE_LOGGER_LEVEL` | `INFO` |  | `DEBUG` in `conf/aias.env` |
+| `AGATE_LOGGER_LEVEL` | `AGATE_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
 | `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARCH` | `` |  | `"http://arlas-server:9999/arlas/explore/{collectio ...` in `conf/aias.env` |
 | `AGATE_PREFIX` | `/agate` | `` |  |  |
 | `AGATE_HOST` | `AGATE_HOST` | `0.0.0.0` |  |  |
