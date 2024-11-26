@@ -1670,7 +1670,8 @@
                 ]
             },
             "externalNode": {
-                "download": true
+                "download": true,
+                "enrich": true
             }
         },
         "server": {
