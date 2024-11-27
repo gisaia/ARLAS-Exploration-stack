@@ -20,3 +20,6 @@ services:
       - "8004"
     networks:
       - arlas-net
+    volumes:
+      - ${PWD}/conf/aias/agate.yaml:/app/conf/agate.yaml:ro
+
