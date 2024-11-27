@@ -75,7 +75,7 @@
         "minio:9000": 1
     plugins:
       forward-auth:
-        uri: http://agate:8004/agate/authorization
+        uri: http://agate:8004/agate/authorization/
         request_headers: ["Authorization", "arlas-org-filter"]
   -
     uri: /fam/*

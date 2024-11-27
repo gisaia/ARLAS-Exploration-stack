@@ -3,12 +3,12 @@ agate_prefix: $AGATE_PREFIX|/arlas/agate
 host: $AGATE_HOST|127.0.0.1
 port: $AGATE_PORT|8004
 services:
-  airs:
+  airs-storage:
     url_patterns:
-      - $ASSET_MINIO_PATTERN|(/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
+      - (/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
     public_url_patterns: 
-      - $ASSET_MINIO_PUBLIC_PATTERN|(/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
-      - $ASSET_MINIO_PUBLIC_PATTERN|(/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
+      - (/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
+      - (/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
     url_header: $AGATE_URL_HEADER|X-Forwarded-Uri
     url_header_prefix: $AGATE_URL_HEADER_PREFIX
     pattern_target:
