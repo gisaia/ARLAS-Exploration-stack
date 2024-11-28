@@ -141,7 +141,7 @@ docker run --rm --network arlas-net gisaia/stac-geodes:latest add https://geodes
 This will register in the `org.com@airs_geodes` index the first 1000 `S2L1C` data that were acquired after 2023-04-05T08:58. Then, you can create the catalog:
 
 ```shell
-./scripts/init_aias_catalog.sh local.iam.user catalog org.com@airs_geodes
+./scripts/init_aias_catalog.sh local.iam.user geodes org.com
 ```
 
 # Configuration
