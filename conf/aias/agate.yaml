@@ -3,7 +3,7 @@ agate_prefix: $AGATE_PREFIX|/arlas/agate
 host: $AGATE_HOST|127.0.0.1
 port: $AGATE_PORT|8004
 services:
-  airs:
+  airs-storage:
     url_patterns:
       - (/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
     public_url_patterns: 
