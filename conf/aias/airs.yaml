@@ -19,5 +19,5 @@ s3:
 # if you don't use aws s3, then please prov
   endpoint_url: $AIRS_S3_ENDPOINT_URL
 
-arlaseo_mapping_url: $AIRS_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.8/mapping.json"
+arlaseo_mapping_url: $ARLASEO_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.8/mapping.json"
 arlaseo_collection_url: $AIRS_COLLECTION_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.8/collection.json"
