@@ -1,6 +1,6 @@
 arlas_url_search: $ARLAS_URL_SEARCH
-arlaseo_mapping_url: $ARLASEO_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.8/mapping.json"
-download_mapping_url: $DOWNLOAD_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.8/downloads_mapping.json"
+arlaseo_mapping_url: $ARLASEO_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json"
+download_mapping_url: $DOWNLOAD_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/downloads_mapping.json"
 
 clean_outbox_directory: $CLEAN_DOWNLOAD_OUTBOX_DIR|True
 outbox_directory: $APROC_DOWNLOAD_OUTBOX_DIR
