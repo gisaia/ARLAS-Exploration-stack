@@ -46,7 +46,8 @@ then
     echo "Initialising Minio configuration..."
     set +e
 
-
+    . ./conf/aias.env
+    
     export BUCKET_NAME=$AIRS_S3_BUCKET
     docker compose  -p arlas-exploration-stack \
         --env-file conf/versions.env  \

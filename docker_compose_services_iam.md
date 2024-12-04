@@ -34,7 +34,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.2` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.6` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -132,7 +132,7 @@ Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:26.0.0`
 ### Service arlas-iam-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
 
-Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.0` in `conf/versions.env`
+Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -168,7 +168,7 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.0` in `conf
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.1` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -184,7 +184,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.1` in `conf/versi
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.4` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -224,7 +224,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.4` in `conf/v
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.1` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -259,7 +259,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.1` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.0.6-no-analytics` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.1.0-rc.2-no-analytics` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -293,6 +293,16 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.0.6-no-analytics` in `conf/
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
 | `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
+| `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_PROCESS_URL` | `` |  | `/aproc/processes/download/execution` in `conf/arlas.env` |
+| `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/download` in `conf/arlas.env` |
+| `ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS` | `ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS` | `` |  |  |
+| `ARLAS_DOWNLOAD_PROCESS_SETTINGS_URL` | `ARLAS_DOWNLOAD_PROCESS_SETTINGS_URL` | `` |  |  |
+| `ARLAS_DOWNLOAD_PROCESS_STATUS_URL` | `ARLAS_DOWNLOAD_PROCESS_STATUS_URL` | `` |  | `/aproc/jobs` in `conf/arlas.env` |
+| `ARLAS_ENRICH_PROCESS_URL` | `ARLAS_ENRICH_PROCESS_URL` | `` |  | `/aproc/processes/enrich/execution` in `conf/arlas.env` |
+| `ARLAS_ENRICH_PROCESS_CHECK_URL` | `ARLAS_ENRICH_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/enrich` in `conf/arlas.env` |
+| `ARLAS_ENRICH_PROCESS_MAX_ITEMS` | `ARLAS_ENRICH_PROCESS_MAX_ITEMS` | `` |  |  |
+| `ARLAS_ENRICH_PROCESS_SETTINGS_URL` | `ARLAS_ENRICH_PROCESS_SETTINGS_URL` | `` |  |  |
+| `ARLAS_ENRICH_PROCESS_STATUS_URL` | `ARLAS_ENRICH_PROCESS_STATUS_URL` | `` |  | `/aproc/jobs` in `conf/arlas.env` |
 
 List of volumes:
 - ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
