@@ -4,7 +4,7 @@ on: push
 
 jobs:
   simple-stack:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
     - name: Start simple stack
@@ -20,7 +20,7 @@ jobs:
     - name: Stop stack
       run: ./stop.sh
   iam-stack:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
     - name: Start iam stack
