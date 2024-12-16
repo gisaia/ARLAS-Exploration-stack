@@ -1,0 +1,93 @@
+#!/bin/sh -e
+
+# Generate documentation
+pip install ruamel.yaml
+mkdir -p docs/docs/dc_services
+
+python3.10 scripts/generate_dc_doc.py \
+    dc/ref-dc-elastic.yaml \
+    dc/ref-dc-arlas-server.yaml \
+    dc/ref-dc-arlas-persistence-server.yaml \
+    dc/ref-dc-arlas-permissions-server.yaml \
+    dc/ref-dc-arlas-builder.yaml \
+    dc/ref-dc-arlas-hub.yaml \
+    dc/ref-dc-arlas-wui.yaml \
+    dc/ref-dc-protomaps.yaml \
+    dc/ref-dc-apisix.yaml \
+    conf/versions.env \
+    conf/elastic.env \
+    conf/arlas.env \
+    conf/persistence-file.env \
+    conf/permissions.env \
+    conf/apisix.env \
+    conf/restart_strategy.env \
+    conf/stack.env \
+    > docs/docs/dc_services/docker_compose_services_simple.md
+
+python3.10 scripts/generate_dc_doc.py \
+    dc/ref-dc-elastic.yaml \
+    dc/ref-dc-arlas-server.yaml \
+    dc/ref-dc-arlas-persistence-server.yaml \
+    dc/ref-dc-arlas-permissions-server.yaml \
+    dc/ref-dc-iam-server.yaml \
+    dc/ref-dc-iam-wui.yaml \
+    dc/ref-dc-arlas-builder.yaml \
+    dc/ref-dc-arlas-hub.yaml \
+    dc/ref-dc-arlas-wui.yaml \
+    dc/ref-dc-protomaps.yaml \
+    dc/ref-dc-apisix.yaml \
+    dc/ref-dc-postgres.yaml \
+    conf/versions.env \
+    conf/elastic.env \
+    conf/arlas.env \
+    conf/persistence-file.env \
+    conf/permissions.env \
+    conf/apisix.env \
+    conf/restart_strategy.env \
+    conf/stack.env \
+    conf/arlas_iam.env \
+    conf/postgres.env \
+    > docs/docs/dc_services/docker_compose_services_iam.md
+
+python3.10 scripts/generate_dc_doc.py \
+    dc/ref-dc-elastic.yaml \
+    dc/ref-dc-arlas-server.yaml \
+    dc/ref-dc-arlas-persistence-server.yaml \
+    dc/ref-dc-arlas-permissions-server.yaml \
+    dc/ref-dc-iam-server.yaml \
+    dc/ref-dc-iam-wui.yaml \
+    dc/ref-dc-arlas-builder.yaml \
+    dc/ref-dc-arlas-hub.yaml \
+    dc/ref-dc-arlas-wui.yaml \
+    dc/ref-dc-protomaps.yaml \
+    dc/ref-dc-apisix.yaml \
+    dc/ref-dc-postgres.yaml \
+    dc/ref-dc-aias-airs.yaml \
+    dc/ref-dc-aias-aproc-proc.yaml \
+    dc/ref-dc-aias-aproc-service.yaml \
+    dc/ref-dc-aias-fam-wui.yaml \
+    dc/ref-dc-aias-fam.yaml \
+    dc/ref-dc-aias-minio.yaml \
+    dc/ref-dc-aias-rabbitmq.yaml \
+    dc/ref-dc-aias-redis.yaml \
+    dc/ref-dc-aias-volumes.yaml \
+    dc/ref-dc-aias-agate.yaml \
+    conf/aias.env \
+    conf/minio.env \
+    conf/versions.env \
+    conf/elastic.env \
+    conf/arlas.env \
+    conf/persistence-file.env \
+    conf/permissions.env \
+    conf/apisix.env \
+    conf/restart_strategy.env \
+    conf/stack.env \
+    conf/arlas_iam.env \
+    conf/postgres.env \
+    > docs/docs/dc_services/docker_compose_services_aias.md
+
+# Copy documentation to target
+rm -rf target/generated-docs
+mkdir -p target/generated-docs
+
+cp -r docs/docs/* target/generated-docs

@@ -1,0 +1,28 @@
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.details
+
+site_name: Deploy ARLAS Exploration stack
+repo_url: https://github.com/gisaia/ARLAS-Exploration-stack
+
+extra_css:
+    - css/styles.css
+theme:
+  name: 'material'
+  palette:
+    primary: 'pink'
+    accent: 'light-blue'
+
+nav:
+- Run ARLAS Stack: arlas_exploration_stack.md
+- Configure ARLAS deployment:
+  - Configure ARLAS: configuration.md
+  - Docker-compose services:
+      - Simple deployment: dc_services/docker_compose_services_simple.md
+      - IAM deployment: dc_services/docker_compose_services_iam.md
+      - AIAS deployment: dc_services/docker_compose_services_aias.md
+
+plugins:
+  - search
