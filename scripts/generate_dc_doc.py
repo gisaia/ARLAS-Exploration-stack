@@ -109,19 +109,22 @@ def generate(yaml_files: list[str], env_files: list[str]):
                                 description = description + " " + c.value.lstrip('#').lstrip(' ').rstrip()
                     variable = truncate(variable)
                     print("| `{}` | `{}` | `{}` | {} | {} |".format(escape(k), escape(variable), escape(default), escape(description), escape(env_settings)))
+                print()
                 volumes = services.get(service).get("volumes", None)
                 if volumes:
-                    print()
-                    print("List of volumes:")
+                    print("List of volumes:\n")
                     for volume in volumes:
-                        print("- " + volume)
+                        print(f"- `{volume}`")
 
-yaml_files: list[str] = []
-env_files: list[str] = []
-for f in sys.argv[1:]:
-    if Path(f).suffix == ".env":
-        env_files.append(f)
-    if Path(f).suffix == ".yaml":
-        yaml_files.append(f)
 
-generate(yaml_files, env_files)
+if __name__ == '__main__':
+
+    yaml_files: list[str] = []
+    env_files: list[str] = []
+    for f in sys.argv[1:]:
+        if Path(f).suffix == ".env":
+            env_files.append(f)
+        if Path(f).suffix == ".yaml":
+            yaml_files.append(f)
+
+    generate(yaml_files, env_files)
