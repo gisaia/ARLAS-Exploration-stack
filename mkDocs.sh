@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # Generate documentation
-pip install ruamel.yaml
+pip3.10 install ruamel.yaml
 mkdir -p docs/docs/dc_services
 
 python3.10 scripts/generate_dc_doc.py \
