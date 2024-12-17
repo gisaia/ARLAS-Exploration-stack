@@ -165,7 +165,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.1.0` in `conf/v
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIONS_URL` | `/arlas_permissions_server` |  |  |
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env` |
-| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `http://localhost/arlas` |  ARLAS Server url |  |
+| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  |  |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  |  |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  |  |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
