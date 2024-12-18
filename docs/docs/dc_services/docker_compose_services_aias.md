@@ -38,7 +38,8 @@ Image: `ELASTIC_VERSION` with `docker.elastic.co/elasticsearch/elasticsearch:8.9
 | `tracing.apm.enabled` | `false` | `` |  |  |
 
 List of volumes:
-- ${ELASTIC_STORAGE:-arlas-data-es}:/usr/share/elasticsearch/data
+
+- `${ELASTIC_STORAGE:-arlas-data-es}:/usr/share/elasticsearch/data`
 ## File dc/ref-dc-arlas-server.yaml
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
@@ -73,6 +74,7 @@ Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:26.0.6` in `conf/version
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_SECRET` | `ARLAS_AUTH_KEYCLOAK_SECRET` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_URL` | `ARLAS_AUTH_KEYCLOAK_URL` | `` |  |  |
+
 ## File dc/ref-dc-arlas-persistence-server.yaml
 ### Service arlas-persistence-server
 Description: ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
@@ -108,7 +110,8 @@ Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:26.0.0`
 | `JDK_JAVA_OPTIONS` | `ARLAS_PERSISTENCE_JDK_JAVA_OPTIONS` | `` |  |  |
 
 List of volumes:
-- ${ARLAS_PERSISTENCE_STORAGE}:/persist/
+
+- `${ARLAS_PERSISTENCE_STORAGE}:/persist/`
 ## File dc/ref-dc-arlas-permissions-server.yaml
 ### Service arlas-permissions-server
 Description: ARLAS Permissions is a service for listing user's permissions
@@ -137,6 +140,7 @@ Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:26.0.0`
 | `ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS` | `GoogleHC/*, kube-probe/*, curl*, GoogleStackdriver ...` | `` |  |  |
 | `ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME` | `ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME` | `true` |  |  |
 | `JDK_JAVA_OPTIONS` | `ARLAS_PERMISSIONS_JDK_JAVA_OPTIONS` | `` |  | empty value in `conf/permissions.env` |
+
 ## File dc/ref-dc-iam-server.yaml
 ### Service arlas-iam-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
@@ -173,11 +177,12 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:26.0.2` in `conf
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_SECRET` | `ARLAS_AUTH_KEYCLOAK_SECRET` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_URL` | `ARLAS_AUTH_KEYCLOAK_URL` | `` |  |  |
+
 ## File dc/ref-dc-iam-wui.yaml
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.2` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.1.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -189,11 +194,12 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:26.0.2` in `conf/versi
 | `ARLAS_WUI_IAM_APP_PATH` | `/iam` | `` |  |  |
 | `ARLAS_WUI_IAM_BASE_HREF` | `/iam` | `` |  |  |
 | `ARLAS_STATIC_LINKS` | `ARLAS_IAM_LINKS` | `` |  | `'` in `conf/arlas_iam.env` |
+
 ## File dc/ref-dc-arlas-builder.yaml
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.5` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.1.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -229,11 +235,12 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:26.0.5` in `conf/v
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
+
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.3` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.1.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -264,11 +271,12 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:26.0.3` in `conf/versions.
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env` |
+
 ## File dc/ref-dc-arlas-wui.yaml
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.1.0-rc.2-no-analytics` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.1.0-no-analytics` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -314,17 +322,19 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:26.1.0-rc.2-no-analytics` in `
 | `ARLAS_ENRICH_PROCESS_STATUS_URL` | `ARLAS_ENRICH_PROCESS_STATUS_URL` | `` |  | `/aproc/jobs` in `conf/arlas.env` |
 
 List of volumes:
-- ${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles
-- ${PWD}/conf/protomaps/glyphs:/usr/share/nginx/html/assets/basemap/glyphs
-- ${PWD}/conf/protomaps/quicklook:/usr/share/nginx/html/assets/basemap/quicklook
-- ${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles
+
+- `${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles`
+- `${PWD}/conf/protomaps/glyphs:/usr/share/nginx/html/assets/basemap/glyphs`
+- `${PWD}/conf/protomaps/quicklook:/usr/share/nginx/html/assets/basemap/quicklook`
+- `${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles`
 ## File dc/ref-dc-protomaps.yaml
 ### Service protomaps
 Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.19.0` in `conf/versions.env`
 
 
 List of volumes:
-- ${PWD}/conf/protomaps/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro
+
+- `${PWD}/conf/protomaps/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro`
 ## File dc/ref-dc-apisix.yaml
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
@@ -336,7 +346,8 @@ Image: `APISIX_VERSION` with `apache/apisix:3.9.1-debian` in `conf/versions.env`
 | `APISIX_STAND_ALONE` | `APISIX_STAND_ALONE` | `true` |  | `true` in `conf/apisix.env` |
 
 List of volumes:
-- ${APISIX_CONF_FILE}:/usr/local/apisix/conf/apisix.yaml:ro
+
+- `${APISIX_CONF_FILE}:/usr/local/apisix/conf/apisix.yaml:ro`
 ## File dc/ref-dc-postgres.yaml
 ### Service db
 Image: `POSTGRES_VERSION` with `postgres:16.1` in `conf/versions.env`
@@ -355,15 +366,16 @@ Image: `POSTGRES_VERSION` with `postgres:16.1` in `conf/versions.env`
 | `POSTGRES_USER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
 
 List of volumes:
-- ${POSTGRES_BACKUP_STORAGE}:/backup/
-- ${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro
-- ${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro
-- ${POSTGRES_STORAGE}:/var/lib/postgresql/data
+
+- `${POSTGRES_BACKUP_STORAGE}:/backup/`
+- `${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro`
+- `${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro`
+- `${POSTGRES_STORAGE}:/var/lib/postgresql/data`
 ## File dc/ref-dc-aias-airs.yaml
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.5.5` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.5.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -377,12 +389,12 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.5.5` in `conf/versions.env`
 | `AIRS_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
 | `AIRS_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `AIRS_LOGGER_LEVEL` | `AIRS_LOGGER_LEVEL` | `` |  | `INFO` in `conf/aias.env` |
-| `AIRS_MAPPING_URL` | `AIRS_MAPPING_URL` | `/app/conf/mapping.json` |  |  |
+| `ARLASEO_MAPPING_URL` | `ARLASEO_MAPPING_URL` | `/app/conf/mapping.json` |  | `https://raw.githubusercontent.com/gisaia/ARLAS-EO/ ...` in `conf/aias.env` |
 | `AIRS_PORT` | `AIRS_PORT` | `8000` |  |  |
 | `AIRS_PREFIX` | `AIRS_PREFIX` | `/airs` |  |  |
 | `AIRS_S3_ACCESS_KEY_ID` | `AIRS_S3_ACCESS_KEY_ID` | `` |  | `airs` in `conf/aias.env` |
 | `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `` |  | `http://minio:9000/{}/{}` in `conf/aias.env` |
-| `AIRS_S3_BUCKET` | `AIRS_S3_BUCKET` | `airs-storage` |  | `airs` in `conf/aias.env` |
+| `AIRS_S3_BUCKET` | `AIRS_S3_BUCKET` | `airs-storage` |  | `airs-storage` in `conf/aias.env` |
 | `AIRS_S3_ENDPOINT_URL` | `AIRS_S3_ENDPOINT_URL` | `http://minio:9000` |  | `http://minio:9000` in `conf/aias.env` |
 | `AIRS_S3_PLATFORM` | `AIRS_S3_PLATFORM` | `MINIO` |  |  |
 | `AIRS_S3_REGION` | `AIRS_S3_REGION` | `Standart` |  |  |
@@ -397,11 +409,12 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.5.5` in `conf/versions.env`
 | `ELASTIC_APM_SERVICE_NAME` | `airs-server` | `` |  |  |
 | `ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS` | `GoogleHC/*, kube-probe/*, curl*, GoogleStackdriver ...` | `` |  |  |
 | `ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME` | `ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME` | `true` |  |  |
+
 ## File dc/ref-dc-aias-aproc-proc.yaml
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.5.5` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.5.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -453,17 +466,18 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.5.5` in `conf/versio
 | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `True` |  | `True` in `conf/aias.env` |
 
 List of volumes:
-- ${APROC_INPUT_DIR}:/inputs:ro
-- ${APROC_DOWNLOAD_DIR}:/outbox
-- ${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro
-- ${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro
-- ${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro
-- ${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro
+
+- `${APROC_INPUT_DIR}:/inputs:ro`
+- `${APROC_DOWNLOAD_DIR}:/outbox`
+- `${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro`
+- `${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro`
+- `${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro`
+- `${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro`
 ## File dc/ref-dc-aias-aproc-service.yaml
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.5.5` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.5.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -515,16 +529,17 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.5.5` in `conf/
 | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `True` |  | `True` in `conf/aias.env` |
 
 List of volumes:
-- ${APROC_INPUT_DIR}:/inputs:ro
-- ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
-- ${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro
-- ${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro
-- ${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro
+
+- `${APROC_INPUT_DIR}:/inputs:ro`
+- `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
+- `${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro`
+- `${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro`
+- `${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro`
 ## File dc/ref-dc-aias-fam-wui.yaml
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.5.5` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.5.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -546,11 +561,12 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.5.5` in `conf/versio
 | `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `AIRS_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_FAM_LINKS` | `` |  | `'` in `conf/aias.env` |
+
 ## File dc/ref-dc-aias-fam.yaml
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.5.5` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.5.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -560,8 +576,9 @@ Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.5.5` in `conf/versions.env`
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 
 List of volumes:
-- ${APROC_INPUT_DIR}:/inputs:ro
-- ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
+
+- `${APROC_INPUT_DIR}:/inputs:ro`
+- `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
 ## File dc/ref-dc-aias-minio.yaml
 ### Service minio
 Description: Minio is an object store
@@ -575,27 +592,30 @@ Image: `ARLAS_VERSION_MINIO` with `minio/minio:RELEASE.2024-10-02T17-50-41Z` in 
 | `MINIO_ROOT_USER` | `MINIO_ROOT_USER` | `` |  | `airs` in `conf/minio.env` |
 
 List of volumes:
-- ${AIRS_STORAGE_DIRECTORY:-arlas-data-minio}:/data
+
+- `${AIRS_STORAGE_DIRECTORY:-arlas-data-minio}:/data`
 ## File dc/ref-dc-aias-rabbitmq.yaml
 ### Service rabbitmq
 Image: `ARLAS_VERSION_RABBITMQ` with `rabbitmq:3.13.2-management-alpine` in `conf/versions.env`
 
 
 List of volumes:
-- arlas-data-rabbimq:/var/lib/rabbitmq/mnesia
+
+- `arlas-data-rabbimq:/var/lib/rabbitmq/mnesia`
 ## File dc/ref-dc-aias-redis.yaml
 ### Service redis
 Image: `ARLAS_VERSION_REDIS` with `redis/redis-stack:7.2.0-v10` in `conf/versions.env`
 
 
 List of volumes:
-- arlas-data-redis:/data
+
+- `arlas-data-redis:/data`
 ## File dc/ref-dc-aias-volumes.yaml
 ## File dc/ref-dc-aias-agate.yaml
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.5.5` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.5.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -605,6 +625,8 @@ Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.5.5` in `conf/versions.env`
 | `AGATE_HOST` | `AGATE_HOST` | `0.0.0.0` |  |  |
 | `AGATE_PORT` | `AGATE_PORT` | `8004` |  |  |
 | `AGATE_URL_HEADER` | `X-Forwarded-Uri` | `` |  |  |
-| `AGATE_URL_HEADER_PREFIX` | `AIRS_S3_BUCKET` | `` |  | `airs` in `conf/aias.env` |
-| `ASSET_MINIO_PATTERN` | `"/(?P<collection>[^/]+)/items/(?P<item>[^/]+)/asse ...` | `` |  |  |
-| `ASSET_MINIO_PUBLIC_PATTERN` | `"/(?P<collection>[^/]+)/items/(?P<item>[^/]+)/asse ...` | `` |  |  |
+| `AGATE_URL_HEADER_PREFIX` | `AIRS_S3_BUCKET` | `` |  | `airs-storage` in `conf/aias.env` |
+
+List of volumes:
+
+- `${PWD}/conf/aias/agate.yaml:/app/conf/agate.yaml:ro`

@@ -1,0 +1,70 @@
+# Configuration
+
+## Configuration files
+
+A significant number of parameters can be configured. Parameters are configured in the environment files located in the `conf/` directory.
+
+### Common files
+
+- `conf/arlas.env`: General parameters of ARLAS Server
+- `conf/elastic.env`: Configuration of elasticsearch
+- `conf/permissions.env`: Configuration of the service delivering permission descriptions
+- `conf/persistence-file.env` and `conf/persistence-postgres.env`: Configuration of the persistence services
+- `conf/restart_strategy.env`: Configuration of the restart strategy for every service
+- `conf/stack.env`: General parameters of the stack
+- `conf/versions.env`: Version of every single service (docker image)
+
+
+### Simple deployment
+
+All [common files](#common-files) and:
+
+- `conf/apisix.env`: Configuration of APISIX gateway
+
+See [Simple ARLAS Stack configuration](../../docker_compose_services_simple.md)
+
+### IAM deployment
+
+All [common files](#common-files) and:
+
+- `conf/arlas_iam.env`: Configuration of the IAM
+
+See [ARLAS with IAM configuration](../../docker_compose_services_iam.md)
+
+### AIAS deployment
+
+Same as [IAM deployment](#iam-deployment) and:
+
+- `conf/aias.env`: Configuration of AIAS
+- `conf/minio.env`: Configuration of the minio object store
+
+See [ARLAS Items and Assets Services (AIAS) configuration](../../docker_compose_services_aias.md)
+
+## Host and domain
+
+By default, the stack is deployed on `http(s)://localhost/`. To deploy the ARLAS Stack on a different domain, simply change the `ARLAS_HOST` environment variable in `conf/stack.env`:
+```shell
+ARLAS_HOST=localhost
+```
+
+If you are using `arlas_cli` you need to run `scripts/init_arlas_cli_confs.sh` to create again the `arlas_cli` configuration file.
+
+## Variables
+
+The current configurations are for tests only. These variables have to be changed for storing the data in reliable places:
+
+- `ELASTIC_STORAGE` (`conf/elastic.env`)
+- `ARLAS_PERSISTENCE_STORAGE` (`conf/persistence-file.env`)
+- `POSTGRES_STORAGE` (`conf/postgres.env`)
+- `POSTGRES_BACKUP_STORAGE` (`conf/postgres.env`)
+
+And for AIAS:
+
+- `APROC_DOWNLOAD_DIR` (`conf/aias.env`)
+- `APROC_INPUT_DIR` (`conf/aias.env`)
+- `APROC_EMAIL_PATH_PREFIX_ADD` (`conf/aias.env`)
+
+
+## Basemap
+
+The basemap provided with the ARLAS Stack is the first zoom levels of protomaps. [Download](https://maps.protomaps.com/builds/) and replace `conf/protomaps/world.pmtiles` to get all zoom levels.
