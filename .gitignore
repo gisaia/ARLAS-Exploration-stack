@@ -11,3 +11,4 @@ conf/apisix/apisix.generated.tmp.yaml
 sample/dashboard.generated.json
 tmp/
 docker-compose.env
+target
