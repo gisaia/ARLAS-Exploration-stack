@@ -8,7 +8,7 @@ It also contains the script for starting the stack in different modes:
 - **IAM**: With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
 - **AIAS**: With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance. *(WORK IN PROGRESS)*
 
-See the [full documentation](https://gisaia.github.io/ARLAS-Exploration-stack) to run and deploy ARLAS Exploration stack.
+See the [full documentation](https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/arlas_exploration_stack/) to run and deploy ARLAS Exploration stack.
 
 # Developers
 
