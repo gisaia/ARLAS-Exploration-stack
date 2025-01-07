@@ -1,5 +1,6 @@
   elasticsearch-logs:
     image: ${ELASTIC_VERSION}
+    platform: linux/x86_64
     container_name: elasticsearch-logs
     restart: ${ELASTIC_RESTART_STRATEGY:-always}
     environment:

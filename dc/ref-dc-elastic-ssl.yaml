@@ -1,6 +1,7 @@
 services:
   elasticsearch:
     image: ${ELASTIC_VERSION}
+    platform: linux/x86_64
     container_name: elasticsearch
     restart: ${ELASTIC_RESTART_STRATEGY:-always}
     environment:

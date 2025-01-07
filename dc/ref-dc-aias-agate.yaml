@@ -4,6 +4,7 @@ services:
       arlas-server:
         condition: service_healthy
     image: ${ARLAS_VERSION_AGATE}
+    platform: linux/x86_64
     container_name: 'agate'
     restart: ${ARLAS_AGATE_RESTART_STRATEGY:-always}
     environment:

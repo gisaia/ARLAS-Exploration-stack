@@ -1,6 +1,7 @@
 services:
   arlas-wui-iam: # ARLAS IAM is the ARLAS Identity and Access Management web interface.
     image: ${ARLAS_WUI_IAM_VERSION}
+    platform: linux/x86_64
     container_name: arlas-wui-iam
     depends_on:
       arlas-server:

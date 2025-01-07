@@ -1,6 +1,7 @@
 services:
   apisix: # APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
     image: ${APISIX_VERSION}
+    platform: linux/x86_64
     container_name: apisix
     depends_on:
       arlas-server:

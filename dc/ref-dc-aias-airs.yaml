@@ -1,6 +1,7 @@
 services:
   airs-server: # AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
     image: ${ARLAS_VERSION_AIRS}
+    platform: linux/x86_64
     container_name: airs-server
     depends_on:
       elasticsearch:

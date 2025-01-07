@@ -2,6 +2,7 @@ services:
   # https://hub.docker.com/_/postgres
   db:
     image: ${POSTGRES_VERSION}
+    platform: linux/x86_64
     container_name: db
     restart: ${POSTGRES_RESTART_STRATEGY:-always}
     environment:

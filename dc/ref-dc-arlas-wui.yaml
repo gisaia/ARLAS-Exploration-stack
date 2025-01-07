@@ -2,6 +2,7 @@
 services:
   arlas-wui: # ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
     image: ${ARLAS_WUI_VERSION}
+    platform: linux/x86_64
     container_name: arlas-wui
     depends_on:
 #      arlas-persistence-server: # Persistence is not necessarily deployed

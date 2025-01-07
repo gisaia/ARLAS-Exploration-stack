@@ -1,6 +1,7 @@
 services:
   titiler: # Titiler generates tiles for COG files
     image: ${TITILER_VERSION}
+    platform: linux/x86_64
     container_name: 'titiler'
     restart: ${TITILER_RESTART_STRATEGY:-always}
     environment:

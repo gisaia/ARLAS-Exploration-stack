@@ -1,6 +1,7 @@
 services:
   protomaps:
     image: ${PROTOMAP_VERSION}
+    platform: linux/x86_64
     container_name: protomaps
     restart: ${PROTOMAP_RESTART_STRATEGY:-always}
     entrypoint: ['/go-pmtiles', 'serve', '/protomaps/']

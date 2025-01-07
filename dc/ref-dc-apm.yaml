@@ -6,6 +6,7 @@ services:
       kibana-logs:
         condition: service_healthy
     image: ${APM_VERSION}
+    platform: linux/x86_64
     container_name: apm-server
     restart: ${APM_RESTART_STRATEGY:-always}
     expose:

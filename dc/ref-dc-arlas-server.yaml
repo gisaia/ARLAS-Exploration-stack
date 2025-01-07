@@ -1,6 +1,7 @@
 services:
   arlas-server: # ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
     image: ${ARLAS_SERVER_VERSION}
+    platform: linux/x86_64
     container_name: arlas-server
     depends_on:
       elasticsearch:

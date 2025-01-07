@@ -1,6 +1,7 @@
 services:
   elasticsearch-setup:
     image: ${ELASTIC_VERSION}
+    platform: linux/x86_64
     container_name: elasticsearch-setup
     volumes:
       - arlas-es-certs:/usr/share/elasticsearch/config/certs

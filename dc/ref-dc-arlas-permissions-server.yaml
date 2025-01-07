@@ -1,6 +1,7 @@
 services:
   arlas-permissions-server: # ARLAS Permissions is a service for listing user's permissions
     image: ${ARLAS_PERMISSIONS_VERSION}
+    platform: linux/x86_64
     container_name: arlas-permissions-server
     restart: ${ARLAS_PERMISSION_RESTART_STRATEGY:-always}
     environment:

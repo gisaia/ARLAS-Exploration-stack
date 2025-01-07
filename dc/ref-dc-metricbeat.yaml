@@ -1,6 +1,7 @@
 services:
   metricbeat:
     image: ${METRICBEAT_VERSION}
+    platform: linux/x86_64
     container_name: metricbeat
     depends_on:
       elasticsearch-logs:
