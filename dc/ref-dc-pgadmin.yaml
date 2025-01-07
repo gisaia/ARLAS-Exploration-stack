@@ -1,6 +1,7 @@
 services:
   pgadmin:
     image: ${PGADMIN4_VERSION}
+    platform: linux/x86_64
     container_name: pgadmin
     depends_on:
       db:

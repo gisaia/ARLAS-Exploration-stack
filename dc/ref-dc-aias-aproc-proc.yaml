@@ -11,6 +11,7 @@ services:
       elasticsearch:
         condition: service_healthy
     image: ${ARLAS_VERSION_APROC_PROC}
+    platform: linux/x86_64
     container_name: aproc-proc
     restart: always
     deploy:

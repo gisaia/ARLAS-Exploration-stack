@@ -1,6 +1,7 @@
 services:
   arlas-persistence-server: # ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
     image: ${ARLAS_PERSISTENCE_VERSION}
+    platform: linux/x86_64
     container_name: arlas-persistence-server
     restart: ${ARLAS_PERSISTENCE_RESTART_STRATEGY:-always}
     environment:

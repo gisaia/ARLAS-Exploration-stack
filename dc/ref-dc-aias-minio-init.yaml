@@ -1,6 +1,7 @@
 services:
   createbuckets:
     image: ${ARLAS_VERSION_MINIO_MC}
+    platform: linux/x86_64
     container_name: createbuckets
     depends_on:
       minio:

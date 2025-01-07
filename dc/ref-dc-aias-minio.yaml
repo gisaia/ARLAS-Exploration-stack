@@ -1,6 +1,7 @@
 services:
   minio: #Minio is an object store
     image: ${ARLAS_VERSION_MINIO}
+    platform: linux/x86_64
     container_name: minio
     restart: ${MINIO_RESTART_STRATEGY:-always}
     command: server /data

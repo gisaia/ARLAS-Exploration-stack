@@ -1,6 +1,7 @@
 services:
   arlas-hub: # ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
     image: ${ARLAS_HUB_VERSION}
+    platform: linux/x86_64
     container_name: arlas-hub
     depends_on:
       arlas-persistence-server:

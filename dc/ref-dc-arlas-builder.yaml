@@ -1,6 +1,7 @@
 services:
   arlas-builder: # ARLAS Builder is the interface for elaborating ARLAS Dashboards.
     image: ${ARLAS_BUILDER_VERSION}
+    platform: linux/x86_64
     container_name: arlas-builder
     depends_on:
       arlas-persistence-server:

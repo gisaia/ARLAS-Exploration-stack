@@ -4,6 +4,7 @@ services:
       file: ref-dc-logger.yaml
       service: log-rotated
     image: ${ARLAS_VERSION_FAM}
+    platform: linux/x86_64
     container_name: fam-service
     restart: always
     environment:

@@ -1,6 +1,7 @@
 services:
   filebeat:
     image: ${FILEBEAT_VERSION}
+    platform: linux/x86_64
     container_name: filebeat
     depends_on:
       elasticsearch-logs:

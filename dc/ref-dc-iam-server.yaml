@@ -1,6 +1,7 @@
 services:
   arlas-iam-server: # ARLAS IAM is the ARLAS Identity and Access Management service.
     image: ${ARLAS_IAM_SERVER_VERSION}
+    platform: linux/x86_64
     container_name: arlas-iam-server
     depends_on:
       db:

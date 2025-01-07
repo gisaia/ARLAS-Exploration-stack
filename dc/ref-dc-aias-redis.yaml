@@ -4,6 +4,7 @@ services:
       file: ref-dc-logger.yaml
       service: log-rotated
     image: ${ARLAS_VERSION_REDIS}
+    platform: linux/x86_64
     container_name: redis
     restart: always
     expose:
