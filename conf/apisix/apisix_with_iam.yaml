@@ -8,7 +8,7 @@ routes:
       redirect:
         uri: /builder/
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -24,7 +24,7 @@ routes:
       nodes:
         "arlas-builder:80": 1
       # response-rewrite:
-      #   headers: 
+      #   headers:
       #     set:
       #       # Fix CWE Id: 693
       #       Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -48,7 +48,7 @@ routes:
         uri: /hub/
         plugins:
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -64,7 +64,7 @@ routes:
       redirect:
         uri: /hub/
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -81,7 +81,7 @@ routes:
         "arlas-hub:80": 1
     plugins:
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -103,7 +103,7 @@ routes:
       redirect:
         uri: /iam/
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -120,7 +120,7 @@ routes:
         "arlas-wui-iam:80": 1
     plugins:
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -140,7 +140,7 @@ routes:
       redirect:
         uri: /wui/
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -154,10 +154,10 @@ routes:
     uri: /wui/*
     upstream:
       nodes:
-        "arlas-wui:80": 1
+        "arlas-wui:8080": 1
     plugins:
 #      response-rewrite:
-#        headers: 
+#        headers:
 #          set:
             # Fix CWE Id: 693
 #            Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src  https://api.maptiler.com 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -181,12 +181,12 @@ routes:
         "arlas-iam-server:9998": 1
     plugins:
       proxy-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 1021
             Access-Control-Allow-Origin: "https://${ARLAS_HOST}"
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -206,7 +206,7 @@ routes:
       proxy-rewrite:
         regex_uri: ["/arlas_iam_server/healthcheck", "/admin/healthcheck"]
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -226,7 +226,7 @@ routes:
       proxy-rewrite:
         regex_uri: ["/arlas_permissions_server/healthcheck", "/admin/healthcheck"]
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -243,7 +243,7 @@ routes:
         "arlas-permissions-server:9996": 1
     plugins:
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -263,7 +263,7 @@ routes:
       proxy-rewrite:
         regex_uri: ["/persist/healthcheck", "/admin/healthcheck"]
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -280,7 +280,7 @@ routes:
         "arlas-persistence-server:9997": 1
     plugins:
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -301,7 +301,7 @@ routes:
       proxy-rewrite:
         regex_uri: ["/arlas/healthcheck", "/admin/healthcheck"]
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
@@ -319,12 +319,12 @@ routes:
         "arlas-server:9999": 1
     plugins:
       proxy-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 1021
             Access-Control-Allow-Origin: "https://${ARLAS_HOST}"
       response-rewrite:
-        headers: 
+        headers:
           set:
             # Fix CWE Id: 693
             Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
