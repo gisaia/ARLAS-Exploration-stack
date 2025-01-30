@@ -10,6 +10,11 @@ The [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack)
 
 To run ARLAS stack, clone the [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack) project and follow the guidelines.
 
+```shell
+git clone git@github.com:gisaia/ARLAS-Exploration-stack.git
+cd ARLAS-Exploration-stack
+```
+
 ### Simple deployment
 
 The simple deployment has:
