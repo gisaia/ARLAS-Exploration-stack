@@ -52,7 +52,7 @@ services:
       - ARLAS_ENRICH_PROCESS_SETTINGS_URL=${ARLAS_ENRICH_PROCESS_SETTINGS_URL}
       - ARLAS_ENRICH_PROCESS_STATUS_URL=${ARLAS_ENRICH_PROCESS_STATUS_URL}
     expose:
-      - "80"
+      - "8080"
     networks:
       - arlas-net
     volumes:
