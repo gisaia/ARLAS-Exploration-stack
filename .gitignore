@@ -12,3 +12,8 @@ sample/dashboard.generated.json
 tmp/
 docker-compose.env
 target
+
+__pycache__/
+*.py[cod]
+*$py.class
+

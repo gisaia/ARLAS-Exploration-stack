@@ -4,9 +4,9 @@
             "contributors": [
                 {
                     "type": "map",
-                    "identifier": "courses",
-                    "name": "Map courses",
-                    "collection": "courses",
+                    "identifier": "$COLLECTION",
+                    "name": "Map $COLLECTION",
+                    "collection": "$COLLECTION",
                     "geo_query_op": "Intersects",
                     "geo_query_field": "track.location",
                     "icon": "check_box_outline_blank",
@@ -14,7 +14,7 @@
                         {
                             "id": "arlas_id:Tracks:1724158164373",
                             "name": "Tracks",
-                            "source": "cluster-departure.location-Finest-tile-centroid-courses",
+                            "source": "cluster-departure.location-Finest-tile-centroid-$COLLECTION",
                             "minzoom": 0,
                             "maxzoom": 23,
                             "include_fields": [],
@@ -38,7 +38,7 @@
                         {
                             "id": "arlas_id:Trails:1724158240395",
                             "name": "Trails",
-                            "source": "feature-track.trail-wide-courses",
+                            "source": "feature-track.trail-wide-$COLLECTION",
                             "minzoom": 0,
                             "maxzoom": 23,
                             "include_fields": [],
@@ -56,7 +56,7 @@
                 {
                     "type": "chipssearch",
                     "identifier": "chipssearch",
-                    "collection": "courses",
+                    "collection": "$COLLECTION",
                     "search_field": "internal.fulltext",
                     "name": "Search...",
                     "icon": "search",
@@ -66,7 +66,7 @@
                 {
                     "type": "histogram",
                     "identifier": "timeline",
-                    "collection": "courses",
+                    "collection": "$COLLECTION",
                     "name": "Timeline",
                     "icon": "watch_later",
                     "isOneDimension": false,
@@ -83,7 +83,7 @@
                 {
                     "type": "detailedhistogram",
                     "identifier": "detailedTimeline",
-                    "collection": "courses",
+                    "collection": "$COLLECTION",
                     "name": "Timeline",
                     "icon": "watch_later",
                     "isOneDimension": false,
@@ -100,10 +100,10 @@
                     "additionalCollections": []
                 },
                 {
-                    "identifier": "courses-object.mmsi-10-Count-desc-count",
+                    "identifier": "$COLLECTION-object.mmsi-10-Count-desc-count",
                     "name": "MMSI",
                     "title": "MMSI",
-                    "collection": "courses",
+                    "collection": "$COLLECTION",
                     "icon": "directions_boat_filled",
                     "type": "tree",
                     "jsonpath": "$.count",
@@ -120,10 +120,10 @@
                     "allowOperatorChange": true
                 },
                 {
-                    "identifier": "courses-object.ship_type-10-",
+                    "identifier": "$COLLECTION-object.ship_type-10-",
                     "name": "Type",
                     "title": "Type",
-                    "collection": "courses",
+                    "collection": "$COLLECTION",
                     "icon": "directions_boat_filled",
                     "type": "tree",
                     "aggregationmodels": [
@@ -230,7 +230,7 @@
                                 {
                                     "id": "arlas_id:Tracks:1724158164373",
                                     "type": "circle",
-                                    "source": "cluster-departure.location-Finest-tile-centroid-courses",
+                                    "source": "cluster-departure.location-Finest-tile-centroid-$COLLECTION",
                                     "minzoom": 0,
                                     "maxzoom": 23,
                                     "layout": {
@@ -337,8 +337,8 @@
                                         "circle-blur": 1
                                     },
                                     "metadata": {
-                                        "collection": "courses",
-                                        "collectionDisplayName": "courses",
+                                        "collection": "$COLLECTION",
+                                        "collectionDisplayName": "$COLLECTION",
                                         "hiddenProps": {
                                             "geomType": "circle-heatmap"
                                         }
@@ -353,7 +353,7 @@
                                 {
                                     "id": "arlas_id:Trails:1724158240395",
                                     "type": "line",
-                                    "source": "feature-track.trail-wide-courses",
+                                    "source": "feature-track.trail-wide-$COLLECTION",
                                     "minzoom": 0,
                                     "maxzoom": 23,
                                     "layout": {
@@ -367,8 +367,8 @@
                                         "line-width": 2
                                     },
                                     "metadata": {
-                                        "collection": "courses",
-                                        "collectionDisplayName": "courses",
+                                        "collection": "$COLLECTION",
+                                        "collectionDisplayName": "$COLLECTION",
                                         "isScrollableLayer": false
                                     },
                                     "filter": [
@@ -381,7 +381,7 @@
                                 {
                                     "id": "arlas-select-arlas_id:Trails:1724158240395",
                                     "type": "line",
-                                    "source": "feature-track.trail-wide-courses",
+                                    "source": "feature-track.trail-wide-$COLLECTION",
                                     "minzoom": 0,
                                     "maxzoom": 23,
                                     "layout": {
@@ -393,8 +393,8 @@
                                         "line-width": 14
                                     },
                                     "metadata": {
-                                        "collection": "courses",
-                                        "collectionDisplayName": "courses",
+                                        "collection": "$COLLECTION",
+                                        "collectionDisplayName": "$COLLECTION",
                                         "isScrollableLayer": false
                                     },
                                     "filter": [
@@ -407,7 +407,7 @@
                                 {
                                     "id": "arlas-hover-arlas_id:Trails:1724158240395",
                                     "type": "line",
-                                    "source": "feature-track.trail-wide-courses",
+                                    "source": "feature-track.trail-wide-$COLLECTION",
                                     "minzoom": 0,
                                     "maxzoom": 23,
                                     "layout": {
@@ -419,8 +419,8 @@
                                         "line-width": 14
                                     },
                                     "metadata": {
-                                        "collection": "courses",
-                                        "collectionDisplayName": "courses",
+                                        "collection": "$COLLECTION",
+                                        "collectionDisplayName": "$COLLECTION",
                                         "isScrollableLayer": false
                                     },
                                     "filter": [
@@ -532,7 +532,7 @@
                                 "unit": "",
                                 "chartWidth": 217
                             },
-                            "contributorId": "courses-object.mmsi-10-Count-desc-count",
+                            "contributorId": "$COLLECTION-object.mmsi-10-Count-desc-count",
                             "uuid": "b63abbdd-764d-4994-81a8-b9396efe9d73",
                             "usage": "analytics"
                         },
@@ -540,14 +540,14 @@
                             "componentType": "donut",
                             "showExportCsv": "",
                             "input": {
-                                "id": "courses-object.ship_type-10-",
+                                "id": "$COLLECTION-object.ship_type-10-",
                                 "customizedCssClass": "arlas-donuts-analytics",
                                 "diameter": 170,
                                 "containerWidth": 223,
                                 "multiselectable": true,
                                 "opacity": 0.4
                             },
-                            "contributorId": "courses-object.ship_type-10-",
+                            "contributorId": "$COLLECTION-object.ship_type-10-",
                             "uuid": "5d490a4d-a6d7-4431-abd1-9cbdf8f7472e",
                             "usage": "analytics"
                         }
@@ -627,7 +627,7 @@
             "url": "${ARLAS_SERVER_URL}/arlas",
             "max_age_cache": 120,
             "collection": {
-                "name": "courses"
+                "name": "$COLLECTION"
             }
         }
     },
@@ -643,8 +643,8 @@
                 "name": "ARLAS",
                 "units": [
                     {
-                        "collection": "courses",
-                        "unit": "courses",
+                        "collection": "$COLLECTION",
+                        "unit": "$COLLECTION",
                         "ignored": false
                     }
                 ]
