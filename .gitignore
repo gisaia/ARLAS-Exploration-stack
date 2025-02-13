@@ -9,7 +9,6 @@ conf/apisix/domains.generated.ext
 conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
 sample/dashboard.generated.json
-sample/dashboard.generated2.json
 tmp/
 docker-compose.env
 target
