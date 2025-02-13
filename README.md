@@ -19,3 +19,14 @@ To release, run:
 where `X.Y` is the version of the stack. `X` must be aligned with the major version ARLAS (WUI and Server) while `Y` is the increment of the stack.
 
 To update the version of the dependencies, such as ARLAS containers, edit `conf/versions.env`.
+
+## Tests
+
+Launch tests for IAM:
+
+```shell
+./start.sh iam
+pip3.10 install arlas_cli
+pip.3.10 install pytest==8.3.4
+pytest -s scripts/pytest/test_iam.py
+```

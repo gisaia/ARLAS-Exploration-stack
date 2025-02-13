@@ -1,20 +1,28 @@
 USER_ADMIN = "tech@gisaia.com"
 ORG_1 = "org1.com"
-USER_1_ORG_1 = "user1@" + ORG_1
-USER_2_ORG_1 = "user2@" + ORG_1
+OWNER_ORG_1 = "user1@" + ORG_1
+USER_ORG_1 = "user2@" + ORG_1
 
 ORG_2 = "org2.com"
-USER_1_ORG_2 = "user2@" + ORG_2
-USER_2_ORG_2 = "user2@" + ORG_2
+OWNER_ORG_2 = "user1@" + ORG_2
+USER_ORG_2 = "user2@" + ORG_2
 
-ORPHAN = "orphan@org.com"
-ORPHAN2 = "orphan2@org.com"
+ORPHAN = "orphan@org.com"    # Has no ORG
+ORPHAN2 = "orphan2@org.com"  # Has no ORG but fake to be in org 1 with org-filter
+ORPHAN3 = "orphan3@org.com"  # Has no ORG but fake to be in org 2 with org-filter
 
-COLLECTION1_ORG_1_PRIVATE = 
+ANONYMOUS = "anonymous"
+
+COLLECTION1_ORG_1_PRIVATE = "org1_collection_private"
+COLLECTION1_ORG_2_PRIVATE = "org2_collection_private"
+COLLECTION1_ORG_1_PUBLIC = "org1_collection_public"
 
 
-INDEX = "courses"
-USERS = [USER_1_ORG_1]
+INDEX_ORG1 = "org1.com@courses"
+INDEX_ORG2 = "org2.com@courses"
+INDICES = [INDEX_ORG1, INDEX_ORG2]
+
+USERS = [OWNER_ORG_1]
 ES_ENDPOINT = "http://localhost:9200"
 
 SQL_INIT = """
