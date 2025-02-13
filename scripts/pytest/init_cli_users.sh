@@ -43,7 +43,6 @@ register_user_in_cli(){
 
 ARLAS_HOST=localhost
 ARLAS_CLI_CONF_FILE=/tmp/arlas-cli-tests.yaml
-rm $ARLAS_CLI_CONF_FILE
 
 arlas_cli --config-file $ARLAS_CLI_CONF_FILE --version
 
