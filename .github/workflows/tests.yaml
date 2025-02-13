@@ -30,7 +30,7 @@ jobs:
     - name: Install arlas_cli
       run: pip3.10 install arlas_cli
     - name: Install pytest
-      run: pip.3.10 install pytest==8.3.4
+      run: pip3.10 install pytest==8.3.4
     - name: Launch tests
       run: pytest -s scripts/pytest/test_iam.py
     - name: Stop stack
