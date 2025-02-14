@@ -53,12 +53,13 @@ register_user_in_cli user2@org1.com secret org1.com
 
 register_user_in_cli user1@org2.com secret org2.com
 register_user_in_cli user2@org2.com secret org2.com
+register_user_in_cli user3@org2.com secret
 
-register_user_in_cli orphan@org.com secret ""
+register_user_in_cli orphan@org.com secret
 register_user_in_cli orphan2@org.com secret org1.com
 register_user_in_cli orphan3@org.com secret org2.com
 
-
+# register anonymous
 arlas_cli --config-file ${ARLAS_CLI_CONF_FILE} confs create anonymous \
     --server https://${ARLAS_HOST}/arlas \
     --headers "Content-Type:application/json" \
@@ -69,3 +70,37 @@ arlas_cli --config-file ${ARLAS_CLI_CONF_FILE} confs create anonymous \
     --allow-delete  \
     --auth-headers "Content-Type:application/json" \
     --no-auth-arlas-iam
+
+
+# register orphan facking arlas-organization
+arlas_cli --config-file ${ARLAS_CLI_CONF_FILE} confs create orphan4@org.com \
+    --server https://${ARLAS_HOST}/arlas \
+    --headers "Content-Type:application/json" \
+    --persistence https://${ARLAS_HOST}/persist \
+    --persistence-headers "Content-Type:application/json" \
+    --elastic http://localhost:9200 \
+    --elastic-headers "Content-Type:application/json" \
+    --allow-delete  \
+    --auth-token-url https://${ARLAS_HOST}/arlas_iam_server/session \
+    --auth-headers "Content-Type:application/json" \
+    --auth-headers "arlas-organization:org1" \
+    --auth-login orphan3@org.com \
+    --auth-password secret \
+    --auth-arlas-iam 
+
+# register orphan facking arlas-organization and org-filter
+arlas_cli --config-file ${ARLAS_CLI_CONF_FILE} confs create orphan5@org.com \
+    --server https://${ARLAS_HOST}/arlas \
+    --headers "Content-Type:application/json" \
+    --persistence https://${ARLAS_HOST}/persist \
+    --persistence-headers "Content-Type:application/json" \
+    --elastic http://localhost:9200 \
+    --elastic-headers "Content-Type:application/json" \
+    --allow-delete  \
+    --auth-token-url https://${ARLAS_HOST}/arlas_iam_server/session \
+    --auth-headers "Content-Type:application/json" \
+    --auth-headers "arlas-organization:org1" \
+    --auth-login orphan5@org.com \
+    --auth-org org1.com \
+    --auth-password secret \
+    --auth-arlas-iam 

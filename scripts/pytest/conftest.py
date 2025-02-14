@@ -3,7 +3,7 @@ import pytest
 from arlas.cli.settings import Configuration
 from arlas.cli.service import Service
 from helper import create_collection, create_user, get_groups_and_roles
-from variables import COLLECTION1_ORG_1_PRIVATE, COLLECTION1_ORG_1_PUBLIC, COLLECTION1_ORG_2_PRIVATE, INDEX_ORG1, INDEX_ORG2, INDICES, ORG_1, ORG_2, ORPHAN, ORPHAN2, ORPHAN3, SQL_INIT, OWNER_ORG_2, USER_ORG_1, USER_ADMIN, OWNER_ORG_1, USER_ORG_2
+from variables import COLLECTION1_ORG_1_PRIVATE, COLLECTION1_ORG_1_PUBLIC, COLLECTION1_ORG_2_PRIVATE, INDEX_ORG1, INDEX_ORG2, INDICES, ORG_1, ORG_2, ORPHAN, ORPHAN_ORG_FILTER_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG1, ORPHAN_ORG_FILTER_ORG1_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG2, SQL_INIT, OWNER_ORG_2, USER_ORG_1, USER_ADMIN, OWNER_ORG_1, USER_ORG_2, USER_ORG_2_NO_ORG_FILTER
 from arlas.cli.index import make_mapping
 
 
@@ -42,7 +42,7 @@ def fixture_org1_owner():
 def fixture_org1_owner_and_user(fixture_org1_owner):
     oid, email1, groups = fixture_org1_owner
     email2 = create_user(OWNER_ORG_1, USER_ORG_1)
-    print(Service.add_user_in_organisation(OWNER_ORG_1, oid, USER_ORG_1, [groups.get("role/arlas/user"), groups.get("group/config.json/" + ORG_1)]))
+    Service.add_user_in_organisation(OWNER_ORG_1, oid, USER_ORG_1, [groups.get("role/arlas/user"), groups.get("group/config.json/" + ORG_1)])
     return oid, email1, email2, groups
 
 
@@ -56,19 +56,23 @@ def fixture_org2_owner():
 
 
 @pytest.fixture(scope="function")
-def fixture_org2_owner_and_user(fixture_org2_owner):
+def fixture_org2_owner_and_users(fixture_org2_owner):
     oid, email1, groups = fixture_org2_owner
     email2 = create_user(OWNER_ORG_2, USER_ORG_2)
     Service.add_user_in_organisation(OWNER_ORG_2, oid, USER_ORG_2, [groups.get("role/arlas/user"), groups.get("group/config.json/" + ORG_2)])
-    return oid, email1, email2, groups
+    email3 = create_user(OWNER_ORG_2, USER_ORG_2_NO_ORG_FILTER)
+    Service.add_user_in_organisation(OWNER_ORG_2, oid, USER_ORG_2_NO_ORG_FILTER, [groups.get("role/arlas/user"), groups.get("group/config.json/" + ORG_2)])
+    return oid, email1, email2, email3, groups
 
 
 @pytest.fixture(scope="function")
 def fixture_orphans():
     email1, id1 = create_user(USER_ADMIN, ORPHAN)
-    email2, id1 = create_user(USER_ADMIN, ORPHAN2)
-    email3, id1 = create_user(USER_ADMIN, ORPHAN3)
-    return email1, email2, email3
+    email2, id1 = create_user(USER_ADMIN, ORPHAN_ORG_FILTER_ORG1)
+    email3, id1 = create_user(USER_ADMIN, ORPHAN_ORG_FILTER_ORG2)
+    email4, id1 = create_user(USER_ADMIN, ORPHAN_ORG_FILTER_ARLAS_ORG1)
+    email5, id1 = create_user(USER_ADMIN, ORPHAN_ORG_FILTER_ORG1_ARLAS_ORG1)
+    return email1, email2, email3, email4, email5
 
 
 @pytest.fixture(scope="function")
