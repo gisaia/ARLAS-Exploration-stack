@@ -201,7 +201,6 @@ def test_users_can_see_collection(run_as, collection, cli_confs, fixture_init, f
     assert see_collection(run_as, collection) is True
 
 
-@pytest.mark.skip(reason="IAM service fails for now")
 @pytest.mark.parametrize("run_as", CAN_NOT_SEE_FOREIGN_PRIVE_COLLECTIONS)
 def test_foreigners_do_not_see_private_collection_iam(run_as, cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans, fixture_collections):
     """Test: as foreign user, I can not see the collections of other orgs - IAM"""
@@ -209,7 +208,6 @@ def test_foreigners_do_not_see_private_collection_iam(run_as, cli_confs, fixture
     assert see_collection_iam(run_as, oid, COLLECTION1_ORG_1_PRIVATE) is False
 
 
-@pytest.mark.skip(reason="IAM service fails for now")
 @pytest.mark.parametrize("run_as, collection", CAN_SEE_COLLECTIONS)
 def test_users_can_see_collection_iam(run_as, collection, cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans, fixture_collections):
     """Test: as a user, I can see the collections of my org and public collections of other orgs - IAM"""
