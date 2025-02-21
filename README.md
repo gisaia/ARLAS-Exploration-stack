@@ -27,6 +27,7 @@ Launch tests for IAM:
 ```shell
 ./start.sh iam
 pip3.10 install arlas_cli
-pip.3.10 install pytest==8.3.4
+pip3.10 install pytest==8.3.4
+
 pytest -s scripts/pytest/test_iam.py
 ```
