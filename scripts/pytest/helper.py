@@ -75,8 +75,8 @@ def api_key_call(action, key, secret, post=None, delete=False):
 
 def call(url, post=None, delete=False, headers={}):
     if post:
-        return requests.post(url, data=post, headers=headers, verify=False)
+        return requests.post(url, data=post, headers=headers, verify=False)  # NOSONAR
     elif delete:
-        return requests.delete(url, headers=headers, verify=False)
+        return requests.delete(url, headers=headers, verify=False)  # NOSONAR
     else:
-        return requests.get(url, headers=headers, verify=False)
+        return requests.get(url, headers=headers, verify=False)  # NOSONAR

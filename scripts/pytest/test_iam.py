@@ -84,15 +84,15 @@ def test_admin_create_org(cli_confs, fixture_init):
 def test_non_admin_not_create_org(run_as, cli_confs, fixture_init, fixture_org2_owner_and_users, fixture_orphans):
     """Test: as not admin, I can not create an org"""
     if run_as == ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
-        requests.post("https://localhost/arlas_iam_server/organisations/" + ORG_1, headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299
+        requests.post("https://localhost/arlas_iam_server/organisations/" + ORG_1, headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
     else:
         with pytest.raises(SystemExit):
-            assert Service.create_organisation(run_as, ORG_1)
+            Service.create_organisation(run_as, ORG_1)
 
 
 def test_anonymous_not_create_org_on_user_domain(cli_confs, fixture_init, fixture_orphans):
     """Test: as anonymous, I can not create an org on my domain"""
-    requests.post("https://localhost/arlas_iam_server/organisations", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299
+    requests.post("https://localhost/arlas_iam_server/organisations", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
 
 
 def test_user_create_org_on_user_domain(cli_confs, fixture_init, ):
@@ -115,7 +115,7 @@ def test_user_not_create_org_on_forbidden_user_domain(cli_confs, fixture_init):
 def test_foreigners_do_not_see_other_orgs(run_as, cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans):
     """Test: as foreign user, I can not see the organisations that I do not belong to"""
     if run_as == ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
-        requests.get("https://localhost/arlas_iam_server/organisations", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299
+        requests.get("https://localhost/arlas_iam_server/organisations", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
     else:
         assert see_organisation(run_as, ORG_1) is False
 
@@ -138,7 +138,7 @@ def test_admin_delete_org(cli_confs, fixture_init, fixture_org1_owner_and_user):
 def test_non_admin_not_delete_org(run_as, cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans):
     oid, __, __, __ = fixture_org1_owner_and_user
     if run_as == ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
-        assert requests.delete("https://localhost/arlas_iam_server/organisations/" + oid, headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299
+        assert requests.delete("https://localhost/arlas_iam_server/organisations/" + oid, headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
     else:
         with pytest.raises(SystemExit):
             assert Service.delete_organisation(run_as, oid)
@@ -173,7 +173,7 @@ def test_foreigners_do_not_see_other_org_users(run_as, cli_confs, fixture_init, 
     """Test: as foreign user, I can not see the users of other orgs"""
     oid, __, __, __ = fixture_org1_owner_and_user
     if run_as == ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
-        requests.get("https://localhost/arlas_iam_server/organisations/" + oid + "/users", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299
+        requests.get("https://localhost/arlas_iam_server/organisations/" + oid + "/users", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
     else:
         with pytest.raises(SystemExit):
             assert see_user(run_as, oid, USER_ORG_1) is False

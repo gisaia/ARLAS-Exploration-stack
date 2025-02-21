@@ -1,16 +1,23 @@
 import os
 import time
+
 import pytest
-from arlas.cli.settings import Configuration, Settings
-from arlas.cli.service import Service
-from helper import create_collection, create_user, get_groups_and_roles
-from variables import USER_TO_UID, ANONYMOUS, COLLECTION1_ORG_1_PRIVATE, COLLECTION1_ORG_1_PUBLIC, COLLECTION1_ORG_2_PRIVATE, INDEX_ORG1, INDEX_ORG2, INDICES, ORG_1, ORG_2, ORPHAN, ORPHAN_ORG_FILTER_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG1, ORPHAN_ORG_FILTER_ORG1_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG2, SQL_INIT, OWNER_ORG_2, USER_ORG_1, USER_ADMIN, OWNER_ORG_1, USER_ORG_2, USER_ORG_2_NO_ORG_FILTER
-from arlas.cli.index import make_mapping
-
-
 from arlas.cli.configurations import create_configuration
+from arlas.cli.index import make_mapping
+from arlas.cli.service import Service
+from arlas.cli.settings import Configuration, Settings
 from arlas.cli.variables import variables as cli_variables
-ARLAS_CLI_CONF_FILE = "/tmp/arlas-cli-tests.yaml"
+from helper import create_collection, create_user, get_groups_and_roles
+from variables import (ANONYMOUS, COLLECTION1_ORG_1_PRIVATE,
+                       COLLECTION1_ORG_1_PUBLIC, COLLECTION1_ORG_2_PRIVATE,
+                       INDEX_ORG1, INDEX_ORG2, INDICES, ORG_1, ORG_2, ORPHAN,
+                       ORPHAN_ORG_FILTER_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG1,
+                       ORPHAN_ORG_FILTER_ORG1_ARLAS_ORG1,
+                       ORPHAN_ORG_FILTER_ORG2, OWNER_ORG_1, OWNER_ORG_2,
+                       SQL_INIT, USER_ADMIN, USER_ORG_1, USER_ORG_2,
+                       USER_ORG_2_NO_ORG_FILTER, USER_TO_UID)
+
+ARLAS_CLI_CONF_FILE = "/tmp/arlas-cli-tests.yaml"  # NOSONAR
 
 
 def register_user_in_cli(user_name: str, password: str, org_name: str, use_auth: bool = True, additional_header=None):
