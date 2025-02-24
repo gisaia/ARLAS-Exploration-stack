@@ -84,7 +84,7 @@ def test_admin_create_org(fixture_cli_confs, fixture_init):
 def test_non_admin_not_create_org(run_as, fixture_cli_confs, fixture_init, fixture_org2_owner_and_users, fixture_orphans):
     """Test: as not admin, I can not create an org"""
     if run_as == ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
-        requests.post("https://localhost/arlas_iam_server/organisations/" + ORG_1, headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
+        anonymous_iam_call("organisations/" + ORG_1, post={}).status_code > 299
     else:
         with pytest.raises(SystemExit):
             Service.create_organisation(run_as, ORG_1)
