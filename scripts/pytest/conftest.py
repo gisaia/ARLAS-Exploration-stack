@@ -170,6 +170,8 @@ def fixture_collections():
     create_collection(OWNER_ORG_1, ORG_1, COLLECTION1_ORG_1_PRIVATE, INDEX_ORG1, False)
     create_collection(OWNER_ORG_1, ORG_1, COLLECTION1_ORG_1_PUBLIC, INDEX_ORG1, True)
     create_collection(OWNER_ORG_2, ORG_2, COLLECTION1_ORG_2_PRIVATE, INDEX_ORG2, False)
+    time.sleep(1)
     Service.describe_collection(OWNER_ORG_1, COLLECTION1_ORG_1_PRIVATE)
     Service.describe_collection(OWNER_ORG_1, COLLECTION1_ORG_1_PUBLIC)
     Service.describe_collection(OWNER_ORG_2, COLLECTION1_ORG_2_PRIVATE)
+    time.sleep(1)
