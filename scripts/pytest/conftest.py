@@ -58,7 +58,7 @@ def register_user_in_cli(user_name: str, password: str, org_name: str, use_auth:
 
 
 @pytest.fixture(scope="class")
-def cli_confs():
+def fixture_cli_confs():
     cli_variables["configuration_file"] = ARLAS_CLI_CONF_FILE
     if os.path.exists(ARLAS_CLI_CONF_FILE):
         os.remove(ARLAS_CLI_CONF_FILE)

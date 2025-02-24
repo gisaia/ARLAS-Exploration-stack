@@ -22,7 +22,7 @@ services:
       - ARLAS_IAM_PORT="${ARLAS_IAM_PORT:-9998}"
       - ARLAS_IAM_VERIFY_EMAIL="${ARLAS_IAM_VERIFY_EMAIL}"
       - ARLAS_REFRESH_TOKEN_TTL=600000
-      - ARLAS_SERVER_URL="http://arlas-server:9999/arlas/"
+      - ARLAS_SERVER_URL="http://arlas-server:9999/arlas"
       - ARLAS_SMTP_ACTIVATED="${ARLAS_SMTP_ACTIVATED}"
       - ARLAS_SMTP_FROM="${ARLAS_SMTP_FROM}"
       - ARLAS_SMTP_HOST="${ARLAS_SMTP_HOST}"

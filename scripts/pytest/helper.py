@@ -33,9 +33,7 @@ def see_user(user: str, oid: str, target: str):
 
 
 def see_collection_iam(user: str, oid: str, collection: str):
-    print(Service.list_organisation_collections(user, oid))
-    collections = list(map(lambda arr: arr[0], Service.list_organisation_collections(user, oid)))
-    return collection in collections
+    return collection in Service.list_organisation_collections(user, oid)
 
 
 def see_organisation(user: str, org: str):
