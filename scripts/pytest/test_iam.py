@@ -1,13 +1,21 @@
 import json
 import time
-import pytest
-from arlas.cli.service import Service
-import requests
-from conftest import USER_ADMIN
-from helper import anonymous_iam_call, api_key_call, create_collection, create_user, get_groups_and_roles, get_groups_and_roles_ids, see_collection, see_collection_iam, see_organisation, see_user
-from variables import ANONYMOUS, COLLECTION1_ORG_1_PRIVATE, COLLECTION1_ORG_1_PUBLIC, COLLECTION1_ORG_2_PRIVATE, INDEX_ORG1, INDEX_ORG2, ORG_1, ORPHAN, ORPHAN_ORG_FILTER_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG1, ORPHAN_ORG_FILTER_ORG1_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG2, OWNER_ORG_1, OWNER_ORG_2, PERMISSION, USER_ORG_1, USER_ORG_2_NO_ORG_FILTER, USER_ORG_2, USER_TO_UID
-from arlas.cli.settings import Configuration, Settings
 
+import pytest
+import requests
+from arlas.cli.service import Service
+from conftest import USER_ADMIN
+from helper import (anonymous_iam_call, api_key_call, create_collection,
+                    create_user, get_groups_and_roles_ids, see_collection,
+                    see_collection_iam, see_organisation, see_user)
+from variables import (ANONYMOUS, COLLECTION1_ORG_1_PRIVATE,
+                       COLLECTION1_ORG_1_PUBLIC, COLLECTION1_ORG_2_PRIVATE,
+                       INDEX_ORG1, INDEX_ORG2, ORG_1, ORPHAN,
+                       ORPHAN_ORG_FILTER_ARLAS_ORG1, ORPHAN_ORG_FILTER_ORG1,
+                       ORPHAN_ORG_FILTER_ORG1_ARLAS_ORG1,
+                       ORPHAN_ORG_FILTER_ORG2, OWNER_ORG_1, OWNER_ORG_2,
+                       PERMISSION, USER_ORG_1, USER_ORG_2,
+                       USER_ORG_2_NO_ORG_FILTER, USER_TO_UID)
 
 # LIST OF SERVICES NOT YET TESTED
 # GET /auth
