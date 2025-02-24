@@ -31,8 +31,6 @@ jobs:
       run: pip3.10 install arlas_cli
     - name: Install pytest
       run: pip3.10 install pytest==8.3.4
-    - name: Create user for arlas cli
-      run: ./scripts/pytest/init_cli_users.sh
     - name: Launch tests
       run: pytest -s scripts/pytest/test_iam.py
     - name: Stop stack
