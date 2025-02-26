@@ -19,7 +19,8 @@ from variables import (ANONYMOUS, COLLECTION1_ORG_1_PRIVATE,
 
 ARLAS_CLI_CONF_FILE = "/tmp/arlas-cli-tests.yaml"  # NOSONAR
 CONTENT_TYPE = "Content-Type:application/json"
-ORG_GROUP_PREFIX = "group/config.json/
+ORG_GROUP_PREFIX = "group/config.json/"
+
 
 def register_user_in_cli(user_name: str, password: str, org_name: str = "", use_auth: bool = True, additional_header=None):
     if use_auth:
