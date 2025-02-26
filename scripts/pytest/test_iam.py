@@ -92,7 +92,7 @@ def test_admin_create_org(fixture_cli_confs, fixture_init):
 def test_non_admin_not_create_org(run_as, fixture_cli_confs, fixture_init, fixture_org2_owner_and_users, fixture_orphans):
     """Test: as not admin, I can not create an org"""
     if run_as == ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
-        anonymous_iam_call("organisations/" + ORG_1, post={}).status_code > 299
+        assert anonymous_iam_call("organisations/" + ORG_1, post={}).status_code > 299
     else:
         with pytest.raises(SystemExit):
             Service.create_organisation(run_as, ORG_1)
@@ -100,17 +100,17 @@ def test_non_admin_not_create_org(run_as, fixture_cli_confs, fixture_init, fixtu
 
 def test_anonymous_not_create_org_on_user_domain(fixture_cli_confs, fixture_init, fixture_orphans):
     """Test: as anonymous, I can not create an org on my domain"""
-    anonymous_iam_call("organisations", post={}).status_code > 299
+    assert anonymous_iam_call("organisations", post={}).status_code > 299
 
 
 def test_user_create_org_on_user_domain(fixture_cli_confs, fixture_init, ):
-    email, id = create_user(USER_ADMIN, USER_ORG_1)
+    create_user(USER_ADMIN, USER_ORG_1)
     """Test: as user, I can create an org on my domain"""
     assert Service.create_organisation_from_user_domain(USER_ORG_1)
 
 
 def test_user_not_create_org_on_forbidden_user_domain(fixture_cli_confs, fixture_init):
-    email, id = create_user(USER_ADMIN, USER_ORG_1)
+    create_user(USER_ADMIN, USER_ORG_1)
     """Test: as user, I can not create an org on my domain if forbidden"""
     assert Service.forbid_organisation(USER_ADMIN, ORG_1).get("name") == ORG_1
     with pytest.raises(SystemExit):
@@ -149,19 +149,19 @@ def test_non_admin_not_delete_org(run_as, fixture_cli_confs, fixture_init, fixtu
         assert requests.delete("https://localhost/arlas_iam_server/organisations/" + oid, headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
     else:
         with pytest.raises(SystemExit):
-            assert Service.delete_organisation(run_as, oid)
+            Service.delete_organisation(run_as, oid)
 
 
 # Test add users
 def test_add_user_to_org_as_admin(fixture_cli_confs, fixture_init, fixture_org1_owner):
     """as admin, I can add a user in org"""
-    oid, email, groups = fixture_org1_owner
+    oid, __, __ = fixture_org1_owner
     assert OWNER_ORG_1 in list(map(lambda arr: arr[1], Service.list_organisation_users(USER_ADMIN, oid)))
 
 
 def test_add_user_to_org_as_owner(fixture_cli_confs, fixture_init, fixture_org1_owner):
     """as an org owner, I can add a user in my org"""
-    oid, email, groups = fixture_org1_owner
+    oid, __, __ = fixture_org1_owner
     Service.add_user_in_organisation(OWNER_ORG_1, oid, USER_ORG_1, [])
     assert USER_ORG_1 in list(map(lambda arr: arr[1], Service.list_organisation_users(USER_ADMIN, oid)))
 
@@ -184,7 +184,7 @@ def test_foreigners_do_not_see_other_org_users(run_as, fixture_cli_confs, fixtur
         requests.get("https://localhost/arlas_iam_server/organisations/" + oid + "/users", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
     else:
         with pytest.raises(SystemExit):
-            assert see_user(run_as, oid, USER_ORG_1) is False
+            see_user(run_as, oid, USER_ORG_1)
 
 
 def test_users_can_see_user_from_org(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans, fixture_collections):
@@ -212,7 +212,7 @@ def test_users_can_see_collection(run_as, collection, fixture_cli_confs, fixture
 @pytest.mark.parametrize("run_as", CAN_NOT_SEE_FOREIGN_PRIVE_COLLECTIONS)
 def test_foreigners_do_not_see_private_collection_iam(run_as, fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans, fixture_collections):
     """Test: as foreign user, I can not see the collections of other orgs - IAM"""
-    oid, email1, email2, groups = fixture_org1_owner_and_user
+    oid, __, __, __ = fixture_org1_owner_and_user
     if run_as == ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
         assert requests.delete("https://localhost/arlas_iam_server/organisations/" + oid + "/collections", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
     else:
@@ -397,14 +397,14 @@ def test_can_not_delete_association(run_as, fixture_cli_confs, fixture_init, fix
 # PERMISSION VISIBILITY
 def test_can_see_all_hits(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_collections):
     """Test: as user with full visibility, I see all collection hits"""
-    oid, __, __, __ = fixture_org1_owner_and_user
+    __, __, __, __ = fixture_org1_owner_and_user
     count = Service.count_collection(USER_ORG_1, COLLECTION1_ORG_1_PRIVATE)[1]
     assert count == ['org1_collection_private', 69]
 
 
 def test_can_see_one_hit_with_permission(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_collections):
     """Test: as user with full visibility, I see all collection hits"""
-    oid, email1, email2, groups = fixture_org1_owner_and_user
+    oid, __, __, groups = fixture_org1_owner_and_user
     Service.remove_user_from_organisation_group(OWNER_ORG_1, oid, USER_TO_UID[USER_ORG_1], groups.get("group/config.json/" + ORG_1))
     permission_id = Service.add_permission_in_organisation(OWNER_ORG_1, oid, PERMISSION, "nakskov").get("id")
     group_id = Service.add_group_in_organisation(OWNER_ORG_1, oid, "nakskov", "Around nakskov").get("id")
@@ -418,7 +418,7 @@ def test_can_see_one_hit_with_permission(fixture_cli_confs, fixture_init, fixtur
 
 @pytest.mark.parametrize("run_as", CAN_NOT_CREATE_DELETE_OR_UPDATE)
 def test_can_not_create_apikey(run_as, fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans):
-    oid, email1, email2, groups = fixture_org1_owner_and_user
+    oid, __, __, groups = fixture_org1_owner_and_user
     if run_as != ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
         with pytest.raises(SystemExit):
             Service.create_api_key(run_as, oid, "API key for " + run_as, 1, USER_TO_UID[OWNER_ORG_1], get_groups_and_roles_ids(oid))
@@ -427,7 +427,7 @@ def test_can_not_create_apikey(run_as, fixture_cli_confs, fixture_init, fixture_
 
 
 def test_can_not_create_apikey_for_other_org_users(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans):
-    oid, email1, email2, groups = fixture_org1_owner_and_user
+    oid, __, __, __ = fixture_org1_owner_and_user
     oid2, __, __, __, __ = fixture_org2_owner_and_users
     with pytest.raises(SystemExit):
         Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_2, 1, USER_TO_UID[OWNER_ORG_2], get_groups_and_roles_ids(oid2))
@@ -436,38 +436,38 @@ def test_can_not_create_apikey_for_other_org_users(fixture_cli_confs, fixture_in
 
 
 def test_can_create_apikey_as_owner_and_admin(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans):
-    oid, email1, email2, groups = fixture_org1_owner_and_user
+    oid, __, __, __ = fixture_org1_owner_and_user
     Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_1, 1, USER_TO_UID[OWNER_ORG_1], get_groups_and_roles_ids(oid))
     Service.create_api_key(USER_ADMIN, oid, "API key for " + USER_ORG_1, 1, USER_TO_UID[USER_ORG_1], get_groups_and_roles_ids(oid))
 
 
 def test_can_delete_apikey_as_owner(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans):
-    oid, email1, email2, groups = fixture_org1_owner_and_user
-    id = Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_1, 1, USER_TO_UID[OWNER_ORG_1], get_groups_and_roles_ids(oid)).get("id")
-    Service.delete_api_key(OWNER_ORG_1, oid, USER_TO_UID[OWNER_ORG_1], id)
+    oid, __, __, __ = fixture_org1_owner_and_user
+    kid = Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_1, 1, USER_TO_UID[OWNER_ORG_1], get_groups_and_roles_ids(oid)).get("id")
+    Service.delete_api_key(OWNER_ORG_1, oid, USER_TO_UID[OWNER_ORG_1], kid)
 
 
 @pytest.mark.parametrize("run_as", CAN_NOT_CREATE_DELETE_OR_UPDATE)
 def test_can_not_delete_apikey(run_as, fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_orphans):
-    oid, email1, email2, groups = fixture_org1_owner_and_user
-    id = Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_1, 1, USER_TO_UID[OWNER_ORG_1], get_groups_and_roles_ids(oid)).get("id")
+    oid, __, __, __ = fixture_org1_owner_and_user
+    kid = Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_1, 1, USER_TO_UID[OWNER_ORG_1], get_groups_and_roles_ids(oid)).get("id")
     if run_as != ANONYMOUS:  # arlas_cli does not handle calls to iam without identity
         with pytest.raises(SystemExit):
-            Service.delete_api_key(run_as, oid, USER_TO_UID[OWNER_ORG_1], id)
+            Service.delete_api_key(run_as, oid, USER_TO_UID[OWNER_ORG_1], kid)
     else:
         assert anonymous_iam_call("/".join(["organisations", oid, "users", USER_TO_UID[OWNER_ORG_1], "apikeys", id]), delete=True).status_code == 401
 
 
 def test_apikey_works_no_group(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_collections):
     time.sleep(2)
-    oid, email1, email2, groups = fixture_org1_owner_and_user
+    oid, __, __, __ = fixture_org1_owner_and_user
     key = Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_1 + " no groups", 1, USER_TO_UID[OWNER_ORG_1], [])
     collections = api_key_call("/explore/_list", key.get("keyId"), key.get("keySecret")).json()
     assert set(map(lambda c: c.get("collection_name"), collections)) == {COLLECTION1_ORG_1_PUBLIC}
 
 
 def test_apikey_works_with_groups(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_collections):
-    oid, email1, email2, groups = fixture_org1_owner_and_user
+    oid, __, __, __ = fixture_org1_owner_and_user
     print(get_groups_and_roles_ids(oid))
     key = Service.create_api_key(OWNER_ORG_1, oid, "API key for " + OWNER_ORG_1 + " with groups", 1, USER_TO_UID[OWNER_ORG_1], get_groups_and_roles_ids(oid))
     collections = api_key_call("/explore/_list", key.get("keyId"), key.get("keySecret")).json()

@@ -18,12 +18,13 @@ from variables import (ANONYMOUS, COLLECTION1_ORG_1_PRIVATE,
                        USER_ORG_2_NO_ORG_FILTER, USER_TO_UID)
 
 ARLAS_CLI_CONF_FILE = "/tmp/arlas-cli-tests.yaml"  # NOSONAR
+CONTENT_TYPE = "Content-Type:application/json"
+ORG_GROUP_PREFIX = "group/config.json/
 
-
-def register_user_in_cli(user_name: str, password: str, org_name: str, use_auth: bool = True, additional_header=None):
+def register_user_in_cli(user_name: str, password: str, org_name: str = "", use_auth: bool = True, additional_header=None):
     if use_auth:
         auth_token_url = "https://localhost/arlas_iam_server/session"
-        auth_headers = ["Content-Type:application/json"]
+        auth_headers = [CONTENT_TYPE]
         if additional_header:
             auth_headers.append(additional_header)
         auth_login = user_name
@@ -37,11 +38,11 @@ def register_user_in_cli(user_name: str, password: str, org_name: str, use_auth:
     create_configuration(
         name=user_name,
         server="https://localhost/arlas",
-        headers=["Content-Type:application/json"],
+        headers=[CONTENT_TYPE],
         persistence="https://localhost/persist",
-        persistence_headers=["Content-Type:application/json"],
+        persistence_headers=[CONTENT_TYPE],
         elastic="http://localhost:9200",
-        elastic_headers=["Content-Type:application/json"],
+        elastic_headers=[CONTENT_TYPE],
         allow_delete=True,
         auth_token_url=auth_token_url,
         auth_headers=auth_headers,
@@ -66,23 +67,23 @@ def fixture_cli_confs():
 
     Configuration.save(cli_variables["configuration_file"])
 
-    register_user_in_cli(USER_ADMIN, "admin", None)
+    register_user_in_cli(USER_ADMIN, "admin")
 
-    register_user_in_cli(OWNER_ORG_1, "secret", "org1.com")
-    register_user_in_cli(USER_ORG_1, "secret", "org1.com")
+    register_user_in_cli(OWNER_ORG_1, "secret", ORG_1)
+    register_user_in_cli(USER_ORG_1, "secret", ORG_1)
 
-    register_user_in_cli(OWNER_ORG_2, "secret", "org2.com")
-    register_user_in_cli(USER_ORG_2, "secret", "org2.com")
-    register_user_in_cli(USER_ORG_2_NO_ORG_FILTER, "secret", None)
+    register_user_in_cli(OWNER_ORG_2, "secret", ORG_2)
+    register_user_in_cli(USER_ORG_2, "secret", ORG_2)
+    register_user_in_cli(USER_ORG_2_NO_ORG_FILTER, "secret")
 
-    register_user_in_cli(ORPHAN, "secret", None)
-    register_user_in_cli(ORPHAN_ORG_FILTER_ORG1, "secret", "org1.com")
-    register_user_in_cli(ORPHAN_ORG_FILTER_ORG2, "secret", "org2.com")
+    register_user_in_cli(ORPHAN, "secret")
+    register_user_in_cli(ORPHAN_ORG_FILTER_ORG1, "secret", ORG_1)
+    register_user_in_cli(ORPHAN_ORG_FILTER_ORG2, "secret", ORG_2)
 
-    register_user_in_cli(ORPHAN_ORG_FILTER_ARLAS_ORG1, "secret", None, additional_header="arlas-organization:org1")
+    register_user_in_cli(ORPHAN_ORG_FILTER_ARLAS_ORG1, "secret", "", additional_header="arlas-organization:org1")
     register_user_in_cli(ORPHAN_ORG_FILTER_ORG1_ARLAS_ORG1, "secret", "org1.com", additional_header="arlas-organization:org1")
 
-    register_user_in_cli(ANONYMOUS, None, None, use_auth=False)
+    register_user_in_cli(ANONYMOUS, "", "", use_auth=False)
 
 
 @pytest.fixture(scope="function")
@@ -124,7 +125,7 @@ def fixture_org1_owner_and_user(fixture_org1_owner):
     oid, email1, groups = fixture_org1_owner
     email2, id2 = create_user(OWNER_ORG_1, USER_ORG_1)
     USER_TO_UID[email2] = id2
-    Service.add_user_in_organisation(OWNER_ORG_1, oid, USER_ORG_1, [groups.get("role/arlas/user"), groups.get("group/config.json/" + ORG_1)])
+    Service.add_user_in_organisation(OWNER_ORG_1, oid, USER_ORG_1, [groups.get("role/arlas/user"), groups.get(ORG_GROUP_PREFIX + ORG_1)])
     return oid, email1, email2, groups
 
 
@@ -142,11 +143,11 @@ def fixture_org2_owner():
 def fixture_org2_owner_and_users(fixture_org2_owner):
     oid, email1, groups = fixture_org2_owner
     email2, id2 = create_user(OWNER_ORG_2, USER_ORG_2)
-    Service.add_user_in_organisation(OWNER_ORG_2, oid, USER_ORG_2, [groups.get("role/arlas/user"), groups.get("group/config.json/" + ORG_2)])
+    Service.add_user_in_organisation(OWNER_ORG_2, oid, USER_ORG_2, [groups.get("role/arlas/user"), groups.get(ORG_GROUP_PREFIX + ORG_2)])
     email3, id3 = create_user(OWNER_ORG_2, USER_ORG_2_NO_ORG_FILTER)
     USER_TO_UID[email2] = id2
     USER_TO_UID[email3] = id3
-    Service.add_user_in_organisation(OWNER_ORG_2, oid, USER_ORG_2_NO_ORG_FILTER, [groups.get("role/arlas/user"), groups.get("group/config.json/" + ORG_2)])
+    Service.add_user_in_organisation(OWNER_ORG_2, oid, USER_ORG_2_NO_ORG_FILTER, [groups.get("role/arlas/user"), groups.get(ORG_GROUP_PREFIX + ORG_2)])
     return oid, email1, email2, email3, groups
 
 
