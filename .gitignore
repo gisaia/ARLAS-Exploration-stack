@@ -1,7 +1,6 @@
 .env
 .DS_Store
 conf/apisix/apisix.yaml
-sample/sample.json
 conf/server.crt
 conf/server.key
 conf/apisix/apisix.yaml
@@ -12,3 +11,8 @@ sample/dashboard.generated.json
 tmp/
 docker-compose.env
 target
+
+__pycache__/
+*.py[cod]
+*$py.class
+
