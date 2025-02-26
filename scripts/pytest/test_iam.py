@@ -455,7 +455,7 @@ def test_can_not_delete_apikey(run_as, fixture_cli_confs, fixture_init, fixture_
         with pytest.raises(SystemExit):
             Service.delete_api_key(run_as, oid, USER_TO_UID[OWNER_ORG_1], kid)
     else:
-        assert anonymous_iam_call("/".join(["organisations", oid, "users", USER_TO_UID[OWNER_ORG_1], "apikeys", id]), delete=True).status_code == 401
+        assert anonymous_iam_call("/".join(["organisations", oid, "users", USER_TO_UID[OWNER_ORG_1], "apikeys", kid]), delete=True).status_code == 401
 
 
 def test_apikey_works_no_group(fixture_cli_confs, fixture_init, fixture_org1_owner_and_user, fixture_org2_owner_and_users, fixture_collections):
