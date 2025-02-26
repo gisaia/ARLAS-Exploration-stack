@@ -100,7 +100,7 @@ def test_non_admin_not_create_org(run_as, fixture_cli_confs, fixture_init, fixtu
 
 def test_anonymous_not_create_org_on_user_domain(fixture_cli_confs, fixture_init, fixture_orphans):
     """Test: as anonymous, I can not create an org on my domain"""
-    requests.post("https://localhost/arlas_iam_server/organisations", headers={"accept": "application/json;charset=utf-8"}, verify=False).status_code > 299  # NOSONAR
+    anonymous_iam_call("organisations", post={}).status_code > 299
 
 
 def test_user_create_org_on_user_domain(fixture_cli_confs, fixture_init, ):
