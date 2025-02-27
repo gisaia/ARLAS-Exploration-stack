@@ -154,7 +154,7 @@ routes:
     uri: /wui/*
     upstream:
       nodes:
-        "arlas-wui:80": 1
+        "arlas-wui:8080": 1
     plugins:
 #      response-rewrite:
 #        headers: 
