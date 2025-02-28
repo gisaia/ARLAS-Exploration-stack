@@ -22,3 +22,5 @@ services:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    extra_hosts:
+      - ${ARLAS_HOST}:host-gateway

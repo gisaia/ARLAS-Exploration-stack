@@ -30,18 +30,24 @@ services:
       - ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS=GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*
       - ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME=${ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME:-true}
       - JDK_JAVA_OPTIONS=${ARLAS_PERSISTENCE_JDK_JAVA_OPTIONS}
+      - ARLAS_AUTH_KEYCLOAK_REALM=${ARLAS_AUTH_KEYCLOAK_REALM:-}
+      - ARLAS_AUTH_KEYCLOAK_RESOURCE=${ARLAS_AUTH_KEYCLOAK_RESOURCE:-}
+      - ARLAS_AUTH_KEYCLOAK_SECRET=${ARLAS_AUTH_KEYCLOAK_SECRET:-}
+      - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}
     volumes:
       - ${ARLAS_PERSISTENCE_STORAGE}:/persist/
     expose:
       - "9997"
     networks:
       - arlas-net
+    extra_hosts:
+      - ${ARLAS_HOST}:host-gateway
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
     healthcheck:
       test: ["CMD","java","HttpHealthcheck.java","http://localhost:9997/admin/healthcheck"]
-      interval: 10s
-      timeout: 10s
-      retries: 10
+      interval: 20s
+      timeout: 20s
+      retries: 20

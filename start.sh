@@ -29,6 +29,19 @@ then
     ./scripts/generate_apisix_conf.sh
 fi
 
+if [ "$1" = "kc" ]
+then
+    echo "START STACK WITH KEYCLOAK"
+    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix.yaml -f dc/ref-dc-keycloak.yaml "
+    COMPOSE_SERVICES=${COMPOSE_SERVICES}" keycloak"
+    ENV_FILES=${ENV_FILES}" conf/arlas_keycloak.env"
+    cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.yaml
+    cat conf/apisix/apisix_part_keycloak.yaml >> conf/apisix/apisix.yaml
+    #cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.yaml
+    echo "#END" >> conf/apisix/apisix.yaml
+    ./scripts/generate_apisix_conf.sh conf/apisix/apisix.yaml
+fi
+
 if [ "$1" = "aias" ]
 then
     echo "START STACK WITH AIAS AND IAM"

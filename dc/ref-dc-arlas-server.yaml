@@ -38,6 +38,8 @@ services:
       - "9999"
     networks:
       - arlas-net
+    extra_hosts:
+      - ${ARLAS_HOST}:host-gateway
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:
