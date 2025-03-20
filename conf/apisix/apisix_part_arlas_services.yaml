@@ -3,7 +3,7 @@ routes:
     uri: /builder
     upstream:
       nodes:
-        "arlas-builder:80": 1
+        "arlas-builder:8080": 1
     plugins:
       redirect:
         uri: /builder/
@@ -22,7 +22,7 @@ routes:
     uri: /builder/*
     upstream:
       nodes:
-        "arlas-builder:80": 1
+        "arlas-builder:8080": 1
       # response-rewrite:
       #   headers: 
       #     set:
@@ -78,7 +78,7 @@ routes:
     uri: /hub/*
     upstream:
       nodes:
-        "arlas-hub:80": 1
+        "arlas-hub:8080": 1
     plugins:
       response-rewrite:
         headers: 
