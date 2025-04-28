@@ -18,7 +18,7 @@
     uri: /iam/*
     upstream:
       nodes:
-        "arlas-wui-iam:80": 1
+        "arlas-wui-iam:8080": 1
     plugins:
       response-rewrite:
         headers: 
