@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
 
-echo "Stack is not always ready, sleep 20s"
-sleep 20
-
 test_status (){
     verb=$1
     endpoint=$2

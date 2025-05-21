@@ -5,12 +5,15 @@ COMPOSE_FILES=" -f dc/ref-dc-volumes.yaml -f dc/ref-dc-arlas-server.yaml -f dc/r
 COMPOSE_SERVICES="elasticsearch arlas-server arlas-persistence-server arlas-permissions-server arlas-builder arlas-hub arlas-wui protomaps apisix"
 ENV_FILES="conf/versions.env conf/elastic.env conf/arlas.env conf/persistence-file.env conf/permissions.env conf/apisix.env conf/restart_strategy.env conf/stack.env"
 
+rm -rf conf/apisix/apisix.yaml
+
 if [ -z "$1" ]
 then
     echo "START SIMPLE ARLAS STACK"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix.yaml"
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     echo "#END" >> conf/apisix/apisix.template.yaml
+    ./scripts/generate_apisix_conf.sh
 fi
 
 if [ "$1" = "iam" ]
