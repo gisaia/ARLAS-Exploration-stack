@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Stack is not always ready
+sleep 10
+
 test_status (){
     verb=$1
     endpoint=$2
