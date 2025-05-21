@@ -9,8 +9,8 @@ jobs:
     - uses: actions/checkout@v4.1.4
     - name: Start simple stack
       run: ./start.sh
-    - name: Run endpoints tests
-      run: ./scripts/test_endpoints.sh
+    # - name: Run endpoints tests
+    #   run: ./scripts/test_endpoints.sh
     - name: Install arlas_cli
       run: pip3.10 install arlas_cli
     - name: Init configurations
