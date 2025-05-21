@@ -34,6 +34,6 @@ services:
       - AIRS_COLLECTION=${AIRS_COLLECTION}
       - 'ARLAS_STATIC_LINKS=${ARLAS_FAM_LINKS}'
     expose:
-      - "80"
+      - "8080"
     networks:
       - arlas-net

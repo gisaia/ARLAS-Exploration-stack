@@ -1,0 +1,2 @@
+inputs_directory: $INGESTED_FOLDER|/inputs
+driver_configuration_file: conf/drivers.yaml

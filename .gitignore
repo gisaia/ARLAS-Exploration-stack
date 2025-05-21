@@ -8,6 +8,7 @@ conf/apisix/domains.generated.ext
 conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
 sample/dashboard.generated.json
+docker-compose-config.yaml
 tmp/
 docker-compose.env
 target
@@ -15,4 +16,3 @@ target
 __pycache__/
 *.py[cod]
 *$py.class
-

@@ -22,3 +22,36 @@ processes:
     class_name: extensions.aproc.proc.enrich.enrich_process
     configuration:
       drivers: conf/enrich_drivers.yaml
+  -
+    name: dc3build
+    class_name: extensions.aproc.proc.dc3build.dc3build_process
+    configuration:
+      drivers: conf/dc3build_drivers.yaml
+
+
+access_manager:
+  tmp_dir: /tmp/
+  storages:
+    -
+      type: file
+      writable_paths:
+        - /tmp
+        - /outbox
+      readable_paths:
+        - /inputs
+    -
+      type: gs
+      bucket: gisaia-public
+      # api_key:
+      #   project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
+      #   private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
+      #   private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
+    -
+      type: s3
+      bucket: archives
+      endpoint: "http://minio:9000"
+    # -
+    #   type: https
+    #   headers: $APROC_INPUT_STORAGE_HEADERS
+    #   domain: $APROC_INPUT_STORAGE_DOMAIN
+    #   force_download: $APROC_INPUT_STORAGE_FORCE_DOWNLOAD

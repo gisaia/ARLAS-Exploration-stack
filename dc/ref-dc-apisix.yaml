@@ -14,7 +14,8 @@ services:
     ports:  
       - "80:9080" # !EXPOSE!
     volumes:
-      - ${APISIX_CONF_FILE}:/usr/local/apisix/conf/apisix.yaml:ro
+      - ${PWD}/conf/apisix/conf.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ${PWD}/conf/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
     networks:
       - arlas-net
     logging:
