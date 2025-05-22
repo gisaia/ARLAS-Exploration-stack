@@ -1,0 +1,21 @@
+dependencies:
+- name: arlas-server
+  repository: file://../arlas-server
+  version: 0.0.1
+- name: airs-server
+  repository: file://../airs-server
+  version: 0.0.1
+- name: arlas-wui
+  repository: file://../arlas-wui
+  version: 0.0.1
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 22.0.4
+- name: minio
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.0.10
+- name: apisix
+  repository: https://charts.bitnami.com/bitnami
+  version: 5.0.3
+digest: sha256:65b6c5e4c2629c888562c421354460d37e24219a8a0720e6b2dbbf09e29f5f02
+generated: "2025-07-22T15:40:21.787896016+02:00"
