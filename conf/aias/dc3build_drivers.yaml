@@ -1,0 +1,8 @@
+arlas_url_search: $ARLAS_URL_SEARCH
+drivers:
+  -
+    name: safe
+    class_name: extensions.aproc.proc.dc3build.drivers.impl.safe
+    assets_dir: /tmp/aproc/safe
+    configuration:
+    priority: 1

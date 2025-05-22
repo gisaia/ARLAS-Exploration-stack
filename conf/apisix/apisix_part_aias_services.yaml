@@ -42,7 +42,7 @@
     uri: /fam-wui/*
     upstream:
       nodes:
-        "arlas-fam-wui:80": 1
+        "arlas-fam-wui:8080": 1
     plugins:
       response-rewrite:
         headers: 

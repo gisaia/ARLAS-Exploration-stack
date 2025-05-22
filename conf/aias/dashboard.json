@@ -124,11 +124,11 @@
                         ],
                         "iconColorFieldName": "properties.constellation",
                         "useHttpQuicklooks": true,
-                        "urlThumbnailTemplate": "{assets.thumbnail.href}",
+                        "urlThumbnailTemplate": "../airs-storage/{collection}/items/{id}/assets/thumbnail",
                         "urlImageTemplates": [
                             {
-                                "url": "{assets.overview.href}",
-                                "description": ""
+                                "url": "../airs-storage/{collection}/items/{id}/assets/overview",
+                                "description": "Product Overview"
                             }
                         ]
                     },

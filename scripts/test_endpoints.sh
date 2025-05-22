@@ -16,8 +16,8 @@ test_status (){
 
 if [ -z "$1" ]
 then
-    test_status GET "http://localhost/hub/assets/hub-icon.png" 200
     test_status GET "http://localhost/wui/favicon.ico" 200
+    test_status GET "http://localhost/hub/assets/hub-icon.png" 200
     test_status GET "http://localhost/builder/favicon.ico" 200
     test_status GET "http://localhost/arlas/collections/" 200
     test_status GET "http://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
@@ -27,8 +27,8 @@ fi
 
 if [ "$1" = "iam" ] || [ "$1" = "aias" ]
 then
-    test_status GET "https://localhost/hub/assets/hub-icon.png" 200
     test_status GET "https://localhost/wui/favicon.ico" 200
+    test_status GET "https://localhost/hub/assets/hub-icon.png" 200
     test_status GET "https://localhost/builder/favicon.ico" 200
     test_status GET "https://localhost/arlas/healthcheck" 200
     test_status GET "https://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
@@ -39,8 +39,8 @@ fi
 
 if [ "$1" = "aias" ]
 then
-    test_status GET "https://sylvains-macbook-air.lan/aproc/healthcheck" 200
-    test_status GET "https://sylvains-macbook-air.lan/agate/healthcheck" 200
-    test_status GET "https://sylvains-macbook-air.lan/airs/healthcheck" 200
+    test_status GET "https://localhost/aproc/healthcheck" 200
+    test_status GET "https://localhost/agate/healthcheck" 200
+    test_status GET "https://localhost/airs/healthcheck" 200
     echo "All good for aias."
 fi
