@@ -4,7 +4,6 @@ description: A Helm Chart to deploy arlas-aias
 version: 0.0.1
 
 dependencies:
-# See parameters here: https://github.com/bitnami/charts/tree/main/bitnami/postgresql/#parameters
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
   version: 22.0.4
