@@ -3,7 +3,7 @@ name: Test Kubernetes ARLAS Exploration stack
 on: push
 
 jobs:
-  create-cluster:
+  aias-on-cluster:
     runs-on: ubuntu-latest
     steps:
       - name: Create k8s Kind Cluster
