@@ -1,0 +1,19 @@
+
+dnsDomain: localhost
+
+
+# ARLAS SERVER
+arlas-server:
+  dnsDomain: localhost
+
+# ELASTICSEARCH
+elasticsearch:
+  master:
+    masterOnly: false
+    replicaCount: 1
+  data:
+    replicaCount: 0
+  coordinating:
+    replicaCount: 0
+  ingest:
+    replicaCount: 0
