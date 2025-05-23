@@ -1,6 +1,6 @@
 name: Test Docker compose ARLAS Exploration stack
 
-on: push
+on: pull_request
 
 jobs:
   simple-stack:
