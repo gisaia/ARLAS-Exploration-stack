@@ -1,4 +1,4 @@
-name: Test ARLAS Exploration stack
+name: Test Docker compose ARLAS Exploration stack
 
 on: push
 
