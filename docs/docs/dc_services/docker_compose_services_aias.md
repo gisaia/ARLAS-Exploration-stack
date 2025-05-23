@@ -182,7 +182,7 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:27.0.1` in `conf
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.0.1` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -199,7 +199,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.0.1` in `conf/versi
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.1` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -276,7 +276,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.0.1` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.1` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -329,7 +329,7 @@ List of volumes:
 - `${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles`
 ## File dc/ref-dc-protomaps.yaml
 ### Service protomaps
-Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.19.0` in `conf/versions.env`
+Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.28.0` in `conf/versions.env`
 
 
 List of volumes:
@@ -339,7 +339,7 @@ List of volumes:
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
 
-Image: `APISIX_VERSION` with `apache/apisix:3.9.1-debian` in `conf/versions.env`
+Image: `APISIX_VERSION` with `apache/apisix:3.12.0-debian` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -347,10 +347,11 @@ Image: `APISIX_VERSION` with `apache/apisix:3.9.1-debian` in `conf/versions.env`
 
 List of volumes:
 
-- `${APISIX_CONF_FILE}:/usr/local/apisix/conf/apisix.yaml:ro`
+- `${PWD}/conf/apisix/conf.yaml:/usr/local/apisix/conf/config.yaml:ro`
+- `${PWD}/conf/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro`
 ## File dc/ref-dc-postgres.yaml
 ### Service db
-Image: `POSTGRES_VERSION` with `postgres:16.1` in `conf/versions.env`
+Image: `POSTGRES_VERSION` with `postgres:16.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -375,7 +376,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.5.8` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.10` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -414,7 +415,7 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.5.8` in `conf/versions.env`
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.5.8` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.10` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -457,6 +458,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.5.8` in `conf/versio
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-public/OPENDATA` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -477,7 +479,7 @@ List of volumes:
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.5.8` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.10` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -520,6 +522,7 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.5.8` in `conf/
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-public/OPENDATA` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -539,7 +542,7 @@ List of volumes:
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.5.8` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.10` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -566,13 +569,13 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.5.8` in `conf/versio
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.5.8` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.10` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `FAM_LOGGER_LEVEL` | `FAM_LOGGER_LEVEL` | `INFO` |  |  |
+| `FAM_LOGGER_LEVEL` | `FAM_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
 | `FAM_PREFIX` | `/fam` | `` |  |  |
-| `INGESTED_FOLDER` | `/inputs` | `` |  |  |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-public/OPENDATA` in `conf/aias.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 
 List of volumes:
@@ -583,7 +586,7 @@ List of volumes:
 ### Service minio
 Description: Minio is an object store
 
-Image: `ARLAS_VERSION_MINIO` with `minio/minio:RELEASE.2024-10-02T17-50-41Z` in `conf/versions.env`
+Image: `ARLAS_VERSION_MINIO` with `minio/minio:RELEASE.2025-04-22T22-12-26Z` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -596,7 +599,7 @@ List of volumes:
 - `${AIRS_STORAGE_DIRECTORY:-arlas-data-minio}:/data`
 ## File dc/ref-dc-aias-rabbitmq.yaml
 ### Service rabbitmq
-Image: `ARLAS_VERSION_RABBITMQ` with `rabbitmq:3.13.2-management-alpine` in `conf/versions.env`
+Image: `ARLAS_VERSION_RABBITMQ` with `rabbitmq:3.13.7-management-alpine` in `conf/versions.env`
 
 
 List of volumes:
@@ -604,7 +607,7 @@ List of volumes:
 - `arlas-data-rabbimq:/var/lib/rabbitmq/mnesia`
 ## File dc/ref-dc-aias-redis.yaml
 ### Service redis
-Image: `ARLAS_VERSION_REDIS` with `redis/redis-stack:7.2.0-v10` in `conf/versions.env`
+Image: `ARLAS_VERSION_REDIS` with `redis/redis-stack:7.4.0-v3` in `conf/versions.env`
 
 
 List of volumes:
@@ -615,7 +618,7 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.5.8` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.6.10` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |

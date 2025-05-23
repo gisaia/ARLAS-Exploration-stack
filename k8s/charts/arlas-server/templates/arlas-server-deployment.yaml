@@ -1,0 +1,143 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: arlas-server
+  name: arlas-server
+spec:
+  replicas: {{ int .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: arlas-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: arlas-server
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: arlas-server
+          image: {{ .Values.image }}
+          ports:
+            - containerPort: 9999
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /admin/healthcheck
+              port: 9999
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: /admin/healthcheck
+              port: 9999
+            initialDelaySeconds: 40
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            # APM CONFIGURATION
+            {{- if .Values.apm }}
+            - name: ELASTIC_APM_LOG_ECS_REFORMATTING
+              value: "OVERRIDE"
+            - name: ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST
+              value: "*"
+            - name: ELASTIC_APM_SERVICE_NAME
+              value: "arlas-server"
+            - name: ELASTIC_APM_APPLICATION_PACKAGES
+              value: "io.arlas"
+            - name: ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME
+              value: '"true"'
+            - name: ELASTIC_APM_SECRET_TOKEN
+              value: {{ .Values.elastic.apm.secret }}
+            - name: ELASTIC_APM_SERVER_URLS
+              value: {{ .Values.elastic.apm.url }}
+            - name: ELASTIC_APM_ENVIRONMENT
+              value: {{ .Release.Name }}
+            - name: ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS
+              value: "GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"
+            {{- end }}
+
+            # JVM CONFIG
+            - name: ARLAS_XMX
+              value: {{ .Values.jvmXmx }}
+            {{- if .Values.apm }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.jvmXmx }} -XX:+ExitOnOutOfMemoryError -javaagent:/opt/app/elastic-apm-agent.jar"
+            {{- else }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.jvmXmx }} -XX:+ExitOnOutOfMemoryError"
+            {{- end }}
+
+            # ENDPOINT CONFIGURATION
+            - name: ARLAS_PREFIX
+              value: {{ .Values.urlPrefix }}
+            - name: ARLAS_BASE_URI
+              value: "https://{{ .Values.dnsDomain }}{{ .Values.urlPrefix }}/"
+            - name: ARLAS_ADMIN_PATH
+              value: {{ .Values.urlPrefix }}/admin
+            - name: ARLAS_APP_PATH
+              value: /
+            - name: ARLAS_CORS_ENABLED
+              value: {{ .Values.cors.enabled | quote }}
+            - name: ARLAS_CORS_ALLOWED_ORIGINS
+              value: {{ .Values.cors.allowedOrigins | squote }}
+            - name: ARLAS_CORS_ALLOWED_HEADERS
+              value: {{ .Values.cors.allowedHeaders | quote }}
+            - name: ARLAS_CORS_ALLOWED_METHODS
+              value: {{ .Values.cors.allowedMethods | quote }}
+            - name: ARLAS_CORS_ALLOWED_CREDENTIALS
+              value: {{ .Values.cors.allowedCredentials | quote }}
+            - name: ARLAS_CORS_EXPOSED_HEADERS
+              value: {{ .Values.cors.exposedHeaders | quote }}
+            - name: ARLAS_SWAGGER_RESOURCE_PKG
+              value: {{ .Values.swaggerResource | quote }}
+            - name: ARLAS_CUSTOM_JS
+              value: {{ .Values.urlPrefix }}/swagger-static/custom-request-interceptor.js
+
+            # SUB SERVICES ACTIVATION
+            - name: ARLAS_INSPIRE_ENABLED
+              value: {{ .Values.services.inspireActivated }}
+            - name: ARLAS_SERVICE_CSW_ENABLE
+              value: {{ .Values.services.cswActivated }}
+            - name: ARLAS_SERVICE_RASTER_TILES_ENABLE
+              value: {{ .Values.services.rasterTileActivated }}
+            - name: ARLAS_SERVICE_WFS_ENABLE
+              value: {{ .Values.services.wfsActivated }}
+
+            # AUTHENTICATION AND AUTHORIZATION
+            {{- toYaml .Values.policyEnv | nindent 12 }}
+
+            # ELASTICSEARCH CONFIGURATION
+            - name: ARLAS_ELASTIC_INDEX
+              value: .arlas
+            - name: ARLAS_ELASTIC_CLUSTER
+              value: elastic
+            - name: ARLAS_ELASTIC_NODES
+              value: {{ .Release.Name }}-elasticsearch:9200
+            {{- toYaml .Values.elasticEnv | nindent 12 }}
+
+            # CACHE CONFIG
+            - name: ARLAS_CACHE_TIMEOUT
+              value: {{ .Values.cacheTimeout | quote }}
+            - name: ARLAS_CACHE_FACTORY_CLASS
+              value: {{ .Values.cacheFactoryClass | quote }}
+
+            # LOGGING
+            - name: ARLAS_LOGGING_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+            - name: ARLAS_LOGGING_CONSOLE_LEVEL
+              value: {{ .Values.logger.loggingConsoleLevel }}
+            - name: ARLAS_LOGGING_FILE_LEVEL
+              value: "OFF"
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

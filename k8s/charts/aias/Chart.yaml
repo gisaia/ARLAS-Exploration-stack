@@ -1,0 +1,12 @@
+apiVersion: v2
+name: arlas-aias
+description: A Helm Chart to deploy arlas-aias
+version: 0.0.1
+
+dependencies:
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 22.0.4
+- name: arlas-server
+  version: 0.0.1
+  repository: "file://../arlas-server"

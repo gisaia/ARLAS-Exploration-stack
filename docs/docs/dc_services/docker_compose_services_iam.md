@@ -173,7 +173,7 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:27.0.1` in `conf
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.0.1` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -190,7 +190,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.0.1` in `conf/versi
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.1` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -267,7 +267,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.0.1` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.1` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -320,7 +320,7 @@ List of volumes:
 - `${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles`
 ## File dc/ref-dc-protomaps.yaml
 ### Service protomaps
-Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.19.0` in `conf/versions.env`
+Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.28.0` in `conf/versions.env`
 
 
 List of volumes:
@@ -330,7 +330,7 @@ List of volumes:
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
 
-Image: `APISIX_VERSION` with `apache/apisix:3.9.1-debian` in `conf/versions.env`
+Image: `APISIX_VERSION` with `apache/apisix:3.12.0-debian` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -338,10 +338,11 @@ Image: `APISIX_VERSION` with `apache/apisix:3.9.1-debian` in `conf/versions.env`
 
 List of volumes:
 
-- `${APISIX_CONF_FILE}:/usr/local/apisix/conf/apisix.yaml:ro`
+- `${PWD}/conf/apisix/conf.yaml:/usr/local/apisix/conf/config.yaml:ro`
+- `${PWD}/conf/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro`
 ## File dc/ref-dc-postgres.yaml
 ### Service db
-Image: `POSTGRES_VERSION` with `postgres:16.1` in `conf/versions.env`
+Image: `POSTGRES_VERSION` with `postgres:16.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
