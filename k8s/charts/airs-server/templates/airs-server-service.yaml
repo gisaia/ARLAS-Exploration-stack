@@ -3,11 +3,11 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/component: {{ .Values.serviceName }}
-  name: arlas-server
+  name: {{ .Values.serviceName }}
 spec:
   ports:
-    - name: "9999"
-      port: 9999
-      targetPort: 9999
+    - name: "8000"
+      port: 8000
+      targetPort: 8000
   selector:
     app.kubernetes.io/component: {{ .Values.serviceName }}

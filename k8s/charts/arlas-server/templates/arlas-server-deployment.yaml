@@ -2,25 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/component: arlas-server
-  name: arlas-server
+    app.kubernetes.io/component: {{ .Values.serviceName }}
+  name: {{ .Values.serviceName }}
 spec:
   replicas: {{ int .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/component: arlas-server
+      app.kubernetes.io/component: {{ .Values.serviceName }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: arlas-server
+        app.kubernetes.io/component: {{ .Values.serviceName }}
     spec:
       automountServiceAccountToken: false
       containers:
-        - name: arlas-server
+        - name: {{ .Values.serviceName }}
           image: {{ .Values.image }}
-          ports:
-            - containerPort: 9999
-              protocol: TCP
           livenessProbe:
             httpGet:
               path: /admin/healthcheck
@@ -41,7 +38,7 @@ spec:
             - name: ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST
               value: "*"
             - name: ELASTIC_APM_SERVICE_NAME
-              value: "arlas-server"
+              value:  {{ .Values.serviceName }}
             - name: ELASTIC_APM_APPLICATION_PACKAGES
               value: "io.arlas"
             - name: ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME
@@ -110,7 +107,7 @@ spec:
             - name: ARLAS_ELASTIC_INDEX
               value: .arlas
             - name: ARLAS_ELASTIC_CLUSTER
-              value: elastic
+              value: {{ .Values.elastic.cluster}}
             - name: ARLAS_ELASTIC_NODES
               value: {{ .Release.Name }}-elasticsearch:9200
             {{- toYaml .Values.elasticEnv | nindent 12 }}

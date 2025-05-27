@@ -1,12 +1,23 @@
 apiVersion: v2
 name: arlas-aias
-description: A Helm Chart to deploy arlas-aias
+description: A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 version: 0.0.1
 
 dependencies:
-- name: elasticsearch
-  repository: https://charts.bitnami.com/bitnami
-  version: 22.0.4
+# ARLAS DEPENDENCIES
+
 - name: arlas-server
   version: 0.0.1
   repository: "file://../arlas-server"
+- name: airs-server
+  version: 0.0.1
+  repository: "file://../airs-server"
+
+
+# THIRD PARTY DEPENDENCIES
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 22.0.4
+- name: minio
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.0.10

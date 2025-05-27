@@ -38,6 +38,7 @@ TODO
 
 To start, run: 
 ```shell
+helm dependency update k8s/charts/aias
 helm dependency build k8s/charts/aias
 helm install aias k8s/charts/aias
 ```
