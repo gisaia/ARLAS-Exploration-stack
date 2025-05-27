@@ -1,4 +1,4 @@
 apiVersion: v2
 name: arlas-server
-description: A Helm Chart to deploy arlas-server
+description: A Helm Chart to deploy ARLAS Server
 version: 0.0.1

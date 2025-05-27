@@ -17,3 +17,16 @@ elasticsearch:
     replicaCount: 0
   ingest:
     replicaCount: 0
+
+
+# AIRS
+airs-server:
+  enabled: false
+  s3.accessKey: admin
+  s3.secret: changeme
+
+minio:
+  auth:
+    rootUser: admin
+    rootPassword: changeme
+

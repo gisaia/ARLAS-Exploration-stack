@@ -2,50 +2,35 @@
 
 dnsDomain: localhost
 
-serviceName: arlas-server
-image: gisaia/arlas-server:27.0.1
+serviceName: airs-server
+image: gisaia/airs:0.6.10
 
 # -- Number of desired pods
 replicaCount: 1
 
-# -- Java Xmx value
-jvmXmx: 1800m
 # -- Whether ES APM should be activated or not
 apm: false
 
-# -- Cache TTL for items in cache (seconds), used for all deployments to ensure consistency
-cacheTimeout: 60
-# -- The factory class for the cache (io.arlas.server.core.impl.cache.HazelcastCacheFactory, io.arlas.server.core.impl.cache.LocalCacheFactory or io.arlas.server.core.impl.cache.NoCacheFactory)
-cacheFactoryClass: io.arlas.server.core.impl.cache.LocalCacheFactory
-
-# -- Whether to protect ARLAS server with authentication
-enabled: true
-# -- Endpoint to call in order to get user permissions given an access token when using HTTPPolicyEnforcer class
-permissionUrl: /permissions
-# -- Comma separated list of endpoints that should bypass authentication
-publicUris: swagger,swagger.*,openapi.*,session:POST, session/refresh:PUT,users:POST,users/.*:POST,organisations/check:GET
 # -- Base URL path for the server's general API
 urlPrefix: /arlas
-# -- The java package to process for extracting the APIs displayed in Swagger
-swaggerResource: io.arlas.server.rest,io.arlas.server.stac
 
 resources:
   requests:
-    cpu: 0.5
-    memory: 750Mi
+    cpu: 0.1
+    memory: 250Mi
   limits:
-    cpu: 2
-    memory: 2000Mi
+    cpu: 1
+    memory: 500Mi
 
 cors:
-  # cors.enabled -- Enable CORS or not
-  enabled: false
   # cors.allowedOrigins -- CORS Allowed Origins
   allowedOrigins: '"*"'
   # cors.allowedHeaders -- CORS Allowed Headers
   allowedHeaders: "arlas-user,arlas-groups,arlas-organization,arlas-org-filter,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User"
   # cors.allowedMethods -- CORS Allowed Methods
   allowedMethods: "OPTIONS,GET,PUT,POST,DELETE,HEAD"
+  # cors.allowedMethods -- Allowed hosts
+  allowedHosts: "0.0.0.0"
   # cors.allowedCredentials -- CORS Allowed Credentials or not
   allowedCredentials: true
   # cors.exposedHeaders -- CORS Exposed Headers
@@ -79,25 +64,27 @@ elastic:
     url:
 
 elasticEnv:
-  - name: ARLAS_ELASTIC_SKIP_MASTER
-    value: "true"
-  - name: ARLAS_ELASTIC_SNIFFING
-    value: "false"
-  - name: ARLAS_ELASTIC_ENABLE_SSL
-    value: "false"
+  # - name: AIRS_INDEX_LOGIN
+  #   value: ""
+  # - name: AIRS_INDEX_PWD
+  #   value: ""
 
-services:
-  # -- Whether INSPIRE Service is activated or not
-  inspireActivated: '"false"'
-  # -- Whether Raster Tile Service is activated or not
-  rasterTileActivated: '"false"'
-  # -- Whether CSW Service is activated or not
-  cswActivated: '"false"'
-  # -- Whether WFS Service is activated or not
-  wfsActivated: '"false"'
+s3:
+  accessKeyId: airs
+  secret: airssecret
+  endpoint: http://minio:9000
+  # -- asset_http_endpoint_url_pattern must look like https://storage.googleapis.com/{}/{} where first {} is the bucket, second {} is the path to the object  
+  assetHttpEndpointUrlPattern: "http://minio:9000/{}/{}"
+  bucket: airs-storage
+  platform: MINIO
+  region: Standard
+  tier: Standard
+
+arlasMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json
 
 # -- Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
+
 # -- Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 # -- Allows constraining pod(s) to only run on particular nodes, or to prefer to run on particular nodes. It is based on label-selection. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
