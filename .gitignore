@@ -1,3 +1,5 @@
+.sonarlint/
+.vscode/
 .env
 .DS_Store
 conf/apisix/apisix.yaml
@@ -7,6 +9,7 @@ conf/apisix/apisix.yaml
 conf/apisix/domains.generated.ext
 conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
+conf/apisix/apisix.template.yaml
 sample/dashboard.generated.json
 docker-compose-config.yaml
 tmp/
