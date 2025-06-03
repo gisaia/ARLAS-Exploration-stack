@@ -15,8 +15,6 @@
 # limitations under the License.
 #
 
-node_listen:
-  - 443
 
 deployment:
   role: data_plane
