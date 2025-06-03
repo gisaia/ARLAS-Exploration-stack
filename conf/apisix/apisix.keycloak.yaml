@@ -240,7 +240,7 @@ routes:
         headers: 
           set:
             # Fix CWE Id: 1021
-            Access-Control-Allow-Origin: "https://${ARLAS_HOST}"
+            Access-Control-Allow-Origin: "https://bigmac"
       response-rewrite:
         headers: 
           set:
@@ -263,13 +263,62 @@ routes:
     upstream:
       nodes:
         "keycloak:8080": 1
+    plugins:
+      proxy-rewrite:
+        headers:
+          X-Forwarded-Host: "${HOST}"
+          X-Forwarded-Port: "80"
 ssls:
   -
     snis:
       - "localhost"
-      - "${ARLAS_HOST}"
+      - "bigmac"
     cert: |
-${SSL_CERT}
+      -----BEGIN CERTIFICATE-----
+      MIIC5TCCAc2gAwIBAgIJAOfTOTiyfwcsMA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV
+      BAMMCWxvY2FsaG9zdDAeFw0yNTA1MDcxMzI0MzFaFw00NTA1MDIxMzI0MzFaMBQx
+      EjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+      ggEBAMwn4H4MI5HE/VjyaIWpJ1am6lgqbHq1bqDIBV8zLUpIeeb+wfcikuEXPKyx
+      4JYXv1q2AzyhRcAx1IsY8pv8TcMT3NlFtgeQmC6EZX2UupNFyKHcM3s0Kkg7FOR0
+      HJf+65siGeVvtdbwKpca8y2yURpkq4guXa4wRjwTu4LfOsOFadoJd/Mnq/w5xp24
+      uTB9CfMileTrfVU3sC1mEnzQP05/Bev+l+95sNvNc4+Nt9fJiYSOkRHWLgbLbnSS
+      15mLmPmPSdpDi64dWuULCFn6ho8GoaUmKMpIOIQomO8Rra4B/IYOjApzJRjXfq2V
+      qSFTAw0qSJ/Hx7/3CzeCeNYuPM0CAwEAAaM6MDgwFAYDVR0RBA0wC4IJbG9jYWxo
+      b3N0MAsGA1UdDwQEAwIHgDATBgNVHSUEDDAKBggrBgEFBQcDATANBgkqhkiG9w0B
+      AQsFAAOCAQEAn1ZovPxOmBQLNZt2iGMBfovNzcC/VbKToUSEUXI89guas37WN6fq
+      PfyLKznVZEmpkIcS9xCDrb+Rlob+NgCy6HEzNl0XQYJXhbaS+FE7UDPDhuhjbVvC
+      hYTdCyxhugW/UyHFzkbWCPKFD+ZS+0OWYK0yrn0sdShwI3krzGgRaTRJQWHuviIW
+      9pRMFEle9AGBBiOD4i6DsTWvrSxXMGroschKYQkLbjt63C1sz760U0CCj58DtpQ6
+      9cuQUAM3OCjCyV82NbUfVYEUpb8N17S9U3hFHYNDDXvB61kZZ1mqflEhsyahvr63
+      vRc10zqzs0pMTeu3KKVhNxkCtzvFRsN0/A==
+      -----END CERTIFICATE-----
     key: |
-${SSL_KEY}
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDMJ+B+DCORxP1Y
+      8miFqSdWpupYKmx6tW6gyAVfMy1KSHnm/sH3IpLhFzysseCWF79atgM8oUXAMdSL
+      GPKb/E3DE9zZRbYHkJguhGV9lLqTRcih3DN7NCpIOxTkdByX/uubIhnlb7XW8CqX
+      GvMtslEaZKuILl2uMEY8E7uC3zrDhWnaCXfzJ6v8OcaduLkwfQnzIpXk631VN7At
+      ZhJ80D9OfwXr/pfvebDbzXOPjbfXyYmEjpER1i4Gy250kteZi5j5j0naQ4uuHVrl
+      CwhZ+oaPBqGlJijKSDiEKJjvEa2uAfyGDowKcyUY136tlakhUwMNKkifx8e/9ws3
+      gnjWLjzNAgMBAAECggEBAKqfGSu/EWsea24PCfPLLyloTqpoqkjToSWWhYbOyqcu
+      c1Luz0SwDHk6ZmceMki+iBpTy9i8IANEohGuQ/TBpGvJCeY8MKmZ2tXlqLyPtG6o
+      /8jms8/gBQZg+lEECXGuh1Ib6fCqsBp2leG7kEk8ojOgtwsVVQ3jIo/LHgd+cSo9
+      sntLkL8mAOAgJsVukd7rByyJ8sn8xC8gfOGTzbO7B2LoILivqw9NZnlNHpKrmcLc
+      VlV1vGwV7Hygh972CzfXGyfakzGBvbbC9W8Ngzludpo/849dtpPoIdynGk6swrXu
+      DQb9l9vs2CBTKALji6llt364XXtx2XBmIfFOgMT7/AECgYEA+OOJRVYdhfAY9z9Z
+      ePe/64tu/ESzZ0fKdwSDpxITdPaBqhTUpLR9FvTzfKOVDrw6kjG214eUoFr4cpET
+      EqBBZ2TbWSS/uqJUGev5XAfI4eMi/tkOi9K2TQLJRsVkH6xehlfZsrgijvR+iuEx
+      tEWt9LqFgiWk9jH0gkjsqUrHG40CgYEA0f0lmSWGI2a9yL4zK3GbWDbTZ5PrXhsq
+      Mv/Jw2txyZY62cCKTxGEfebVqkU7qfTGGBa3jzRbbPEbCOc6sofyGrPEXApjkfbm
+      YXmue1ysn5Bul60urK681kNt1Wq5fqnSQwY0QYr6Zi6dYIEWGIGZkpe+WZzuipNN
+      gyhaT7SytkECgYAILxs1b3Z7EAESKEAd7S+fZC9bFjs7+y1aKojVto9zOiPbXuH7
+      JIA0gAt9nrdpC6F1azMS9T9a4oLm6YRSCXj9GGDqFn5DedEAJTVG5G6jlt9wt9x1
+      lpEuCRhrPlRjgjx9eGgNK2bfgoSitnL29Y+Zy4RWWjyJZ+0dV56Ilo/jhQKBgENA
+      XNNAZkZeODfbWk32k3bcEDai9AVuk8RDkV2pwoZ6O5zTgjgydwlPbWybwbD7uJms
+      ZNtTPFiWmz7ttynISixtGF0V4q+zsDLVoqDVnF96BUFEcKdTSx0f+UQZaxD62GEo
+      0oGPPgSNt09Z6DavAv0k5gyTKv5skK2JterDB11BAoGAH80Jnfr32/0tQpYJ3epR
+      ZADfb9rHDDEDXcNT0sghBF7M96JnDOFD6zrwzRwhcuAhuhwImPjQKGeVNlJU3JVm
+      5jW3AXAeYkz3YXS8ywUBtOaFtV/2TGOA3frDi/vui61fe/mdYRZmq4EpliyWZEWA
+      xb5eaonQWmdNRE5Gp+lkBcI=
+      -----END PRIVATE KEY-----
 #END

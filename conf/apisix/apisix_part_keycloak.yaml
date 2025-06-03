@@ -3,8 +3,3 @@
     upstream:
       nodes:
         "keycloak:8080": 1
-    plugins:
-      proxy-rewrite:
-        headers:
-          X-Forwarded-Host: "${HOST}"
-          X-Forwarded-Port: "80"

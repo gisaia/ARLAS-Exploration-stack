@@ -36,6 +36,8 @@ services:
       - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}
     expose:
       - "9999"
+    volumes:
+      - ${PWD}/conf/server.crt:/opt/java/openjdk/lib/security/cacerts/arlas.crt
     networks:
       - arlas-net
     extra_hosts:

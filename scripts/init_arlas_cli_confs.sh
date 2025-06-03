@@ -9,28 +9,28 @@ set -e
 . conf/stack.env
 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.admin \
-    --server https://${ARLAS_HOST}/arlas \
+    --server https://${ARLAS_HOST}:9443/arlas \
     --headers "Content-Type:application/json" \
-    --persistence https://${ARLAS_HOST}/persist \
+    --persistence https://${ARLAS_HOST}:9443/persist \
     --persistence-headers "Content-Type:application/json" \
     --elastic http://localhost:9200 \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
-    --auth-token-url https://${ARLAS_HOST}/arlas_iam_server/session \
+    --auth-token-url https://${ARLAS_HOST}:9443/arlas_iam_server/session \
     --auth-headers "Content-Type:application/json" \
     --auth-login tech@gisaia.com \
     --auth-password admin \
     --auth-arlas-iam 
 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.user \
-    --server https://${ARLAS_HOST}/arlas \
+    --server https://${ARLAS_HOST}:9443/arlas \
     --headers "Content-Type:application/json" \
-    --persistence https://${ARLAS_HOST}/persist \
+    --persistence https://${ARLAS_HOST}:9443/persist \
     --persistence-headers "Content-Type:application/json" \
     --elastic http://localhost:9200 \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
-    --auth-token-url https://${ARLAS_HOST}/arlas_iam_server/session \
+    --auth-token-url https://${ARLAS_HOST}:9443/arlas_iam_server/session \
     --auth-headers "Content-Type:application/json" \
     --auth-login user@org.com \
     --auth-password secret \
