@@ -1,5 +1,0 @@
-  -
-    uri: /auth/*
-    upstream:
-      nodes:
-        "keycloak:8080": 1
