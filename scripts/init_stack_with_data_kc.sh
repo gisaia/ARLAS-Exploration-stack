@@ -11,7 +11,7 @@ TOKEN="$(curl \
   -d "client_id=arlasm2m" \
   -d "client_secret=MmzaEUIqxpVOqA5G2dWZlAzoMRAKr8GH" \
   -d "grant_type=client_credentials" \
-  "http://$ARLAS_HOST/auth/realms/arlas/protocol/openid-connect/token" | jq -r '.access_token')"
+  "https://$ARLAS_HOST:9443/auth/realms/arlas/protocol/openid-connect/token" | jq -r '.access_token')"
 
   echo $TOKEN
 

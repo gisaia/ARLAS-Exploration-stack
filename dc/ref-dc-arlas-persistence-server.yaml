@@ -36,6 +36,7 @@ services:
       - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}
     volumes:
       - ${ARLAS_PERSISTENCE_STORAGE}:/persist/
+      - ${PWD}/conf/arlas-ks.jks:/opt/app/arlas-ks.jks
     expose:
       - "9997"
     networks:

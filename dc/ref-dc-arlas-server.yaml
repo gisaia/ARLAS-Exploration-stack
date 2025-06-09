@@ -37,7 +37,7 @@ services:
     expose:
       - "9999"
     volumes:
-      - ${PWD}/conf/server.crt:/opt/java/openjdk/lib/security/cacerts/arlas.crt
+      - ${PWD}/conf/arlas-ks.jks:/opt/app/arlas-ks.jks
     networks:
       - arlas-net
     extra_hosts:

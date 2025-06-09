@@ -33,6 +33,8 @@ services:
       - "9996"
     networks:
       - arlas-net
+    volumes:
+      - ${PWD}/conf/arlas-ks.jks:/opt/app/arlas-ks.jks
     extra_hosts:
       - ${ARLAS_HOST}:host-gateway
     logging:

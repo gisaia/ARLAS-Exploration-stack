@@ -9,7 +9,7 @@ rm -rf conf/apisix/apisix.yaml
 
 if [ -z "$1" ]
 then
-    echo "START SIMPLE ARLAS STACK"
+    echo "CONFIGURE SIMPLE ARLAS STACK"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix.yaml"
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     echo "#END" >> conf/apisix/apisix.template.yaml
@@ -18,7 +18,8 @@ fi
 
 if [ "$1" = "iam" ]
 then
-    echo "START STACK WITH IAM"
+    echo "CONFIGURE STACK WITH IAM"
+    ./scripts/create_certificate.sh
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-iam-wui.yaml -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-iam-server.yaml -f dc/ref-dc-postgres.yaml"
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" arlas-iam-server arlas-wui-iam db"
     ENV_FILES=${ENV_FILES}" conf/arlas_iam.env conf/postgres.env"
@@ -31,23 +32,24 @@ fi
 
 if [ "$1" = "kc" ]
 then
-    echo "build a new image for arlas-server with certificate"
-    . ./conf/versions.env
-    docker build --build-arg FROM_IMAGE=${ARLAS_SERVER_VERSION} --platform linux/amd64 -f scripts/Dockerfile-arlas-with-crt . -t ${ARLAS_SERVER_VERSION}-crt
-    echo "START STACK WITH KEYCLOAK"
+    echo "CONFIGURE STACK WITH KEYCLOAK"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-keycloak.yaml "
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" keycloak"
     ENV_FILES=${ENV_FILES}" conf/arlas_keycloak.env"
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
-    cat conf/apisix/apisix_part_keycloak.yaml >> conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.template.yaml
     echo "#END" >> conf/apisix/apisix.template.yaml
+    if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
+    then
+        ./scripts/create_certificate.sh
+    fi
+    chmod 755 conf/server.*
     ./scripts/generate_apisix_conf.sh
 fi
 
 if [ "$1" = "aias" ]
 then
-    echo "START STACK WITH AIAS AND IAM"
+    echo "CONFIGURE STACK WITH AIAS AND IAM"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-iam-wui.yaml -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-iam-server.yaml -f dc/ref-dc-postgres.yaml"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-fam-wui.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-aias-agate.yaml -f dc/ref-dc-aias-titiler.yaml"
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" arlas-iam-server arlas-wui-iam db"
@@ -92,6 +94,14 @@ fi
 #    set +e
 #    docker compose -p arlas-exploration-stack $ENV_FILES -f dc/ref-dc-elastic-init.yaml -f dc/ref-dc-elastic.yaml -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
 #    set -e
+
+
+if [ "$1" = "kc" ]
+then
+    cat ${ENV_FILES} > docker-compose.env
+    docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 keycloak
+#    sleep 120
+fi
 
 cat ${ENV_FILES} > docker-compose.env
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES
