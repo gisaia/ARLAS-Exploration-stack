@@ -109,5 +109,4 @@ docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE
 echo "STACK UP & RUNNING"
 docker ps
 docker logs apisix
-docker logs arlas-wui
-docker logs arlas-hub
+docker exec apisix ls -l /usr/local/apisix/conf/
