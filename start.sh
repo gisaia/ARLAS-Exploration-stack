@@ -106,10 +106,15 @@ then
     sleep 60 # keycloak is terribly slow to start and healthcheck is not 100% sure
 fi
 
+. ./conf/stack.env
+curl -k https://${ARLAS_HOST}:9443/auth/realms/arlas/.well-known/uma2-configuration
+
 echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES  || true
 echo "STACK UP & RUNNING"
 
+docker logs keycloak
 docker logs arlas-persistence-server
+curl -k https://${ARLAS_HOST}:9443/auth/realms/arlas/.well-known/uma2-configuration
 set -e
