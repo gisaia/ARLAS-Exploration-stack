@@ -8,8 +8,6 @@ services:
     container_name: fam-wui
     restart: always
     depends_on:
-      arlas-iam-server:
-        condition: service_healthy
       arlas-server:
         condition: service_healthy
       fam-service:

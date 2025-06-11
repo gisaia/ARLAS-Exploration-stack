@@ -16,7 +16,12 @@ then
     ./scripts/generate_apisix_conf.sh
 fi
 
-if [ "$1" = "iam" ]
+if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
+then
+    ./scripts/create_certificate.sh
+fi
+
+if [ "$1" = "iam" ] || [ "$1" = "aias" ]
 then
     echo "CONFIGURE STACK WITH IAM"
     ./scripts/create_certificate.sh
@@ -25,44 +30,30 @@ then
     ENV_FILES=${ENV_FILES}" conf/arlas_iam.env conf/postgres.env"
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.template.yaml
-    cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.template.yaml
-    echo "#END" >> conf/apisix/apisix.template.yaml
-    ./scripts/generate_apisix_conf.sh
 fi
 
-if [ "$1" = "kc" ]
+if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
     echo "CONFIGURE STACK WITH KEYCLOAK"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-keycloak.yaml "
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" keycloak"
     ENV_FILES=${ENV_FILES}" conf/arlas_keycloak.env"
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
-    cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.template.yaml
-    echo "#END" >> conf/apisix/apisix.template.yaml
-    if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
-    then
-        ./scripts/create_certificate.sh
-    fi
-    chmod 755 conf/server.*
-    ./scripts/generate_apisix_conf.sh
 fi
 
-if [ "$1" = "aias" ]
+if [ "$1" = "aias" ] || [ "$1" = "aiaskc" ]
 then
-    echo "CONFIGURE STACK WITH AIAS AND IAM"
-    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-iam-wui.yaml -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-iam-server.yaml -f dc/ref-dc-postgres.yaml"
+    echo "CONFIGURE STACK WITH AIAS"
+    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix-ssl.yaml"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-fam-wui.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-aias-agate.yaml -f dc/ref-dc-aias-titiler.yaml"
-    COMPOSE_SERVICES=${COMPOSE_SERVICES}" arlas-iam-server arlas-wui-iam db"
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" airs-server aproc-service aproc-proc redis rabbitmq fam-service arlas-fam-wui minio agate titiler"
-    ENV_FILES=${ENV_FILES}" conf/arlas_iam.env conf/postgres.env"
     ENV_FILES=${ENV_FILES}" conf/aias.env conf/minio.env"
+
+    curl https://raw.githubusercontent.com/gisaia/ARLAS-server/refs/heads/master/arlas-commons/src/main/resources/roles.yaml -o conf/aias/roles.yaml
 
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_aias_services.yaml >> conf/apisix/apisix.template.yaml
-    cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.template.yaml
-    echo "#END" >> conf/apisix/apisix.template.yaml
-    ./scripts/generate_apisix_conf.sh
 
     echo "Initialising Minio configuration..."
     set +e
@@ -90,6 +81,15 @@ then
     set -e
 fi
 
+
+if [ "$1" = "iam" ] || [ "$1" = "kc" ] || [ "$1" = "aias" ] || [ "$1" = "aiaskc" ]
+then
+    echo "CONFIGURE STACK WITH SSL"
+    cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.template.yaml
+    echo "#END" >> conf/apisix/apisix.template.yaml
+    ./scripts/generate_apisix_conf.sh
+fi
+
 # We run elastic on 9200 without ssl
 #    set +e
 #    docker compose -p arlas-exploration-stack $ENV_FILES -f dc/ref-dc-elastic-init.yaml -f dc/ref-dc-elastic.yaml -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
@@ -98,10 +98,12 @@ fi
 
 if [ "$1" = "kc" ]
 then
+    echo "START KEYCLOAK"
     cat ${ENV_FILES} > docker-compose.env
     docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 keycloak
-#    sleep 120
 fi
 
+echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES
+echo "STACK UP & RUNNING"

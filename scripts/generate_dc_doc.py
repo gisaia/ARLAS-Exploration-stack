@@ -9,14 +9,19 @@ files = ["dc/ref-dc-arlas-server.yaml"]
 pattern = re.compile(r'\$\{(.+)\}')
 
 
+def insert_line_breaks(text, every=15):
+    return '<br>'.join(text[i: i + every] for i in range(0, len(text), every))
+
+
 def escape(string: str) -> str:
     return string  #string.replace("_", "\\_").replace("*", "\\*")
 
 
-def truncate(string: str) -> str:
-    if len(string) > 50:
-        return string[:50] + " ..."
-    return string
+def format(mystring: str, every=15) -> str:
+    if len(mystring) > 50:
+        mystring = mystring[:50] + " ..."
+    mystring = insert_line_breaks(mystring, every=15)
+    return mystring
 
 
 def __get_env_setting__(env_variables: dict[str:list[tuple[str, str]]], variable: str):
@@ -40,7 +45,7 @@ def __extract_env_pattern__(v, env_variables) -> tuple[str, str, str]:
         env_settings = __get_env_setting__(env_variables, variable)
         return (variable, default, env_settings)
     else:
-        return (truncate(v), "", "")
+        return (format(v), "", "")
 
 
 def generate(yaml_files: list[str], env_files: list[str]):
@@ -52,7 +57,7 @@ def generate(yaml_files: list[str], env_files: list[str]):
                     if line.find("=") > 0:
                         k, v = line.split("=", 1)
                         k = k.strip()
-                        v = truncate(v.strip())
+                        v = format(v.strip())
                         env_variables[k] = env_variables.get(k, [])
                         env_variables[k].append((v, f))
 
@@ -107,7 +112,7 @@ def generate(yaml_files: list[str], env_files: list[str]):
                             c = cs[0]
                             if c.column > 0:
                                 description = description + " " + c.value.lstrip('#').lstrip(' ').rstrip()
-                    variable = truncate(variable)
+                    variable = format(variable)
                     print("| `{}` | `{}` | `{}` | {} | {} |".format(escape(k), escape(variable), escape(default), escape(description), escape(env_settings)))
                 print()
                 volumes = services.get(service).get("volumes", None)

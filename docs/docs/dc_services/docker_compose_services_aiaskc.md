@@ -3,12 +3,22 @@
 - [arlas-server](#service-arlas-server)
 - [arlas-persistence-server](#service-arlas-persistence-server)
 - [arlas-permissions-server](#service-arlas-permissions-server)
-- [keycloak](#service-keycloak)
 - [arlas-builder](#service-arlas-builder)
 - [arlas-hub](#service-arlas-hub)
 - [arlas-wui](#service-arlas-wui)
 - [protomaps](#service-protomaps)
 - [apisix](#service-apisix)
+- [keycloak](#service-keycloak)
+- [db](#service-db)
+- [airs-server](#service-airs-server)
+- [aproc-proc](#service-aproc-proc)
+- [aproc-service](#service-aproc-service)
+- [arlas-fam-wui](#service-arlas-fam-wui)
+- [fam-service](#service-fam-service)
+- [minio](#service-minio)
+- [rabbitmq](#service-rabbitmq)
+- [redis](#service-redis)
+- [agate](#service-agate)
 ## File dc/ref-dc-elastic.yaml
 ### Service elasticsearch
 Description: Elasticsearch is an indexing engine
@@ -83,9 +93,9 @@ Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-pe<br>rsistence-serve<br>r
 | `ARLAS_CACHE_TIMEOUT` | `ARLAS_CACHE_TIM<br>EOUT` | `5` |  |  |
 | `ARLAS_PERSISTENCE_APP_PATH` | `ARLAS_PERSISTEN<br>CE_APP_PATH` | `/` |  |  |
 | `ARLAS_PERSISTENCE_ENGINE` | `ARLAS_PERSISTEN<br>CE_ENGINE` | `hibernate` |  | `file` in `conf/persistence-file.env` |
-| `ARLAS_PERSISTENCE_HIBERNATE_PASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  |  |
+| `ARLAS_PERSISTENCE_HIBERNATE_PASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  | `not_a_secret` in `conf/postgres.env` |
 | `ARLAS_PERSISTENCE_HIBERNATE_URL` | `ARLAS_PERSISTEN<br>CE_HIBERNATE_UR<br>L` | `jdbc:postgresql://db:5432/arlas` |  |  |
-| `ARLAS_PERSISTENCE_HIBERNATE_USER` | `POSTGRES_USER` | `` |  |  |
+| `ARLAS_PERSISTENCE_HIBERNATE_USER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
 | `ARLAS_PERSISTENCE_LOCAL_FOLDER` | `/persist/` | `` |  |  |
 | `ARLAS_PERSISTENCE_LOGGING_CONSOLE_LEVEL` | `ARLAS_PERSISTEN<br>CE_LOGGING_CONS<br>OLE_LEVEL` | `` |  | `INFO` in `conf/persistence-file.env` |
 | `ARLAS_PERSISTENCE_LOGGING_LEVEL` | `ARLAS_PERSISTEN<br>CE_LOGGING_LEVE<br>L` | `` |  | `INFO` in `conf/persistence-file.env` |
@@ -146,26 +156,6 @@ Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-pe<br>rmissions-serve<br>r
 List of volumes:
 
 - `${PWD}/conf/arlas-ks.jks:/opt/app/arlas-ks.jks`
-## File dc/ref-dc-keycloak.yaml
-### Service keycloak
-Image: `KEYCLOAK_VERSION` with `quay.io/keycloa<br>k/keycloak:23.0` in `conf/versions.env`
-
-| Container variable | Value or environment variable | Default | Description | Env file setting |
-| --- | --- | --- | --- | --- |
-| `KC_HEALTH_ENABLED` | `true` | `` |  This is to enable kubernetes healthchecks |  |
-| `KEYCLOAK_ADMIN_PASSWORD` | `KEYCLOAK_ADMIN_<br>PASSWORD` | `` |  | `admin` in `conf/arlas_keycloak.env` |
-| `KEYCLOAK_ADMIN` | `KEYCLOAK_ADMIN_<br>LOGIN` | `` |  | `admin` in `conf/arlas_keycloak.env` |
-| `KC_HTTPS_KEYSTORE_PATH` | `/opt/keycloak/c<br><br>onf/keycloa<br>k.jk<br>s` | `` |  |  |
-| `KC_HTTPS_KEYSTORE_PASSWORD` | `arlaspassword` | `` |  |  |
-| `KC_HTTP_ENABLED` | `true` | `` |  |  |
-| `KC_HEALTH_ENABLED` | `true` | `` |  |  |
-
-List of volumes:
-
-- `${KEYCLOAK_CONF_DIRECTORY}/keycloak.realm.json:/opt/keycloak/data/import/realm.json:ro`
-- `${PWD}/conf/arlas-ks.jks:/opt/keycloak/conf/keycloak.jks:ro`
-- `${PWD}/conf/server.crt:/opt/keycloak/conf/server.crt:ro`
-- `${PWD}/conf/server.key:/opt/keycloak/conf/server.key:ro`
 ## File dc/ref-dc-arlas-builder.yaml
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
@@ -320,3 +310,308 @@ List of volumes:
 
 - `${PWD}/conf/apisix/config.yaml:/usr/local/apisix/conf/config.yaml`
 - `${PWD}/conf/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml`
+## File dc/ref-dc-keycloak.yaml
+### Service keycloak
+Image: `KEYCLOAK_VERSION` with `quay.io/keycloa<br>k/keycloak:23.0` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `KC_HEALTH_ENABLED` | `true` | `` |  This is to enable kubernetes healthchecks |  |
+| `KEYCLOAK_ADMIN_PASSWORD` | `KEYCLOAK_ADMIN_<br>PASSWORD` | `` |  | `admin` in `conf/arlas_keycloak.env` |
+| `KEYCLOAK_ADMIN` | `KEYCLOAK_ADMIN_<br>LOGIN` | `` |  | `admin` in `conf/arlas_keycloak.env` |
+| `KC_HTTPS_KEYSTORE_PATH` | `/opt/keycloak/c<br><br>onf/keycloa<br>k.jk<br>s` | `` |  |  |
+| `KC_HTTPS_KEYSTORE_PASSWORD` | `arlaspassword` | `` |  |  |
+| `KC_HTTP_ENABLED` | `true` | `` |  |  |
+| `KC_HEALTH_ENABLED` | `true` | `` |  |  |
+
+List of volumes:
+
+- `${KEYCLOAK_CONF_DIRECTORY}/keycloak.realm.json:/opt/keycloak/data/import/realm.json:ro`
+- `${PWD}/conf/arlas-ks.jks:/opt/keycloak/conf/keycloak.jks:ro`
+- `${PWD}/conf/server.crt:/opt/keycloak/conf/server.crt:ro`
+- `${PWD}/conf/server.key:/opt/keycloak/conf/server.key:ro`
+## File dc/ref-dc-postgres.yaml
+### Service db
+Image: `POSTGRES_VERSION` with `postgres:16.8` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `DAY_OF_WEEK_TO_KEEP` | `POSTGRES_DAY_OF<br>_WEEK_TO_KEEP` | `` |  | `6` in `conf/postgres.env` |
+| `DAYS_TO_KEEP` | `POSTGRES_DAYS_T<br>O_KEEP` | `` |  | `7` in `conf/postgres.env` |
+| `WEEKS_TO_KEEP` | `POSTGRES_WEEKS_<br>TO_KEEP` | `` |  | `5` in `conf/postgres.env` |
+| `PG_BACKUP_DIR` | `/backup/` | `` |  |  |
+| `PGPASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  | `not_a_secret` in `conf/postgres.env` |
+| `PGUSER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
+| `POSTGRES_DB` | `arlas` | `` |  |  |
+| `POSTGRES_HOST_AUTH_METHOD` | `trust` | `` |  |  |
+| `POSTGRES_PASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  | `not_a_secret` in `conf/postgres.env` |
+| `POSTGRES_USER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
+
+List of volumes:
+
+- `${POSTGRES_BACKUP_STORAGE}:/backup/`
+- `${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro`
+- `${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro`
+- `${POSTGRES_STORAGE}:/var/lib/postgresql/data`
+## File dc/ref-dc-aias-airs.yaml
+### Service airs-server
+Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
+
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6<br>.12` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `AIRS_COLLECTION_URL` | `AIRS_COLLECTION<br>_URL` | `https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/collection.json` |  |  |
+| `AIRS_CORS_HEADERS` | `AIRS_CORS_HEADE<br>RS` | `*` |  |  |
+| `AIRS_CORS_METHODS` | `AIRS_CORS_METHO<br>DS` | `*` |  |  |
+| `AIRS_CORS_ORIGINS` | `AIRS_CORS_ORIGI<br>NS` | `*` |  |  |
+| `AIRS_HOST` | `AIRS_HOST` | `0.0.0.0` |  |  |
+| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLL<br>ECTION_PREFIX` | `airs` |  | `org.com@airs` in `conf/aias.env` |
+| `AIRS_INDEX_ENDPOINT_URL` | `AIRS_INDEX_ENDP<br>OINT_URL` | `` |  | `http://elastics<br>earch:9200` in `conf/aias.env` |
+| `AIRS_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
+| `AIRS_INDEX_PWD` | `ELASTIC_PASSWOR<br>D` | `` |  | `elastic` in `conf/elastic.env` |
+| `AIRS_LOGGER_LEVEL` | `AIRS_LOGGER_LEV<br>EL` | `` |  | `INFO` in `conf/aias.env` |
+| `ARLASEO_MAPPING_URL` | `ARLASEO_MAPPING<br>_URL` | `/app/conf/mapping.json` |  | `https://raw.git<br>hubusercontent.<br>com/gisaia/ARLA<br>S-EO/ ...` in `conf/aias.env` |
+| `AIRS_PORT` | `AIRS_PORT` | `8000` |  |  |
+| `AIRS_PREFIX` | `AIRS_PREFIX` | `/airs` |  |  |
+| `AIRS_S3_ACCESS_KEY_ID` | `AIRS_S3_ACCESS_<br>KEY_ID` | `` |  | `airs` in `conf/aias.env` |
+| `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `AIRS_S3_ASSET_H<br>TTP_ENDPOINT_UR<br>L` | `` |  | `http://minio:90<br>00/{}/{}` in `conf/aias.env` |
+| `AIRS_S3_BUCKET` | `AIRS_S3_BUCKET` | `airs-storage` |  | `airs-storage` in `conf/aias.env` |
+| `AIRS_S3_ENDPOINT_URL` | `AIRS_S3_ENDPOIN<br>T_URL` | `http://minio:9000` |  | `http://minio:90<br>00` in `conf/aias.env` |
+| `AIRS_S3_PLATFORM` | `AIRS_S3_PLATFOR<br>M` | `MINIO` |  |  |
+| `AIRS_S3_REGION` | `AIRS_S3_REGION` | `Standart` |  |  |
+| `AIRS_S3_SECRET_ACCESS_KEY` | `AIRS_S3_SECRET_<br>ACCESS_KEY` | `` |  | `airssecret` in `conf/aias.env` |
+| `AIRS_S3_TIER` | `AIRS_S3_TIER` | `Standard` |  |  |
+| `ELASTIC_APM_APPLICATION_PACKAGES` | `io.arlas` | `` |  |  |
+| `ELASTIC_APM_ENVIRONMENT` | `ELASTIC_APM_ENV<br>IRONMENT` | `` |  | `ARLAS` in `conf/elastic.env` |
+| `ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST` | `ELASTIC_APM_LOG<br>_ECS_FORMATTER_<br>ALLOW_LIST` | `*` |  |  |
+| `ELASTIC_APM_LOG_ECS_REFORMATTING` | `ELASTIC_APM_LOG<br>_ECS_REFORMATTI<br>NG` | `OVERRIDE` |  |  |
+| `ELASTIC_APM_SECRET_TOKEN` | `ELASTIC_APM_SEC<br>RET_TOKEN` | `` |  | `not_a_secret` in `conf/elastic.env` |
+| `ELASTIC_APM_SERVER_URLS` | `ELASTIC_APM_SER<br>VER_URLS` | `http://apm-server:8200` |  |  |
+| `ELASTIC_APM_SERVICE_NAME` | `airs-server` | `` |  |  |
+| `ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS` | `GoogleHC/*, kub<br><br>e-probe/*, <br>curl<br>*, Goog<br>leSta ...` | `` |  |  |
+| `ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME` | `ELASTIC_APM_USE<br>_JAXRS_PATH_AS_<br>TRANSACTION_NAM<br>E` | `true` |  |  |
+
+## File dc/ref-dc-aias-aproc-proc.yaml
+### Service aproc-proc
+Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
+
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-pr<br>oc:0.6.12` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LE<br>VEL` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `APROC_CONFIGURATION_FILE` | `/home/app/worke<br><br>r/conf/apro<br>c.ya<br>ml` | `` |  |  |
+| `CELERY_BROKER_URL` | `pyamqp://guest:<br><br>guest@rabbi<br>tmq:<br>5672//` | `` |  |  |
+| `CELERY_RESULT_BACKEND` | `redis://redis:6<br><br>379/0` | `` |  |  |
+| `AIRS_ENDPOINT` | `http://airs-ser<br><br>ver:8000/ai<br>rs` | `` |  |  |
+| `APROC_ENDPOINT_FROM_APROC` | `http://aproc-se<br><br>rvice:8001/<br>apro<br>c` | `` |  |  |
+| `ROOT_DIRECTORY` | `/inputs` | `` |  |  |
+| `ARLAS_SMTP_ACTIVATED` | `ARLAS_SMTP_ACTI<br>VATED` | `false` |  | `false` in `conf/aias.env` |
+| `ARLAS_SMTP_HOST` | `ARLAS_SMTP_HOST` | `` |  | `tobechanged` in `conf/aias.env` |
+| `ARLAS_SMTP_PORT` | `ARLAS_SMTP_PORT` | `25` |  | `25` in `conf/aias.env` |
+| `ARLAS_SMTP_USERNAME` | `ARLAS_SMTP_USER<br>NAME` | `` |  | `tobechanged` in `conf/aias.env` |
+| `ARLAS_SMTP_PASSWORD` | `ARLAS_SMTP_PASS<br>WORD` | `` |  | `tobechanged` in `conf/aias.env` |
+| `ARLAS_SMTP_FROM` | `ARLAS_SMTP_FROM` | `` |  | `tobechanged@tob<br>echanged.io` in `conf/aias.env` |
+| `APROC_DOWNLOAD_ADMIN_EMAILS` | `APROC_DOWNLOAD_<br>ADMIN_EMAILS` | `` |  | `"admin@the.boss<br>,someone.else@t<br>he.boss"` in `conf/aias.env` |
+| `APROC_DOWNLOAD_OUTBOX_DIR` | `"/outbox"` | `` |  |  |
+| `APROC_DOWNLOAD_CONTENT_USER` | `APROC_DOWNLOAD_<br>CONTENT_USER` | `` |  | `"\"ARLAS Servic<br>es: Dear {arlas<br>-user-email}. <<br>br>Yo ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_SUBJECT_USER` | `APROC_DOWNLOAD_<br>SUBJECT_USER` | `` |  | `"\"ARLAS Servic<br>es: Your downlo<br>ad of {collecti<br>on}/{ ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_CONTENT_ERROR` | `APROC_DOWNLOAD_<br>CONTENT_ERROR` | `` |  | `"\"ARLAS Servic<br>es: The downloa<br>d of {collectio<br>n}/{i ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_SUBJECT_ERROR` | `APROC_DOWNLOAD_<br>SUBJECT_ERROR` | `` |  | `"\"ARLAS Servic<br>es: ERROR: The <br>download of {co<br>llect ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_CONTENT_ADMIN` | `APROC_DOWNLOAD_<br>CONTENT_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: The downloa<br>d of {collectio<br>n}/{i ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_SUBJECT_ADMIN` | `APROC_DOWNLOAD_<br>SUBJECT_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: The downloa<br>d of {collectio<br>n}/{i ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_SUBJECT_USER` | `APROC_DOWNLOAD_<br>REQUEST_SUBJECT<br>_USER` | `` |  | `"\"ARLAS Servic<br>es: Thank you f<br>or your downloa<br>d req ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_CONTENT_USER` | `APROC_DOWNLOAD_<br>REQUEST_CONTENT<br>_USER` | `` |  | `"\"ARLAS Servic<br>es: Dear {arlas<br>-user-email}. <<br>br>Yo ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_SUBJECT_ADMIN` | `APROC_DOWNLOAD_<br>REQUEST_SUBJECT<br>_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: {arlas-user<br>-email} request<br>ed th ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_CONTENT_ADMIN` | `APROC_DOWNLOAD_<br>REQUEST_CONTENT<br>_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: {arlas-user<br>-email} request<br>ed th ...` in `conf/aias.env` |
+| `APROC_EMAIL_PATH_PREFIX_ADD` | `APROC_EMAIL_PAT<br>H_PREFIX_ADD` | `` |  | `"/tmp/"` in `conf/aias.env` |
+| `APROC_PATH_TO_WINDOWS` | `APROC_PATH_TO_W<br>INDOWS` | `` |  | `false` in `conf/aias.env` |
+| `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARC<br>H` | `` |  | `"http://arlas-s<br>erver:9999/arla<br>s/explore/{coll<br>ectio ...` in `conf/aias.env` |
+| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLL<br>ECTION_PREFIX` | `` |  | `org.com@airs` in `conf/aias.env` |
+| `APROC_INDEX_ENDPOINT_URL` | `http://elastics<br><br>earch:9200` | `` |  |  |
+| `APROC_INDEX_NAME` | `APROC_INDEX_NAM<br>E` | `` |  | `aproc_downloads` in `conf/aias.env` |
+| `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
+| `TMP_FOLDER` | `"/outbox"` | `` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_END<br>POINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUC<br>KET` | `` |  | `downloads` in `conf/aias.env` |
+| `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACC<br>ESS_KEY_ID` | `airs` |  |  |
+| `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SEC<br>RET_ACCESS_KEY` | `airssecret` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASS<br>ET_HTTP_ENDPOIN<br>T_URL` | `http://minio:9000/{}/{}` |  |  |
+| `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_<br>OUTBOX_DIR` | `True` |  |  |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-pub<br>lic/OPENDATA` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STO<br>RAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STO<br>RAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STO<br>RAGE_API_KEY_PR<br>OJECT` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID` | `APROC_INPUT_STO<br>RAGE_API_KEY_PR<br>IVATE_KEY_ID` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `APROC_INPUT_STO<br>RAGE_API_KEY_PR<br>IVATE_KEY` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_DOMAIN` | `APROC_INPUT_STO<br>RAGE_DOMAIN` | `` |  | `geodes-portal.c<br>nes.fr` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STO<br>RAGE_FORCE_DOWN<br>LOAD` | `True` |  | `True` in `conf/aias.env` |
+
+List of volumes:
+
+- `${APROC_INPUT_DIR}:/inputs:ro`
+- `${APROC_DOWNLOAD_DIR}:/outbox`
+- `${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro`
+- `${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro`
+- `${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro`
+- `${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro`
+## File dc/ref-dc-aias-aproc-service.yaml
+### Service aproc-service
+Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
+
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-se<br>rvice:0.6.12` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LE<br>VEL` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `APROC_HOST` | `0.0.0.0` | `` |  |  |
+| `APROC_PORT` | `8001` | `` |  |  |
+| `APROC_PREFIX` | `/aproc` | `` |  |  |
+| `APROC_CONFIGURATION_FILE` | `/app/conf/aproc<br><br>.yaml` | `` |  |  |
+| `CELERY_BROKER_URL` | `pyamqp://guest:<br><br>guest@rabbi<br>tmq:<br>5672//` | `` |  |  |
+| `CELERY_RESULT_BACKEND` | `redis://redis:6<br><br>379/0` | `` |  |  |
+| `AIRS_ENDPOINT` | `http://airs-ser<br><br>ver:8000/ai<br>rs` | `` |  |  |
+| `ARLAS_SMTP_ACTIVATED` | `ARLAS_SMTP_ACTI<br>VATED` | `false` |  | `false` in `conf/aias.env` |
+| `ARLAS_SMTP_HOST` | `ARLAS_SMTP_HOST` | `` |  | `tobechanged` in `conf/aias.env` |
+| `ARLAS_SMTP_PORT` | `ARLAS_SMTP_PORT` | `25` |  | `25` in `conf/aias.env` |
+| `ARLAS_SMTP_USERNAME` | `ARLAS_SMTP_USER<br>NAME` | `` |  | `tobechanged` in `conf/aias.env` |
+| `ARLAS_SMTP_PASSWORD` | `ARLAS_SMTP_PASS<br>WORD` | `` |  | `tobechanged` in `conf/aias.env` |
+| `ARLAS_SMTP_FROM` | `ARLAS_SMTP_FROM` | `` |  | `tobechanged@tob<br>echanged.io` in `conf/aias.env` |
+| `APROC_DOWNLOAD_ADMIN_EMAILS` | `APROC_DOWNLOAD_<br>ADMIN_EMAILS` | `` |  | `"admin@the.boss<br>,someone.else@t<br>he.boss"` in `conf/aias.env` |
+| `APROC_DOWNLOAD_OUTBOX_DIR` | `"/outbox"` | `` |  |  |
+| `APROC_DOWNLOAD_CONTENT_USER` | `APROC_DOWNLOAD_<br>CONTENT_USER` | `` |  | `"\"ARLAS Servic<br>es: Dear {arlas<br>-user-email}. <<br>br>Yo ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_SUBJECT_USER` | `APROC_DOWNLOAD_<br>SUBJECT_USER` | `` |  | `"\"ARLAS Servic<br>es: Your downlo<br>ad of {collecti<br>on}/{ ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_CONTENT_ERROR` | `APROC_DOWNLOAD_<br>CONTENT_ERROR` | `` |  | `"\"ARLAS Servic<br>es: The downloa<br>d of {collectio<br>n}/{i ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_SUBJECT_ERROR` | `APROC_DOWNLOAD_<br>SUBJECT_ERROR` | `` |  | `"\"ARLAS Servic<br>es: ERROR: The <br>download of {co<br>llect ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_CONTENT_ADMIN` | `APROC_DOWNLOAD_<br>CONTENT_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: The downloa<br>d of {collectio<br>n}/{i ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_SUBJECT_ADMIN` | `APROC_DOWNLOAD_<br>SUBJECT_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: The downloa<br>d of {collectio<br>n}/{i ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_SUBJECT_USER` | `APROC_DOWNLOAD_<br>REQUEST_SUBJECT<br>_USER` | `` |  | `"\"ARLAS Servic<br>es: Thank you f<br>or your downloa<br>d req ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_CONTENT_USER` | `APROC_DOWNLOAD_<br>REQUEST_CONTENT<br>_USER` | `` |  | `"\"ARLAS Servic<br>es: Dear {arlas<br>-user-email}. <<br>br>Yo ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_SUBJECT_ADMIN` | `APROC_DOWNLOAD_<br>REQUEST_SUBJECT<br>_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: {arlas-user<br>-email} request<br>ed th ...` in `conf/aias.env` |
+| `APROC_DOWNLOAD_REQUEST_CONTENT_ADMIN` | `APROC_DOWNLOAD_<br>REQUEST_CONTENT<br>_ADMIN` | `` |  | `"\"ARLAS Servic<br>es: {arlas-user<br>-email} request<br>ed th ...` in `conf/aias.env` |
+| `APROC_EMAIL_PATH_PREFIX_ADD` | `APROC_EMAIL_PAT<br>H_PREFIX_ADD` | `` |  | `"/tmp/"` in `conf/aias.env` |
+| `APROC_PATH_TO_WINDOWS` | `APROC_PATH_TO_W<br>INDOWS` | `` |  | `false` in `conf/aias.env` |
+| `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARC<br>H` | `` |  | `"http://arlas-s<br>erver:9999/arla<br>s/explore/{coll<br>ectio ...` in `conf/aias.env` |
+| `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLL<br>ECTION_PREFIX` | `` |  | `org.com@airs` in `conf/aias.env` |
+| `APROC_INDEX_ENDPOINT_URL` | `http://elastics<br><br>earch:9200` | `` |  |  |
+| `APROC_INDEX_NAME` | `APROC_INDEX_NAM<br>E` | `` |  | `aproc_downloads` in `conf/aias.env` |
+| `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_END<br>POINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUC<br>KET` | `` |  | `downloads` in `conf/aias.env` |
+| `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACC<br>ESS_KEY_ID` | `airs` |  |  |
+| `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SEC<br>RET_ACCESS_KEY` | `airssecret` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASS<br>ET_HTTP_ENDPOIN<br>T_URL` | `http://minio:9000/{}/{}` |  |  |
+| `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_<br>OUTBOX_DIR` | `True` |  |  |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-pub<br>lic/OPENDATA` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STO<br>RAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STO<br>RAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STO<br>RAGE_API_KEY_PR<br>OJECT` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID` | `APROC_INPUT_STO<br>RAGE_API_KEY_PR<br>IVATE_KEY_ID` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `APROC_INPUT_STO<br>RAGE_API_KEY_PR<br>IVATE_KEY` | `` |  | `""` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_DOMAIN` | `APROC_INPUT_STO<br>RAGE_DOMAIN` | `` |  | `geodes-portal.c<br>nes.fr` in `conf/aias.env` |
+| `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STO<br>RAGE_FORCE_DOWN<br>LOAD` | `True` |  | `True` in `conf/aias.env` |
+
+List of volumes:
+
+- `${APROC_INPUT_DIR}:/inputs:ro`
+- `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
+- `${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro`
+- `${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro`
+- `${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro`
+## File dc/ref-dc-aias-fam-wui.yaml
+### Service arlas-fam-wui
+Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
+
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fa<br>m-wui:0.6.12` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `FAM_WUI_BASE_HREF` | `/fam-wui` | `` |  |  |
+| `ARLAS_USE_AUTHENT` | `true` | `` |  |  |
+| `ARLAS_AUTHENT_MODE` | `iam` | `` |  |  |
+| `ARLAS_IAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `ARLAS_AUTHENT_THRESHOLD` | `60000` | `` |  |  |
+| `ARLAS_AUTHENT_SIGN_UP_ENABLED` | `false` | `` |  |  |
+| `ARLAS_TAB_NAME` | `"ARLAS FAM Wui"` | `` |  |  |
+| `FAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `FAM_DEFAULT_PATH` | `''` | `` |  |  |
+| `FAM_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
+| `FAM_ARCHIVES_PAGES_SIZE` | `FAM_ARCHIVES_PA<br>GES_SIZE` | `` |  |  |
+| `FAM_FILES_PAGES_SIZE` | `FAM_FILES_PAGES<br>_SIZE` | `` |  |  |
+| `APROC_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `APROC_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
+| `APROC_CATALOG` | `AIAS_CATALOG_NA<br>ME` | `` |  |  |
+| `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `AIRS_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_FAM_LINKS` | `` |  | `'` in `conf/aias.env` |
+
+## File dc/ref-dc-aias-fam.yaml
+### Service fam-service
+Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
+
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.<br>12` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `FAM_LOGGER_LEVEL` | `FAM_LOGGER_LEVE<br>L` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `FAM_PREFIX` | `/fam` | `` |  |  |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-pub<br>lic/OPENDATA` in `conf/aias.env` |
+| `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
+
+List of volumes:
+
+- `${APROC_INPUT_DIR}:/inputs:ro`
+- `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
+## File dc/ref-dc-aias-minio.yaml
+### Service minio
+Description: Minio is an object store
+
+Image: `ARLAS_VERSION_MINIO` with `minio/minio:REL<br>EASE.2025-04-22<br>T22-12-26Z` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `MINIO_BROWSER` | `off` | `` |  |  |
+| `MINIO_ROOT_PASSWORD` | `MINIO_ROOT_PASS<br>WORD` | `` |  | `airssecret` in `conf/minio.env` |
+| `MINIO_ROOT_USER` | `MINIO_ROOT_USER` | `` |  | `airs` in `conf/minio.env` |
+
+List of volumes:
+
+- `${AIRS_STORAGE_DIRECTORY:-arlas-data-minio}:/data`
+## File dc/ref-dc-aias-rabbitmq.yaml
+### Service rabbitmq
+Image: `ARLAS_VERSION_RABBITMQ` with `rabbitmq:3.13.7<br>-management-alp<br>ine` in `conf/versions.env`
+
+
+List of volumes:
+
+- `arlas-data-rabbimq:/var/lib/rabbitmq/mnesia`
+## File dc/ref-dc-aias-redis.yaml
+### Service redis
+Image: `ARLAS_VERSION_REDIS` with `redis/redis-sta<br>ck:7.4.0-v3` in `conf/versions.env`
+
+
+List of volumes:
+
+- `arlas-data-redis:/data`
+## File dc/ref-dc-aias-volumes.yaml
+## File dc/ref-dc-aias-agate.yaml
+### Service agate
+Description: AGATE is a forward authorization service for accessing resources such as images
+
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.<br>6.12` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `AGATE_LOGGER_LEVEL` | `AGATE_LOGGER_LE<br>VEL` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARC<br>H` | `` |  | `"http://arlas-s<br>erver:9999/arla<br>s/explore/{coll<br>ectio ...` in `conf/aias.env` |
+| `AGATE_PREFIX` | `/agate` | `` |  |  |
+| `AGATE_HOST` | `AGATE_HOST` | `0.0.0.0` |  |  |
+| `AGATE_PORT` | `AGATE_PORT` | `8004` |  |  |
+| `AGATE_URL_HEADER` | `X-Forwarded-Uri` | `` |  |  |
+| `AGATE_URL_HEADER_PREFIX` | `AIRS_S3_BUCKET` | `` |  | `airs-storage` in `conf/aias.env` |
+
+List of volumes:
+
+- `${PWD}/conf/aias/agate.yaml:/app/conf/agate.yaml:ro`
+- `${PWD}/conf/aias/roles.yaml:/app/conf/roles.yaml:ro`

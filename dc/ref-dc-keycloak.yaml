@@ -30,6 +30,12 @@ services:
       - ${PWD}/conf/arlas-ks.jks:/opt/keycloak/conf/keycloak.jks:ro
       - ${PWD}/conf/server.crt:/opt/keycloak/conf/server.crt:ro
       - ${PWD}/conf/server.key:/opt/keycloak/conf/server.key:ro
+    healthcheck:
+      test: ["CMD-SHELL", "echo > /dev/tcp/localhost/8080"]
+      interval: 20s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
     networks:
       - arlas-net
     logging:

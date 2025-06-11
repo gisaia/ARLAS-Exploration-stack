@@ -6,7 +6,7 @@ It also contains the script for starting the stack in different modes:
 
 - **Simple**: ARLAS without authentication, on HTTP
 - **IAM**: With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
-- **KC**: With Keycloak as Identity and Access Management, on HTTPS
+- **KC**: With Keycloak as Identity and Access Management, on HTTPS. This __must not be used in production as is__ : you must deploy your own keycloak.
 - **AIAS**: With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance. *(WORK IN PROGRESS)*
 
 See the [full documentation](https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/arlas_exploration_stack/) to run and deploy ARLAS Exploration stack.

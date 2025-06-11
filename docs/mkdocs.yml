@@ -22,7 +22,9 @@ nav:
   - Docker-compose services:
       - Simple deployment: dc_services/docker_compose_services_simple.md
       - IAM deployment: dc_services/docker_compose_services_iam.md
+      - Keycloak (KC) deployment: dc_services/docker_compose_services_kc.md
       - AIAS deployment: dc_services/docker_compose_services_aias.md
+      - AIASKC deployment: dc_services/docker_compose_services_aiaskc.md
 
 plugins:
   - search

@@ -14,10 +14,10 @@ services:
     ports:  
       - "80:9080" # !EXPOSE!
     volumes:
-      - ${PWD}/conf/apisix/conf.yaml:/usr/local/apisix/conf/config.yaml:ro
-      - ${PWD}/conf/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+      - ${PWD}/conf/apisix/config.yaml:/usr/local/apisix/conf/config.yaml
+      - ${PWD}/conf/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml
     networks:
-      - arlas-net
+      - arlas-net 
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:

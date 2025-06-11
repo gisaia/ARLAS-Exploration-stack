@@ -21,3 +21,4 @@ services:
       - arlas-net
     volumes:
       - ${PWD}/conf/aias/agate.yaml:/app/conf/agate.yaml:ro
+      - ${PWD}/conf/aias/roles.yaml:/app/conf/roles.yaml:ro

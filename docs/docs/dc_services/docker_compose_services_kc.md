@@ -9,6 +9,7 @@
 - [arlas-wui](#service-arlas-wui)
 - [protomaps](#service-protomaps)
 - [apisix](#service-apisix)
+- [db](#service-db)
 ## File dc/ref-dc-elastic.yaml
 ### Service elasticsearch
 Description: Elasticsearch is an indexing engine
@@ -37,9 +38,9 @@ Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-se<br>rver:27.1.0-rc.<br>1` in 
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `ARLAS_AUTH_POLICY_CLASS` | `ARLAS_AUTH_POLI<br>CY_CLASS` | `io.arlas.filter.impl.NoPolicyEnforcer` |  Specify a PolicyEnforcer class to load in order to activate Authentication if needed | `io.arlas.filter<br>.impl.KeycloakP<br>olicyEnforcer` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTH_PUBLIC_URIS` | `ARLAS_AUTH_PUBL<br>IC_URIS` | `` |  | `"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTH_PERMISSION_URL` | `ARLAS_AUTH_PERM<br>ISSION_URL` | `` |  |  |
+| `ARLAS_AUTH_POLICY_CLASS` | `ARLAS_AUTH_POLI<br>CY_CLASS` | `io.arlas.filter.impl.NoPolicyEnforcer` |  Specify a PolicyEnforcer class to load in order to activate Authentication if needed | `io.arlas.filter<br>.impl.KeycloakP<br>olicyEnforcer` in `conf/arlas_keycloak.env`<br>`io.arlas.filter<br>.impl.HTTPPolic<br>yEnforcer` in `conf/arlas_iam.env` |
+| `ARLAS_AUTH_PUBLIC_URIS` | `ARLAS_AUTH_PUBL<br>IC_URIS` | `` |  | `"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_keycloak.env`<br>`"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_iam.env` |
+| `ARLAS_AUTH_PERMISSION_URL` | `ARLAS_AUTH_PERM<br>ISSION_URL` | `` |  | `http://arlas-ia<br>m-server:9998/a<br>rlas_iam_server<br>/perm ...` in `conf/arlas_iam.env` |
 | `ARLAS_APP_PATH` | `/` | `` |  |  |
 | `ARLAS_BASE_URI` | `ARLAS_BASE_URI` | `http://arlas-server:9999/arlas/` |  Arlas base uri |  |
 | `ARLAS_CACHE_TIMEOUT` | `ARLAS_CACHE_TIM<br>EOUT` | `5` |  TTL in seconds of items in the cache |  |
@@ -76,16 +77,16 @@ Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-pe<br>rsistence-serve<br>r
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `ARLAS_AUTH_POLICY_CLASS` | `ARLAS_AUTH_POLI<br>CY_CLASS` | `io.arlas.filter.impl.NoPolicyEnforcer` |  | `io.arlas.filter<br>.impl.KeycloakP<br>olicyEnforcer` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTH_PUBLIC_URIS` | `ARLAS_AUTH_PUBL<br>IC_URIS` | `` |  | `"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTH_PERMISSION_URL` | `ARLAS_AUTH_PERM<br>ISSION_URL` | `` |  |  |
-| `ARLAS_AUTH_ENABLED` | `ARLAS_AUTH_ENAB<br>LED` | `false` |  | `true` in `conf/permissions.env` |
+| `ARLAS_AUTH_POLICY_CLASS` | `ARLAS_AUTH_POLI<br>CY_CLASS` | `io.arlas.filter.impl.NoPolicyEnforcer` |  | `io.arlas.filter<br>.impl.KeycloakP<br>olicyEnforcer` in `conf/arlas_keycloak.env`<br>`io.arlas.filter<br>.impl.HTTPPolic<br>yEnforcer` in `conf/arlas_iam.env` |
+| `ARLAS_AUTH_PUBLIC_URIS` | `ARLAS_AUTH_PUBL<br>IC_URIS` | `` |  | `"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_keycloak.env`<br>`"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_iam.env` |
+| `ARLAS_AUTH_PERMISSION_URL` | `ARLAS_AUTH_PERM<br>ISSION_URL` | `` |  | `http://arlas-ia<br>m-server:9998/a<br>rlas_iam_server<br>/perm ...` in `conf/arlas_iam.env` |
+| `ARLAS_AUTH_ENABLED` | `ARLAS_AUTH_ENAB<br>LED` | `false` |  | `true` in `conf/permissions.env`<br>`true` in `conf/arlas_iam.env` |
 | `ARLAS_CACHE_TIMEOUT` | `ARLAS_CACHE_TIM<br>EOUT` | `5` |  |  |
 | `ARLAS_PERSISTENCE_APP_PATH` | `ARLAS_PERSISTEN<br>CE_APP_PATH` | `/` |  |  |
 | `ARLAS_PERSISTENCE_ENGINE` | `ARLAS_PERSISTEN<br>CE_ENGINE` | `hibernate` |  | `file` in `conf/persistence-file.env` |
-| `ARLAS_PERSISTENCE_HIBERNATE_PASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  |  |
+| `ARLAS_PERSISTENCE_HIBERNATE_PASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  | `not_a_secret` in `conf/postgres.env` |
 | `ARLAS_PERSISTENCE_HIBERNATE_URL` | `ARLAS_PERSISTEN<br>CE_HIBERNATE_UR<br>L` | `jdbc:postgresql://db:5432/arlas` |  |  |
-| `ARLAS_PERSISTENCE_HIBERNATE_USER` | `POSTGRES_USER` | `` |  |  |
+| `ARLAS_PERSISTENCE_HIBERNATE_USER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
 | `ARLAS_PERSISTENCE_LOCAL_FOLDER` | `/persist/` | `` |  |  |
 | `ARLAS_PERSISTENCE_LOGGING_CONSOLE_LEVEL` | `ARLAS_PERSISTEN<br>CE_LOGGING_CONS<br>OLE_LEVEL` | `` |  | `INFO` in `conf/persistence-file.env` |
 | `ARLAS_PERSISTENCE_LOGGING_LEVEL` | `ARLAS_PERSISTEN<br>CE_LOGGING_LEVE<br>L` | `` |  | `INFO` in `conf/persistence-file.env` |
@@ -118,15 +119,15 @@ Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-pe<br>rmissions-serve<br>r
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `ARLAS_AUTH_POLICY_CLASS` | `ARLAS_AUTH_POLI<br>CY_CLASS` | `io.arlas.filter.impl.NoPolicyEnforcer` |  | `io.arlas.filter<br>.impl.KeycloakP<br>olicyEnforcer` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTH_PERMISSION_URL` | `ARLAS_AUTH_PERM<br>ISSION_URL` | `` |  |  |
-| `ARLAS_AUTH_ENABLED` | `ARLAS_AUTH_ENAB<br>LED` | `false` |  | `true` in `conf/permissions.env` |
+| `ARLAS_AUTH_POLICY_CLASS` | `ARLAS_AUTH_POLI<br>CY_CLASS` | `io.arlas.filter.impl.NoPolicyEnforcer` |  | `io.arlas.filter<br>.impl.KeycloakP<br>olicyEnforcer` in `conf/arlas_keycloak.env`<br>`io.arlas.filter<br>.impl.HTTPPolic<br>yEnforcer` in `conf/arlas_iam.env` |
+| `ARLAS_AUTH_PERMISSION_URL` | `ARLAS_AUTH_PERM<br>ISSION_URL` | `` |  | `http://arlas-ia<br>m-server:9998/a<br>rlas_iam_server<br>/perm ...` in `conf/arlas_iam.env` |
+| `ARLAS_AUTH_ENABLED` | `ARLAS_AUTH_ENAB<br>LED` | `false` |  | `true` in `conf/permissions.env`<br>`true` in `conf/arlas_iam.env` |
 | `ARLAS_PERMISSIONS_APP_PATH` | `/` | `` |  |  |
 | `ARLAS_PERMISSIONS_PREFIX` | `/arlas_permissi<br><br>ons_server` | `` |  |  |
 | `ARLAS_CACHE_TIMEOUT` | `ARLAS_CACHE_TIM<br>EOUT` | `5` |  |  |
 | `ARLAS_PERMISSIONS_LOGGING_CONSOLE_LEVEL` | `ARLAS_PERMISSIO<br>NS_LOGGING_CONS<br>OLE_LEVEL` | `` |  | `INFO` in `conf/permissions.env` |
 | `ARLAS_PERMISSIONS_LOGGING_LEVEL` | `ARLAS_PERMISSIO<br>NS_LOGGING_LEVE<br>L` | `` |  | `INFO` in `conf/permissions.env` |
-| `ARLAS_AUTH_PUBLIC_URIS` | `ARLAS_AUTH_PUBL<br>IC_URIS` | `` |  | `"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTH_PUBLIC_URIS` | `ARLAS_AUTH_PUBL<br>IC_URIS` | `` |  | `"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_keycloak.env`<br>`"swagger.*:*,st<br>ac:GET,openapi.<br>json:GET,stac/.<br>*:GET ...` in `conf/arlas_iam.env` |
 | `ARLAS_PERMISSIONS_PORT` | `ARLAS_PERMISSIO<br>NS_PORT` | `9996` |  |  |
 | `ELASTIC_APM_APPLICATION_PACKAGES` | `io.arlas` | `` |  |  |
 | `ELASTIC_APM_ENVIRONMENT` | `ELASTIC_APM_ENV<br>IRONMENT` | `` |  | `ARLAS` in `conf/elastic.env` |
@@ -178,11 +179,11 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wu<br>i-builder:27.0.<br>3` in
 | `ARLAS_AUTHENT_CLIENT_ID` | `ARLAS_AUTHENT_C<br>LIENT_ID` | `` |  | `arlas-front` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_DISABLE_AT_HASH_CHECK` | `ARLAS_AUTHENT_D<br>ISABLE_AT_HASH_<br>CHECK` | `true` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `ARLAS_AUTHENT_E<br>NABLE_SESSION_C<br>HECKS` | `true` |  | `true` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_F<br>ORCE_CONNECT` | `` |  | `false` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_F<br>ORCE_CONNECT` | `` |  | `false` in `conf/arlas_keycloak.env`<br>`false` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_I<br>SSUER` | `` |  | `https://${ARLAS<br>_HOST}:9443/aut<br>h/realms/arlas` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_L<br>OGIN_URL` | `` |  |  |
+| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_L<br>OGIN_URL` | `` |  | `https://${ARLAS<br>_HOST}/hub/logi<br>n` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_L<br>OGOUT_URL` | `` |  |  |
-| `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_M<br>ODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_M<br>ODE` | `` |  | `openid` in `conf/arlas_keycloak.env`<br>`iam` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_P<br>OST_LOGOUT_REDI<br>RECT_URI` | `` |  |  |
 | `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_R<br>EDIRECT_URI` | `/builder/callback` |  | `https://${ARLAS<br>_HOST}:443/wui/<br>callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_R<br>EQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
@@ -192,19 +193,19 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wu<br>i-builder:27.0.<br>3` in
 | `ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI` | `ARLAS_AUTHENT_S<br>ILENT_REFRESH_R<br>EDIRECT_URI-/bu<br>ilder ...` | `` |  |  |
 | `ARLAS_AUTHENT_SILENT_REFRESH_TIMEOUT` | `ARLAS_AUTHENT_S<br>ILENT_REFRESH_T<br>IMEOUT` | `10000` |  | `1000` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_STORAGE` | `ARLAS_AUTHENT_S<br>TORAGE` | `memorystorage` |  | `memorystorage` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_T<br>HRESHOLD` | `` |  |  |
+| `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_T<br>HRESHOLD` | `` |  | `60000` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_T<br>IMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_U<br>SE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_U<br>SE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env`<br>`true` in `conf/arlas_iam.env` |
 | `ARLAS_BASEMAPS` | `ARLAS_BASEMAPS` | `[{"name":"Empty","url":"/styles/empty/style.json","image":null}]` |  | `'[` in `conf/arlas.env` |
 | `ARLAS_BASEMAPS` | `[{"name":"Stree<br><br>ts-light","<br>url"<br>:"https<br>://ap ...` | `` |  |  |
 | `ARLAS_BUILDER_BASE_HREF` | `ARLAS_BUILDER_B<br>ASE_HREF` | `/builder` |  |  |
 | `ARLAS_EXTERNAL_NODE_PAGE` | `ARLAS_EXTERNAL_<br>NODE_PAGE` | `true` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVE<br>R_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIO<br>NS_URL` | `/arlas_permissions_server` |  |  |
-| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env` |
+| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/arlas_persistence_server` |  | `https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env`<br>`/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_iam.env` |
 | `ARLAS_SERVER_URL` | `ARLAS_SERVER_UR<br>L` | `/arlas` |  | `https://${ARLAS<br>_HOST}/arlas` in `conf/arlas_keycloak.env` |
-| `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env` |
-| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_keycloak.env` |
+| `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env`<br>`true` in `conf/arlas_iam.env` |
+| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_keycloak.env`<br>`https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_L<br>INKS` | `` |  | `'` in `conf/arlas.env` |
 
 ## File dc/ref-dc-arlas-hub.yaml
@@ -219,10 +220,10 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wu<br>i-hub:27.0.2` in `conf/versi
 | `ARLAS_AUTHENT_CLIENT_ID` | `ARLAS_AUTHENT_C<br>LIENT_ID` | `` |  | `arlas-front` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_DISABLE_AT_HASH_CHECK` | `ARLAS_AUTHENT_D<br>ISABLE_AT_HASH_<br>CHECK` | `true` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `ARLAS_AUTHENT_E<br>NABLE_SESSION_C<br>HECKS` | `true` |  | `true` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_F<br>ORCE_CONNECT` | `` |  | `false` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_F<br>ORCE_CONNECT` | `` |  | `false` in `conf/arlas_keycloak.env`<br>`false` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_I<br>SSUER` | `` |  | `https://${ARLAS<br>_HOST}:9443/aut<br>h/realms/arlas` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_L<br>OGOUT_URL` | `` |  |  |
-| `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_M<br>ODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_M<br>ODE` | `` |  | `openid` in `conf/arlas_keycloak.env`<br>`iam` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_R<br>EDIRECT_URI` | `/hub/callback` |  | `https://${ARLAS<br>_HOST}:443/wui/<br>callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_R<br>EQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_R<br>ESPONSE_TYPE` | `` |  | `code` in `conf/arlas_keycloak.env` |
@@ -231,16 +232,16 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wu<br>i-hub:27.0.2` in `conf/versi
 | `ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI` | `ARLAS_AUTHENT_S<br>ILENT_REFRESH_R<br>EDIRECT_URI-/hu<br>b/sil ...` | `` |  |  |
 | `ARLAS_AUTHENT_SILENT_REFRESH_TIMEOUT` | `ARLAS_AUTHENT_S<br>ILENT_REFRESH_T<br>IMEOUT` | `10000` |  | `1000` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_STORAGE` | `ARLAS_AUTHENT_S<br>TORAGE` | `memorystorage` |  | `memorystorage` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_T<br>HRESHOLD` | `` |  |  |
+| `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_T<br>HRESHOLD` | `` |  | `60000` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_T<br>IMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_U<br>SE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
-| `ARLAS_BUILDER_URL` | `ARLAS_BUILDER_U<br>RL` | `/builder/` |  | `https://${ARLAS<br>_HOST}/builder/` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_U<br>SE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env`<br>`true` in `conf/arlas_iam.env` |
+| `ARLAS_BUILDER_URL` | `ARLAS_BUILDER_U<br>RL` | `/builder/` |  | `https://${ARLAS<br>_HOST}/builder/` in `conf/arlas_keycloak.env`<br>`https://${ARLAS<br>_HOST}/builder/` in `conf/arlas_iam.env` |
 | `ARLAS_HUB_BASE_HREF` | `ARLAS_HUB_BASE_<br>HREF` | `/hub` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVE<br>R_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIO<br>NS_URL` | `/arlas_permissions_server` |  |  |
-| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/persist` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env` |
-| `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env` |
-| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_keycloak.env` |
+| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/persist` |  | `https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env`<br>`/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_iam.env` |
+| `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env`<br>`true` in `conf/arlas_iam.env` |
+| `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_keycloak.env`<br>`https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env` |
 
 ## File dc/ref-dc-arlas-wui.yaml
@@ -255,11 +256,11 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wu<br>i:27.0.4` in `conf/versions.
 | `ARLAS_AUTHENT_CLIENT_ID` | `ARLAS_AUTHENT_C<br>LIENT_ID` | `` |  | `arlas-front` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_DISABLE_AT_HASH_CHECK` | `ARLAS_AUTHENT_D<br>ISABLE_AT_HASH_<br>CHECK` | `true` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `ARLAS_AUTHENT_E<br>NABLE_SESSION_C<br>HECKS` | `true` |  | `true` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_F<br>ORCE_CONNECT` | `` |  | `false` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_FORCE_CONNECT` | `ARLAS_AUTHENT_F<br>ORCE_CONNECT` | `` |  | `false` in `conf/arlas_keycloak.env`<br>`false` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_I<br>SSUER` | `` |  | `https://${ARLAS<br>_HOST}:9443/aut<br>h/realms/arlas` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_L<br>OGIN_URL` | `` |  |  |
+| `ARLAS_AUTHENT_LOGIN_URL` | `ARLAS_AUTHENT_L<br>OGIN_URL` | `` |  | `https://${ARLAS<br>_HOST}/hub/logi<br>n` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_L<br>OGOUT_URL` | `` |  |  |
-| `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_M<br>ODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_M<br>ODE` | `` |  | `openid` in `conf/arlas_keycloak.env`<br>`iam` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_P<br>OST_LOGOUT_REDI<br>RECT_URI` | `` |  |  |
 | `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_R<br>EDIRECT_URI` | `/wui/callback` |  | `https://${ARLAS<br>_HOST}:443/wui/<br>callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_R<br>EQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
@@ -269,15 +270,15 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wu<br>i:27.0.4` in `conf/versions.
 | `ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI` | `ARLAS_AUTHENT_S<br>ILENT_REFRESH_R<br>EDIRECT_URI-/wu<br>i/sil ...` | `` |  |  |
 | `ARLAS_AUTHENT_SILENT_REFRESH_TIMEOUT` | `ARLAS_AUTHENT_S<br>ILENT_REFRESH_T<br>IMEOUT` | `10000` |  | `1000` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_STORAGE` | `ARLAS_AUTHENT_S<br>TORAGE` | `memorystorage` |  | `memorystorage` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_T<br>HRESHOLD` | `` |  |  |
+| `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_T<br>HRESHOLD` | `` |  | `60000` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_T<br>IMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_U<br>SE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_U<br>SE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env`<br>`true` in `conf/arlas_iam.env` |
 | `ARLAS_GEOCODING_FIND_PLACE_URL` | `ARLAS_GEOCODING<br>_FIND_PLACE_URL` | `` |  | empty value in `conf/arlas.env` |
 | `ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO` | `ARLAS_GEOCODING<br>_FIND_PLACE_ZOO<br>M_TO` | `10` |  |  |
 | `ARLAS_HUB_URL` | `ARLAS_HUB_URL` | `/hub/` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVE<br>R_URL` | `/arlas_iam_server` |  |  |
-| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env` |
-| `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env` |
+| `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/arlas_persistence_server` |  | `https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env`<br>`/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_iam.env` |
+| `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env`<br>`true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_<br>HREF` | `/wui` |  |  |
 | `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
@@ -320,3 +321,26 @@ List of volumes:
 
 - `${PWD}/conf/apisix/config.yaml:/usr/local/apisix/conf/config.yaml`
 - `${PWD}/conf/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml`
+## File dc/ref-dc-postgres.yaml
+### Service db
+Image: `POSTGRES_VERSION` with `postgres:16.8` in `conf/versions.env`
+
+| Container variable | Value or environment variable | Default | Description | Env file setting |
+| --- | --- | --- | --- | --- |
+| `DAY_OF_WEEK_TO_KEEP` | `POSTGRES_DAY_OF<br>_WEEK_TO_KEEP` | `` |  | `6` in `conf/postgres.env` |
+| `DAYS_TO_KEEP` | `POSTGRES_DAYS_T<br>O_KEEP` | `` |  | `7` in `conf/postgres.env` |
+| `WEEKS_TO_KEEP` | `POSTGRES_WEEKS_<br>TO_KEEP` | `` |  | `5` in `conf/postgres.env` |
+| `PG_BACKUP_DIR` | `/backup/` | `` |  |  |
+| `PGPASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  | `not_a_secret` in `conf/postgres.env` |
+| `PGUSER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
+| `POSTGRES_DB` | `arlas` | `` |  |  |
+| `POSTGRES_HOST_AUTH_METHOD` | `trust` | `` |  |  |
+| `POSTGRES_PASSWORD` | `POSTGRES_PASSWO<br>RD` | `` |  | `not_a_secret` in `conf/postgres.env` |
+| `POSTGRES_USER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
+
+List of volumes:
+
+- `${POSTGRES_BACKUP_STORAGE}:/backup/`
+- `${POSTGRES_CREATE_TABLE}:/docker-entrypoint-initdb.d/createTable.sql:ro`
+- `${POSTGRES_CRON}:/usr/local/bin/arlas/pg_backup_rotated.sh:ro`
+- `${POSTGRES_STORAGE}:/var/lib/postgresql/data`

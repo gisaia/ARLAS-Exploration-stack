@@ -32,6 +32,11 @@ if [ ${CONF} == "local.iam.admin" ]; then
     curl -kX POST https://localhost/arlas_iam_server/users/${USERID}/reset/${TOKEN} -H 'Content-Type: application/json;charset=utf-8' -d "secret"
 fi
 
+if [ ${CONF} == "local.kc.data" ]; then
+    export ARLAS_SERVER_URL=https://$ARLAS_HOST
+    USER_CONF="local.kc.data"
+fi
+
 echo "Fetch sample data"
 curl https://raw.githubusercontent.com/gisaia/arlas_cli/master/tests/sample.json -o sample/sample.json
 echo "Create mapping for courses"

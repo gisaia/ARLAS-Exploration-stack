@@ -1,5 +1,6 @@
 .env
 .DS_Store
+conf/aias/roles.yaml
 conf/apisix/apisix.yaml
 conf/server.crt
 conf/server.key

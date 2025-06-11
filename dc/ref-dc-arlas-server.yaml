@@ -9,7 +9,7 @@ services:
     restart: ${ARLAS_SERVER_RESTART_STRATEGY:-always}
     environment:
       - ARLAS_AUTH_POLICY_CLASS=${ARLAS_AUTH_POLICY_CLASS:-io.arlas.filter.impl.NoPolicyEnforcer} # Specify a PolicyEnforcer class to load in order to activate Authentication if needed
-      - ARLAS_AUTH_PUBLIC_URIS=swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,collections/demo_.*:GET,authorize/resources:GET
+      - ARLAS_AUTH_PUBLIC_URIS=${ARLAS_AUTH_PUBLIC_URIS}
       - ARLAS_AUTH_PERMISSION_URL="${ARLAS_AUTH_PERMISSION_URL}"
       - ARLAS_APP_PATH=/
       - ARLAS_BASE_URI="${ARLAS_BASE_URI:-http://arlas-server:9999/arlas/}" # Arlas base uri
@@ -34,6 +34,7 @@ services:
       - ARLAS_AUTH_KEYCLOAK_RESOURCE=${ARLAS_AUTH_KEYCLOAK_RESOURCE:-}
       - ARLAS_AUTH_KEYCLOAK_SECRET=${ARLAS_AUTH_KEYCLOAK_SECRET:-}
       - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}
+      - ARLAS_CHECK_ORGANISATIONS=${ARLAS_CHECK_ORGANISATIONS:-true}
     expose:
       - "9999"
     volumes:
