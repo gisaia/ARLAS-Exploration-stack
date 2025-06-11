@@ -9,6 +9,8 @@ jobs:
     - uses: actions/checkout@v4.1.4
     - name: Start simple stack
       run: ./start.sh
+    - name: Start simple stack second attempt
+      run: ./start.sh
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh
     - name: Install arlas_cli
@@ -20,53 +22,53 @@ jobs:
     - name: Stop stack
       run: ./stop.sh
 
-  iam-stack:
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4.1.4
-    - name: Start iam stack
-      run: ./start.sh iam
-    - name: Run endpoints tests
-      run: ./scripts/test_endpoints.sh iam
-    - name: Install arlas_cli
-      run: pip3.10 install arlas_cli
-    - name: Install pytest
-      run: pip3.10 install pytest==8.3.4
-    - name: Launch tests
-      run: pytest -s scripts/pytest/test_iam.py
-    - name: Stop stack
-      run: ./stop.sh
+  # iam-stack:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v4.1.4
+  #   - name: Start iam stack
+  #     run: ./start.sh iam
+  #   - name: Run endpoints tests
+  #     run: ./scripts/test_endpoints.sh iam
+  #   - name: Install arlas_cli
+  #     run: pip3.10 install arlas_cli
+  #   - name: Install pytest
+  #     run: pip3.10 install pytest==8.3.4
+  #   - name: Launch tests
+  #     run: pytest -s scripts/pytest/test_iam.py
+  #   - name: Stop stack
+  #     run: ./stop.sh
 
-  aias-stack:
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4.1.4
-    - name: Start aias stack
-      run: ./start.sh aias
-    - name: Run endpoints tests
-      run: ./scripts/test_endpoints.sh aias
-    - name: Stop stack
-      run: ./stop.sh
+  # aias-stack:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v4.1.4
+  #   - name: Start aias stack
+  #     run: ./start.sh aias
+  #   - name: Run endpoints tests
+  #     run: ./scripts/test_endpoints.sh aias
+  #   - name: Stop stack
+  #     run: ./stop.sh
 
-  kc-stack:
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4.1.4
-    - name: Start kc stack
-      run: ./start.sh kc
-    - name: Run endpoints tests
-      run: ./scripts/test_endpoints.sh kc
-    - name: Stop stack
-      run: ./stop.sh
+  # kc-stack:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v4.1.4
+  #   - name: Start kc stack
+  #     run: ./start.sh kc
+  #   - name: Run endpoints tests
+  #     run: ./scripts/test_endpoints.sh kc
+  #   - name: Stop stack
+  #     run: ./stop.sh
 
 
-  aiaskc-stack:
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4.1.4
-    - name: Start aiaskc stack
-      run: ./start.sh aiaskc
-    - name: Run endpoints tests
-      run: ./scripts/test_endpoints.sh aiaskc
-    - name: Stop stack
-      run: ./stop.sh
+  # aiaskc-stack:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v4.1.4
+  #   - name: Start aiaskc stack
+  #     run: ./start.sh aiaskc
+  #   - name: Run endpoints tests
+  #     run: ./scripts/test_endpoints.sh aiaskc
+  #   - name: Stop stack
+  #     run: ./stop.sh

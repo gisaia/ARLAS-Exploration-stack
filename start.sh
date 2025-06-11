@@ -108,3 +108,6 @@ cat ${ENV_FILES} > docker-compose.env
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES
 echo "STACK UP & RUNNING"
 docker ps
+docker logs apisix
+docker logs arlas-wui
+docker logs arlas-hub
