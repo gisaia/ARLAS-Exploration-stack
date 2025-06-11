@@ -96,13 +96,13 @@ fi
 #    set -e
 
 
+set +e # initial start can lead to temporally unhealthy keycloak
+
 if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
     echo "START KEYCLOAK"
     cat ${ENV_FILES} > docker-compose.env
-    set +e # initial start can lead to temporally unhealthy keycloak
     docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 keycloak
-    set -e
     sleep 60 # keycloak is terribly slow to start and healthcheck is not 100% sure
 fi
 
@@ -110,3 +110,6 @@ echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES
 echo "STACK UP & RUNNING"
+
+docker logs arlas-persistence-server
+set -e
