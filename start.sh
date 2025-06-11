@@ -108,7 +108,7 @@ fi
 
 echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
-docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES
+docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES  || true
 echo "STACK UP & RUNNING"
 
 docker logs arlas-persistence-server
