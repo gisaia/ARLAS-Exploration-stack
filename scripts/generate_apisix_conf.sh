@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
 
-export SSL_CERT=`cat conf/server.crt | sed 's/^/      /'`
-export SSL_KEY=`cat conf/server.key | sed 's/^/      /'`
+if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
+then
+    echo "no certificates"
+else
+    export SSL_CERT=`cat conf/server.crt | sed 's/^/      /'`
+    export SSL_KEY=`cat conf/server.key | sed 's/^/      /'`
+fi
+
 
 . conf/stack.env
 echo "ARLAS HOST: ${ARLAS_HOST}"
