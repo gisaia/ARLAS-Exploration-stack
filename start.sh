@@ -111,8 +111,6 @@ then
     set -e
 fi
 
-. ./conf/stack.env
-curl -k https://${ARLAS_HOST}:9443/auth/realms/arlas/.well-known/uma2-configuration
 
 echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
