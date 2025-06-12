@@ -11,8 +11,14 @@ CONF=$1
 export COLLECTION=$2
 INDEX=${ORG}"@airs_"${COLLECTION}
 
-GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
-USER_CONF="local.iam.user"
+if [ "$CONF" = "local.kc.data" ]
+then
+    GROUPS_PARAMS=''
+    USER_CONF="local.kc.data"
+else
+    GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
+    USER_CONF="local.iam.user"
+fi
 
 echo "Create collection '${COLLECTION}' on index '${INDEX}'"
 arlas_cli --config-file /tmp/arlas-cli.yaml \

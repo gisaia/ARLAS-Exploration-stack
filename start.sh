@@ -36,7 +36,12 @@ if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
     echo "CONFIGURE STACK WITH KEYCLOAK"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-keycloak.yaml "
-    COMPOSE_SERVICES=${COMPOSE_SERVICES}" keycloak"
+    if [ "$2" = "nokc" ]
+    then
+        echo "WILL NOT START KEYCLOACK"
+    else
+        COMPOSE_SERVICES=${COMPOSE_SERVICES}" keycloak"
+    fi
     ENV_FILES=${ENV_FILES}" conf/arlas_keycloak.env"
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
 fi
@@ -96,14 +101,14 @@ fi
 #    set -e
 
 
-set +e # initial start can lead to temporally unhealthy keycloak
 
 if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
     echo "START KEYCLOAK"
     cat ${ENV_FILES} > docker-compose.env
+    set +e # initial start can lead to temporally unhealthy keycloak
     docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 keycloak
-    sleep 60 # keycloak is terribly slow to start and healthcheck is not 100% sure
+    set -e
 fi
 
 . ./conf/stack.env
@@ -113,11 +118,3 @@ echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES  || true
 echo "STACK UP & RUNNING"
-
-docker logs keycloak
-docker logs arlas-persistence-server
-
-curl -k https://${ARLAS_HOST}:9443/auth/realms/arlas/.well-known/uma2-configuration
-curl -k https://localhost:9443/auth/realms/arlas/.well-known/uma2-configuration
-docker exec elasticsearch curl -k https://keycloak:9443/auth/realms/arlas/.well-known/uma2-configuration
-set -e

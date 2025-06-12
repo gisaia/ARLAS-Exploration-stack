@@ -277,6 +277,13 @@ To start, run:
 You can access ARLAS just like the [Keycloak deployment](#keycloak-deployment). You can also use the same script for initializing the stack with data.
 
 
+#### EO Catalog for Keycloak
+
+The process is the same as [EO Catalog for IAM](#eo-catalog). Simply change the `arlas_cli` connection configuration:
+
+```shell
+./scripts/init_aias_catalog.sh local.kc.data catalog org.com
+```
 
 ## Stop ARLAS stack
 
