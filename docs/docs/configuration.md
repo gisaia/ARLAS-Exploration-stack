@@ -4,6 +4,13 @@
 
 A significant number of parameters can be configured. Parameters are configured in the environment files located in the `conf/` directory.
 
+To change the values, __do not edit the .env files__, simply set the values you want in `conf/custom.env`. For instance, the first thing you want to add in `conf/custom.env` is:
+
+```shell
+ARLAS_HOST=mydomain.com
+```
+
+
 ### Common files
 
 - `conf/arlas.env`: General parameters of ARLAS Server
