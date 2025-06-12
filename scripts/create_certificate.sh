@@ -9,7 +9,7 @@ echo "creating conf/server.crt and conf/server.key ..."
 openssl genrsa -out conf/server.key 2048
 openssl req -new -key conf/server.key -out conf/server.csr \
   -subj "/CN="${ARLAS_HOST}
-
+chmod r+g conf/server.key
 openssl x509 -req -in conf/server.csr -signkey conf/server.key \
   -out conf/server.crt -days 365
 
