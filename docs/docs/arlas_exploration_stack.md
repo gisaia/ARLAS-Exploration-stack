@@ -249,7 +249,7 @@ Then, you can create the catalog:
 
 ### AIASKC deployment
 
-The AIASKC (ARLAS Item and Asset Services) deployment has:
+The AIASKC (ARLAS Item and Asset Services with Keycloak) deployment has:
 
 - [apisix](https://apisix.apache.org/)
 - [keycloak](https://www.keycloak.org) (For demo only, not secured. You must use your own deployment!)
