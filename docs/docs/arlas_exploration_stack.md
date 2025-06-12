@@ -4,6 +4,7 @@ The [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack)
 
 - [Simple](#simple-deployment): ARLAS without authentication, on HTTP
 - [IAM](#iam-deployment): With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
+- [KC](#kc-deployment): ARLAS With Keycloak
 - [AIAS](#aias-deployment): With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 - [AIASKC](#aiaskc-deployment): With Keycloak and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 
@@ -120,10 +121,10 @@ or as admin:
 
 ### Keycloak deployment
 
-The IAM deployment has:
+The Keycloak deployment has:
 
 - [apisix](https://apisix.apache.org/)
-- [keycloak](https://github.com/gisaia/ARLAS-wui-iam) __This is to demonstrate ARLAS with KC, do not use this keycloak in production__
+- [keycloak](https://www.keycloak.org/) __This is to demonstrate ARLAS with KC, do not use this keycloak in production__
 - [arlas-wui](https://github.com/gisaia/ARLAS-wui)
 - [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub)
 - [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder)

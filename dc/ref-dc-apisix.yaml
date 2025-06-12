@@ -3,11 +3,6 @@ services:
     image: ${APISIX_VERSION}
     platform: linux/x86_64
     container_name: apisix
-    # depends_on:
-    #   arlas-server:
-    #     condition: service_healthy
-    #   arlas-wui:
-    #     condition: service_healthy
     restart: ${APISIX_RESTART_STRATEGY:-always}
     environment:
       - APISIX_STAND_ALONE=${APISIX_STAND_ALONE:-true}
