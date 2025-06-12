@@ -45,6 +45,8 @@ jobs:
       run: ./scripts/update_hostname.sh
     - name: Start aias stack
       run: ./start.sh aias
+    - name: Show logs
+      run: scripts/show_logs.sh
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh aias
     - name: Stop stack
