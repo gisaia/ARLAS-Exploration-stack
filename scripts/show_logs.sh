@@ -10,3 +10,5 @@ show apisix
 show keycloak
 show arlas-server
 show arlas-persistence-server
+show agate
+show aproc-proc
