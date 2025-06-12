@@ -58,21 +58,24 @@ jobs:
       run: ./scripts/update_hostname.sh
     - name: Start kc stack
       run: ./start.sh kc
-    - name: Show logs
-      run: scripts/show_logs.sh
+    # - name: Show logs
+    #   run: scripts/show_logs.sh
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh kc
     - name: Stop stack
       run: ./stop.sh
 
-
-  # aiaskc-stack:
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #   - uses: actions/checkout@v4.1.4
-  #   - name: Start aiaskc stack
-  #     run: ./start.sh aiaskc
-  #   - name: Run endpoints tests
-  #     run: ./scripts/test_endpoints.sh aiaskc
-  #   - name: Stop stack
-  #     run: ./stop.sh
+  aiaskc-stack:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4.1.4
+    - name: Set hostname
+      run: ./scripts/update_hostname.sh
+    - name: Start aiaskc stack
+      run: ./start.sh aiaskc
+    # - name: Show logs
+    #   run: scripts/show_logs.sh
+    - name: Run endpoints tests
+      run: ./scripts/test_endpoints.sh aiaskc
+    - name: Stop stack
+      run: ./stop.sh
