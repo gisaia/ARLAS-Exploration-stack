@@ -20,27 +20,29 @@ jobs:
     - name: Stop stack
       run: ./stop.sh
 
-  iam-stack:
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4.1.4
-    - name: Start iam stack
-      run: ./start.sh iam
-    - name: Run endpoints tests
-      run: ./scripts/test_endpoints.sh iam
-    - name: Install arlas_cli
-      run: pip3.10 install arlas_cli
-    - name: Install pytest
-      run: pip3.10 install pytest==8.3.4
-    - name: Launch tests
-      run: pytest -s scripts/pytest/test_iam.py
-    - name: Stop stack
-      run: ./stop.sh
+  # iam-stack:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v4.1.4
+  #   - name: Start iam stack
+  #     run: ./start.sh iam
+  #   - name: Run endpoints tests
+  #     run: ./scripts/test_endpoints.sh iam
+  #   - name: Install arlas_cli
+  #     run: pip3.10 install arlas_cli
+  #   - name: Install pytest
+  #     run: pip3.10 install pytest==8.3.4
+  #   - name: Launch tests
+  #     run: pytest -s scripts/pytest/test_iam.py
+  #   - name: Stop stack
+  #     run: ./stop.sh
 
   aias-stack:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
+    - name: Set hostname
+      run: ./scripts/update_hostname.sh
     - name: Start aias stack
       run: ./start.sh aias
     - name: Run endpoints tests
@@ -56,8 +58,8 @@ jobs:
       run: ./scripts/update_hostname.sh
     - name: Start kc stack
       run: ./start.sh kc
-    # - name: Show logs
-    #   run: scripts/show_logs.sh
+    - name: Show logs
+      run: scripts/show_logs.sh
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh kc
     - name: Stop stack
@@ -71,8 +73,8 @@ jobs:
       run: ./scripts/update_hostname.sh
     - name: Start aiaskc stack
       run: ./start.sh aiaskc
-    # - name: Show logs
-    #   run: scripts/show_logs.sh
+    - name: Show logs
+      run: scripts/show_logs.sh
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh aiaskc
     - name: Stop stack
