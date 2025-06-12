@@ -11,7 +11,6 @@ routes:
         headers: 
           set:
             # Fix CWE Id: 693
-            Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
             # Fix CWE Id: 200
             Server: "ARLAS services"
             # Fix CWE Id: 319 // Value recommended by https://hstspreload.org/
@@ -51,7 +50,6 @@ routes:
         headers: 
           set:
             # Fix CWE Id: 693
-            Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
             # Fix CWE Id: 200
             Server: "ARLAS services"
             # Fix CWE Id: 319 // Value recommended by https://hstspreload.org/
@@ -67,7 +65,6 @@ routes:
         headers: 
           set:
             # Fix CWE Id: 693
-            Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
             # Fix CWE Id: 200
             Server: "ARLAS services"
             # Fix CWE Id: 319 // Value recommended by https://hstspreload.org/
@@ -84,7 +81,6 @@ routes:
         headers: 
           set:
             # Fix CWE Id: 693
-            Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
             # Fix CWE Id: 1021
             X-Frame-Options: "DENY"
             # Fix CWE Id: 693 // The () means those resources are not allowed.
@@ -106,7 +102,6 @@ routes:
         headers: 
           set:
             # Fix CWE Id: 693
-            Content-Security-Policy: "default-src https: data: blob: 'self'; connect-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; font-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; form-action 'self'; object-src 'none'; manifest-src 'self'; frame-src 'self'"
             # Fix CWE Id: 200
             Server: "ARLAS services"
             # Fix CWE Id: 319 // Value recommended by https://hstspreload.org/

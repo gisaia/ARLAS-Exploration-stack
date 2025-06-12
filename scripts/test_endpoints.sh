@@ -37,10 +37,22 @@ then
 fi
 
 
-if [ "$1" = "aias" ]
+if [ "$1" = "aias" ] || [ "$1" = "aiaskc" ]
 then
     test_status GET "https://localhost/aproc/healthcheck" 200
     test_status GET "https://localhost/agate/healthcheck" 200
     test_status GET "https://localhost/airs/healthcheck" 200
     echo "All good for aias."
+fi
+
+if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
+then
+    test_status GET "https://localhost/wui/favicon.ico" 200
+    test_status GET "https://localhost/hub/assets/hub-icon.png" 200
+    test_status GET "https://localhost/builder/favicon.ico" 200
+    test_status GET "https://localhost/arlas/healthcheck" 200
+    test_status GET "https://localhost/persist/persist/resources/config.json?size=20&page=1&order=desc" 200
+    test_status GET "https://localhost/arlas_permissions_server/authorize/resources?filter=persist%2Fresource%2F&pretty=false" 200
+    test_status GET "https://localhost:9443/auth/realms/arlas" 200
+    echo "All good for kc."
 fi

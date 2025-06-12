@@ -19,3 +19,8 @@ services:
     url_header: $AGATE_URL_HEADER|X-Forwarded-Uri
     url_header_prefix: $AGATE_URL_HEADER_PREFIX
     pattern_target: $TITILER_PATTERN_TARGET|query.url.url.path # takes the query parametters, use it as a url, then extract the path
+urbac:
+  url_header: $AGATE_URL_HEADER|x-forwarded-uri
+  method_header: $AGATE_METHOD_HEADER|x-forwarded-method
+  jwt_header: $AGATE_JWT_HEADER|authorization
+  role_file: conf/roles.yaml

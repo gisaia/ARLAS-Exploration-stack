@@ -7,6 +7,7 @@ USER_CONF=local
 CONF=$1
 GROUPS_PARAMS=""
 . conf/stack.env
+. conf/custom.env
 export ARLAS_SERVER_URL=http://$ARLAS_HOST
 if [ ${CONF} == "local.iam.admin" ]; then
     export ARLAS_SERVER_URL=https://$ARLAS_HOST
@@ -30,6 +31,11 @@ if [ ${CONF} == "local.iam.admin" ]; then
     TOKEN=`docker logs arlas-iam-server --tail 100 | grep "Reset token" | tail -1 | awk -F 'token: ' '{print $2}'`
     echo "Set password to 'secret'"
     curl -kX POST https://localhost/arlas_iam_server/users/${USERID}/reset/${TOKEN} -H 'Content-Type: application/json;charset=utf-8' -d "secret"
+fi
+
+if [ ${CONF} == "local.kc.data" ]; then
+    export ARLAS_SERVER_URL=https://$ARLAS_HOST
+    USER_CONF="local.kc.data"
 fi
 
 echo "Fetch sample data"

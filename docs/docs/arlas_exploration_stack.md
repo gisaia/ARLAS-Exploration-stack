@@ -4,7 +4,9 @@ The [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack)
 
 - [Simple](#simple-deployment): ARLAS without authentication, on HTTP
 - [IAM](#iam-deployment): With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
-- [AIAS](#aias-deployment): With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance. *(WORK IN PROGRESS)*
+- [KC](#kc-deployment): ARLAS With Keycloak
+- [AIAS](#aias-deployment): With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
+- [AIASKC](#aiaskc-deployment): With Keycloak and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 
 ## Run ARLAS stack
 
@@ -115,6 +117,67 @@ or as admin:
 
     For instance, a user in the organisation `gisaia.com`, who creates an index containing car gps data can name the index `gisaia.com@car_gps_locations`.
 
+
+
+### Keycloak deployment
+
+The Keycloak deployment has:
+
+- [apisix](https://apisix.apache.org/)
+- [keycloak](https://www.keycloak.org/) __This is to demonstrate ARLAS with KC, do not use this keycloak in production__
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui)
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub)
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder)
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence)
+- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
+- [arlas-server](https://github.com/gisaia/ARLAS-server)
+- [elasticsearch](https://github.com/elastic/elasticsearch)
+- [protomaps](https://protomaps.com/)
+
+**Start**
+
+To start, run: 
+```shell
+./start.sh kc
+```
+
+!!! success
+    Once started, you can open ARLAS in your browser: [https://localhost/](https://localhost/). 
+
+This keycloak service is for demo only. Three accounts are created:
+- user_basic with roles `role/arlas/user`, `group/public` and `group/config.json/gisaia.com`
+- user_builder with roles `role/arlas/builder` and the roles of user_basic
+- user_all_roles with roles `role/arlas/tagger`, `role/m2m/importer`, `role/arlas/datasets`, `role/arlas/downloader`, `role/arlas/builder` and the roles of user_basic
+
+The password is `secret`.
+
+!!! note
+    If you changed `ARLAS_HOST` in `conf/stack.env`, then open instead https://${ARLAS_HOST} .
+
+**Test**
+
+You can add a sample data set and a configured dashboard by running:
+
+```shell
+pip3.10 install arlas-cli
+./scripts/init_arlas_cli_confs.sh
+./scripts/init_stack_with_data.sh local.kc.data
+```
+
+!!! success
+    A simple dashboard with AIS data is then available. 
+
+You can login with:
+
+- username: `user_basic`
+- password: `secret`
+
+or as the data manager:
+
+- username: `user_all_roles`
+- password: `admin`
+
+
 ### AIAS deployment
 
 The AIAS (ARLAS Item and Asset Services) deployment has:
@@ -181,6 +244,46 @@ Then, you can create the catalog:
 
 ```shell
 ./scripts/init_aias_catalog.sh local.iam.user geodes org.com
+```
+
+
+### AIASKC deployment
+
+The AIASKC (ARLAS Item and Asset Services with Keycloak) deployment has:
+
+- [apisix](https://apisix.apache.org/)
+- [keycloak](https://www.keycloak.org) (For demo only, not secured. You must use your own deployment!)
+- [arlas-wui](https://github.com/gisaia/ARLAS-wui)
+- [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub)
+- [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder)
+- [arlas-persistence-server](https://github.com/gisaia/ARLAS-persistence)
+- [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
+- [arlas-server](https://github.com/gisaia/ARLAS-server)
+- [agate](https://github.com/gisaia/aias)
+- [fam](https://github.com/gisaia/aias)
+- [fam-wui](https://github.com/gisaia/aias)
+- [aproc-service](https://github.com/gisaia/aias)
+- [aproc-proc](https://github.com/gisaia/aias)
+- [elasticsearch](https://github.com/elastic/elasticsearch)
+- [protomaps](https://protomaps.com/)
+- [minio](https://min.io)
+- [redis](https://redis.io)
+- [rabbitmq](https://www.rabbitmq.com)
+
+To start, run: 
+```shell
+./start.sh aiaskc
+```
+
+You can access ARLAS just like the [Keycloak deployment](#keycloak-deployment). You can also use the same script for initializing the stack with data.
+
+
+#### EO Catalog for Keycloak
+
+The process is the same as [EO Catalog for IAM](#eo-catalog). Simply change the `arlas_cli` connection configuration:
+
+```shell
+./scripts/init_aias_catalog.sh local.kc.data catalog org.com
 ```
 
 ## Stop ARLAS stack

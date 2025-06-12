@@ -4,6 +4,13 @@
 
 A significant number of parameters can be configured. Parameters are configured in the environment files located in the `conf/` directory.
 
+To change the values, __do not edit the .env files__, simply set the values you want in `conf/custom.env`. For instance, the first thing you want to add in `conf/custom.env` is:
+
+```shell
+ARLAS_HOST=mydomain.com
+```
+
+
 ### Common files
 
 - `conf/arlas.env`: General parameters of ARLAS Server
@@ -31,6 +38,14 @@ All [common files](#common-files) and:
 
 See [ARLAS with IAM configuration](../../docker_compose_services_iam.md)
 
+### Keycloak deployment
+
+All [common files](#common-files) and:
+
+- `conf/arlas_keycloak.env`: Configuration of Keycloak for ARLAS
+
+See [ARLAS with Keycloak configuration](../../docker_compose_services_kc.md)
+
 ### AIAS deployment
 
 Same as [IAM deployment](#iam-deployment) and:
@@ -40,14 +55,24 @@ Same as [IAM deployment](#iam-deployment) and:
 
 See [ARLAS Items and Assets Services (AIAS) configuration](../../docker_compose_services_aias.md)
 
+### AIAS with Keycloak deployment
+
+Same as [Keycloak deployment](#keycloak-deployment) and:
+
+- `conf/aias.env`: Configuration of AIAS
+- `conf/minio.env`: Configuration of the minio object store
+
+See [ARLAS Items and Assets Services (AIAS) configuration with Keycloak](../../docker_compose_services_aiaskc.md)
+
 ## Host and domain
 
 By default, the stack is deployed on `http(s)://localhost/`. To deploy the ARLAS Stack on a different domain, simply change the `ARLAS_HOST` environment variable in `conf/stack.env`:
+
 ```shell
-ARLAS_HOST=localhost
+ARLAS_HOST=mydomain.com
 ```
 
-If you are using `arlas_cli` you need to run `scripts/init_arlas_cli_confs.sh` to create again the `arlas_cli` configuration file.
+If you are using `arlas_cli` and you updated the `$ARLAS_HOST` variable, then you need to run `scripts/init_arlas_cli_confs.sh` to create again the `arlas_cli` configuration file.
 
 ## Variables
 

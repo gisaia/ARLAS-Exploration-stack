@@ -1,9 +1,13 @@
 .env
 .DS_Store
+conf/aias/roles.yaml
 conf/apisix/apisix.yaml
 conf/server.crt
 conf/server.key
+conf/server.csr
+conf/arlas-ks.jks
 conf/apisix/apisix.yaml
+conf/apisix/apisix.template.yaml
 conf/apisix/domains.generated.ext
 conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
@@ -16,3 +20,6 @@ target
 __pycache__/
 *.py[cod]
 *$py.class
+.sonarlint/
+.vscode/
+conf/custom.env
