@@ -48,6 +48,15 @@ Same as [IAM deployment](#iam-deployment) and:
 
 See [ARLAS Items and Assets Services (AIAS) configuration](../../docker_compose_services_aias.md)
 
+### AIAS with Keycloak deployment
+
+Same as [Keycloak deployment](#keycloak-deployment) and:
+
+- `conf/aias.env`: Configuration of AIAS
+- `conf/minio.env`: Configuration of the minio object store
+
+See [ARLAS Items and Assets Services (AIAS) configuration with Keycloak](../../docker_compose_services_aiaskc.md)
+
 ## Host and domain
 
 By default, the stack is deployed on `http(s)://localhost/`. To deploy the ARLAS Stack on a different domain, simply change the `ARLAS_HOST` environment variable in `conf/stack.env`:

@@ -32,7 +32,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-se<br>rver:27.1.0-rc.<br>1` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-se<br>rver:27.1.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -62,7 +62,7 @@ Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-se<br>rver:27.1.0-rc.<br>1` in 
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYC<br>LOAK_RESOURCE` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_SECRET` | `ARLAS_AUTH_KEYC<br>LOAK_SECRET` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_URL` | `ARLAS_AUTH_KEYC<br>LOAK_URL` | `` |  |  |
-| `ARLAS_CHECK_ORGANISATIONS` | `ARLAS_CHECK_ORG<br>ANISATIONS` | `true` |  |  |
+| `ARLAS_CHECK_ORGANISATIONS` | `ARLAS_CHECK_ORG<br>ANISATIONS` | `true` |  | `false` in `conf/arlas.env` |
 
 List of volumes:
 
@@ -258,7 +258,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wu<br>i:27.0.4` in `conf/versions.
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  |  |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_<br>HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_<br>PROCESS_URL` | `` |  | `/aproc/processe<br>s/download/exec<br>ution` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_<br>PROCESS_CHECK_U<br>RL` | `` |  | `/aproc/processe<br>s/download` in `conf/arlas.env` |
@@ -289,7 +289,7 @@ List of volumes:
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
 
-Image: `APISIX_VERSION` with `apache/apisix:3<br>.9.1-debian` in `conf/versions.env`
+Image: `APISIX_VERSION` with `apache/apisix:3<br>.12.0-debian` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |

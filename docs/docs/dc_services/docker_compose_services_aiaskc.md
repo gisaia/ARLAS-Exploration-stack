@@ -43,7 +43,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-se<br>rver:27.1.0-rc.<br>1` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-se<br>rver:27.1.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -73,7 +73,7 @@ Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-se<br>rver:27.1.0-rc.<br>1` in 
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYC<br>LOAK_RESOURCE` | `` |  | `arlas-backend` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTH_KEYCLOAK_SECRET` | `ARLAS_AUTH_KEYC<br>LOAK_SECRET` | `` |  | `"rha14c4202RB0D<br>xlke6ZNCCTw9gkv<br>LJ8"` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTH_KEYCLOAK_URL` | `ARLAS_AUTH_KEYC<br>LOAK_URL` | `` |  | `https://${ARLAS<br>_HOST}:9443/aut<br>h` in `conf/arlas_keycloak.env` |
-| `ARLAS_CHECK_ORGANISATIONS` | `ARLAS_CHECK_ORG<br>ANISATIONS` | `true` |  | `false` in `conf/arlas_keycloak.env` |
+| `ARLAS_CHECK_ORGANISATIONS` | `ARLAS_CHECK_ORG<br>ANISATIONS` | `true` |  | `false` in `conf/arlas.env`<br>`false` in `conf/arlas_keycloak.env` |
 
 List of volumes:
 
@@ -195,7 +195,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wu<br>i-builder:27.0.<br>3` in
 | `ARLAS_SERVER_URL` | `ARLAS_SERVER_UR<br>L` | `/arlas` |  | `https://${ARLAS<br>_HOST}/arlas` in `conf/arlas_keycloak.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_keycloak.env` |
-| `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_L<br>INKS` | `` |  | `'` in `conf/arlas.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_L<br>INKS` | `` |  | `'` in `conf/arlas.env`<br>`'` in `conf/arlas_keycloak.env` |
 
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub
@@ -231,7 +231,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wu<br>i-hub:27.0.2` in `conf/versi
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/persist` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS<br>_HOST}/wui/` in `conf/arlas_keycloak.env` |
-| `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env`<br>`'` in `conf/arlas_keycloak.env` |
 
 ## File dc/ref-dc-arlas-wui.yaml
 ### Service arlas-wui
@@ -269,8 +269,8 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wu<br>i:27.0.4` in `conf/versions.
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_<br>HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
-| `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env`<br>`'` in `conf/arlas_keycloak.env` |
 | `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_<br>PROCESS_URL` | `` |  | `/aproc/processe<br>s/download/exec<br>ution` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_<br>PROCESS_CHECK_U<br>RL` | `` |  | `/aproc/processe<br>s/download` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS` | `ARLAS_DOWNLOAD_<br>PROCESS_MAX_ITE<br>MS` | `` |  |  |
@@ -300,7 +300,7 @@ List of volumes:
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
 
-Image: `APISIX_VERSION` with `apache/apisix:3<br>.9.1-debian` in `conf/versions.env`
+Image: `APISIX_VERSION` with `apache/apisix:3<br>.12.0-debian` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -357,7 +357,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6<br>.12` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6<br>.14` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -396,7 +396,7 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6<br>.12` in `conf/versions.env`
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-pr<br>oc:0.6.12` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-pr<br>oc:0.6.14` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -460,7 +460,7 @@ List of volumes:
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-se<br>rvice:0.6.12` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-se<br>rvice:0.6.14` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -523,26 +523,42 @@ List of volumes:
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fa<br>m-wui:0.6.12` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fa<br>m-wui:0.6.14` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
 | `FAM_WUI_BASE_HREF` | `/fam-wui` | `` |  |  |
+| `ARLAS_AUTHENT_CLEAR_HASH` | `ARLAS_AUTHENT_C<br>LEAR_HASH` | `true` |  | `true` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_CLIENT_ID` | `ARLAS_AUTHENT_C<br>LIENT_ID` | `` |  | `arlas-front` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_DISABLE_AT_HASH_CHECK` | `ARLAS_AUTHENT_D<br>ISABLE_AT_HASH_<br>CHECK` | `true` |  | `true` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_ENABLE_SESSION_CHECKS` | `ARLAS_AUTHENT_E<br>NABLE_SESSION_C<br>HECKS` | `true` |  | `true` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_FORCE_CONNECT` | `true` | `` |  |  |
+| `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_I<br>SSUER` | `` |  | `https://${ARLAS<br>_HOST}:9443/aut<br>h/realms/arlas` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_L<br>OGOUT_URL` | `` |  |  |
+| `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_M<br>ODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_R<br>EQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_R<br>ESPONSE_TYPE` | `` |  | `code` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_S<br>COPE` | `` |  | `profile` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_SHOW_DEBUG` | `ARLAS_AUTHENT_S<br>HOW_DEBUG` | `false` |  | `false` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI` | `/fam-wui/silent<br><br>-refresh.ht<br>ml` | `` |  |  |
+| `ARLAS_AUTHENT_SILENT_REFRESH_TIMEOUT` | `ARLAS_AUTHENT_S<br>ILENT_REFRESH_T<br>IMEOUT` | `10000` |  | `1000` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_STORAGE` | `ARLAS_AUTHENT_S<br>TORAGE` | `memorystorage` |  | `memorystorage` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_T<br>HRESHOLD` | `` |  |  |
+| `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_T<br>IMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_U<br>SE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_USE_AUTHENT` | `true` | `` |  |  |
-| `ARLAS_AUTHENT_MODE` | `iam` | `` |  |  |
-| `ARLAS_IAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
-| `ARLAS_AUTHENT_THRESHOLD` | `60000` | `` |  |  |
-| `ARLAS_AUTHENT_SIGN_UP_ENABLED` | `false` | `` |  |  |
+| `ARLAS_IAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
 | `ARLAS_TAB_NAME` | `"ARLAS FAM Wui"` | `` |  |  |
-| `FAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `FAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
 | `FAM_DEFAULT_PATH` | `''` | `` |  |  |
 | `FAM_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `FAM_ARCHIVES_PAGES_SIZE` | `FAM_ARCHIVES_PA<br>GES_SIZE` | `` |  |  |
 | `FAM_FILES_PAGES_SIZE` | `FAM_FILES_PAGES<br>_SIZE` | `` |  |  |
-| `APROC_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `APROC_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
 | `APROC_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `APROC_CATALOG` | `AIAS_CATALOG_NA<br>ME` | `` |  |  |
-| `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
 | `AIRS_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_FAM_LINKS` | `` |  | `'` in `conf/aias.env` |
 
@@ -550,7 +566,7 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fa<br>m-wui:0.6.12` in `conf/v
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.<br>12` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.<br>14` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -599,7 +615,7 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.<br>6.12` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.<br>6.14` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |

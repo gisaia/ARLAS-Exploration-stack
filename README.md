@@ -4,10 +4,10 @@ This projects contains reference docker compose files for all the ARLAS microser
 
 It also contains the script for starting the stack in different modes:
 
-- **Simple**: ARLAS without authentication, on HTTP
-- **IAM**: With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
-- **KC**: With Keycloak as Identity and Access Management, on HTTPS. This __must not be used in production as is__ : you must deploy your own keycloak.
-- **AIAS**: With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance. *(WORK IN PROGRESS)*
+- [Simple](#simple-deployment): ARLAS without authentication, on HTTP
+- [IAM](#iam-deployment): With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
+- [AIAS](#aias-deployment): With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
+- [AIASKC](#aiaskc-deployment): With Keycloak and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 
 See the [full documentation](https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/arlas_exploration_stack/) to run and deploy ARLAS Exploration stack.
 
