@@ -7,6 +7,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml --version
 set -e
 
 . conf/stack.env
+. conf/custom.env
 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.admin \
     --server https://${ARLAS_HOST}/arlas \

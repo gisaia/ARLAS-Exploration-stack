@@ -4,7 +4,8 @@ set -o errexit -o pipefail
 rm -rf conf/server.crt and conf/server.key conf/arlas-ks.jks
 echo "creating conf/server.crt and conf/server.key ..."
 
-. ./conf/stack.env
+. conf/stack.env
+. conf/custom.env
 
 openssl genrsa -out conf/server.key 2048
 openssl req -new -key conf/server.key -out conf/server.csr \

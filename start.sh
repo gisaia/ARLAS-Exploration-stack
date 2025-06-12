@@ -6,6 +6,7 @@ COMPOSE_SERVICES="elasticsearch arlas-server arlas-persistence-server arlas-perm
 ENV_FILES="conf/versions.env conf/elastic.env conf/arlas.env conf/persistence-file.env conf/permissions.env conf/apisix.env conf/restart_strategy.env conf/stack.env"
 
 rm -rf conf/apisix/apisix.yaml
+touch conf/custom.env
 
 if [ -z "$1" ]
 then
@@ -72,6 +73,7 @@ then
         --env-file conf/stack.env \
         --env-file conf/aias.env \
         --env-file conf/minio.env \
+        --env-file conf/custom.env \
         -f dc/ref-dc-net.yaml -f dc/ref-dc-aias-minio-init.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-volumes.yaml \
     up -d --wait --wait-timeout 300 minio createbuckets
 
@@ -81,6 +83,7 @@ then
         --env-file conf/stack.env \
         --env-file conf/aias.env \
         --env-file conf/minio.env \
+        --env-file conf/custom.env \
         -f dc/ref-dc-net.yaml -f dc/ref-dc-aias-minio-init.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-volumes.yaml \
     up -d --wait --wait-timeout 300 minio createbuckets
     echo "...done."
@@ -103,20 +106,17 @@ fi
 
 
 
+echo "START STACK"
+cat ${ENV_FILES} > docker-compose.env
+cat conf/custom.env >> docker-compose.env
+
 if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
     echo "START KEYCLOAK"
-    cat ${ENV_FILES} > docker-compose.env
     set +e # initial start can lead to temporally unhealthy keycloak
     docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 keycloak
     set -e
 fi
-
-
-echo "START STACK"
-cat ${ENV_FILES} > docker-compose.env
-touch conf/custom.env
-cat conf/custom.env >> docker-compose.env
 
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES  || true
 echo "STACK UP & RUNNING"

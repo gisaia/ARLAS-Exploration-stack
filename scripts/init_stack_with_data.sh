@@ -7,6 +7,7 @@ USER_CONF=local
 CONF=$1
 GROUPS_PARAMS=""
 . conf/stack.env
+. conf/custom.env
 export ARLAS_SERVER_URL=http://$ARLAS_HOST
 if [ ${CONF} == "local.iam.admin" ]; then
     export ARLAS_SERVER_URL=https://$ARLAS_HOST
