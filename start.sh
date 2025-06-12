@@ -54,7 +54,8 @@ then
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" airs-server aproc-service aproc-proc redis rabbitmq fam-service arlas-fam-wui minio agate titiler"
     ENV_FILES=${ENV_FILES}" conf/aias.env conf/minio.env"
 
-    curl https://raw.githubusercontent.com/gisaia/ARLAS-server/refs/heads/master/arlas-commons/src/main/resources/roles.yaml -o conf/aias/roles.yaml
+    . conf/versions.env
+    curl https://raw.githubusercontent.com/gisaia/ARLAS-server/refs/tags/${ARLAS_ROLES_VERSION}/arlas-commons/src/main/resources/roles.yaml -o conf/aias/roles.yaml
 
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.template.yaml
@@ -114,5 +115,8 @@ fi
 
 echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
+touch conf/custom.env
+cat conf/custom.env >> docker-compose.env
+
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES  || true
 echo "STACK UP & RUNNING"

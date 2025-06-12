@@ -22,3 +22,4 @@ __pycache__/
 *$py.class
 .sonarlint/
 .vscode/
+conf/custom.env
