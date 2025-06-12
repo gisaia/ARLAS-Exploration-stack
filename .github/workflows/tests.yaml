@@ -58,6 +58,8 @@ jobs:
       run: ./scripts/update_hostname.sh
     - name: Start kc stack
       run: ./start.sh kc
+    - name: Show logs
+      run: scripts/show_logs.sh
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh kc
     - name: Stop stack

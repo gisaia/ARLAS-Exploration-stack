@@ -116,5 +116,8 @@ echo "STACK UP & RUNNING"
 
 docker logs keycloak
 docker logs arlas-persistence-server
+
 curl -k https://${ARLAS_HOST}:9443/auth/realms/arlas/.well-known/uma2-configuration
+curl -k https://localhost:9443/auth/realms/arlas/.well-known/uma2-configuration
+docker exec elasticsearch curl -k https://keycloak:9443/auth/realms/arlas/.well-known/uma2-configuration
 set -e
