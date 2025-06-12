@@ -247,7 +247,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wu<br>i-hub:27.0.2` in `conf/versi
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wu<br>i:27.0.4` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wu<br>i:27.0.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -279,7 +279,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wu<br>i:27.0.4` in `conf/versions.
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTEN<br>CE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS<br>_HOST}/persist` in `conf/arlas_keycloak.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHE<br>NT` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_<br>HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env`<br>`'` in `conf/arlas_keycloak.env` |
 | `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_<br>PROCESS_URL` | `` |  | `/aproc/processe<br>s/download/exec<br>ution` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_<br>PROCESS_CHECK_U<br>RL` | `` |  | `/aproc/processe<br>s/download` in `conf/arlas.env` |
