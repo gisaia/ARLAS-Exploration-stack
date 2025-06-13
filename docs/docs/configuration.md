@@ -28,7 +28,7 @@ All [common files](#common-files) and:
 
 - `conf/apisix.env`: Configuration of APISIX gateway
 
-See [Simple ARLAS Stack configuration](../../docker_compose_services_simple.md)
+See [Simple ARLAS Stack configuration](dc_services/docker_compose_services_simple.md)
 
 ### IAM deployment
 
@@ -36,7 +36,7 @@ All [common files](#common-files) and:
 
 - `conf/arlas_iam.env`: Configuration of the IAM
 
-See [ARLAS with IAM configuration](../../docker_compose_services_iam.md)
+See [ARLAS with IAM configuration](dc_services/docker_compose_services_iam.md)
 
 ### Keycloak deployment
 
@@ -44,7 +44,7 @@ All [common files](#common-files) and:
 
 - `conf/arlas_keycloak.env`: Configuration of Keycloak for ARLAS
 
-See [ARLAS with Keycloak configuration](../../docker_compose_services_kc.md)
+See [ARLAS with Keycloak configuration](dc_services/docker_compose_services_kc.md)
 
 ### AIAS deployment
 
@@ -53,7 +53,7 @@ Same as [IAM deployment](#iam-deployment) and:
 - `conf/aias.env`: Configuration of AIAS
 - `conf/minio.env`: Configuration of the minio object store
 
-See [ARLAS Items and Assets Services (AIAS) configuration](../../docker_compose_services_aias.md)
+See [ARLAS Items and Assets Services (AIAS) configuration](dc_services/docker_compose_services_aias.md)
 
 ### AIAS with Keycloak deployment
 
@@ -62,7 +62,7 @@ Same as [Keycloak deployment](#keycloak-deployment) and:
 - `conf/aias.env`: Configuration of AIAS
 - `conf/minio.env`: Configuration of the minio object store
 
-See [ARLAS Items and Assets Services (AIAS) configuration with Keycloak](../../docker_compose_services_aiaskc.md)
+See [ARLAS Items and Assets Services (AIAS) configuration with Keycloak](dc_services/docker_compose_services_aiaskc.md)
 
 ## Host and domain
 
