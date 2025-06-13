@@ -55,9 +55,7 @@ def register_user_in_cli(user_name: str, password: str, org_name: str = "", use_
         auth_org=org_name,
         auth_client_id=None,
         auth_client_secret=None,
-        auth_grant_type=None,
-        elastic_login=None,
-        elastic_password=None
+        auth_grant_type=None
     )
 
 
