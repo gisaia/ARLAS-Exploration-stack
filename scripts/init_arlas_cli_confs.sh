@@ -51,6 +51,8 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
     --elastic https://localhost:9200 \
+    --elastic-login ${ELASTIC_USER} \
+    --elastic-password ${ELASTIC_PASSWORD} \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
     --auth-grant-type password \
