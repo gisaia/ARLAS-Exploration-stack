@@ -10,7 +10,7 @@ pattern = re.compile(r'\$\{(.+)\}')
 
 
 def insert_line_breaks(text, every=15):
-    return '<br>'.join(text[i: i + every] for i in range(0, len(text), every))
+    return text #'<br>'.join(text[i: i + every] for i in range(0, len(text), every))
 
 
 def escape(string: str) -> str:

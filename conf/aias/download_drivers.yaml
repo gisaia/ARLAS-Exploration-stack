@@ -38,7 +38,7 @@ smtp:
   from_addr: $ARLAS_SMTP_FROM
 
 index_for_download:
-  endpoint_url: $APROC_INDEX_ENDPOINT_URL|http://localhost:9200
+  endpoint_url: $APROC_INDEX_ENDPOINT_URL|https://localhost:9200
   index_name: $APROC_INDEX_NAME|aproc_downloads
   login: $APROC_INDEX_LOGIN
   pwd: $APROC_INDEX_PWD

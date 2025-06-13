@@ -1,5 +1,5 @@
 index:
-  endpoint_url: $AIRS_INDEX_ENDPOINT_URL|http://localhost:9200
+  endpoint_url: $AIRS_INDEX_ENDPOINT_URL|https://localhost:9200
   collection_prefix: $AIRS_INDEX_COLLECTION_PREFIX|airs
   login: $AIRS_INDEX_LOGIN
   pwd: $AIRS_INDEX_PWD

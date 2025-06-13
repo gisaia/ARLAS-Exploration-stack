@@ -17,7 +17,8 @@ services:
       - ARLAS_CORS_ALLOWED_HEADERS="arlas-user,arlas-groups,arlas-organization,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User,partition-filter,arlas-org-filter" # Comma-separated list of allowed headers
       - ARLAS_CORS_ENABLED="${ARLAS_CORS_ENABLED:-true}" # Whether to configure cors or not
       - ARLAS_ELASTIC_CLUSTER=${ARLAS_ELASTIC_CLUSTER:-arlas-es-cluster}
-      - ARLAS_ELASTIC_ENABLE_SSL=false # use SSL to connect to elasticsearch
+      - ARLAS_ELASTIC_CREDENTIALS="${ELASTIC_USER}:${ELASTIC_PASSWORD}"
+      - ARLAS_ELASTIC_ENABLE_SSL="${ARLAS_ELASTIC_ENABLE_SSL:-true}" # use SSL to connect to elasticsearch
       - ARLAS_ELASTIC_INDEX="${ARLAS_ELASTIC_INDEX:-.arlas}" # name of the index that is used for storing ARLAS configuration
       - ARLAS_ELASTIC_NODES=${ARLAS_ELASTIC_NODES:-elasticsearch:9200} # comma separated list of elasticsearch nodes as host:port values
       - ARLAS_ELASTIC_SKIP_MASTER="${ARLAS_ELASTIC_SKIP_MASTER:-true}"

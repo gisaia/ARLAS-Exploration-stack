@@ -6,6 +6,7 @@ rm /tmp/arlas-cli.yaml
 arlas_cli --config-file /tmp/arlas-cli.yaml --version
 set -e
 
+. conf/elastic.env
 . conf/stack.env
 . conf/custom.env
 
@@ -14,7 +15,9 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.admin \
     --headers "Content-Type:application/json" \
     --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
-    --elastic http://localhost:9200 \
+    --elastic https://localhost:9200 \
+    --elastic-login ${ELASTIC_USER} \
+    --elastic-password ${ELASTIC_PASSWORD} \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
     --auth-token-url https://${ARLAS_HOST}/arlas_iam_server/session \
@@ -28,7 +31,9 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs create local.iam.user \
     --headers "Content-Type:application/json" \
     --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
-    --elastic http://localhost:9200 \
+    --elastic https://localhost:9200 \
+    --elastic-login ${ELASTIC_USER} \
+    --elastic-password ${ELASTIC_PASSWORD} \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
     --auth-token-url https://${ARLAS_HOST}/arlas_iam_server/session \
@@ -45,7 +50,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --headers "Content-Type:application/json" \
     --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
-    --elastic http://localhost:9200 \
+    --elastic https://localhost:9200 \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
     --auth-grant-type password \
@@ -63,7 +68,9 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --headers "Content-Type:application/json" \
     --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
-    --elastic http://localhost:9200 \
+    --elastic https://localhost:9200 \
+    --elastic-login ${ELASTIC_USER} \
+    --elastic-password ${ELASTIC_PASSWORD} \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
     --auth-grant-type password \
@@ -80,7 +87,9 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --headers "Content-Type:application/json" \
     --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
-    --elastic http://localhost:9200 \
+    --elastic https://localhost:9200 \
+    --elastic-login ${ELASTIC_USER} \
+    --elastic-password ${ELASTIC_PASSWORD} \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete  \
     --auth-grant-type password \
@@ -99,7 +108,9 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs create local \
     --headers "Content-Type:application/json" \
     --persistence http://localhost/persist \
     --persistence-headers "Content-Type:application/json" \
-    --elastic http://localhost:9200 \
+    --elastic https://localhost:9200 \
+    --elastic-login ${ELASTIC_USER} \
+    --elastic-password ${ELASTIC_PASSWORD} \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-COMPOSE_FILES=" -f dc/ref-dc-volumes.yaml -f dc/ref-dc-arlas-server.yaml -f dc/ref-dc-elastic.yaml -f dc/ref-dc-arlas-persistence-server.yaml -f dc/ref-dc-arlas-permissions-server.yaml -f dc/ref-dc-arlas-builder.yaml -f dc/ref-dc-arlas-hub.yaml -f dc/ref-dc-arlas-wui.yaml -f dc/ref-dc-protomaps.yaml -f dc/ref-dc-net.yaml"
+COMPOSE_FILES=" -f dc/ref-dc-volumes.yaml -f dc/ref-dc-arlas-server.yaml -f dc/ref-dc-elastic-ssl.yaml -f dc/ref-dc-arlas-persistence-server.yaml -f dc/ref-dc-arlas-permissions-server.yaml -f dc/ref-dc-arlas-builder.yaml -f dc/ref-dc-arlas-hub.yaml -f dc/ref-dc-arlas-wui.yaml -f dc/ref-dc-protomaps.yaml -f dc/ref-dc-net.yaml"
 COMPOSE_SERVICES="elasticsearch arlas-server arlas-persistence-server arlas-permissions-server arlas-builder arlas-hub arlas-wui protomaps apisix"
 ENV_FILES="conf/versions.env conf/elastic.env conf/arlas.env conf/persistence-file.env conf/permissions.env conf/apisix.env conf/restart_strategy.env conf/stack.env"
 
@@ -99,16 +99,12 @@ then
     ./scripts/generate_apisix_conf.sh
 fi
 
-# We run elastic on 9200 without ssl
-#    set +e
-#    docker compose -p arlas-exploration-stack $ENV_FILES -f dc/ref-dc-elastic-init.yaml -f dc/ref-dc-elastic.yaml -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
-#    set -e
-
-
 
 echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
 cat conf/custom.env >> docker-compose.env
+
+docker compose -p arlas-exploration-stack --env-file docker-compose.env -f dc/ref-dc-elastic-init.yaml -f dc/ref-dc-elastic.yaml -f dc/ref-dc-volumes.yaml  -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
 
 if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
