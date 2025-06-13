@@ -42,7 +42,9 @@ def register_user_in_cli(user_name: str, password: str, org_name: str = "", use_
         headers=[CONTENT_TYPE],
         persistence="https://localhost/persist",
         persistence_headers=[CONTENT_TYPE],
-        elastic="http://localhost:9200",
+        elastic="https://localhost:9200",
+        elastic_login="elastic",
+        elastic_password="elastic",
         elastic_headers=[CONTENT_TYPE],
         allow_delete=True,
         auth_token_url=auth_token_url,
@@ -53,9 +55,7 @@ def register_user_in_cli(user_name: str, password: str, org_name: str = "", use_
         auth_org=org_name,
         auth_client_id=None,
         auth_client_secret=None,
-        auth_grant_type=None,
-        elastic_login=None,
-        elastic_password=None
+        auth_grant_type=None
     )
 
 
