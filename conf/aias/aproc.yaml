@@ -55,3 +55,8 @@ access_manager:
     #   headers: $APROC_INPUT_STORAGE_HEADERS
     #   domain: $APROC_INPUT_STORAGE_DOMAIN
     #   force_download: $APROC_INPUT_STORAGE_FORCE_DOWNLOAD
+
+    -
+      type: s3
+      bucket: gisaia-public
+      endpoint: "https://storage.googleapis.com"

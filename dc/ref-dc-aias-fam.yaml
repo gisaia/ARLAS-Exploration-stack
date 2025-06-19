@@ -15,6 +15,7 @@ services:
     volumes:
       - ${APROC_INPUT_DIR}:/inputs:ro
       - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
+      - ${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro
     expose:
       - "8005"
     ports:
