@@ -232,8 +232,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.3` in `conf/v
 | `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_THRESHOLD` | `` |  | `60000` in `conf/arlas_iam.env` |
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `0.75` |  |  |
 | `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_USE_DISCOVERY` | `` |  | `true` in `conf/arlas_iam.env` |
-| `ARLAS_BASEMAPS` | `ARLAS_BASEMAPS` | `[{"name":"Empty","url":"/styles/empty/style.json","image":null}]` |  | `'[` in `conf/arlas.env` |
-| `ARLAS_BASEMAPS` | `[{"name":"Streets-light","url":"https://api.maptil ...` | `` |  |  |
+| `ARLAS_BASEMAPS` | `ARLAS_BASEMAPS` | `[{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]` |  | `'[` in `conf/arlas.env` |
 | `ARLAS_BUILDER_BASE_HREF` | `ARLAS_BUILDER_BASE_HREF` | `/builder` |  |  |
 | `ARLAS_EXTERNAL_NODE_PAGE` | `ARLAS_EXTERNAL_NODE_PAGE` | `true` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |

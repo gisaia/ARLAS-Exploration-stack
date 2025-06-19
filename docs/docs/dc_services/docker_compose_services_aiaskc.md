@@ -186,8 +186,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.3` in `conf/v
 | `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_THRESHOLD` | `` |  |  |
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_USE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
-| `ARLAS_BASEMAPS` | `ARLAS_BASEMAPS` | `[{"name":"Empty","url":"/styles/empty/style.json","image":null}]` |  | `'[` in `conf/arlas.env` |
-| `ARLAS_BASEMAPS` | `[{"name":"Streets-light","url":"https://api.maptil ...` | `` |  |  |
+| `ARLAS_BASEMAPS` | `ARLAS_BASEMAPS` | `[{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]` |  | `'[` in `conf/arlas.env` |
 | `ARLAS_BUILDER_BASE_HREF` | `ARLAS_BUILDER_BASE_HREF` | `/builder` |  |  |
 | `ARLAS_EXTERNAL_NODE_PAGE` | `ARLAS_EXTERNAL_NODE_PAGE` | `true` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
@@ -358,7 +357,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.18` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.21` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -397,7 +396,7 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.18` in `conf/versions.env`
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.18` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.21` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -442,7 +441,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.18` in `conf/versi
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-public/OPENDATA` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -463,7 +462,7 @@ List of volumes:
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.18` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.21` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -508,7 +507,7 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.18` in `conf
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-public/OPENDATA` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -528,7 +527,7 @@ List of volumes:
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.18` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.21` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -571,19 +570,20 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.18` in `conf/versi
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.18` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.21` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
 | `FAM_LOGGER_LEVEL` | `FAM_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
 | `FAM_PREFIX` | `/fam` | `` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `gs://gisaia-public/OPENDATA` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 
 List of volumes:
 
 - `${APROC_INPUT_DIR}:/inputs:ro`
 - `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
+- `${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro`
 ## File dc/ref-dc-aias-minio.yaml
 ### Service minio
 Description: Minio is an object store
@@ -620,7 +620,7 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.6.18` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.6.21` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
