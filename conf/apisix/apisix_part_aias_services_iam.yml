@@ -23,7 +23,7 @@
         regex_uri: ["/(.*)", "/$1"]
 
   -
-    uri: /colorMaps/*
+    uri: /colorMaps*
     upstream:
       nodes:
         "titiler:8000": 1
