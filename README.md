@@ -2,14 +2,6 @@
 
 This projects contains reference docker compose files for all the ARLAS microservices and third party services for running the ARLAS Stack. 
 
-It also contains the script for starting the stack in different modes:
-
-- [Simple](#simple-deployment): ARLAS without authentication, on HTTP
-- [IAM](#iam-deployment): With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
-- [KC](#kc-deployment): ARLAS With Keycloak
-- [AIAS](#aias-deployment): With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
-- [AIASKC](#aiaskc-deployment): With Keycloak and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
-
 See the [full documentation](https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/arlas_exploration_stack/) to run and deploy ARLAS Exploration stack.
 
 # Developers
