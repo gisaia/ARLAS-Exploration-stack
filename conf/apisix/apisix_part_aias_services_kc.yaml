@@ -23,6 +23,15 @@
         regex_uri: ["/(.*)", "/$1"]
 
   -
+    uri: /colorMaps/*
+    upstream:
+      nodes:
+        "titiler:8000": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/(.*)", "/$1"]
+
+  -
     uri: /fam-wui
     plugins:
       redirect:
