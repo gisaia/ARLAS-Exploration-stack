@@ -60,7 +60,12 @@ then
 
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.template.yaml
-    cat conf/apisix/apisix_part_aias_services.yaml >> conf/apisix/apisix.template.yaml
+    if [ "$1" = "aias" ]
+    then
+        cat conf/apisix/apisix_part_aias_services_iam.yml >> conf/apisix/apisix.template.yaml
+    else
+        cat conf/apisix/apisix_part_aias_services_kc.yaml >> conf/apisix/apisix.template.yaml
+    fi
 
     echo "Initialising Minio configuration..."
     set +e
