@@ -5,6 +5,7 @@ services:
     container_name: elasticsearch
     restart: ${ELASTIC_RESTART_STRATEGY:-always}
     environment:
+      - ELASTIC_LOGIN=${ELASTIC_LOGIN}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - APM_SECRET_TOKEN=${APM_SECRET_TOKEN}
       - discovery.type=single-node

@@ -115,7 +115,7 @@ if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
     echo "START KEYCLOAK"
     set +e # initial start can lead to temporally unhealthy keycloak
-    docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 keycloak
+    docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --wait --wait-timeout 300 keycloak
     set -e
 fi
 
