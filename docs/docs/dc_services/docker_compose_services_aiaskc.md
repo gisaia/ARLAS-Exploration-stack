@@ -441,7 +441,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.22` in `conf/versi
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://s3.gra.io.cloud.ovh.net/arlas` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -507,7 +507,7 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.22` in `conf
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://s3.gra.io.cloud.ovh.net/arlas` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -576,7 +576,7 @@ Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.22` in `conf/versions.env`
 | --- | --- | --- | --- | --- |
 | `FAM_LOGGER_LEVEL` | `FAM_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
 | `FAM_PREFIX` | `/fam` | `` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://s3.gra.io.cloud.ovh.net/arlas` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 
 List of volumes:
