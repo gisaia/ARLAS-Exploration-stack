@@ -186,9 +186,9 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:27.0.1` in `conf
 | `ARLAS_SMTP_HOST` | `ARLAS_SMTP_HOST` | `` |  | `tobechanged` in `conf/aias.env`<br>empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_PASSWORD` | `ARLAS_SMTP_PASSWORD` | `` |  | `tobechanged` in `conf/aias.env`<br>empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_PORT` | `ARLAS_SMTP_PORT` | `25` |  | `25` in `conf/aias.env` |
-| `ARLAS_SMTP_RESET_LINK` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `ARLAS_SMTP_RESET_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_SMTP_USERNAME` | `ARLAS_SMTP_USERNAME` | `` |  | `tobechanged` in `conf/aias.env`<br>empty value in `conf/arlas_iam.env` |
-| `ARLAS_SMTP_VERIFY_LINK` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `ARLAS_SMTP_VERIFY_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `JDK_JAVA_OPTIONS` | `ARLAS_IAM_JDK_JAVA_OPTIONS` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_REALM` | `ARLAS_AUTH_KEYCLOAK_REALM` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `` |  |  |
@@ -324,7 +324,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.5` in `conf/versions.env`
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_PROCESS_URL` | `` |  | `/aproc/processes/download/execution` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/download` in `conf/arlas.env` |
@@ -476,7 +476,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.22` in `conf/versi
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://s3.gra.io.cloud.ovh.net/arlas` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -542,7 +542,7 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.22` in `conf
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
 | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://s3.gra.io.cloud.ovh.net/arlas` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_BUCKET` | `APROC_INPUT_STORAGE_BUCKET` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `APROC_INPUT_STORAGE_API_KEY_PROJECT` | `` |  | `""` in `conf/aias.env` |
@@ -575,7 +575,7 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.22` in `conf/versi
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_ISSUER` | `` |  |  |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `iam` in `conf/arlas_iam.env` |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  |  |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `` |  |  |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `` |  |  |
@@ -587,17 +587,17 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.22` in `conf/versi
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `0.75` |  |  |
 | `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_USE_DISCOVERY` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `true` | `` |  |  |
-| `ARLAS_IAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `ARLAS_IAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_TAB_NAME` | `"ARLAS FAM Wui"` | `` |  |  |
-| `FAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `FAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `FAM_DEFAULT_PATH` | `''` | `` |  |  |
 | `FAM_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `FAM_ARCHIVES_PAGES_SIZE` | `FAM_ARCHIVES_PAGES_SIZE` | `` |  |  |
 | `FAM_FILES_PAGES_SIZE` | `FAM_FILES_PAGES_SIZE` | `` |  |  |
-| `APROC_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `APROC_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `APROC_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `APROC_CATALOG` | `AIAS_CATALOG_NAME` | `` |  |  |
-| `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `bigmac` in `conf/stack.env` |
+| `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `AIRS_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_FAM_LINKS` | `` |  | `'` in `conf/aias.env` |
 
@@ -611,7 +611,7 @@ Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.22` in `conf/versions.env`
 | --- | --- | --- | --- | --- |
 | `FAM_LOGGER_LEVEL` | `FAM_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
 | `FAM_PREFIX` | `/fam` | `` |  |  |
-| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
+| `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://s3.gra.io.cloud.ovh.net/arlas` in `conf/aias.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 
 List of volumes:
