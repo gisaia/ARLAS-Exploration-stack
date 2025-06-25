@@ -3,6 +3,9 @@ services:
     image: ${ELASTIC_VERSION}
     platform: linux/x86_64
     container_name: elasticsearch-setup
+    environment:
+      - ELASTIC_LOGIN=${ELASTIC_LOGIN}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     volumes:
       - arlas-es-certs:/usr/share/elasticsearch/config/certs
       - arlas-es-config:/usr/share/elasticsearch/config
