@@ -26,7 +26,7 @@ services:
       co.elastic.logs/json.expand_keys: true
     environment:
       - APROC_LOGGER_LEVEL=${APROC_LOGGER_LEVEL:-INFO}
-      - APROC_CONFIGURATION_FILE=/home/app/worker/conf/aproc.yaml
+      - APROC_CONFIGURATION_FILE=/app/conf/aproc.yaml
       - CELERY_BROKER_URL=pyamqp://guest:guest@rabbitmq:5672//
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - AIRS_ENDPOINT=http://airs-server:8000/airs
@@ -79,7 +79,7 @@ services:
     volumes:
       - ${APROC_INPUT_DIR}:/inputs:ro
       - ${APROC_DOWNLOAD_DIR}:/outbox
-      - ${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro
-      - ${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro
-      - ${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro
-      - ${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro
+      - ${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro
+      - ${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro
+      - ${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro
+      - ${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro

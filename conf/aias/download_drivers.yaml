@@ -63,8 +63,8 @@ drivers:
     assets_dir: /tmp/aproc/download
     priority: 3
   -
-    name: zarr_download
-    class_name: extensions.aproc.proc.download.drivers.impl.zarr_download
+    name: zarr
+    class_name: extensions.aproc.proc.download.drivers.impl.zarr
     assets_dir: /tmp/aproc/download
     configuration:
       chunk_size: 1000
