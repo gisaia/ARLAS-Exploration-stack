@@ -85,3 +85,11 @@ drivers:
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 12
+
+  -
+    name: sentinel2
+    class_name: extensions.aproc.proc.ingest.drivers.impl.sentinel_2
+    assets_dir: /tmp/aproc/sentinel2
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 13

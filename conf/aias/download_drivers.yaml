@@ -62,25 +62,25 @@ drivers:
     configuration:
     assets_dir: /tmp/aproc/download
     priority: 3
-  -
-    name: zarr_download
-    class_name: extensions.aproc.proc.download.drivers.impl.zarr_download
-    assets_dir: /tmp/aproc/download
-    configuration:
-      chunk_size: 1000
-      # input:
-      #   type: $APROC_INPUT_STORAGE_TYPE
-      #   bucket: $APROC_INPUT_STORAGE_BUCKET
-      #   api_key:
-      #     project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
-      #     private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
-      #     private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
-      #   headers:
-      #     X-API-Key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
-      #     Accept: "application/json, text/plain"
-      #     Connection: "keep-alive"
-      #     Sec-Fetch-Dest: "empty"
-      #     Content-Type: application/json;charset=utf-8
-      #   domain: $APROC_INPUT_STORAGE_DOMAIN
-      #   force_download: $APROC_INPUT_STORAGE_FORCE_DOWNLOAD
-    priority: 1
+  # -
+  #   name: zarr
+  #   class_name: extensions.aproc.proc.download.drivers.impl.zarr
+  #   assets_dir: /tmp/aproc/download
+  #   configuration:
+  #     chunk_size: 1000
+  #     # input:
+  #     #   type: $APROC_INPUT_STORAGE_TYPE
+  #     #   bucket: $APROC_INPUT_STORAGE_BUCKET
+  #     #   api_key:
+  #     #     project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
+  #     #     private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
+  #     #     private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
+  #     #   headers:
+  #     #     X-API-Key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
+  #     #     Accept: "application/json, text/plain"
+  #     #     Connection: "keep-alive"
+  #     #     Sec-Fetch-Dest: "empty"
+  #     #     Content-Type: application/json;charset=utf-8
+  #     #   domain: $APROC_INPUT_STORAGE_DOMAIN
+  #     #   force_download: $APROC_INPUT_STORAGE_FORCE_DOWNLOAD
+  #   priority: 1
