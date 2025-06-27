@@ -357,7 +357,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.25` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -396,12 +396,12 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.22` in `conf/versions.env`
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.25` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
 | `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
-| `APROC_CONFIGURATION_FILE` | `/home/app/worker/conf/aproc.yaml` | `` |  |  |
+| `APROC_CONFIGURATION_FILE` | `/app/conf/aproc.yaml` | `` |  |  |
 | `CELERY_BROKER_URL` | `pyamqp://guest:guest@rabbitmq:5672//` | `` |  |  |
 | `CELERY_RESULT_BACKEND` | `redis://redis:6379/0` | `` |  |  |
 | `AIRS_ENDPOINT` | `http://airs-server:8000/airs` | `` |  |  |
@@ -454,15 +454,15 @@ List of volumes:
 
 - `${APROC_INPUT_DIR}:/inputs:ro`
 - `${APROC_DOWNLOAD_DIR}:/outbox`
-- `${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro`
-- `${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro`
-- `${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro`
-- `${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro`
+- `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
+- `${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro`
+- `${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro`
+- `${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro`
 ## File dc/ref-dc-aias-aproc-service.yaml
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.25` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -527,7 +527,7 @@ List of volumes:
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.25` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -570,7 +570,7 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.22` in `conf/versi
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.25` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -620,7 +620,7 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.6.25` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
