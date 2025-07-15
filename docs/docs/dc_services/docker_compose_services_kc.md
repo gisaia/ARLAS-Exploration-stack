@@ -185,7 +185,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.4` in `conf/v
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `` |  |  |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/builder/callback` |  | `https://${ARLAS_HOST}:443/wui/callback` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/builder/callback` |  | `https://${ARLAS_HOST}:443/hub/callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `code` |  | `code` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `profile` |  | `profile` in `conf/arlas_keycloak.env` |
@@ -223,7 +223,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.0.2` in `conf/versions.
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_ISSUER` | `` |  | `https://${ARLAS_HOST}:9443/auth/realms/arlas` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/hub/callback` |  | `https://${ARLAS_HOST}:443/wui/callback` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/hub/callback` |  | `https://${ARLAS_HOST}:443/hub/callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `` |  | `code` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `` |  | `profile` in `conf/arlas_keycloak.env` |
@@ -261,7 +261,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.5` in `conf/versions.env`
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `` |  |  |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/wui/callback` |  | `https://${ARLAS_HOST}:443/wui/callback` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/wui/callback` |  | `https://${ARLAS_HOST}:443/hub/callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `code` |  | `code` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `profile` |  | `profile` in `conf/arlas_keycloak.env` |

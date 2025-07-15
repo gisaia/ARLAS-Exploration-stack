@@ -175,7 +175,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.4` in `conf/v
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `` |  |  |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/builder/callback` |  | `https://${ARLAS_HOST}:443/wui/callback` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/builder/callback` |  | `https://${ARLAS_HOST}:443/hub/callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `code` |  | `code` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `profile` |  | `profile` in `conf/arlas_keycloak.env` |
@@ -213,7 +213,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.0.2` in `conf/versions.
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_ISSUER` | `` |  | `https://${ARLAS_HOST}:9443/auth/realms/arlas` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/hub/callback` |  | `https://${ARLAS_HOST}:443/wui/callback` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/hub/callback` |  | `https://${ARLAS_HOST}:443/hub/callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `` |  | `code` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `` |  | `profile` in `conf/arlas_keycloak.env` |
@@ -251,7 +251,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.5` in `conf/versions.env`
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `ARLAS_AUTHENT_POST_LOGOUT_REDIRECT_URI` | `` |  |  |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/wui/callback` |  | `https://${ARLAS_HOST}:443/wui/callback` in `conf/arlas_keycloak.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_AUTHENT_REDIRECT_URI` | `/wui/callback` |  | `https://${ARLAS_HOST}:443/hub/callback` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `code` |  | `code` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `profile` |  | `profile` in `conf/arlas_keycloak.env` |
@@ -357,7 +357,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.30` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -396,12 +396,12 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.6.22` in `conf/versions.env`
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.30` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
-| `APROC_CONFIGURATION_FILE` | `/home/app/worker/conf/aproc.yaml` | `` |  |  |
+| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `DEBUG` in `conf/aias.env` |
+| `APROC_CONFIGURATION_FILE` | `/app/conf/aproc.yaml` | `` |  |  |
 | `CELERY_BROKER_URL` | `pyamqp://guest:guest@rabbitmq:5672//` | `` |  |  |
 | `CELERY_RESULT_BACKEND` | `redis://redis:6379/0` | `` |  |  |
 | `AIRS_ENDPOINT` | `http://airs-server:8000/airs` | `` |  |  |
@@ -449,24 +449,26 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.22` in `conf/versi
 | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_DOMAIN` | `APROC_INPUT_STORAGE_DOMAIN` | `` |  | `geodes-portal.cnes.fr` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `True` |  | `True` in `conf/aias.env` |
+| `APROC_TASK_TIME_LIMIT` | `APROC_TASK_TIME_LIMIT` | `1200` |  | `1200` in `conf/aias.env` |
+| `APROC_TASK_SOFT_TIME_LIMIT` | `APROC_TASK_SOFT_TIME_LIMIT` | `1190` |  | `1190` in `conf/aias.env` |
 
 List of volumes:
 
 - `${APROC_INPUT_DIR}:/inputs:ro`
 - `${APROC_DOWNLOAD_DIR}:/outbox`
-- `${PWD}/conf/aias/drivers.yaml:/home/app/worker/conf/drivers.yaml:ro`
-- `${PWD}/conf/aias/aproc.yaml:/home/app/worker/conf/aproc.yaml:ro`
-- `${PWD}/conf/aias/download_drivers.yaml:/home/app/worker/conf/download_drivers.yaml:ro`
-- `${PWD}/conf/aias/enrich_drivers.yaml:/home/app/worker/conf/enrich_drivers.yaml:ro`
+- `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
+- `${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro`
+- `${PWD}/conf/aias/download_drivers.yaml:/app/conf/download_drivers.yaml:ro`
+- `${PWD}/conf/aias/enrich_drivers.yaml:/app/conf/enrich_drivers.yaml:ro`
 ## File dc/ref-dc-aias-aproc-service.yaml
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.30` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `DEBUG` in `conf/aias.env` |
 | `APROC_HOST` | `0.0.0.0` | `` |  |  |
 | `APROC_PORT` | `8001` | `` |  |  |
 | `APROC_PREFIX` | `/aproc` | `` |  |  |
@@ -527,7 +529,7 @@ List of volumes:
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.30` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -570,7 +572,7 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.22` in `conf/versi
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.6.30` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -620,7 +622,7 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.6.22` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.6.30` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
