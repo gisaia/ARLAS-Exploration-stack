@@ -400,7 +400,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.30` in `conf/versi
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `DEBUG` in `conf/aias.env` |
+| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
 | `APROC_CONFIGURATION_FILE` | `/app/conf/aproc.yaml` | `` |  |  |
 | `CELERY_BROKER_URL` | `pyamqp://guest:guest@rabbitmq:5672//` | `` |  |  |
 | `CELERY_RESULT_BACKEND` | `redis://redis:6379/0` | `` |  |  |
@@ -468,7 +468,7 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.6.30` in `conf
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
-| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `DEBUG` in `conf/aias.env` |
+| `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
 | `APROC_HOST` | `0.0.0.0` | `` |  |  |
 | `APROC_PORT` | `8001` | `` |  |  |
 | `APROC_PREFIX` | `/aproc` | `` |  |  |
