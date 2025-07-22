@@ -24,3 +24,5 @@ __pycache__/
 .sonarlint/
 .vscode/
 conf/custom.env
+*.lock
+k8s/charts/aias/charts

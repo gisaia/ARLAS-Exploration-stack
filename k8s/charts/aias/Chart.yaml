@@ -12,6 +12,9 @@ dependencies:
 - name: airs-server
   version: 0.0.1
   repository: "file://../airs-server"
+- name: arlas-wui
+  version: 0.0.1
+  repository: "file://../arlas-wui"
 
 
 # THIRD PARTY DEPENDENCIES
@@ -21,3 +24,6 @@ dependencies:
 - name: minio
   repository: https://charts.bitnami.com/bitnami
   version: 16.0.10
+- name: apisix
+  repository: https://charts.bitnami.com/bitnami
+  version: 5.0.3

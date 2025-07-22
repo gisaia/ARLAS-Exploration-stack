@@ -73,7 +73,7 @@ spec:
 
             # INDEX CONFIGURATION
             - name: AIRS_INDEX_COLLECTION_PREFIX
-              value: "{{ .Values.organisation }}@{{ .Values.cors.airsIndexPrefix }}"
+              value: "{{ .Values.organization }}@{{ .Values.cors.airsIndexPrefix }}"
 
             # INDEX MAPPING
             - name: ARLASEO_MAPPING_URL
@@ -81,12 +81,15 @@ spec:
 
             # ELASTICSEARCH CONFIGURATION
             - name: AIRS_INDEX_ENDPOINT_URL
-              value: "http://{{ .Release.Name }}-elasticsearch:9200" # TO BE IMPROVED: remove the protocol
+              value: "https://{{ .Release.Name }}-elasticsearch:9200" # TO BE IMPROVED: remove the protocol
             - name: ARLAS_ELASTIC_CLUSTER
-              value: {{ .Values.elastic.cluster}}
+              value: {{ .Values.elastic.cluster }}
             - name: ARLAS_ELASTIC_NODES
               value: {{ .Release.Name }}-elasticsearch:9200
-
+            - name: AIRS_INDEX_LOGIN
+              value: {{ .Values.elastic.login }}
+            - name: AIRS_INDEX_PWD
+              value: {{ .Values.elastic.password }}
             {{- with .Values.elasticEnv }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -112,6 +115,8 @@ spec:
               value: {{ .Values.s3.region | quote }}
             - name: AIRS_S3_TIER
               value: {{ .Values.s3.tier | quote }}
+
+      # NODE SELECTION      
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

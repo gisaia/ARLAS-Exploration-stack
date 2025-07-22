@@ -1,0 +1,142 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.serviceName }}
+  name: {{ .Values.serviceName }}
+spec:
+  replicas: {{ int .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.serviceName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .Values.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.serviceName }}
+          image: {{ .Values.image }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.wui.baseAppPath }}/
+              port: http
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.wui.baseAppPath }}/
+              port: http
+            initialDelaySeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            # AUTHENTICATION
+            - name: ARLAS_USE_AUTHENT
+              value: {{ .Values.wuiAuthent.useAuthent | quote }}
+            - name: ARLAS_AUTHENT_MODE
+              value: {{ .Values.wuiAuthent.authMode | quote  }}
+            - name: ARLAS_AUTHENT_FORCE_CONNECT
+              value: {{ .Values.wuiAuthent.forceConnect | quote  }}
+            - name: ARLAS_AUTHENT_USE_DISCOVERY
+              value: {{ .Values.wuiAuthent.useDiscovery  | quote }}
+            - name: ARLAS_AUTHENT_ISSUER
+              value: {{ .Values.wuiAuthent.issuer }}
+            - name: ARLAS_AUTHENT_CLIENT_ID
+              value: {{ .Values.wuiAuthent.clientId }}
+            - name: ARLAS_AUTHENT_REDIRECT_URI
+              value: https://{{ .Values.dnsDomain }}{{ .Values.wui.baseAppPath }}/callback
+            - name: ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI
+              value: https://{{ .Values.dnsDomain }}{{ .Values.wui.baseAppPath }}/silent-refresh.html
+            - name: ARLAS_AUTHENT_SCOPE
+              value: {{ .Values.wuiAuthent.scope }}
+            - name: ARLAS_AUTHENT_CUSTOM_QUERY_PARAMS
+              value: {{ .Values.wuiAuthent.customQueryParams | toPrettyJson | quote}}
+            - name: ARLAS_AUTHENT_REQUIRE_HTTPS
+              value: {{ .Values.wuiAuthent.requireHttps | quote  }}
+            - name: ARLAS_AUTHENT_RESPONSE_TYPE
+              value: {{ .Values.wuiAuthent.responseType }}
+            - name: ARLAS_AUTHENT_SILENT_REFRESH_TIMEOUT
+              value: {{ .Values.wuiAuthent.silentRefreshTimeout | quote }}
+            - name: ARLAS_AUTHENT_TIMEOUT_FACTOR
+              value: {{ .Values.wuiAuthent.timeoutFactor | quote }}
+            - name: ARLAS_AUTHENT_ENABLE_SESSION_CHECKS
+              value: {{ .Values.wuiAuthent.sessionChecksEnabled | quote }}
+            - name: ARLAS_AUTHENT_CLEAR_HASH
+              value: {{ .Values.wuiAuthent.clearHashAfterLogin | quote }}
+            - name: ARLAS_AUTHENT_DISABLE_AT_HASH_CHECK
+              value: {{ .Values.wuiAuthent.disableAtHashCheck | quote }}
+            - name: ARLAS_AUTHENT_SHOW_DEBUG
+              value: {{ .Values.wuiAuthent.showDebugInformation | quote }}
+            - name: ARLAS_AUTHENT_STORAGE
+              value: {{ .Values.wuiAuthent.storage }}
+            - name: ARLAS_AUTHENT_LOGOUT_URL
+              value: {{ .Values.wuiAuthent.logoutUrl }}
+
+            # SERVICES
+            - name: ARLAS_PERSISTENCE_URL
+              value: https://{{ .Values.dnsDomain }}{{ .Values.persistence.urlPrefix }}
+            - name: ARLAS_PERMISSIONS_URL
+              value: https://{{ .Values.dnsDomain }}{{ .Values.permissions.urlPrefix }}
+            - name: ARLAS_HUB_URL
+              value: https://{{ .Values.dnsDomain }}{{ .Values.wuiHub.baseAppPath }}
+            - name: ARLAS_GEOCODING_FIND_PLACE_URL
+              value: {{ .Values.wui.geocodingUrl }}
+
+            # ENDPOINT CONFIGURATION
+            - name: ARLAS_WUI_APP_PATH
+              value: {{ .Values.wui.baseAppPath }}
+            - name: ARLAS_WUI_BASE_HREF
+              value: {{ .Values.wui.baseAppPath }}
+
+            # USER INTERFACE CONFIGURATION
+            - name: ARLAS_STATIC_LINKS
+              value: {{ .Values.wui.links | toPrettyJson | quote }}
+            - name: ARLAS_TAB_NAME
+              value: {{ .Values.wui.tabName }}
+            - name: ARLAS_GEOCODING_ENABLED
+              value: {{ .Values.wui.enableGeocoding | quote }}
+            - name: ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO
+              value: {{ .Values.wui.geocodingZoomTo | quote }}
+            - name: RESULTLIST_ENABLE_EXPORT
+              value: {{ .Values.wui.resultListEnableExport | quote }}
+            - name: RESULTLIST_EXPORT_SIZE
+              value: {{ .Values.wui.resultListExportSize | quote }}
+            - name: ARLAS_HISTOGRAMS_MAX_BUCKETS
+              value: {{ .Values.wui.histogramsMaxBucket | quote }}
+            - name: ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS
+              value: {{ .Values.wui.histogramsExportNbBuckets | quote }}
+
+            # ACTIONS CONFIGURATION (DOWNLOAD, ENRICH, ETC)
+            #{{- toYaml .Values.actionsEnv | nindent 12 }}
+
+
+          {{- range $configurationName, $configurationInfo := .Values.wui.configuration }}
+            - name: {{ (index $.Values.wui.configuration $configurationName).environmentVariable }}
+              value: file://{{ (index $.Values.wui.configuration $configurationName).mountPath }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html/assets/basemap"
+              name: basemap-volume
+      volumes:
+        - name: basemap-volume
+          persistentVolumeClaim:
+            claimName: basemap-pvc
+
+      # NODE SELECTION      
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
