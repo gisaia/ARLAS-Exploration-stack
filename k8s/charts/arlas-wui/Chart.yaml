@@ -1,0 +1,4 @@
+apiVersion: v2
+name: arlas-wui
+description: A Helm Chart to deploy ARLAS Wui
+version: 0.0.1

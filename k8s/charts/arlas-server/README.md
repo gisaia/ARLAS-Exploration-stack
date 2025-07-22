@@ -2,7 +2,7 @@
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square)
 
-A Helm Chart to deploy arlas-server
+A Helm Chart to deploy ARLAS Server
 
 ## Values
 
@@ -18,15 +18,18 @@ A Helm Chart to deploy arlas-server
 | cors.allowedOrigins | string | `"\"*\""` | CORS Allowed Origins |
 | cors.enabled | bool | `false` | Enable CORS or not |
 | cors.exposedHeaders | string | `"Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,WWW-Authenticate"` | CORS Exposed Headers |
-| dnsDomain | string | `"localhost"` |  |
+| dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
 | elastic.apm.secret | string | `nil` |  |
 | elastic.apm.url | string | `nil` |  |
+| elastic.cluster | string | `"elastic"` |  |
+| elastic.login | string | `"elastic"` |  |
+| elastic.password | string | `"elastic"` |  |
 | elasticEnv[0].name | string | `"ARLAS_ELASTIC_SKIP_MASTER"` |  |
 | elasticEnv[0].value | string | `"true"` |  |
 | elasticEnv[1].name | string | `"ARLAS_ELASTIC_SNIFFING"` |  |
 | elasticEnv[1].value | string | `"false"` |  |
 | elasticEnv[2].name | string | `"ARLAS_ELASTIC_ENABLE_SSL"` |  |
-| elasticEnv[2].value | string | `"false"` |  |
+| elasticEnv[2].value | string | `"true"` |  |
 | enabled | bool | `true` | Whether to protect ARLAS server with authentication |
 | image | string | `"gisaia/arlas-server:27.0.1"` |  |
 | jvmXmx | string | `"1800m"` | Java Xmx value |
@@ -35,7 +38,7 @@ A Helm Chart to deploy arlas-server
 | nodeSelector | object | `{}` | Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector |
 | permissionUrl | string | `"/permissions"` | Endpoint to call in order to get user permissions given an access token when using HTTPPolicyEnforcer class |
 | policyEnv | list | `[{"name":"ARLAS_AUTH_POLICY_CLASS","value":"io.arlas.filter.impl.NoPolicyEnforcer"}]` | ARLAS Policy Enforcer |
-| policyEnv[0] | object | `{"name":"ARLAS_AUTH_POLICY_CLASS","value":"io.arlas.filter.impl.NoPolicyEnforcer"}` | Policy Enforcer class to use |
+| policyEnv[0] | object | `{"name":"ARLAS_AUTH_POLICY_CLASS","value":"io.arlas.filter.impl.NoPolicyEnforcer"}` | Policy Enforcer class to use among `io.arlas.filter.impl.NoPolicyEnforcer`, `io.arlas.filter.impl.HTTPPolicyEnforcer`, `io.arlas.filter.impl.KeycloakPolicyEnforcer` |
 | publicUris | string | `"swagger,swagger.*,openapi.*,session:POST, session/refresh:PUT,users:POST,users/.*:POST,organisations/check:GET"` | Comma separated list of endpoints that should bypass authentication |
 | replicaCount | int | `1` | Number of desired pods |
 | resources.limits.cpu | int | `2` |  |
@@ -43,6 +46,8 @@ A Helm Chart to deploy arlas-server
 | resources.requests.cpu | float | `0.5` |  |
 | resources.requests.memory | string | `"750Mi"` |  |
 | serviceName | string | `"arlas-server"` |  |
+| servicePort | int | `9999` |  |
+| serviceType | string | `"ClusterIP"` |  |
 | services.cswActivated | string | `"\"false\""` | Whether CSW Service is activated or not |
 | services.inspireActivated | string | `"\"false\""` | Whether INSPIRE Service is activated or not |
 | services.rasterTileActivated | string | `"\"false\""` | Whether Raster Tile Service is activated or not |

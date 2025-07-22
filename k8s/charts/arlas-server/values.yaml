@@ -1,8 +1,11 @@
 ## @section Global parameters
 
+# -- DNS domain hosting ARLAS
 dnsDomain: localhost
 
 serviceName: arlas-server
+servicePort: 9999
+serviceType: ClusterIP
 image: gisaia/arlas-server:27.0.1
 
 # -- Number of desired pods
@@ -59,7 +62,7 @@ logger:
 
 # -- ARLAS Policy Enforcer
 policyEnv:
-  # -- Policy Enforcer class to use
+  # -- Policy Enforcer class to use among `io.arlas.filter.impl.NoPolicyEnforcer`, `io.arlas.filter.impl.HTTPPolicyEnforcer`, `io.arlas.filter.impl.KeycloakPolicyEnforcer`
   - name: ARLAS_AUTH_POLICY_CLASS
     value: io.arlas.filter.impl.NoPolicyEnforcer
   # value: io.arlas.filter.impl.HTTPPolicyEnforcer
@@ -71,9 +74,10 @@ policyEnv:
   # - name: ARLAS_AUTH_PUBLIC_URIS
   #   value: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,collections/demo_.*:GET,authorize/resources:GET
 
-
 elastic:
   cluster: elastic
+  login: elastic
+  password: elastic
   apm:
     secret:
     url:
@@ -84,7 +88,7 @@ elasticEnv:
   - name: ARLAS_ELASTIC_SNIFFING
     value: "false"
   - name: ARLAS_ELASTIC_ENABLE_SSL
-    value: "false"
+    value: "true"
 
 services:
   # -- Whether INSPIRE Service is activated or not
