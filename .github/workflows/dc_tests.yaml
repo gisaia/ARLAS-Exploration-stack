@@ -1,6 +1,13 @@
 name: Test Docker compose ARLAS Exploration stack
 
-on: push
+on: 
+  push:
+    paths:
+      - 'conf'
+      - 'dc'
+      - 'scripts'
+      - 'start.sh'
+      - 'stop.sh'
 
 jobs:
   simple-stack:
