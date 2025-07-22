@@ -3,9 +3,9 @@ name: Test Docker compose ARLAS Exploration stack
 on: 
   push:
     paths:
-      - 'conf'
-      - 'dc'
-      - 'scripts'
+      - 'conf/**'
+      - 'dc/**'
+      - 'scripts/**'
       - 'start.sh'
       - 'stop.sh'
 
