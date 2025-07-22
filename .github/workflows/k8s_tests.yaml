@@ -5,12 +5,15 @@ on:
       - 'k8s/**'
 
 jobs:
-  aias-on-cluster:
+  aias-on-k8s-cluster:
     runs-on: ubuntu-latest
     steps:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
       - uses: actions/checkout@v4.1.4
+
+      - name: Add bitnami repo
+        run: helm repo add bitnami https://charts.bitnami.com/bitnami
 
       - name: Update aias dependencies
         run: helm dependency update k8s/charts/aias
