@@ -11,7 +11,12 @@ jobs:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
       - uses: actions/checkout@v4.1.4
+
+      - name: Update aias dependencies
+        run: helm dependency update k8s/charts/aias
+
       - name: Build aias dependencies
         run: helm dependency build k8s/charts/aias
+
       - name: Install aias
         run: helm install aias k8s/charts/aias
