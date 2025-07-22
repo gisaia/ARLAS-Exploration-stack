@@ -20,3 +20,6 @@ jobs:
 
       - name: Install aias
         run: helm install aias k8s/charts/aias
+
+      - name: Copy files
+        run: ./k8s/scripts/copy_files.sh
