@@ -25,4 +25,4 @@ __pycache__/
 .vscode/
 conf/custom.env
 *.lock
-k8s/charts/aias/charts
+k8s/charts/aias/charts/**

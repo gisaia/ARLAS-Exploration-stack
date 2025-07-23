@@ -137,7 +137,7 @@ apisix:
         apisix.yaml: |-
           routes:
             -
-                uri: /wui/*
+              uri: /wui/*
               upstream:
                 nodes:
                   "arlas-wui:8080": 1

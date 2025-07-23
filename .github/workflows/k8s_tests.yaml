@@ -22,7 +22,7 @@ jobs:
         run: helm dependency build k8s/charts/aias
 
       - name: Install aias
-        run: helm install aias k8s/charts/aias
+        run: helm install --wait aias k8s/charts/aias
 
       - name: Copy files
         run: ./k8s/scripts/copy_files.sh
