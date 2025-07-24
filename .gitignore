@@ -26,3 +26,4 @@ __pycache__/
 conf/custom.env
 *.lock
 k8s/charts/aias/charts/**
+k8s/charts/aias/Chart.lock
