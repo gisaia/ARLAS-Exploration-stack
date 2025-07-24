@@ -27,3 +27,7 @@ dependencies:
 - name: apisix
   repository: https://charts.bitnami.com/bitnami
   version: 5.0.3
+- name: rabbitmq
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.0.11
+  
