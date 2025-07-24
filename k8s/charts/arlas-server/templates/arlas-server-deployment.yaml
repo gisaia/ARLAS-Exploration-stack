@@ -130,7 +130,7 @@ spec:
             httpGet:
               path: {{ .Values.urlPrefix }}/admin/healthcheck
               port: http
-            initialDelaySeconds: 40
+            initialDelaySeconds: 40            
           readinessProbe:
             httpGet:
               path: {{ .Values.urlPrefix }}/admin/healthcheck
