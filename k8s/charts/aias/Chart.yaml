@@ -15,6 +15,12 @@ dependencies:
 - name: arlas-wui
   version: 0.0.1
   repository: "file://../arlas-wui"
+- name: agate
+  version: 0.0.1
+  repository: "file://../agate"
+- name: fam
+  version: 0.0.1
+  repository: "file://../fam"
 
 
 # THIRD PARTY DEPENDENCIES
@@ -30,4 +36,6 @@ dependencies:
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
   version: 16.0.11
-  
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 21.2.13

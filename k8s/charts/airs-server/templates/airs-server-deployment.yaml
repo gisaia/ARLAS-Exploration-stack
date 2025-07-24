@@ -20,13 +20,13 @@ spec:
           image: {{ .Values.image }}
           livenessProbe:
             httpGet:
-              path: /airs/healthcheck
-              port: 8000
+              path: {{ .Values.urlPrefix }}/healthcheck
+              port: {{ .Values.servicePort }}
             initialDelaySeconds: 40
           readinessProbe:
             httpGet:
-              path: /airs/healthcheck
-              port: 8000
+              path: {{ .Values.urlPrefix }}/healthcheck
+              port: {{ .Values.servicePort }}
             initialDelaySeconds: 40
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -73,7 +73,7 @@ spec:
 
             # INDEX CONFIGURATION
             - name: AIRS_INDEX_COLLECTION_PREFIX
-              value: "{{ .Values.organization }}@{{ .Values.cors.airsIndexPrefix }}"
+              value: "{{ .Values.organization }}@{{ .Values.airsIndexPrefix }}"
 
             # INDEX MAPPING
             - name: ARLASEO_MAPPING_URL

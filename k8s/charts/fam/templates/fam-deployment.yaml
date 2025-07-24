@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.serviceName }}
+  name: {{ .Values.serviceName }}
+spec:
+  replicas: {{ int .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.serviceName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .Values.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.serviceName }}
+          image: {{ .Values.image }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.urlPrefix }}/healthcheck
+              port: {{ .Values.servicePort }}
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.urlPrefix }}/healthcheck
+              port: {{ .Values.servicePort }}
+            initialDelaySeconds: 40
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            # FAM CONFIGURATION
+            - name: INGESTED_FOLDER
+              value: {{ .Values.ingestFolder | quote }}
+            - name: APROC_RESOURCE_ID_HASH_STARTS_AT
+              value: {{ .Values.resourceIdHashStartAt | quote }}
+
+            # ENDPOINT CONFIGURATION              
+            - name: FAM_CORS_HEADERS
+              value: {{ .Values.cors.allowedHeaders | quote }}
+            - name: FAM_CORS_METHODS
+              value: {{ .Values.cors.allowedMethods | quote }}
+            - name: FAM_CORS_ORIGINS
+              value: {{ .Values.cors.allowedOrigins | squote }}
+            - name: FAM_HOST
+              value: {{ .Values.cors.allowedHosts | squote }}
+
+            - name: FAM_PORT
+              value: {{ .Values.servicePort | squote }}
+            - name: FAM_PREFIX
+              value: {{ .Values.urlPrefix }}
+
+            # LOGGING
+            - name: FAM_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+          volumeMounts:
+            - name: fam-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: fam-files
+          configMap:
+            name: fam-files-configmap
+
+      # NODE SELECTION      
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
