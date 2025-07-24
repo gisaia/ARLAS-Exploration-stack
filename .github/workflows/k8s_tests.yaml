@@ -15,14 +15,5 @@ jobs:
       - name: Add bitnami repo
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
 
-      - name: Update aias dependencies
-        run: helm dependency update k8s/charts/aias
-
-      - name: Build aias dependencies
-        run: helm dependency build k8s/charts/aias
-
-      - name: Install aias
-        run: helm install --wait aias k8s/charts/aias
-
-      - name: Copy files
-        run: ./k8s/scripts/copy_files.sh
+      - name: deploy aias
+        run: ./k8s/scripts/start.sh 

@@ -1,0 +1,45 @@
+apisix:
+  usePasswordFiles: false
+  controlPlane:
+    enabled: false
+  ingressController:
+    enabled: false
+  etcd:
+    enabled: false
+  dashboard:
+    enabled: false
+  dataPlane:
+    extraConfig:
+      deployment:
+        role_data_plane:
+          config_provider: yaml
+    extraVolumes:
+      - name: routes
+        configMap:
+          name: apisix-routes
+    extraVolumeMounts:
+      - name: routes
+        mountPath: /usr/local/apisix/conf/apisix.yaml
+        subPath: apisix.yaml
+  extraDeploy:
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: apisix-routes
+      data:
+        apisix.yaml: |-
+          routes:
+            -
+              uri: /wui/*
+              upstream:
+                nodes:
+                  "arlas-wui:8080": 1
+              plugins:
+                proxy-rewrite:
+                  regex_uri: ["/wui/(.*)", "/$1"]
+            -
+              uri: /arlas/*
+              upstream:
+                nodes:
+                  "arlas-server:9999": 1
+          #END
