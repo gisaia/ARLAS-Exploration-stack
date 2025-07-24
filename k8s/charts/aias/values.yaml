@@ -115,6 +115,9 @@ rabbitmq:
     username: *arlasAppRabbitMQLogin
     password: *arlasAppRabbitMQPassword
 
+redis:
+  architecture: standalone
+
 # MINIO
 # @ignored
 minio:
