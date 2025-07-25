@@ -24,12 +24,12 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.hubUrl }}
+              path: {{ .Values.builderUrl }}
               port: http
             initialDelaySeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.hubUrl }}
+              path: {{ .Values.builderUrl }}
               port: http
             initialDelaySeconds: 10
           resources:
@@ -77,6 +77,12 @@ spec:
             - name: ARLAS_AUTHENT_LOGOUT_URL
               value: {{ .Values.authent.logoutUrl | quote }}
 
+            # BUILDER CONFIGURATION
+            - name: ARLAS_BASEMAPS
+              value: {{ .Values.basemaps | quote }}
+            - name: ARLAS_EXTERNAL_NODE_PAGE
+              value: {{ .Values.allowExternalNodeConfiguration | quote }}
+
             # UI LINKS
             - name: ARLAS_BUILDER_URL
               value: {{ .Values.builderUrl | quote }}
@@ -84,8 +90,8 @@ spec:
               value: {{ .Values.hubUrl | quote }}
             - name: ARLAS_WUI_URL
               value: {{ .Values.wuiURL | quote }}
-            - name: ARLAS_HUB_APP_PATH
-              value: ""
+            - name: ARLAS_BUILDER_BASE_HREF
+              value: {{ .Values.builderUrl | quote }}
 
             # SERVICES
             - name: ARLAS_PERSISTENCE_URL

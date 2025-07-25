@@ -1,0 +1,4 @@
+apiVersion: v2
+name: arlas-builder
+description: A Helm Chart to deploy ARLAS Builder
+version: 0.0.1
