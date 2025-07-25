@@ -4,7 +4,7 @@ description: A Helm Chart to deploy the ARLAS Exploration Stack with AIAS servic
 version: 0.0.1
 
 dependencies:
-# ARLAS DEPENDENCIES
+# ARLAS BACKEND DEPENDENCIES
 
 - name: arlas-server
   version: 0.0.1
@@ -12,16 +12,23 @@ dependencies:
 - name: airs-server
   version: 0.0.1
   repository: "file://../airs-server"
-- name: arlas-wui
-  version: 0.0.1
-  repository: "file://../arlas-wui"
 - name: agate
   version: 0.0.1
   repository: "file://../agate"
 - name: fam
   version: 0.0.1
   repository: "file://../fam"
+- name: arlas-persistence-server
+  version: 0.0.1
+  repository: "file://../arlas-persistence-server"
 
+# ARLAS FRONTEND DEPENDENCIES
+- name: arlas-wui
+  version: 0.0.1
+  repository: "file://../arlas-wui"
+- name: arlas-hub
+  version: 0.0.1
+  repository: "file://../arlas-hub"
 
 # THIRD PARTY DEPENDENCIES
 - name: elasticsearch

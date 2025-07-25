@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'k8s/**'
+      - 'conf/aias/**'
 
 jobs:
   aias-on-k8s-cluster:
@@ -17,3 +18,9 @@ jobs:
 
       - name: deploy aias
         run: ./k8s/scripts/start.sh 
+        
+      - name: wait aias running
+        run: ./k8s/scripts/wait_until_running.sh        
+
+      - name: copy files
+        run: ./k8s/scripts/copy_files.sh
