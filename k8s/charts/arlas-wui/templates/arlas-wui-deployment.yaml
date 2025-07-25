@@ -97,7 +97,7 @@ spec:
             - name: ARLAS_STATIC_LINKS
               value: {{ .Values.links | toPrettyJson | quote }}
             - name: ARLAS_TAB_NAME
-              value: {{ .Values.tabName }}
+              value: {{ .Values.tabName | quote }}
             - name: ARLAS_GEOCODING_ENABLED
               value: {{ .Values.enableGeocoding | quote }}
             - name: ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO

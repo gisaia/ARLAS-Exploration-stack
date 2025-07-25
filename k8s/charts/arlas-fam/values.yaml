@@ -3,7 +3,7 @@
 # -- DNS domain hosting ARLAS
 dnsDomain: localhost
 
-serviceName: fam
+serviceName: arlas-fam
 servicePort: 8000
 serviceType: ClusterIP
 
