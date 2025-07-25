@@ -3,10 +3,10 @@
 # -- DNS domain hosting ARLAS
 dnsDomain: localhost
 
-serviceName: arlas-wui
+serviceName: arlas-hub
 servicePort: 8080
 serviceType: ClusterIP
-image: gisaia/arlas-wui:27.0.5
+image: gisaia/arlas-wui-hub:27.0.2
 
 
 persistence:
@@ -60,67 +60,7 @@ authent:
   # -- The client's id as registered with the auth server
   clientId:
 
-# -- List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes.
-links: []
-# -- The Google Analytics key of the wui app
-googleAnalyticsKey:
-# -- Version number of the ARLAS Hits Exporter to use
-hitsExporterVersion: 2.2
-# -- The text to display on the tab of the web browser (will be enriched with the dashboard name)
-tabName: ARLAS Exploration
-# -- Whether to display the dashboard shortcut icon
-dashboardShortcut: false
-# -- Whether or not to enable result list export
-resultListEnableExport: false
-# -- Result list export size
-resultListExportSize: 1000
-# -- Maximum number of buckets for the histogram graph
-histogramsMaxBucket: 200
-# -- Maximum number of buckets for the histogram export
-histogramsExportNbBuckets: 1000
-# -- Enable or disable Geocoding feature
-enableGeocoding: false
-# -- Geocoding find place URL
-geocodingUrl:
-# -- Maximum zoom level for geocoding feature
-geocodingZoomTo: 11
 configuration: {}
-
-actionsEnv:
-  # -- Relative AIAS download execution URL
-  - name: ARLAS_DOWNLOAD_PROCESS_URL
-    value: /aproc/processes/download/execution
-  # -- Relative AIAS download URL
-  - name: ARLAS_DOWNLOAD_PROCESS_CHECK_URL
-    value: /aproc/processes/download
-  # -- AIAS download max number of items
-  - name: ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS
-    value: "100"
-  # -- AIAS download configuration file location
-  - name: ARLAS_DOWNLOAD_PROCESS_SETTINGS_URL
-    value: assets/processes/download.json
-  # -- AIAS download status relative url
-  - name: ARLAS_DOWNLOAD_PROCESS_STATUS_URL
-    value: /aproc/jobs
-  # -- Relative AIAS enrich execution URL
-  - name: ARLAS_ENRICH_PROCESS_URL
-    value: /aproc/processes/enrich/execution
-  # -- Relative AIAS enrich URL
-  - name: ARLAS_ENRICH_PROCESS_CHECK_URL
-    value: /aproc/processes/enrich
-  # -- AIAS enrich max number of items
-  - name: ARLAS_ENRICH_PROCESS_MAX_ITEMS
-    value: "100"
-  # -- AIAS enrich configuration file location
-  - name: ARLAS_ENRICH_PROCESS_SETTINGS_URL
-    value: assets/processes/enrich.json
-  # -- AIAS enrich status relative url
-  - name: ARLAS_ENRICH_PROCESS_STATUS_URL
-    value: /aproc/jobs
-
-basemap:
-  # -- Size of the directory containing the basemap files
-  storageSize: 10Mi
 
 # -- Number of desired pods
 replicaCount: 1

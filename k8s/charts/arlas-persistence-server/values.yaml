@@ -1,0 +1,135 @@
+## @section Global parameters
+
+# -- DNS domain hosting ARLAS
+dnsDomain: localhost
+
+serviceName: arlas-persistence-server
+servicePort: 8000
+serviceType: ClusterIP
+image: gisaia/arlas-persistence-server:27.0.1
+
+# -- Number of desired pods
+replicaCount: 1
+
+# -- Java Xmx value
+jvmXmx: 1800m
+# -- Whether ES APM should be activated or not
+apm: false
+
+# -- Cache TTL for items in cache (seconds), used for all deployments to ensure consistency
+cacheTimeout: 60
+# -- The factory class for the cache (`io.arlas.server.core.impl.cache.HazelcastCacheFactory`, `io.arlas.server.core.impl.cache.LocalCacheFactory` or `io.arlas.server.core.impl.cache.NoCacheFactory`)
+cacheFactoryClass: io.arlas.commons.cache.NoCacheFactory
+
+# -- Whether to protect ARLAS server with authentication
+enabled: true
+# -- Endpoint to call in order to get user permissions given an access token when using HTTPPolicyEnforcer class
+permissionUrl: /permissions
+# -- Comma separated list of endpoints that should bypass authentication
+publicUris: swagger,swagger.*,openapi.*,session:POST, session/refresh:PUT,users:POST,users/.*:POST,organisations/check:GET
+# -- Base URL path for the server's general API
+urlPrefix: /arlas
+# -- The java package to process for extracting the APIs displayed in Swagger
+swaggerResource: io.arlas.server.rest,io.arlas.server.stac
+
+resources:
+  requests:
+    cpu: 0.5
+    memory: 750Mi
+  limits:
+    cpu: 2
+    memory: 2000Mi
+
+# -- Configuration of the persistence engine
+persistence:
+  # -- Storage engine to use: either `file` or `hibernate`
+  engine: file
+  # -- Storage size in case of file persistence
+  storageSize: 100Mi
+  # -- Storage engine to use: either `file` or `hibernate`
+  localFolder: /persist/
+  
+  # -- Configuration node if `engine=hibernate`, ignored otherwise
+  hibernate:
+    # -- JDBC URL
+    url: jdbc:postgresql://db:5432/arlas
+    # -- Database user login
+    user:
+    # -- Database user password
+    password:
+    # -- SQL Dialect
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+    # -- JDBC Driver
+    driver: org.postgresql.Driver
+
+cors:
+  # -- Enable CORS or not
+  enabled: false
+  # -- CORS Allowed Origins
+  allowedOrigins: '"*"'
+  # -- CORS Allowed Headers
+  allowedHeaders: "arlas-user,arlas-groups,arlas-organization,arlas-org-filter,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User"
+  # -- CORS Allowed Methods
+  allowedMethods: "OPTIONS,GET,PUT,POST,DELETE,HEAD"
+  # -- CORS Allowed Credentials or not
+  allowedCredentials: true
+  # -- CORS Exposed Headers
+  exposedHeaders: "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,WWW-Authenticate"
+
+logger:
+  # -- Default logging level
+  loggingLevel: INFO
+  # -- Default console logging level
+  loggingConsoleLevel: INFO
+
+# -- ARLAS Policy Enforcer
+policyEnv:
+  # -- Policy Enforcer class to use among `io.arlas.filter.impl.NoPolicyEnforcer`, `io.arlas.filter.impl.HTTPPolicyEnforcer`, `io.arlas.filter.impl.KeycloakPolicyEnforcer`
+  - name: ARLAS_AUTH_POLICY_CLASS
+    value: io.arlas.filter.impl.NoPolicyEnforcer
+
+  # value: io.arlas.filter.impl.HTTPPolicyEnforcer
+  # - name: ARLAS_AUTH_KEYCLOAK_REALM
+  # - name: ARLAS_AUTH_KEYCLOAK_RESOURCE
+  # - name: ARLAS_AUTH_KEYCLOAK_SECRET
+  # - name: ARLAS_AUTH_KEYCLOAK_URL
+  # - name: ARLAS_AUTH_PERMISSION_URL
+  # - name: ARLAS_AUTH_PUBLIC_URIS
+  #   value: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,collections/demo_.*:GET,authorize/resources:GET
+  # - name: ARLAS_ANONYMOUS_VALUE
+  #   value: anonymous
+  # - name: ARLAS_ORGANIZATION_HEADER
+  #   value: arlas-organization
+
+elastic:
+  cluster: elastic
+  login: elastic
+  password: elastic
+  apm:
+    secret:
+    url:
+
+elasticEnv:
+  - name: ARLAS_ELASTIC_SKIP_MASTER
+    value: "true"
+  - name: ARLAS_ELASTIC_SNIFFING
+    value: "false"
+  - name: ARLAS_ELASTIC_ENABLE_SSL
+    value: "true"
+
+services:
+  # -- Whether INSPIRE Service is activated or not
+  inspireActivated: '"false"'
+  # -- Whether Raster Tile Service is activated or not
+  rasterTileActivated: '"false"'
+  # -- Whether CSW Service is activated or not
+  cswActivated: '"false"'
+  # -- Whether WFS Service is activated or not
+  wfsActivated: '"false"'
+
+# -- Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelector: {}
+# -- Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: []
+# -- Allows constraining pod(s) to only run on particular nodes, or to prefer to run on particular nodes. It is based on label-selection. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}

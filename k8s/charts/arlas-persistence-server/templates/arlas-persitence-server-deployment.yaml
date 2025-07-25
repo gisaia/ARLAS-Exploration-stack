@@ -1,0 +1,156 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.serviceName }}
+  labels:
+    app.kubernetes.io/component: {{ .Values.serviceName }}
+spec:
+  replicas: {{ int .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.serviceName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .Values.serviceName }}
+      # annotations:
+      #   co.elastic.logs/enabled: "true"
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.serviceName }}
+          image: {{ .Values.image }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            # APM CONFIGURATION
+            {{- if .Values.apm }}
+            - name: ELASTIC_APM_LOG_ECS_REFORMATTING
+              value: "OVERRIDE"
+            - name: ELASTIC_APM_LOG_ECS_FORMATTER_ALLOW_LIST
+              value: "*"
+            - name: ELASTIC_APM_SERVICE_NAME
+              value:  {{ .Values.serviceName | quote }}
+            - name: ELASTIC_APM_APPLICATION_PACKAGES
+              value: "io.arlas"
+            - name: ELASTIC_APM_USE_JAXRS_PATH_AS_TRANSACTION_NAME
+              value: '"true"'
+            - name: ELASTIC_APM_SECRET_TOKEN
+              value: {{ .Values.elastic.apm.secret | quote }}
+            - name: ELASTIC_APM_SERVER_URLS
+              value: {{ .Values.elastic.apm.url | quote }}
+            - name: ELASTIC_APM_ENVIRONMENT
+              value: {{ .Release.Name | quote }}
+            - name: ELASTIC_APM_TRANSACTION_IGNORE_USER_AGENTS
+              value: "GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"
+            {{- end }}
+
+            # PERSISTENCE CONFIGURATION
+            - name: ARLAS_PERSISTENCE_ENGINE
+              value: {{ .Values.persistence.engine | quote }}
+            - name: ARLAS_PERSISTENCE_LOCAL_FOLDER
+              value: {{ .Values.persistence.localFolder | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_URL
+              value: {{ .Values.persistence.hibernate.url | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_USER
+              value: {{ .Values.persistence.hibernate.user | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_PASSWORD
+              value: {{ .Values.persistence.hibernate.password | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_DIALECT
+              value: {{ .Values.persistence.hibernate.dialect | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_DRIVER
+              value: {{ .Values.persistence.hibernate.driver | quote }}
+
+            # JVM CONFIG
+            {{- if .Values.apm }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.jvmXmx }} -XX:+ExitOnOutOfMemoryError -javaagent:/opt/app/elastic-apm-agent.jar"
+            {{- else }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.jvmXmx }} -XX:+ExitOnOutOfMemoryError"
+            {{- end }}
+            - name: ARLAS_XMX
+              value: {{ .Values.jvmXmx | quote }}
+
+            # ENDPOINT CONFIGURATION
+            - name: ARLAS_PERSISTENCE_APP_PATH
+              value: /
+            - name: ARLAS_PERSISTENCE_PREFIX
+              value: {{ .Values.urlPrefix | quote }}
+            - name: ARLAS_PERSISTENCE_BASE_URI
+              value: "https://{{ .Values.dnsDomain }}{{ .Values.urlPrefix }}/"
+            - name: ARLAS_PERSISTENCE_PORT
+              value: {{ .Values.servicePort  | quote }}
+            - name: ARLAS_CORS_ENABLED
+              value: {{ .Values.cors.enabled | quote }}
+            - name: ARLAS_CORS_ALLOWED_ORIGINS
+              value: {{ .Values.cors.allowedOrigins | squote }}
+            - name: ARLAS_CORS_ALLOWED_HEADERS
+              value: {{ .Values.cors.allowedHeaders | quote }}
+            - name: ARLAS_CORS_ALLOWED_METHODS
+              value: {{ .Values.cors.allowedMethods | quote }}
+            - name: ARLAS_CORS_ALLOWED_CREDENTIALS
+              value: {{ .Values.cors.allowedCredentials | quote }}
+            - name: ARLAS_CORS_EXPOSED_HEADERS
+              value: {{ .Values.cors.exposedHeaders | quote }}
+            - name: ARLAS_SWAGGER_RESOURCE_PKG
+              value: {{ .Values.swaggerResource | quote }}
+            - name: ARLAS_PERSISTENCE_CUSTOM_JS
+              value: {{ .Values.urlPrefix }}/swagger-static/custom-request-interceptor.js
+            - name: ARLAS_PERSISTENCE_ADMIN_PATH
+              value: {{ .Values.urlPrefix }}/admin
+
+            # AUTHENTICATION AND AUTHORIZATION
+            {{- toYaml .Values.policyEnv | nindent 12 }}
+
+            # CACHE CONFIG
+            - name: ARLAS_CACHE_TIMEOUT
+              value: {{ .Values.cacheTimeout | quote }}
+            - name: ARLAS_PERSISTENCE_CACHE_FACTORY_CLASS
+              value: {{ .Values.cacheFactoryClass | quote }}
+
+            # LOGGING
+            - name: ARLAS_PERSISTENCE_LOGGING_LEVEL
+              value: {{ .Values.logger.loggingLevel | quote }}
+            - name: ARLAS_PERSISTENCE_LOGGING_CONSOLE_LEVEL
+              value: {{ .Values.logger.loggingConsoleLevel | quote }}
+            - name: ARLAS_LOGGING_FILE_LEVEL
+              value: "OFF"
+
+          volumeMounts:
+            - mountPath: "/persistence"
+              name: arlas-persistence-file
+          ports:
+            - name: http
+              containerPort: {{ .Values.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.urlPrefix }}/admin/healthcheck
+              port: http
+            initialDelaySeconds: 40            
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.urlPrefix }}/admin/healthcheck
+              port: http
+            initialDelaySeconds: 40
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: arlas-persistence-file
+          persistentVolumeClaim:
+            claimName: arlas-persistence-file-pvc
+
+      # NODE SELECTION      
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
