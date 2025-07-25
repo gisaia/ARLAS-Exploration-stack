@@ -29,6 +29,9 @@ dependencies:
 - name: arlas-hub
   version: 0.0.1
   repository: "file://../arlas-hub"
+- name: arlas-builder
+  version: 0.0.1
+  repository: "file://../arlas-builder"
 
 # THIRD PARTY DEPENDENCIES
 - name: elasticsearch

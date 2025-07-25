@@ -6,7 +6,7 @@ then
 fi
 
 # Define the maximum number of loops
-max_loops=30
+max_loops=40
 
 # Define the namespace you want to check
 
@@ -28,6 +28,9 @@ for (( loop=1; loop<=$max_loops; loop++ )); do
     # Wait for a few seconds before checking again
     sleep 10
 done
+
+not_running_pods=$(kubectl get pods --namespace "$namespace" --no-headers | awk '$3 != "Running" {print $1}')
+kubectl describe pod $not_running_pods
 
 # If the loop completes without all pods running, exit with an error
 echo "Error: Not all pods are running after $max_loops checks."
