@@ -1,4 +1,4 @@
 apiVersion: v2
-name: fam
+name: arlas-fam
 description: A Helm Chart to deploy ARLAS FAM (File and Archive exploration)
 version: 0.0.1

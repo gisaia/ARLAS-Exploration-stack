@@ -24,12 +24,12 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.hubUrl }}
+              path: {{ .Values.hubURL }}
               port: http
             initialDelaySeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.hubUrl }}
+              path: {{ .Values.hubURL }}
               port: http
             initialDelaySeconds: 10
           resources:
@@ -49,9 +49,9 @@ spec:
             - name: ARLAS_AUTHENT_CLIENT_ID
               value: {{ .Values.authent.clientId }}
             - name: ARLAS_AUTHENT_REDIRECT_URI
-              value: https://{{ .Values.dnsDomain }}{{ .Values.hubUrl }}/callback
+              value: https://{{ .Values.dnsDomain }}{{ .Values.hubURL }}/callback
             - name: ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI
-              value: https://{{ .Values.dnsDomain }}{{ .Values.hubUrl }}/silent-refresh.html
+              value: https://{{ .Values.dnsDomain }}{{ .Values.hubURL }}/silent-refresh.html
             - name: ARLAS_AUTHENT_SCOPE
               value: {{ .Values.authent.scope }}
             - name: ARLAS_AUTHENT_CUSTOM_QUERY_PARAMS
@@ -79,9 +79,9 @@ spec:
 
             # UI LINKS
             - name: ARLAS_BUILDER_URL
-              value: {{ .Values.builderUrl | quote }}
+              value: {{ .Values.builderURL | quote }}
             - name: ARLAS_HUB_BASE_HREF
-              value: {{ .Values.hubUrl | quote }}
+              value: {{ .Values.hubURL | quote }}
             - name: ARLAS_WUI_URL
               value: {{ .Values.wuiURL | quote }}
             - name: ARLAS_HUB_APP_PATH

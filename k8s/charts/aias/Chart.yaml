@@ -12,12 +12,12 @@ dependencies:
 - name: airs-server
   version: 0.0.1
   repository: "file://../airs-server"
-- name: agate
+- name: arlas-agate
   version: 0.0.1
-  repository: "file://../agate"
-- name: fam
+  repository: "file://../arlas-agate"
+- name: arlas-fam
   version: 0.0.1
-  repository: "file://../fam"
+  repository: "file://../arlas-fam"
 - name: arlas-persistence-server
   version: 0.0.1
   repository: "file://../arlas-persistence-server"
@@ -32,6 +32,9 @@ dependencies:
 - name: arlas-builder
   version: 0.0.1
   repository: "file://../arlas-builder"
+- name: arlas-fam-wui
+  version: 0.0.1
+  repository: "file://../arlas-fam-wui"
 
 # THIRD PARTY DEPENDENCIES
 - name: elasticsearch

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: arlas-fam-wui
+description: A Helm Chart to deploy ARLAS FAM User Interface
+version: 0.0.1

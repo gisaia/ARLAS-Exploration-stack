@@ -24,12 +24,12 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.builderURL }}
+              path: {{ .Values.famWuiURL }}
               port: http
             initialDelaySeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.builderURL }}
+              path: {{ .Values.famWuiURL }}
               port: http
             initialDelaySeconds: 10
           resources:
@@ -49,9 +49,9 @@ spec:
             - name: ARLAS_AUTHENT_CLIENT_ID
               value: {{ .Values.authent.clientId }}
             - name: ARLAS_AUTHENT_REDIRECT_URI
-              value: https://{{ .Values.dnsDomain }}{{ .Values.builderURL }}/callback
+              value: https://{{ .Values.dnsDomain }}{{ .Values.famWuiURL }}/callback
             - name: ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI
-              value: https://{{ .Values.dnsDomain }}{{ .Values.builderURL }}/silent-refresh.html
+              value: https://{{ .Values.dnsDomain }}{{ .Values.famWuiURL }}/silent-refresh.html
             - name: ARLAS_AUTHENT_SCOPE
               value: {{ .Values.authent.scope }}
             - name: ARLAS_AUTHENT_CUSTOM_QUERY_PARAMS
@@ -77,27 +77,44 @@ spec:
             - name: ARLAS_AUTHENT_LOGOUT_URL
               value: {{ .Values.authent.logoutUrl | quote }}
 
-            # BUILDER CONFIGURATION
-            - name: ARLAS_BASEMAPS
-              value: {{ .Values.basemaps | quote }}
-            - name: ARLAS_EXTERNAL_NODE_PAGE
-              value: {{ .Values.allowExternalNodeConfiguration | quote }}
-
             # UI LINKS
+            - name: FAM_WUI_BASE_HREF
+              value: {{ .Values.famWuiURL | quote }}
             - name: ARLAS_BUILDER_URL
               value: {{ .Values.builderURL | quote }}
             - name: ARLAS_HUB_BASE_HREF
               value: {{ .Values.hubURL | quote }}
             - name: ARLAS_WUI_URL
               value: {{ .Values.wuiURL | quote }}
-            - name: ARLAS_BUILDER_BASE_HREF
-              value: {{ .Values.builderURL | quote }}
+            - name: ARLAS_HUB_APP_PATH
+              value: ""
+
+            # USER INTERFACE CONFIGURATION
+            - name: ARLAS_STATIC_LINKS
+              value: {{ .Values.links | toPrettyJson | quote }}
+            - name: ARLAS_TAB_NAME
+              value: {{ .Values.tabName | quote }}
+            - name: FAM_SERVER_URL
+              value: https://{{ .Values.dnsDomain }}/{{ .Values.famWuiURL }}
+            - name: FAM_DEFAULT_PATH
+              value: {{ .Values.famDefaultURL | quote }}
+            - name: FAM_COLLECTION
+              value: {{ .Values.collectionName | quote }}
+            - name: FAM_ARCHIVES_PAGES_SIZE
+              value: {{ .Values.archivePageSize | quote }}
+            - name: FAM_FILES_PAGES_SIZE
+              value: {{ .Values.filePageSize | quote }}
+            - name: APROC_CATALOG
+              value: {{ .Values.catalog | quote }}
+            - name: AIRS_COLLECTION
+              value: {{ .Values.collectionName | quote }}
+
 
             # SERVICES
-            - name: ARLAS_PERSISTENCE_URL
-              value: https://{{ .Values.dnsDomain }}{{ .Values.persistence.urlPrefix }}
-            - name: ARLAS_PERMISSIONS_URL
-              value: https://{{ .Values.dnsDomain }}{{ .Values.permissions.urlPrefix }}
+            - name: APROC_SERVER_URL
+              value: https://{{ .Values.dnsDomain }}{{ .Values.aprocURL }}
+            - name: AIRS_SERVER_URL
+              value: https://{{ .Values.dnsDomain }}{{ .Values.airsURL }}
 
           {{- range $configurationName, $configurationInfo := .Values.configuration }}
             - name: {{ (index $.Values.configuration $configurationName).environmentVariable }}

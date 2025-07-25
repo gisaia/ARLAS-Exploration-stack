@@ -3,7 +3,7 @@
 # -- DNS domain hosting ARLAS
 dnsDomain: localhost
 
-serviceName: agate
+serviceName: arlas-agate
 servicePort: 8000
 serviceType: ClusterIP
 

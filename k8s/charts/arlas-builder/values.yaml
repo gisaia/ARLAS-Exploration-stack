@@ -15,8 +15,8 @@ persistence:
 permissions:
   urlPrefix: /arlas/permissions
 
-builderUrl: /builder/
-hubUrl: /hub/
+builderURL: /builder/
+hubURL: /hub/
 wuiURL: /wui/
 
 authent:
