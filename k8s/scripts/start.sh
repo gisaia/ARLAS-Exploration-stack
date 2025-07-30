@@ -1,11 +1,6 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-if helm list -n default | grep -q '^aias'; then
-  echo "first, removing existing aias ..."
-  helm uninstall aias
-fi
-
 kubectl create configmap agate-files-configmap  \
   --from-file=agate.yaml=conf/aias/agate.yaml  \
   --from-file=roles.yaml=conf/aias/roles.yaml  \
@@ -21,4 +16,13 @@ kubectl create configmap fam-files-configmap  \
 
 helm dependency update k8s/charts/aias 
 helm dependency build k8s/charts/aias
-helm install aias k8s/charts/aias -f k8s/charts/aias/values.yaml -f k8s/charts/aias/values-apisix.yaml
+
+OPERATION="install"
+if helm list -n default | grep -q '^aias'; then
+  echo "aias is deployed ... upgrading deployment"
+  OPERATION="upgrade"
+else
+  echo "aias is not deployed ... installing deployment"
+fi
+
+helm $OPERATION aias k8s/charts/aias -f k8s/charts/aias/values.yaml -f k8s/charts/aias/values-apisix.yaml

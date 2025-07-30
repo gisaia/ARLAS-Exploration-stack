@@ -7,7 +7,7 @@ serviceName: arlas-fam
 servicePort: 8000
 serviceType: ClusterIP
 
-image: gisaia/fam:0.6.31
+image: gisaia/fam:0.6.40
 
 # -- Number of desired pods
 replicaCount: 1

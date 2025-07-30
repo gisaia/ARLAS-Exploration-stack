@@ -105,7 +105,7 @@ spec:
             - name: ARLAS_ELASTIC_NODES
               value: {{ .Release.Name }}-elasticsearch:9200
             - name: ARLAS_ELASTIC_CREDENTIALS
-              value: elastic:password4elastic
+              value: {{ .Values.elastic.login}}:{{ .Values.elastic.password}}
 
             {{- toYaml .Values.elasticEnv | nindent 12 }}
 

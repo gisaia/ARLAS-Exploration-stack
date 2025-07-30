@@ -6,7 +6,7 @@ dnsDomain: localhost
 serviceName: arlas-fam-wui
 servicePort: 8080
 serviceType: ClusterIP
-image: gisaia/arlas-fam-wui:0.6.31
+image: gisaia/arlas-fam-wui:0.6.40
 
 
 persistence:

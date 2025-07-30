@@ -31,7 +31,6 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - AIRS_ENDPOINT=http://airs-server:8000/airs
       - APROC_ENDPOINT_FROM_APROC=http://aproc-service:8001/aproc
-      - ROOT_DIRECTORY=/inputs
       - ARLAS_SMTP_ACTIVATED="${ARLAS_SMTP_ACTIVATED:-false}"
       - ARLAS_SMTP_HOST="${ARLAS_SMTP_HOST}"
       - ARLAS_SMTP_PORT="${ARLAS_SMTP_PORT:-25}"

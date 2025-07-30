@@ -7,7 +7,7 @@ serviceName: arlas-agate
 servicePort: 8000
 serviceType: ClusterIP
 
-image: gisaia/agate:0.6.31
+image: gisaia/agate:0.6.40
 
 # -- Number of desired pods
 replicaCount: 1

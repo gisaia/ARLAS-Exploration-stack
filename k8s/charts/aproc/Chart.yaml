@@ -1,0 +1,4 @@
+apiVersion: v2
+name: aproc
+description: A Helm Chart to deploy ARLAS APROC PROC
+version: 0.0.1
