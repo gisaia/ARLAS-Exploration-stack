@@ -21,6 +21,9 @@ dependencies:
 - name: arlas-persistence-server
   version: 0.0.1
   repository: "file://../arlas-persistence-server"
+- name: aproc
+  version: 0.0.1
+  repository: "file://../aproc"
 
 # ARLAS FRONTEND DEPENDENCIES
 - name: arlas-wui
@@ -52,3 +55,9 @@ dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 21.2.13
+- name: keycloak
+  repository: https://charts.bitnami.com/bitnami
+  version: 24.8.1
+- name: titiler
+  repository: "file://../titiler"
+  version: 1.2.7

@@ -77,7 +77,7 @@ policyEnv:
 elastic:
   cluster: elastic
   login: elastic
-  password: elastic
+  password: password4elastic
   apm:
     secret:
     url:

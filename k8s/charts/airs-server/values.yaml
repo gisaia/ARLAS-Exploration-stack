@@ -7,7 +7,7 @@ serviceName: airs-server
 servicePort: 8000
 serviceType: ClusterIP
 
-image: gisaia/airs:0.6.31
+image: gisaia/airs:0.6.40
 
 # -- Number of desired pods
 replicaCount: 1

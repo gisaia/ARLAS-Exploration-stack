@@ -15,18 +15,30 @@ global:
   # -- Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch
   elasticLogin: &arlasAppElasticLogin elastic
   # -- Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
-  elasticPassword: &arlasAppElasticPassword password4elastic
+  elasticPassword: &arlasAppElasticPassword secret4elastic
 
   # -- Minio login for minio itself and the services that are connecting to minio
   minioLogin: &arlasAppMinioLogin minioadmin
   # -- Minio password for minio itself and the services that are connecting to minio
   minioPassword: &arlasAppMinioPassword secret4minio
 
+  # -- Keycloak admin login for keycloak deployment (for test only)
+  keycloakLogin: &arlasAppKeycloakLogin keycloakadmin
+  # -- Keycloak admin password 
+  keycloakPassword: &arlasAppKeycloakPassword secret4keycloak
+
   # -- RabbitMQ Login
   rabbitMQLogin: &arlasAppRabbitMQLogin admin
   
 # -- RabbitMQ Password
-  rabbitMQPassword: &arlasAppRabbitMQPassword secretpassword
+  rabbitMQPassword: &arlasAppRabbitMQPassword secret4rabbitmq
+
+# -- redis Password
+  redisPassword: &arlasAppRedisPassword secret4redis
+
+  postgresql:
+    auth:
+      password: secret4postgres
 
 # -- 
 # -- 
@@ -85,6 +97,12 @@ airs-server:
   # @ignored
   organisation: *arlasAppOrganization
 
+# APROC PROC
+aproc:
+  rabbitmq: 
+    login: *arlasAppRabbitMQLogin
+    password: *arlasAppRabbitMQPassword
+
 # ELASTICSEARCH
 # @ignored
 elasticsearch:
@@ -117,6 +135,13 @@ rabbitmq:
 
 redis:
   architecture: standalone
+  auth:
+    password: *arlasAppRedisPassword
+  commonConfiguration: |
+    loadmodule /opt/bitnami/redis/lib/redis/modules/redisbloom.so
+    loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
+    loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
+    loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
 
 # MINIO
 # @ignored
@@ -124,3 +149,14 @@ minio:
   auth:
     rootUser: *arlasAppMinioLogin
     rootPassword: *arlasAppMinioPassword
+
+# KEYCLOAK
+# @ignored
+keycloak:
+  auth.adminUser: *arlasAppKeycloakLogin
+  auth.adminPassword: *arlasAppKeycloakPassword
+  service:
+    type: LoadBalancer
+    ports:
+      http: 8080
+      https: 8443
