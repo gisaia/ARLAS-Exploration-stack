@@ -11,7 +11,7 @@ image:
     - "--host"
     - "0.0.0.0"
     - "--port"
-    - "80"
+    - "8000"
     - "--workers"
     - "1"
 
@@ -22,7 +22,7 @@ terminationGracePeriodSeconds: 30
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8000
 
 ingress:
   enabled: false
@@ -58,12 +58,12 @@ env:
   PYTHONWARNINGS: "ignore"
 
 resources:
+  requests:
+    cpu: 0.1
+    memory: 50Mi
   limits:
     cpu: 1
     memory: 2Gi
-  requests:
-    cpu: 1
-    memory: 512Mi
 
 serviceAccountName: ""
 

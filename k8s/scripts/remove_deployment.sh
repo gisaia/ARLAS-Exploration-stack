@@ -1,9 +1,9 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-if helm list -n default | grep -q '^aias'; then
-  echo "Removing aias ..."
-  helm uninstall aias
+if helm list -n arlas | grep -q '^arlas-stack'; then
+  echo "Removing arlas-stack ..."
+  helm uninstall arlas-stack -n arlas
 else
-  echo "aias is not deployed"
+  echo "arlas-stack is not deployed"
 fi

@@ -65,6 +65,8 @@ spec:
               value: {{ .Values.urlPrefix }}/admin
             - name: ARLAS_APP_PATH
               value: /
+            - name: ARLAS_PORT
+              value: {{ .Values.servicePort | quote }}
             # - name: ARLAS_TAGGER_PORT
             #   value: {{ .Values.servicePort  | quote }}
             - name: ARLAS_CORS_ENABLED

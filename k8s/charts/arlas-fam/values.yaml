@@ -4,7 +4,7 @@
 dnsDomain: localhost
 
 serviceName: arlas-fam
-servicePort: 8000
+servicePort: 8080
 serviceType: ClusterIP
 
 image: gisaia/fam:0.6.40
@@ -31,11 +31,11 @@ resourceIdHashStartAt: 0
 
 resources:
   requests:
-    cpu: 0.1
+    cpu: 0.05
     memory: 10Mi
   limits:
-    cpu: 1
-    memory: 250Mi
+    cpu: 0.5
+    memory: 256Mi
 
 cors:
   # cors.allowedOrigins -- CORS Allowed Origins

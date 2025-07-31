@@ -99,9 +99,14 @@ airs-server:
 
 # APROC PROC
 aproc:
+  # @ignored
   rabbitmq: 
     login: *arlasAppRabbitMQLogin
     password: *arlasAppRabbitMQPassword
+  # @ignored
+  elastic:
+    login: *arlasAppElasticLogin
+    password: *arlasAppElasticPassword
 
 # ELASTICSEARCH
 # @ignored
@@ -153,6 +158,13 @@ minio:
 # KEYCLOAK
 # @ignored
 keycloak:
+  resourcesPreset: medium
+  readinessProbe:
+    initialDelaySeconds: 300
+    timeoutSeconds: 60
+  startupProbe:
+    initialDelaySeconds: 300
+    timeoutSeconds: 60
   auth.adminUser: *arlasAppKeycloakLogin
   auth.adminPassword: *arlasAppKeycloakPassword
   service:

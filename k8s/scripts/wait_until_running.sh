@@ -1,9 +1,13 @@
 set -o errexit -o pipefail
-namespace="default"
+namespace="arlas"
 if [ -z "$1" ]
 then
+    echo "Using default namespace $namespace"
+else
     namespace=$1
+    echo "Using provided namespace $namespace"
 fi
+
 
 # Define the maximum number of loops
 max_loops=40

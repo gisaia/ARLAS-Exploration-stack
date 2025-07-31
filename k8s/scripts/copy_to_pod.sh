@@ -4,7 +4,6 @@ set -o errexit -o pipefail
 [ -z "$1" ] && echo "Please provide the source path" && exit 1;
 [ -z "$1" ] && echo "Please provide the target path" && exit 1;
 
-NAMESPACE=aias
 DEPLOYMENT=$1
 SOURCE_PATH=$2
 TARGET_PATH=$3
