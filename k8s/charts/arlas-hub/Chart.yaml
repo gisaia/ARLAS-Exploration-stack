@@ -1,4 +1,0 @@
-apiVersion: v2
-name: arlas-hub
-description: A Helm Chart to deploy ARLAS Hub
-version: 0.0.1
