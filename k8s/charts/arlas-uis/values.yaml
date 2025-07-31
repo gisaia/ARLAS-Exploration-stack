@@ -2,22 +2,81 @@
 
 # -- DNS domain hosting ARLAS
 dnsDomain: localhost
+protocol: http
 
-serviceName: arlas-wui
-servicePort: 8080
-serviceType: ClusterIP
-image: gisaia/arlas-wui:27.0.5
+uis:
+  servicePort: 8080
+  serviceType: ClusterIP
+
+  wui:
+    serviceName: arlas-wui
+    image: gisaia/arlas-wui:27.0.5
+    urlPrefix: /wui
+    tabName: ARLAS Exploration
+
+  famWui:
+    serviceName: arlas-fam-wui
+    image: gisaia/arlas-fam-wui:0.6.40
+    urlPrefix: /fam-wui
+    tabName: ARLAS FAM Wui
+    famDefaultURL:
+    collectionName: main
+    catalog: main catalog
+    archivePageSize: 10
+    filePageSize: 50
+ 
+  hub:
+    serviceName: arlas-hub
+    image: gisaia/arlas-wui-hub:27.0.2
+    urlPrefix: /hub
+    tabName: ARLAS Hub
+
+  builder: 
+    serviceName: arlas-builder
+    image: gisaia/arlas-wui-builder:27.0.4
+    urlPrefix: /builder/
+    tabName: ARLAS Studio
+    allowExternalNodeConfiguration: true
+    advancedFeatures: false
+    basemaps: [{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]
 
 
-persistence:
-  urlPrefix: /arlas/persistence
+services:
+  persistence:
+    urlPrefix: /arlas/persistence
+  permissions:
+    urlPrefix: /arlas/permissions
+  aprocService:
+    urlPrefix: /aproc
+  airs:
+    urlPrefix: /airs
+  fam:
+    urlPrefix: /fam
 
-permissions:
-  urlPrefix: /arlas/permissions
-
-builderURL: /builder/
-hubURL: /hub/
-wuiURL: /wui/
+# -- List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes.
+links: []
+# -- The Google Analytics key of the wui app
+googleAnalyticsKey:
+# -- Version number of the ARLAS Hits Exporter to use
+hitsExporterVersion: 2.2
+# -- The text to display on the tab of the web browser (will be enriched with the dashboard name)
+# -- Whether to display the dashboard shortcut icon
+dashboardShortcut: false
+# -- Whether or not to enable result list export
+resultListEnableExport: false
+# -- Result list export size
+resultListExportSize: 1000
+# -- Maximum number of buckets for the histogram graph
+histogramsMaxBucket: 200
+# -- Maximum number of buckets for the histogram export
+histogramsExportNbBuckets: 1000
+# -- Enable or disable Geocoding feature
+enableGeocoding: false
+# -- Geocoding find place URL
+geocodingUrl:
+# -- Maximum zoom level for geocoding feature
+geocodingZoomTo: 11
+configuration: {}
 
 authent:
   # -- When authentication is enabled, this option forces to be connected to Identity Provider at application bootstrap
@@ -54,69 +113,11 @@ authent:
   # -- Defines the kind of storage: localstorage or sessionstorage
   storage: memorystorage
   # -- The issuer's uri
-  issuer: 
+  issuer: http://localhost:80/auth/realms/arlas
   # -- The logout URL to be used
   logoutUrl:
   # -- The client's id as registered with the auth server
-  clientId:
-
-# -- List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes.
-links: []
-# -- The Google Analytics key of the wui app
-googleAnalyticsKey:
-# -- Version number of the ARLAS Hits Exporter to use
-hitsExporterVersion: 2.2
-# -- The text to display on the tab of the web browser (will be enriched with the dashboard name)
-tabName: ARLAS Exploration
-# -- Whether to display the dashboard shortcut icon
-dashboardShortcut: false
-# -- Whether or not to enable result list export
-resultListEnableExport: false
-# -- Result list export size
-resultListExportSize: 1000
-# -- Maximum number of buckets for the histogram graph
-histogramsMaxBucket: 200
-# -- Maximum number of buckets for the histogram export
-histogramsExportNbBuckets: 1000
-# -- Enable or disable Geocoding feature
-enableGeocoding: false
-# -- Geocoding find place URL
-geocodingUrl:
-# -- Maximum zoom level for geocoding feature
-geocodingZoomTo: 11
-configuration: {}
-
-actionsEnv:
-  # -- Relative AIAS download execution URL
-  - name: ARLAS_DOWNLOAD_PROCESS_URL
-    value: /aproc/processes/download/execution
-  # -- Relative AIAS download URL
-  - name: ARLAS_DOWNLOAD_PROCESS_CHECK_URL
-    value: /aproc/processes/download
-  # -- AIAS download max number of items
-  - name: ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS
-    value: "100"
-  # -- AIAS download configuration file location
-  - name: ARLAS_DOWNLOAD_PROCESS_SETTINGS_URL
-    value: assets/processes/download.json
-  # -- AIAS download status relative url
-  - name: ARLAS_DOWNLOAD_PROCESS_STATUS_URL
-    value: /aproc/jobs
-  # -- Relative AIAS enrich execution URL
-  - name: ARLAS_ENRICH_PROCESS_URL
-    value: /aproc/processes/enrich/execution
-  # -- Relative AIAS enrich URL
-  - name: ARLAS_ENRICH_PROCESS_CHECK_URL
-    value: /aproc/processes/enrich
-  # -- AIAS enrich max number of items
-  - name: ARLAS_ENRICH_PROCESS_MAX_ITEMS
-    value: "100"
-  # -- AIAS enrich configuration file location
-  - name: ARLAS_ENRICH_PROCESS_SETTINGS_URL
-    value: assets/processes/enrich.json
-  # -- AIAS enrich status relative url
-  - name: ARLAS_ENRICH_PROCESS_STATUS_URL
-    value: /aproc/jobs
+  clientId: arlas-front
 
 basemap:
   # -- Size of the directory containing the basemap files
@@ -130,8 +131,8 @@ resources:
     cpu: 0.05
     memory: 10Mi
   limits:
-    cpu: 0.3
-    memory: 30Mi
+    cpu: 0.1
+    memory: 50Mi
 
 logger:
   # -- Default logging level

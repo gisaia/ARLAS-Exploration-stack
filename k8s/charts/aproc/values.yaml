@@ -17,7 +17,7 @@ service:
       memory: 50Mi
     limits:
       cpu: 0.5
-      memory: 500Mi
+      memory: 256Mi
 
   # -- Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   nodeSelector: {}
@@ -30,11 +30,11 @@ worker:
   serviceName: aproc-proc
   image: gisaia/aproc-proc:0.6.32
   # -- Number of desired pods
-  replicaCount: 2
+  replicaCount: 1
   resources:
     requests:
       cpu: 0.5
-      memory: 1Gi
+      memory: 512Mi
     limits:
       cpu: 2
       memory: 2Gi

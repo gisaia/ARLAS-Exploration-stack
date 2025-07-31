@@ -20,24 +20,18 @@ dependencies:
   repository: "file://../arlas-fam"
 - name: arlas-persistence-server
   version: 0.0.1
+  repository: "file://../arlas-permissions-server"
+- name: arlas-permissions-server
+  version: 0.0.1
   repository: "file://../arlas-persistence-server"
 - name: aproc
   version: 0.0.1
   repository: "file://../aproc"
 
 # ARLAS FRONTEND DEPENDENCIES
-- name: arlas-wui
+- name: arlas-uis
   version: 0.0.1
-  repository: "file://../arlas-wui"
-- name: arlas-hub
-  version: 0.0.1
-  repository: "file://../arlas-hub"
-- name: arlas-builder
-  version: 0.0.1
-  repository: "file://../arlas-builder"
-- name: arlas-fam-wui
-  version: 0.0.1
-  repository: "file://../arlas-fam-wui"
+  repository: "file://../arlas-uis"
 
 # THIRD PARTY DEPENDENCIES
 - name: elasticsearch

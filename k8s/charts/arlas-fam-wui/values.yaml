@@ -7,6 +7,7 @@ serviceName: arlas-fam-wui
 servicePort: 8080
 serviceType: ClusterIP
 image: gisaia/arlas-fam-wui:0.6.40
+protocol: http
 
 
 persistence:
@@ -81,8 +82,8 @@ resources:
     cpu: 0.05
     memory: 10Mi
   limits:
-    cpu: 0.3
-    memory: 30Mi
+    cpu: 0.1
+    memory: 50Mi
 
 logger:
   # -- Default logging level

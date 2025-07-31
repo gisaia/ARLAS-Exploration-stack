@@ -7,7 +7,7 @@ serviceName: arlas-hub
 servicePort: 8080
 serviceType: ClusterIP
 image: gisaia/arlas-wui-hub:27.0.2
-
+protocol: http
 
 persistence:
   urlPrefix: /arlas/persistence
@@ -70,8 +70,8 @@ resources:
     cpu: 0.05
     memory: 10Mi
   limits:
-    cpu: 0.3
-    memory: 30Mi
+    cpu: 0.1
+    memory: 50Mi
 
 logger:
   # -- Default logging level

@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "arlasWebUserInterface.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
+  name: {{ .Values.uis.wui.serviceName }}
+spec:
+  replicas: {{ int .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arlasWebUserInterface.labels" . | nindent 6 }}
+      app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
+  template:
+    metadata:
+      labels:
+        {{- include "arlasWebUserInterface.labels" . | nindent 8 }}
+        app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.uis.wui.serviceName }}
+          image: {{ .Values.uis.wui.image }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.uis.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.uis.wui.urlPrefix }}
+              port: http
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.uis.wui.urlPrefix }}
+              port: http
+            initialDelaySeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+
+            {{- include "arlasWebUserInterface.auth2Env" . | nindent 12 }}
+
+            {{- include "arlasWebUserInterface.linksEnv" . | nindent 12 }}
+
+            {{- include "arlasWebUserInterface.servicesEnv" . | nindent 12 }}
+
+            {{- include "arlasWebUserInterface.actionsEnv" . | nindent 12 }}
+
+            # ENDPOINT CONFIGURATION
+            - name: ARLAS_WUI_BASE_HREF
+              value: {{ .Values.uis.wui.urlPrefix }}
+
+            # USER INTERFACE CONFIGURATION
+            - name: ARLAS_STATIC_LINKS
+              value: {{ .Values.links | toPrettyJson | quote }}
+            - name: ARLAS_TAB_NAME
+              value: {{ .Values.uis.wui.tabName | quote }}
+            - name: ARLAS_GEOCODING_ENABLED
+              value: {{ .Values.enableGeocoding | quote }}
+            - name: ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO
+              value: {{ .Values.geocodingZoomTo | quote }}
+            - name: RESULTLIST_ENABLE_EXPORT
+              value: {{ .Values.resultListEnableExport | quote }}
+            - name: RESULTLIST_EXPORT_SIZE
+              value: {{ .Values.resultListExportSize | quote }}
+            - name: ARLAS_HISTOGRAMS_MAX_BUCKETS
+              value: {{ .Values.histogramsMaxBucket | quote }}
+            - name: ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS
+              value: {{ .Values.histogramsExportNbBuckets | quote }}
+
+          {{- range $configurationName, $configurationInfo := .Values.configuration }}
+            - name: {{ (index $.Values.configuration $configurationName).environmentVariable }}
+              value: file://{{ (index $.Values.configuration $configurationName).mountPath }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html/assets/basemap"
+              name: basemap-volume
+      volumes:
+        - name: basemap-volume
+          persistentVolumeClaim:
+            claimName: basemap-pvc
+
+      # NODE SELECTION      
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

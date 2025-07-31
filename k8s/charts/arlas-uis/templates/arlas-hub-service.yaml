@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "arlasWebUserInterface.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}
+  name: {{ .Values.uis.hub.serviceName }}
+spec:
+  type: {{ .Values.uis.serviceType }}
+  ports:
+    - name: "http"
+      port: {{ .Values.uis.servicePort }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "arlasWebUserInterface.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}

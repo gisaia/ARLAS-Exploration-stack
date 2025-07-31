@@ -1,0 +1,4 @@
+apiVersion: v2
+name: arlas-uis
+description: A Helm Chart to deploy ARLAS User Interfaces
+version: 0.0.1

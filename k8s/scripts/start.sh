@@ -14,15 +14,15 @@ kubectl create configmap fam-files-configmap  \
   --dry-run=client  \
   -o yaml > k8s/charts/arlas-fam/templates/fam-files-configmap.yaml
 
-helm dependency update k8s/charts/aias 
-helm dependency build k8s/charts/aias
+helm dependency update k8s/charts/arlas-stack 
+helm dependency build k8s/charts/arlas-stack
 
 OPERATION="install"
-if helm list -n default | grep -q '^aias'; then
-  echo "aias is deployed ... upgrading deployment"
+if helm list --namespace arlas | grep -q '^arlas-stack'; then
+  echo "arlas-stack is deployed ... upgrading deployment"
   OPERATION="upgrade"
 else
-  echo "aias is not deployed ... installing deployment"
+  echo "arlas-stack is not deployed ... installing deployment"
 fi
 
-helm $OPERATION aias k8s/charts/aias -f k8s/charts/aias/values.yaml -f k8s/charts/aias/values-apisix.yaml
+helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml -f k8s/charts/arlas-stack/values-apisix.yaml

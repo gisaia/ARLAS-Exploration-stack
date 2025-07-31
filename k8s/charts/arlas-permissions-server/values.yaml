@@ -3,10 +3,10 @@
 # -- DNS domain hosting ARLAS
 dnsDomain: localhost
 
-serviceName: arlas-persistence-server
+serviceName: arlas-permissions-server
 servicePort: 8000
 serviceType: ClusterIP
-image: gisaia/arlas-persistence-server:27.0.1
+image: gisaia/arlas-permissions-server:27.0.1
 
 # -- Number of desired pods
 replicaCount: 1
@@ -28,7 +28,7 @@ permissionUrl: /permissions
 # -- Comma separated list of endpoints that should bypass authentication
 publicUris: swagger,swagger.*,openapi.*,session:POST, session/refresh:PUT,users:POST,users/.*:POST,organisations/check:GET
 # -- Base URL path for the server's general API
-urlPrefix: /arlas
+urlPrefix: /permissions
 # -- The java package to process for extracting the APIs displayed in Swagger
 swaggerResource: io.arlas.server.rest,io.arlas.server.stac
 
@@ -39,29 +39,7 @@ resources:
   limits:
     cpu: 0.5
     memory: 512Mi
-
-# -- Configuration of the persistence engine
-persistence:
-  # -- Storage engine to use: either `file` or `hibernate`
-  engine: file
-  # -- Storage size in case of file persistence
-  storageSize: 100Mi
-  # -- Storage engine to use: either `file` or `hibernate`
-  localFolder: /persist/
   
-  # -- Configuration node if `engine=hibernate`, ignored otherwise
-  hibernate:
-    # -- JDBC URL
-    url: jdbc:postgresql://db:5432/arlas
-    # -- Database user login
-    user:
-    # -- Database user password
-    password:
-    # -- SQL Dialect
-    dialect: org.hibernate.dialect.PostgreSQLDialect
-    # -- JDBC Driver
-    driver: org.postgresql.Driver
-
 cors:
   # -- Enable CORS or not
   enabled: false

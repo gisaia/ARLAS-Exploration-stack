@@ -27,10 +27,10 @@ airsIndexPrefix: airs
 resources:
   requests:
     cpu: 0.1
-    memory: 10Mi
+    memory: 50Mi
   limits:
-    cpu: 1
-    memory: 500Mi
+    cpu: 0.5
+    memory: 256Mi
 
 cors:
   # cors.allowedOrigins -- CORS Allowed Origins

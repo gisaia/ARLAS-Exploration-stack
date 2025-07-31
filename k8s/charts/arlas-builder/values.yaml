@@ -7,6 +7,7 @@ serviceName: arlas-builder
 servicePort: 8080
 serviceType: ClusterIP
 image: gisaia/arlas-wui-builder:27.0.4
+protocol: http
 
 
 persistence:
@@ -61,6 +62,7 @@ authent:
   clientId:
 
 allowExternalNodeConfiguration: true
+advancedFeatures: false
 basemaps: [{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]
 
 
@@ -74,8 +76,8 @@ resources:
     cpu: 0.05
     memory: 10Mi
   limits:
-    cpu: 0.3
-    memory: 30Mi
+    cpu: 0.1
+    memory: 50Mi
 
 logger:
   # -- Default logging level
