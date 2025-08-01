@@ -6,27 +6,12 @@ version: 0.0.1
 dependencies:
 # ARLAS BACKEND DEPENDENCIES
 
-- name: arlas-server
+- name: arlas-services
   version: 0.0.1
-  repository: "file://../arlas-server"
-- name: airs-server
+  repository: "file://../arlas-services"
+- name: aias-services
   version: 0.0.1
-  repository: "file://../airs-server"
-- name: arlas-agate
-  version: 0.0.1
-  repository: "file://../arlas-agate"
-- name: arlas-fam
-  version: 0.0.1
-  repository: "file://../arlas-fam"
-- name: arlas-persistence-server
-  version: 0.0.1
-  repository: "file://../arlas-permissions-server"
-- name: arlas-permissions-server
-  version: 0.0.1
-  repository: "file://../arlas-persistence-server"
-- name: aproc
-  version: 0.0.1
-  repository: "file://../aproc"
+  repository: "file://../aias-services"
 
 # ARLAS FRONTEND DEPENDENCIES
 - name: arlas-uis

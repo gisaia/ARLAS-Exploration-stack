@@ -1,4 +1,0 @@
-apiVersion: v2
-name: arlas-agate
-description: A Helm Chart to deploy ARLAS AGATE
-version: 0.0.1

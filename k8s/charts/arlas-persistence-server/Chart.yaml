@@ -1,4 +1,0 @@
-apiVersion: v2
-name: arlas-persistence-server
-description: A Helm Chart to deploy ARLAS Persistence Server
-version: 0.0.1

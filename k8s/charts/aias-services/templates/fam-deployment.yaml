@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.services.fam.serviceName }}
+  name: {{ .Values.services.fam.serviceName }}
+spec:
+  replicas: {{ int .Values.services.fam.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.services.fam.serviceName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .Values.services.fam.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.services.fam.serviceName }}
+          image: {{ .Values.services.fam.image }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.services.fam.urlPrefix }}/healthcheck
+              port: {{ .Values.services.servicePort }}
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.services.fam.urlPrefix }}/healthcheck
+              port: {{ .Values.services.servicePort }}
+            initialDelaySeconds: 40
+          resources:
+            {{- toYaml .Values.services.fam.resources | nindent 12 }}
+          env:
+            # FAM CONFIGURATION
+            - name: INGESTED_FOLDER
+              value: {{ .Values.ingestFolder | quote }}
+            - name: APROC_RESOURCE_ID_HASH_STARTS_AT
+              value: {{ .Values.resourceIdHashStartAt | quote }}
+
+            # ENDPOINT CONFIGURATION              
+            - name: FAM_CORS_HEADERS
+              value: {{ .Values.cors.allowedHeaders | quote }}
+            - name: FAM_CORS_METHODS
+              value: {{ .Values.cors.allowedMethods | quote }}
+            - name: FAM_CORS_ORIGINS
+              value: {{ .Values.cors.allowedOrigins | squote }}
+            - name: FAM_HOST
+              value: {{ .Values.cors.allowedHosts | squote }}
+
+            - name: FAM_PORT
+              value: {{ .Values.services.servicePort | squote }}
+            - name: FAM_PREFIX
+              value: {{ .Values.services.fam.urlPrefix }}
+
+            # LOGGING
+            - name: FAM_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+          volumeMounts:
+            - name: fam-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: fam-files
+          configMap:
+            name: fam-files-configmap
+
+      # NODE SELECTION      
+      {{- with .Values.services.fam.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.fam.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.fam.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

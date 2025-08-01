@@ -36,17 +36,14 @@ global:
 # -- redis Password
   redisPassword: &arlasAppRedisPassword secret4redis
 
+  # -- postgres password for keycloak
   postgresql:
     auth:
       password: secret4postgres
 
-# -- 
-# -- 
-# -- 
 
-
-# ARLAS SERVER
-arlas-server:
+# ARLAS SERVICES
+arlas-services:
   # @ignored
   dnsDomain: *arlasAppDnsDomain
   # @ignored
@@ -61,7 +58,7 @@ arlas-server:
 
 
 # ARLAS WUI
-arlas-wui:
+arlas-uis:
   # @ignored
   issuer: *arlasAppAuthIssuer
   # @ignored
@@ -77,8 +74,8 @@ arlas-wui:
   basemap:
     storageSize: 50Mi
 
-# AIRS SERVER
-airs-server:
+# AIAS SERVICES
+aias-services:
 # @ignored
   dnsDomain: *arlasAppDnsDomain
 # @ignored
@@ -97,20 +94,17 @@ airs-server:
   # @ignored
   organisation: *arlasAppOrganization
 
-# APROC PROC
-aproc:
   # @ignored
   rabbitmq: 
     login: *arlasAppRabbitMQLogin
     password: *arlasAppRabbitMQPassword
   # @ignored
-  elastic:
-    login: *arlasAppElasticLogin
-    password: *arlasAppElasticPassword
 
 # ELASTICSEARCH
 # @ignored
 elasticsearch:
+  service:
+    type: LoadBalancer
   master:
     masterOnly: false
     replicaCount: 1

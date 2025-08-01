@@ -47,12 +47,15 @@ spec:
 
 
             # BUILDER CONFIGURATION
+            - name: ARLAS_BUILDER_BASE_HREF
+              value: {{ .Values.uis.builder.urlPrefix | quote }}
             - name: ARLAS_BASEMAPS
               value: {{ .Values.uis.builder.basemaps | quote }}
             - name: ARLAS_EXTERNAL_NODE_PAGE
               value: {{ .Values.uis.builder.allowExternalNodeConfiguration | quote }}
             - name: ARLAS_ENABLE_ADVANCED_FEATURES
               value: {{ .Values.uis.builder.advancedFeatures | default "false" | quote }}
+
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}

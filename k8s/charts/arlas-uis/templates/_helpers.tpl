@@ -1,9 +1,9 @@
 {{- define "arlasWebUserInterface.labels" -}}
-app.kubernetes.io/part-of: arlas-stack
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/version: {{ .Chart.AppVersion }}
-app.kubernetes.io/name: arlas-stack
+# app.kubernetes.io/part-of: arlas-stack
+# app.kubernetes.io/managed-by: {{ .Release.Service }}
+# app.kubernetes.io/instance: {{ .Release.Name }}
+# app.kubernetes.io/version: {{ .Chart.AppVersion }}
+# app.kubernetes.io/name: arlas-stack
 {{- end }}
 
 
@@ -62,8 +62,6 @@ app.kubernetes.io/name: arlas-stack
   value: {{ .Values.uis.hub.urlPrefix | quote }}
 - name: ARLAS_WUI_URL
   value: {{ .Values.uis.wui.urlPrefix | quote }}
-- name: ARLAS_HUB_APP_PATH
-  value: ""
 - name: ARLAS_HUB_URL
   value: {{ .Values.uis.hub.urlPrefix | quote }}
 {{- end }}
@@ -71,16 +69,24 @@ app.kubernetes.io/name: arlas-stack
 
 {{- define "arlasWebUserInterface.servicesEnv" -}}
 # SERVICES
+- name: ARLAS_SERVER_URL
+  value: {{ .Values.services.server.urlPrefix }}
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.server.urlPrefix }}
 - name: FAM_SERVER_URL
-  value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.fam.urlPrefix }}
+  value: {{ .Values.services.fam.urlPrefix }}
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.fam.urlPrefix }}
 - name: APROC_SERVER_URL
-  value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.aprocService.urlPrefix }}
+  value: {{ .Values.services.aprocService.urlPrefix }}
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.aprocService.urlPrefix }}
 - name: AIRS_SERVER_URL
-  value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.airs.urlPrefix }}
+  value: {{ .Values.services.airs.urlPrefix }}
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.airs.urlPrefix }}
 - name: ARLAS_PERSISTENCE_URL
-  value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.persistence.urlPrefix }}
+  value: {{ .Values.services.persistence.urlPrefix }}
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.persistence.urlPrefix }}
 - name: ARLAS_PERMISSIONS_URL
-  value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.permissions.urlPrefix }}
+  value: {{ .Values.services.permissions.urlPrefix }}
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.permissions.urlPrefix }}
 - name: ARLAS_GEOCODING_FIND_PLACE_URL
   value: {{ .Values.geocodingUrl }}
 {{- end }}

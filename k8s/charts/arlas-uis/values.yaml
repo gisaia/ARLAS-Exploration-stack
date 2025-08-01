@@ -38,14 +38,16 @@ uis:
     tabName: ARLAS Studio
     allowExternalNodeConfiguration: true
     advancedFeatures: false
-    basemaps: [{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]
-
+    # basemaps: [{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]
+    basemaps: ""
 
 services:
+  server:
+    urlPrefix: /arlas
   persistence:
-    urlPrefix: /arlas/persistence
+    urlPrefix: /persist
   permissions:
-    urlPrefix: /arlas/permissions
+    urlPrefix: /permissions
   aprocService:
     urlPrefix: /aproc
   airs:
