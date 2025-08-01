@@ -23,7 +23,7 @@ global:
   minioPassword: &arlasAppMinioPassword secret4minio
 
   # -- Keycloak admin login for keycloak deployment (for test only)
-  keycloakLogin: &arlasAppKeycloakLogin keycloakadmin
+  keycloakLogin: &arlasAppKeycloakLogin admin
   # -- Keycloak admin password 
   keycloakPassword: &arlasAppKeycloakPassword secret4keycloak
 
@@ -152,6 +152,7 @@ minio:
 # KEYCLOAK
 # @ignored
 keycloak:
+  httpRelativePath: /auth/
   resourcesPreset: medium
   readinessProbe:
     initialDelaySeconds: 300
@@ -159,10 +160,11 @@ keycloak:
   startupProbe:
     initialDelaySeconds: 300
     timeoutSeconds: 60
-  auth.adminUser: *arlasAppKeycloakLogin
-  auth.adminPassword: *arlasAppKeycloakPassword
+  auth:
+    adminUser: *arlasAppKeycloakLogin
+    adminPassword: *arlasAppKeycloakPassword
   service:
-    type: LoadBalancer
+    type: ClusterIP
     ports:
       http: 8080
       https: 8443

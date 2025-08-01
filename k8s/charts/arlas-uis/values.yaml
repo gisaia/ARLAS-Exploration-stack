@@ -10,7 +10,7 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:27.0.5
+    image: gisaia/arlas-wui:27.1.0-rc.1
     urlPrefix: /wui
     tabName: ARLAS Exploration
 
@@ -27,19 +27,24 @@ uis:
  
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:27.0.2
+    image: gisaia/arlas-wui-hub:27.1.0-rc.1
     urlPrefix: /hub
     tabName: ARLAS Hub
 
   builder: 
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:27.0.4
+    image: gisaia/arlas-wui-builder:27.0.5
     urlPrefix: /builder/
     tabName: ARLAS Studio
     allowExternalNodeConfiguration: true
     advancedFeatures: false
-    # basemaps: [{"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}]
-    basemaps: ""
+    basemaps: '[
+        {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"},
+        {"name":"Dark","url":"/wui/assets/basemap/styles/protomap-dark.json","image":"/wui/assets/basemap/quicklook/dark.png", "type": "protomap"},
+        {"name":"Grayscale","url":"/wui/assets/basemap/styles/protomap-grayscale.json","image":"/wui/assets/basemap/quicklook/grayscale.png", "type": "protomap"},
+        {"name":"Light","url":"/wui/assets/basemap/styles/protomap-light.json","image":"/wui/assets/basemap/quicklook/light.png", "type": "protomap"},
+        {"name":"White","url":"/wui/assets/basemap/styles/protomap-white.json","image":"/wui/assets/basemap/quicklook/white.png", "type": "protomap"}
+        ]'
 
 services:
   server:
@@ -97,7 +102,7 @@ authent:
   customQueryParams:
     - audience: http://arlas.io/api/server
   # -- Defines whether https is required
-  requireHttps: true
+  requireHttps: false
   # -- Response type values
   responseType: code
   # -- Timeout for silent refresh
@@ -115,7 +120,7 @@ authent:
   # -- Defines the kind of storage: localstorage or sessionstorage
   storage: memorystorage
   # -- The issuer's uri
-  issuer: http://localhost:80/auth/realms/arlas
+  issuer: http://172.18.0.3/auth/realms/arlas
   # -- The logout URL to be used
   logoutUrl:
   # -- The client's id as registered with the auth server

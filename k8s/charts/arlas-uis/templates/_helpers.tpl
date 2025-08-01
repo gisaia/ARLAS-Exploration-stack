@@ -22,9 +22,11 @@
 - name: ARLAS_AUTHENT_CLIENT_ID
   value: {{ .Values.authent.clientId }}
 - name: ARLAS_AUTHENT_REDIRECT_URI
-  value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.hubURL }}/callback
+  value: http://172.18.0.3{{ .Values.uis.hub.urlPrefix }}/callback
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.hubURL }}/callback
 - name: ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI
-  value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.hubURL }}/silent-refresh.html
+  value: http://172.18.0.3{{ .Values.uis.hub.urlPrefix }}/silent-refresh.html
+  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.uis.hub.urlPrefix }}/silent-refresh.html
 - name: ARLAS_AUTHENT_SCOPE
   value: {{ .Values.authent.scope }}
 # - name: ARLAS_AUTHENT_CUSTOM_QUERY_PARAMS

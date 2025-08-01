@@ -78,8 +78,9 @@ spec:
             - name: ARLAS_SERVICE_WFS_ENABLE
               value: {{ .Values.subServices.wfsActivated }}
 
+            # ARLAS AUTH PUBLIC URIS
             - name: ARLAS_AUTH_PUBLIC_URIS
-              value: {{ .Values.services.server.publicUris | quote }}
+              value: {{ .Values.services.server.publicUris  | quote }}
 
             {{- include "arlasServices.corsEnv" . | nindent 12 }}
             {{- include "arlasServices.authEnv" . | nindent 12 }}

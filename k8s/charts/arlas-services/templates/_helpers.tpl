@@ -48,18 +48,19 @@
   # -- ARLAS Policy Enforcer
   # -- Policy Enforcer class to use among `io.arlas.filter.impl.NoPolicyEnforcer`, `io.arlas.filter.impl.HTTPPolicyEnforcer`, `io.arlas.filter.impl.KeycloakPolicyEnforcer`
 - name: ARLAS_AUTH_POLICY_CLASS
-  value: io.arlas.filter.impl.NoPolicyEnforcer
+  value: io.arlas.filter.impl.KeycloakPolicyEnforcer
 #  value: io.arlas.filter.impl.HTTPPolicyEnforcer
+#  value: io.arlas.filter.impl.NoPolicyEnforcer
 - name: ARLAS_AUTH_KEYCLOAK_REALM
-  value: 
+  value: "arlas"
 - name: ARLAS_AUTH_KEYCLOAK_RESOURCE
-  value: 
+  value: "arlas-backend"
 - name: ARLAS_AUTH_KEYCLOAK_SECRET
-  value: 
+  value: "rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"
 - name: ARLAS_AUTH_KEYCLOAK_URL
-  value: 
-- name: ARLAS_AUTH_PERMISSION_URL
-  value: 
+  value: "http://172.18.0.3/auth"
+- name: ARLAS_CHECK_ORGANISATIONS
+  value: "false"
 {{- end }}
 
 {{- define "arlasServices.corsEnv" -}}
