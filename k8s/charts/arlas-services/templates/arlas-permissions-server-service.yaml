@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "arlasServices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.services.permissions.serviceName }}
+  name: {{ .Values.services.permissions.serviceName }}
+spec:
+  type: {{ .Values.services.serviceType }}
+  ports:
+    - name: "http"
+      port: {{ .Values.services.servicePort }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "arlasServices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.services.permissions.serviceName }}

@@ -1,4 +1,0 @@
-apiVersion: v2
-name: airs-server
-description: A Helm Chart to deploy ARLAS AIRS
-version: 0.0.1
