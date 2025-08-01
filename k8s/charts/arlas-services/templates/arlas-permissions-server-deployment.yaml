@@ -61,6 +61,10 @@ spec:
             - name: ARLAS_PERMISSIONS_PORT
               value: {{ .Values.services.servicePort  | quote }}
 
+            # ARLAS AUTH PUBLIC URIS
+            - name: ARLAS_AUTH_PUBLIC_URIS
+              value: {{ .Values.services.permissions.publicUris  | quote }}
+
             {{- include "arlasServices.corsEnv" . | nindent 12 }}
             {{- include "arlasServices.authEnv" . | nindent 12 }}
             {{- include "arlasServices.cacheEnv" . | nindent 12 }}

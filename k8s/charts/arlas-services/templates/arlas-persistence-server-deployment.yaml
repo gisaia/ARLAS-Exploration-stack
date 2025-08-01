@@ -56,6 +56,10 @@ spec:
             - name: ARLAS_PERSISTENCE_HIBERNATE_DRIVER
               value: {{ .Values.persistence.hibernate.driver | quote }}
 
+            # ARLAS AUTH PUBLIC URIS
+            - name: ARLAS_AUTH_PUBLIC_URIS
+              value: {{ .Values.services.persistence.publicUris  | quote }}
+
             # JVM CONFIG
             {{- if .Values.apm }}
             - name: JDK_JAVA_OPTIONS

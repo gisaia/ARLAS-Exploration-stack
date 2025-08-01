@@ -159,4 +159,13 @@ apisix:
                   uri: http://agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
 
+            -
+              uri: /auth/*
+              upstream:
+                nodes:
+                  "arlas-stack-keycloak:8080": 1
+              plugins:
+                proxy-rewrite:
+                  regex_uri: ["/(.*)", "/$1"]
+
           #END
