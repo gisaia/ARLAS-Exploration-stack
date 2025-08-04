@@ -84,7 +84,7 @@ spec:
               value: {{ .Values.services.persistence.urlPrefix }}/admin
 
             {{- include "arlasServices.corsEnv" . | nindent 12 }}
-            {{- include "arlasServices.authEnv" . | nindent 12 }}
+            {{- include "arlasServices.keycloakEnv" . | nindent 12 }}
             {{- include "arlasServices.cacheEnv" . | nindent 12 }}
             {{- include "arlasServices.loggingEnv" . | nindent 12 }}
             {{- include "arlasServices.elasticEnv" . | nindent 12 }}

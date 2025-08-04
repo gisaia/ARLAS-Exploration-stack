@@ -44,7 +44,8 @@
   value: {{ .Values.elastic.ssl.enabled | quote }}
 {{- end }}
 
-{{- define "arlasServices.authEnv" -}}
+{{- define "arlasServices.keycloakEnv" -}}
+{{- if .Values.keycloak.enabled }}
   # -- ARLAS Policy Enforcer
   # -- Policy Enforcer class to use among `io.arlas.filter.impl.NoPolicyEnforcer`, `io.arlas.filter.impl.HTTPPolicyEnforcer`, `io.arlas.filter.impl.KeycloakPolicyEnforcer`
 - name: ARLAS_AUTH_POLICY_CLASS
@@ -52,16 +53,17 @@
 #  value: io.arlas.filter.impl.HTTPPolicyEnforcer
 #  value: io.arlas.filter.impl.NoPolicyEnforcer
 - name: ARLAS_AUTH_KEYCLOAK_REALM
-  value: "arlas"
+  value: {{ .Values.keycloak.realm | quote }}
 - name: ARLAS_AUTH_KEYCLOAK_RESOURCE
-  value: "arlas-backend"
+  value: {{ .Values.keycloak.client | quote }}
 - name: ARLAS_AUTH_KEYCLOAK_SECRET
-  value: "rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"
+  value: {{ .Values.keycloak.secret | quote }}
 - name: ARLAS_AUTH_KEYCLOAK_URL
-  value: "http://172.18.0.3/auth"
+  value: {{ .Values.keycloak.url | quote }}
 - name: ARLAS_CHECK_ORGANISATIONS
   value: "false"
 {{- end }}
+{{- end }}  
 
 {{- define "arlasServices.corsEnv" -}}
 - name: ARLAS_CORS_ENABLED

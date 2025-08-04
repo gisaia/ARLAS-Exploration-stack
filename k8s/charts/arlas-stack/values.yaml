@@ -2,44 +2,71 @@ global:
   # -- DNS domain hosting ARLAS
   dnsDomain: &arlasAppDnsDomain localhost
 
-  # -- The issuer's uri
-  authIssuer: &arlasAppAuthIssuer https://mymachine:9443/auth/realms/arlas
+  # -- __MUST BE CONFIGURED:__ The issuer's uri
+  authIssuer: &arlasAppAuthIssuer http://172.18.0.2/auth/realms/arlas 
   # -- The logout URL to be used
   logoutUrl: &arlasAppLogoutUrl 
-  # -- The client's id as registered with the auth server
-  clientId: &arlasAppClientId arlas-front
 
-  # -- Name of the organization using AIAS
+  # -- __MUST BE CONFIGURED:__ Name of the organization using AIAS
   organization: &arlasAppOrganization org.com
 
   # -- Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch
   elasticLogin: &arlasAppElasticLogin elastic
-  # -- Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
+  # -- __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
   elasticPassword: &arlasAppElasticPassword secret4elastic
 
   # -- Minio login for minio itself and the services that are connecting to minio
   minioLogin: &arlasAppMinioLogin minioadmin
-  # -- Minio password for minio itself and the services that are connecting to minio
+  # -- __MUST BE CONFIGURED:__ Minio password for minio itself and the services that are connecting to minio
   minioPassword: &arlasAppMinioPassword secret4minio
 
   # -- Keycloak admin login for keycloak deployment (for test only)
   keycloakLogin: &arlasAppKeycloakLogin admin
-  # -- Keycloak admin password 
+  # -- __MUST BE CONFIGURED:__ Keycloak admin password 
   keycloakPassword: &arlasAppKeycloakPassword secret4keycloak
 
   # -- RabbitMQ Login
   rabbitMQLogin: &arlasAppRabbitMQLogin admin
   
-# -- RabbitMQ Password
+  # -- __MUST BE CONFIGURED:__ RabbitMQ Password
   rabbitMQPassword: &arlasAppRabbitMQPassword secret4rabbitmq
 
-# -- redis Password
+  # -- __MUST BE CONFIGURED:__ redis Password
   redisPassword: &arlasAppRedisPassword secret4redis
 
-  # -- postgres password for keycloak
   postgresql:
     auth:
+      # -- __MUST BE CONFIGURED:__ postgres password for keycloak
       password: secret4postgres
+
+  keycloak:
+    # -- __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm 
+    secret: &arlasKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+    # -- __MUST BE CONFIGURED:__ Keycloak URL
+    url: &arlasKeycloakUrl http://172.18.0.2/auth
+
+deployment: 
+  elasticsearch:
+    # -- Should the chart deploy elasticsearch
+    enabled: true
+  minio:
+    # -- Should the chart deploy minio
+    enabled: true
+  apisix:
+    # -- Should the chart deploy apisix
+    enabled: true
+  rabbitmq:
+    # -- Should the chart deploy rabbitmq
+    enabled: true
+  redis:
+    # -- Should the chart deploy redis
+    enabled: true
+  keycloak: 
+    # -- __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs.
+    enabled: true
+  titiler:
+    # -- Should the chart deploy titiler
+    enabled: true
 
 
 # ARLAS SERVICES
@@ -55,22 +82,23 @@ arlas-services:
     loggingLevel: INFO
     # -- Console logging level
     loggingConsoleLevel: INFO
-
+  keycloak:
+    secret: &arlasKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+    url: &arlasKeycloakUrl http://172.18.0.2/auth
 
 # ARLAS WUI
 arlas-uis:
-  # @ignored
-  issuer: *arlasAppAuthIssuer
-  # @ignored
-  logoutUrl: *arlasAppLogoutUrl
-  # @ignored
-  clientId: *arlasAppClientId
+  authent:
+    # @ignored
+    issuer: *arlasAppAuthIssuer
+    # @ignored
+    logoutUrl: *arlasAppLogoutUrl
   logger:
     # -- Logging level
     loggingLevel: INFO
     # -- Console logging level
     loggingConsoleLevel: INFO
-  # -- Set to 120 Gi if you copy the full basemap
+  # -- __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap
   basemap:
     storageSize: 50Mi
 
@@ -132,6 +160,8 @@ rabbitmq:
     username: *arlasAppRabbitMQLogin
     password: *arlasAppRabbitMQPassword
 
+# REDIS
+# @ignored
 redis:
   architecture: standalone
   auth:

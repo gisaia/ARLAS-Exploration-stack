@@ -145,8 +145,14 @@ python3.10 scripts/generate_dc_doc.py \
     conf/postgres.env \
     > docs/docs/dc_services/docker_compose_services_aiaskc.md
 
+helm-docs k8s/charts/
+cp k8s/charts/aias-services/README.md docs/docs/helm/aias-services
+cp k8s/charts/arlas-services/README.md docs/docs/helm/arlas-services
+cp k8s/charts/arlas-stack/README.md docs/docs/helm/arlas-stack
+cp k8s/charts/arlas-uis/README.md docs/docs/helm/arlas-uis
+
 # Copy documentation to target
 rm -rf target/generated-docs
 mkdir -p target/generated-docs
-
 cp -r docs/docs/* target/generated-docs
+
