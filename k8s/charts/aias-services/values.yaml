@@ -79,7 +79,6 @@ services:
     worker:
       serviceName: aproc-proc
       image: gisaia/aproc-proc:0.6.32
-      # -- Number of desired pods
       replicaCount: 1
       resources:
         requests:

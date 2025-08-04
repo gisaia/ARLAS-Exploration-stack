@@ -20,20 +20,6 @@ spec:
           image: {{ .Values.services.aproc.service.image }}
           resources:
             {{- toYaml .Values.services.aproc.service.resources | nindent 12 }}
-          env:
-            - name: APROC_HOST
-              value: {{ .Values.services.aproc.service.serviceBinding | quote }}
-            - name: APROC_PORT
-              value: {{ .Values.services.servicePort | quote }}
-            - name: APROC_PREFIX
-              value: {{ .Values.services.aproc.service.urlPrefix | quote }}
-
-            # LOGGING
-            - name: APROC_LOGGER_LEVEL
-              value: {{ .Values.logger.loggingLevel }}
-
-            {{- include "aias.aprocEnv" . | nindent 12 }}
-
           ports:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
@@ -48,6 +34,28 @@ spec:
               path: {{ .Values.services.aproc.service.urlPrefix }}/healthcheck
               port: http
             initialDelaySeconds: 40
+          env:
+            - name: APROC_HOST
+              value: {{ .Values.services.aproc.service.serviceBinding | quote }}
+            - name: APROC_PORT
+              value: {{ .Values.services.servicePort | quote }}
+            - name: APROC_PREFIX
+              value: {{ .Values.services.aproc.service.urlPrefix | quote }}
+
+            # LOGGING
+            - name: APROC_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+
+            {{- include "aias.aprocEnv" . | nindent 12 }}
+          volumeMounts:
+            - name: aproc-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: aproc-files
+          configMap:
+            name: aproc-files-configmap
+
 
       # NODE SELECTION      
       {{- with .Values.services.aproc.service.nodeSelector }}

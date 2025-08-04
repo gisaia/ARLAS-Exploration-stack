@@ -34,6 +34,5 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
 
 . conf/stack.env
 . conf/custom.env
-export ARLAS_SERVER_URL="https://$ARLAS_HOST"
-envsubst '$COLLECTION,$ARLAS_SERVER_URL' < conf/aias/dashboard.json > sample/dashboard.generated.json
+envsubst '$COLLECTION' < conf/aias/dashboard.json > sample/dashboard.generated.json
 arlas_cli --config-file /tmp/arlas-cli.yaml persist --config ${USER_CONF} add sample/dashboard.generated.json config.json --name "${COLLECTION}" $GROUPS_PARAMS

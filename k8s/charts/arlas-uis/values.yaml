@@ -120,7 +120,7 @@ authent:
   # -- Defines the kind of storage: localstorage or sessionstorage
   storage: memorystorage
   # -- The issuer's uri
-  issuer: http://172.18.0.3/auth/realms/arlas
+  issuer: 
   # -- The logout URL to be used
   logoutUrl:
   # -- The client's id as registered with the auth server

@@ -1,5 +1,8 @@
-ARLAS_HOST=172.18.0.3
-ES_HOST=172.18.0.4
+#!/bin/bash
+set -o errexit -o pipefail
+
+export ARLAS_HOST=`kubectl get services arlas-stack-apisix-data-plane -n arlas  -o=jsonpath={.status.loadBalancer.ingress[0].ip}`
+export ES_HOST=`kubectl get services arlas-stack-elasticsearch -n arlas  -o=jsonpath={.status.loadBalancer.ingress[0].ip}`
 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local.k8s.kc.data
 
@@ -22,8 +25,3 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --auth-password secret \
     --auth-org "" \
     --no-auth-arlas-iam
-
-export USER_CONF=local.k8s.kc.data
-arlas_cli --print-curl --config-file /tmp/arlas-cli.yaml indices --config ${USER_CONF} mapping sample/sample.json --nb-lines 200 --field-mapping track.timestamps.center:date-epoch_second --field-mapping track.timestamps.start:date-epoch_second --field-mapping track.timestamps.end:date-epoch_second --no-fulltext cargo_type --push-on org.com@courses
-arlas_cli --config-file /tmp/arlas-cli.yaml indices --config ${USER_CONF} data org.com@courses sample/sample.json
-arlas_cli --print-curl --config-file /tmp/arlas-cli.yaml collections --config ${USER_CONF} create courses --index org.com@courses --display-name courses --id-path track.id --centroid-path track.location --geometry-path track.trail --date-path track.timestamps.center --no-public --owner org.com --orgs org.com

@@ -65,6 +65,14 @@ services:
     tolerations: []
     affinity: {}
 
+auth:
+  checkOrganizations: false
+keycloak:
+  enabled: true
+  realm: arlas
+  client: arlas-backend
+  secret: rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+  url: http://172.18.0.2/auth
 
 # -- Cache TTL for items in cache (seconds), used for all deployments to ensure consistency
 cacheTimeout: 60
@@ -72,6 +80,7 @@ cacheTimeout: 60
 cacheFactoryClass: io.arlas.server.core.impl.cache.LocalCacheFactory
 # -- The java package to process for extracting the APIs displayed in Swagger
 swaggerResource: io.arlas.server.rest,io.arlas.server.stac
+
 
 cors:
   # cors.enabled -- Enable CORS or not

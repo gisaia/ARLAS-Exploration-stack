@@ -135,6 +135,14 @@ spec:
             # LOGGING
             - name: APROC_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
+          volumeMounts:
+            - name: aproc-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: aproc-files
+          configMap:
+            name: aproc-files-configmap
 
       # NODE SELECTION      
       {{- with .Values.services.aproc.worker.nodeSelector }}
