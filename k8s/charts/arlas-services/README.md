@@ -33,7 +33,6 @@ A Helm Chart to deploy ARLAS Server
 | keycloak.url | string | `"http://172.18.0.2/auth"` |  |
 | logger.loggingConsoleLevel | string | `"DEBUG"` | Default console logging level |
 | logger.loggingLevel | string | `"DEBUG"` | Default logging level |
-| persistence | object | `{"engine":"file","hibernate":{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null},"localFolder":"/tmp/","storageSize":"100Mi"}` | Configuration of the persistence engine |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
 | persistence.hibernate.dialect | string | `"org.hibernate.dialect.PostgreSQLDialect"` | SQL Dialect |

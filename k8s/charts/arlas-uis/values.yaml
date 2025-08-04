@@ -38,6 +38,7 @@ uis:
     tabName: ARLAS Studio
     allowExternalNodeConfiguration: true
     advancedFeatures: false
+    # @ignored
     basemaps: '[
         {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"},
         {"name":"Dark","url":"/wui/assets/basemap/styles/protomap-dark.json","image":"/wui/assets/basemap/quicklook/dark.png", "type": "protomap"},
