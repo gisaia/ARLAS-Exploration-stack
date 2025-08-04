@@ -60,7 +60,6 @@ A Helm Chart to deploy ARLAS User Interfaces
 | tolerations | list | `[]` | Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | uis.builder.advancedFeatures | bool | `false` |  |
 | uis.builder.allowExternalNodeConfiguration | bool | `true` |  |
-| uis.builder.basemaps | string | `"[ {\"name\":\"Contrast\",\"url\":\"/wui/assets/basemap/styles/protomap-contrast.json\",\"image\":\"/wui/assets/basemap/quicklook/contrast.png\", \"type\": \"protomap\"}, {\"name\":\"Dark\",\"url\":\"/wui/assets/basemap/styles/protomap-dark.json\",\"image\":\"/wui/assets/basemap/quicklook/dark.png\", \"type\": \"protomap\"}, {\"name\":\"Grayscale\",\"url\":\"/wui/assets/basemap/styles/protomap-grayscale.json\",\"image\":\"/wui/assets/basemap/quicklook/grayscale.png\", \"type\": \"protomap\"}, {\"name\":\"Light\",\"url\":\"/wui/assets/basemap/styles/protomap-light.json\",\"image\":\"/wui/assets/basemap/quicklook/light.png\", \"type\": \"protomap\"}, {\"name\":\"White\",\"url\":\"/wui/assets/basemap/styles/protomap-white.json\",\"image\":\"/wui/assets/basemap/quicklook/white.png\", \"type\": \"protomap\"} ]"` |  |
 | uis.builder.image | string | `"gisaia/arlas-wui-builder:27.0.5"` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |

@@ -114,7 +114,6 @@ elastic:
     secret:
     url:
 
-# -- Configuration of the persistence engine
 persistence:
   # -- Storage engine to use: either `file` or `hibernate`
   engine: file
