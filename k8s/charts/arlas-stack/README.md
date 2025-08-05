@@ -33,6 +33,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | arlas-uis.basemap | object | `{"storageSize":"50Mi"}` | __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap |
 | arlas-uis.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
 | arlas-uis.logger.loggingLevel | string | `"INFO"` | Logging level |
+| arlas-uis.protocol | string | `"http"` |  |
 | deployment.apisix.enabled | bool | `true` | Should the chart deploy apisix |
 | deployment.elasticsearch.enabled | bool | `true` | Should the chart deploy elasticsearch |
 | deployment.keycloak.enabled | bool | `true` | __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs. |
@@ -41,7 +42,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
 | global.authIssuer | string | `"http://172.18.0.2/auth/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
-| global.dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
+| global.dnsDomain | string | `"172.18.0.2"` | DNS domain hosting ARLAS |
 | global.elasticLogin | string | `"elastic"` | Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.elasticPassword | string | `"secret4elastic"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` | __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm  |
@@ -53,6 +54,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.minioPassword | string | `"secret4minio"` | __MUST BE CONFIGURED:__ Minio password for minio itself and the services that are connecting to minio |
 | global.organization | string | `"org.com"` | __MUST BE CONFIGURED:__ Name of the organization using AIAS |
 | global.postgresql.auth.password | string | `"secret4postgres"` | __MUST BE CONFIGURED:__ postgres password for keycloak |
+| global.protocol | string | `"http"` |  |
 | global.rabbitMQLogin | string | `"admin"` | RabbitMQ Login |
 | global.rabbitMQPassword | string | `"secret4rabbitmq"` | __MUST BE CONFIGURED:__ RabbitMQ Password |
 | global.redisPassword | string | `"secret4redis"` | __MUST BE CONFIGURED:__ redis Password |

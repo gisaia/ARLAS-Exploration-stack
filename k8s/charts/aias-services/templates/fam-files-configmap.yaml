@@ -52,7 +52,7 @@ data:
         -
           type: s3
           bucket: archives
-          endpoint: "http://minio:9000"
+          endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
         # -
         #   type: https
         #   headers: $APROC_INPUT_STORAGE_HEADERS

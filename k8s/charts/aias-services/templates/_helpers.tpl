@@ -4,8 +4,7 @@
 - name: CELERY_BROKER_URL
   value: pyamqp://{{ .Values.rabbitmq.login }}:{{ .Values.rabbitmq.password }}@{{ .Release.Name }}-{{ .Values.rabbitmq.host }}:{{ .Values.rabbitmq.port }}//
 - name: CELERY_RESULT_BACKEND
-  value: "redis://default:secretpassword@aias-redis-master:6379/0"
-#                 value: redis://secretpassword@{{ .Release.Name }}-{{ .Values.redis.host }}:{{ .Values.redis.port }}/0
+  value: "redis://{{ .Values.redis.username }}:{{ .Values.redis.password }}@{{ .Release.Name }}-{{ .Values.redis.host}}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
 - name: AIRS_ENDPOINT
   value: http://airs-server:{{ .Values.services.servicePort }}/{{ .Values.services.airs.urlPrefix }}
 - name: APROC_ENDPOINT_FROM_APROC

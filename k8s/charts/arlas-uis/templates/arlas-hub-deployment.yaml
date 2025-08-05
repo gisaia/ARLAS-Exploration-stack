@@ -39,6 +39,14 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
 
+            - name: ARLAS_AUTHENT_FORCE_CONNECT
+              value: {{ .Values.authent.forceConnect | quote  }}
+            - name: ARLAS_AUTHENT_REDIRECT_URI
+              value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.uis.hub.urlPrefix }}/callback
+            - name: ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI
+              value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.uis.hub.urlPrefix }}/silent-refresh.html
+
+
             {{- include "arlasWebUserInterface.auth2Env" . | nindent 12 }}
 
             {{- include "arlasWebUserInterface.linksEnv" . | nindent 12 }}

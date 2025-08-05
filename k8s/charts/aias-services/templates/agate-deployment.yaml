@@ -18,6 +18,10 @@ spec:
       containers:
         - name: {{ .Values.services.agate.serviceName }}
           image: {{ .Values.services.agate.image }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.services.servicePort }}
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.services.agate.urlPrefix }}/healthcheck

@@ -45,6 +45,12 @@ spec:
 
             {{- include "arlasWebUserInterface.servicesEnv" . | nindent 12 }}
 
+            - name: ARLAS_AUTHENT_FORCE_CONNECT
+              value: "true"
+            - name: ARLAS_AUTHENT_REDIRECT_URI
+              value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.uis.famWui.urlPrefix }}/callback
+            - name: ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI
+              value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.uis.famWui.urlPrefix }}/silent-refresh.html
 
             # USER INTERFACE CONFIGURATION
             - name: ARLAS_STATIC_LINKS
@@ -63,6 +69,8 @@ spec:
               value: {{ .Values.uis.famWui.catalog | quote }}
             - name: AIRS_COLLECTION
               value: {{ .Values.uis.famWui.collectionName | quote }}
+
+
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}
