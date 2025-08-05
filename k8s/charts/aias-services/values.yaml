@@ -133,9 +133,9 @@ s3:
   # -- s3 secret
   secret: airssecret
   # -- s3 endpoint
-  endpoint: http://minio:9000
+  endpoint: http://arlas-stack-minio:9000
   # -- asset_http_endpoint_url_pattern must look like https://storage.googleapis.com/{}/{} where first {} is the bucket, second {} is the path to the object  
-  assetHttpEndpointUrlPattern: "http://minio:9000/{}/{}"
+  assetHttpEndpointUrlPattern: "http://arlas-stack-minio:9000/{}/{}"
   # -- s3 bucket name for storing the STAC collections, items and managed assets
   bucket: airs-storage
   # -- Platform type. This value is provided in the item properties
@@ -158,13 +158,13 @@ download:
   tmpFolder: /tmp/outbox/
   s3:
     # -- where downloads are uploaded once ready
-    endpoint: http://minio:9000
+    endpoint: http://arlas-stack-minio:9000
     # -- bucket that will contain the downloads
     bucket: downloads
     key: airs
     secret: airssecret
     # -- where downloads are uploaded once ready, first {} is the bucket, second {} is the path to the object
-    http: http://minio:9000/{}/{}
+    http: http://arlas-stack-minio:9000/{}/{}
   cleanAfterUpload: True
   message: 
     path:
@@ -216,6 +216,9 @@ rabbitmq:
 redis: 
   host: redis-master
   port: 6379
+  password: somepassword
+  username: default
+  db: 0
 
 smtp: 
   enabled: False

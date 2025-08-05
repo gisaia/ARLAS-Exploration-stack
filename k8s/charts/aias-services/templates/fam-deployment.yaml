@@ -18,6 +18,10 @@ spec:
       containers:
         - name: {{ .Values.services.fam.serviceName }}
           image: {{ .Values.services.fam.image }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.services.servicePort }}
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.services.fam.urlPrefix }}/healthcheck

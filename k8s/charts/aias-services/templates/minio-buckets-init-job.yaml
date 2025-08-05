@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-and-public-minio-buckets
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: mc
+          image: docker.io/bitnami/minio:2025.4.22-debian-12-r1
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "🔐 Configuring mc client..."
+              mc alias set local {{ .Values.s3.endpoint }} {{ .Values.s3.accessKeyId }} {{ .Values.s3.secret }}
+
+              echo "📦 Creating buckets..."
+              mc mb local/{{ .Values.s3.bucket }} || echo "Bucket {{ .Values.s3.bucket }} already exists"
+              mc mb local/{{ .Values.download.s3.bucket }} || echo "Bucket {{ .Values.download.s3.bucket }} already exists"
+
+              echo "🌍 Making buckets public..."
+              mc anonymous set download local/{{ .Values.s3.bucket }}
+              mc anonymous set download local/{{ .Values.download.s3.bucket }}

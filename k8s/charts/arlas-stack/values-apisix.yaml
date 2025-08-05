@@ -102,25 +102,25 @@ apisix:
                   "arlas-stack-minio:9000": 1
               plugins:
                 forward-auth:
-                  uri: http://agate:8000/agate/authorization/airs-storage
+                  uri: http://arlas-agate:8000/agate/authorization/airs-storage
                   request_headers: ["Authorization", "arlas-org-filter"]
             -
               uri: /fam/*
               upstream:
                 nodes:
-                  "fam-service:8000": 1
+                  "arlas-fam:8000": 1
               plugins:
                 forward-auth:
-                  uri: http://agate:8000/agate/url-role-based-authorization
+                  uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
             -
               uri: /fam/files
               upstream:
                 nodes:
-                  "fam-service:8000": 1
+                  "arlas-fam:8000": 1
               plugins:
                 forward-auth:
-                  uri: http://agate:8000/agate/url-role-based-authorization
+                  uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
             -
               uri: /airs/collections/*
@@ -129,7 +129,7 @@ apisix:
                   "airs-server:8000": 1
               plugins:
                 forward-auth:
-                  uri: http://agate:8000/agate/url-role-based-authorization
+                  uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
             -
               uri: /aproc/processes/*
@@ -138,7 +138,7 @@ apisix:
                   "aproc-service:8000": 1
               plugins:
                 forward-auth:
-                  uri: http://agate:8000/agate/url-role-based-authorization
+                  uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
             -
               uri: /aproc/jobs
@@ -147,7 +147,7 @@ apisix:
                   "aproc-service:8000": 1
               plugins:
                 forward-auth:
-                  uri: http://agate:8000/agate/url-role-based-authorization
+                  uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
             -
               uri: /aproc/jobs/*
@@ -156,16 +156,32 @@ apisix:
                   "aproc-service:8000": 1
               plugins:
                 forward-auth:
-                  uri: http://agate:8000/agate/url-role-based-authorization
+                  uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
 
             -
-              uri: /auth/*
+              uri: /agate/healthcheck
+              methods: ["GET"]
               upstream:
                 nodes:
-                  "arlas-stack-keycloak:8080": 1
-              plugins:
-                proxy-rewrite:
-                  regex_uri: ["/(.*)", "/$1"]
+                  "arlas-agate:8000": 1
+            -
+              uri: /airs/healthcheck
+              methods: ["GET"]
+              upstream:
+                nodes:
+                  "airs-server:8000": 1
+            -
+              uri: /aproc/healthcheck
+              methods: ["GET"]
+              upstream:
+                nodes:
+                  "aproc-service:8000": 1
+            -
+              uri: /arlas/admin/healthcheck
+              methods: ["GET"]
+              upstream:
+                nodes:
+                  "arlas-server:8000": 1
 
           #END

@@ -88,7 +88,7 @@ configuration: {}
 
 authent:
   # -- When authentication is enabled, this option forces to be connected to Identity Provider at application bootstrap
-  forceConnect: false
+  forceConnect: true
   # -- Defines whether to be authenticated to Identity Provider
   useAuthent: true
   # -- Defines authentication mode (i.e. "iam", "openid" or not defined)
@@ -107,7 +107,7 @@ authent:
   # -- Response type values
   responseType: code
   # -- Timeout for silent refresh
-  silentRefreshTimeout: "10000"
+  silentRefreshTimeout: "1000"
   # -- Defines when the token_timeout event should be raised. If you set this to the default value 0.75, the event s triggered after 75% of the token's life time.
   timeoutFactor: "0.75"
   # -- If true, the app will try to check whether the user is still logged in on a regular basis as described

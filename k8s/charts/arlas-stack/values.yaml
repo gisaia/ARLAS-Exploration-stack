@@ -1,9 +1,16 @@
 global: 
   # -- DNS domain hosting ARLAS
-  dnsDomain: &arlasAppDnsDomain localhost
+  dnsDomain: &arlasAppDnsDomain site.arlas.k8s
+  protocol: &arlasAppProtocol http
+
+  keycloak:
+    # -- __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm 
+    secret: &arlasAppKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+    # -- __MUST BE CONFIGURED:__ Keycloak URL
+    url: &arlasAppKeycloakUrl http://keycloak.arlas.k8s:8080/auth
 
   # -- __MUST BE CONFIGURED:__ The issuer's uri
-  authIssuer: &arlasAppAuthIssuer http://172.18.0.2/auth/realms/arlas 
+  authIssuer: &arlasAppAuthIssuer http://keycloak.arlas.k8s:8080/auth/realms/arlas 
   # -- The logout URL to be used
   logoutUrl: &arlasAppLogoutUrl 
 
@@ -39,12 +46,6 @@ global:
       # -- __MUST BE CONFIGURED:__ postgres password for keycloak
       password: secret4postgres
 
-  keycloak:
-    # -- __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm 
-    secret: &arlasKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
-    # -- __MUST BE CONFIGURED:__ Keycloak URL
-    url: &arlasKeycloakUrl http://172.18.0.2/auth
-
 deployment: 
   elasticsearch:
     # -- Should the chart deploy elasticsearch
@@ -70,28 +71,29 @@ deployment:
 
 
 # ARLAS SERVICES
+# @ignored
 arlas-services:
-  # @ignored
   dnsDomain: *arlasAppDnsDomain
-  # @ignored
+  protocol: *arlasAppProtocol
   elastic:
     login: *arlasAppElasticLogin
     password: *arlasAppElasticPassword
   logger:
     # -- Logging level
-    loggingLevel: INFO
+    loggingLevel: DEBUG
     # -- Console logging level
-    loggingConsoleLevel: INFO
+    loggingConsoleLevel: DEBUG
   keycloak:
-    secret: &arlasKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
-    url: &arlasKeycloakUrl http://172.18.0.2/auth
+    secret: *arlasAppKeycloakSecret
+    url: *arlasAppKeycloakUrl
 
 # ARLAS WUI
+# @ignored
 arlas-uis:
+  dnsDomain: *arlasAppDnsDomain
+  protocol: *arlasAppProtocol
   authent:
-    # @ignored
     issuer: *arlasAppAuthIssuer
-    # @ignored
     logoutUrl: *arlasAppLogoutUrl
   logger:
     # -- Logging level
@@ -103,14 +105,13 @@ arlas-uis:
     storageSize: 50Mi
 
 # AIAS SERVICES
+# @ignored
 aias-services:
-# @ignored
   dnsDomain: *arlasAppDnsDomain
-# @ignored
+  protocol: *arlasAppProtocol
   s3:
-    accessKey: *arlasAppMinioLogin
+    accessKeyId: *arlasAppMinioLogin
     secret: *arlasAppMinioPassword
-  # @ignored
   elastic:
     login: *arlasAppElasticLogin
     password: *arlasAppElasticPassword
@@ -119,7 +120,6 @@ aias-services:
     loggingLevel: INFO
     # -- Console logging level
     loggingConsoleLevel: INFO
-  # @ignored
   organisation: *arlasAppOrganization
 
   # @ignored
@@ -127,6 +127,9 @@ aias-services:
     login: *arlasAppRabbitMQLogin
     password: *arlasAppRabbitMQPassword
   # @ignored
+
+  redis:
+    password: *arlasAppRedisPassword
 
 # ELASTICSEARCH
 # @ignored
@@ -194,7 +197,7 @@ keycloak:
     adminUser: *arlasAppKeycloakLogin
     adminPassword: *arlasAppKeycloakPassword
   service:
-    type: ClusterIP
+    type: LoadBalancer
     ports:
       http: 8080
       https: 8443
