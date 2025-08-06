@@ -22,16 +22,16 @@ spec:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: {{ .Values.services.agate.urlPrefix }}/healthcheck
-              port: {{ .Values.services.servicePort }}
-            initialDelaySeconds: 40
-          readinessProbe:
-            httpGet:
-              path: {{ .Values.services.agate.urlPrefix }}/healthcheck
-              port: {{ .Values.services.servicePort }}
-            initialDelaySeconds: 40
+          # livenessProbe:
+          #   httpGet:
+          #     path: {{ .Values.services.agate.urlPrefix }}/healthcheck
+          #     port: {{ .Values.services.servicePort }}
+          #   initialDelaySeconds: 40
+          # readinessProbe:
+          #   httpGet:
+          #     path: {{ .Values.services.agate.urlPrefix }}/healthcheck
+          #     port: {{ .Values.services.servicePort }}
+          #   initialDelaySeconds: 40
           resources:
             {{- toYaml .Values.services.agate.resources | nindent 12 }}
           env:

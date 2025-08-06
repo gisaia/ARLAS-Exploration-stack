@@ -1,5 +1,5 @@
 
-# ARLAS Exploration Stack with Docker compose
+# ARLAS Exploration Stack with Kubernetes
 
 ## Prerequisites
 
@@ -37,7 +37,7 @@ Files are organized as follow:
 
 ### AIAS deployment with Keycloak
 
-**Configure**
+#### Configuration
 
 IMPORTANT: configure the passwords before installing the chart!
 
@@ -57,7 +57,10 @@ Then configure carefully the AIAS configuration files:
 - conf/aias/fam.yaml
 - conf/aias/roles.yaml
 
-**Start**
+#### Basemap
+In case you want to use a local protomap basemap, you must specify the right Persistent Volume Claim storage size for the protomap file: set the `arlas-uis.basemap.storageSize` property in the arlas-stack chart values.yaml file (at least 120 Gi for full coverage). Then place the protomap file in `conf/protomaps/world.pmtiles` and launch `./k8s/scripts/copy_files.sh`.
+
+### Start the ARLAS Stack
 
 To start, run: 
 ```shell
@@ -71,6 +74,10 @@ This scripts:
 
 Note that a job is launched for creating the minio buckets used by AIAS (for AIRS assets and for the download).
 
+Once the chart installed, copy the basemap files in the Persistent Volume Claim.
+
+
+### Using the ARLAS Stack
 
 #### Finding the external IPs of the LoadBalancers
 
@@ -98,6 +105,48 @@ In the following, we assume that these three external IPs are bound to:
 These domains must be configured/changed in the values.yaml file of the arlas-stack chart.
 
 The arlas service pods that are depending on keycloak availability will not be running until the keycloak client for arlas is created and available. You can import the keycloak test realm located in `conf/keycloak/keycloak.realm.json`. The import can be done from the user interface of keyckloak (eg http://keycloak.arlas.k8s:8080/auth/).
+
+
+#### Configuring `arlas_cli` for the keycloak test realm
+
+Let's assume the domain names are `elastic.arlas.k8s`, `keycloak.arlas.k8s` and `site.arlas.k8s`, then you can init your arlas_cli configuration file with:
+
+```shell
+./k8s/scripts/init_arlas_cli_confs.sh site.arlas.k8s:80 elastic.arlas.k8s:9200 keycloak.arlas.k8s:8080
+```
+
+You can now list the indices:
+
+```shell
+arlas_cli --config-file /tmp/arlas-cli.yaml indices list
+Using default configuration local.k8s.kc.data
++----------------------------------+--------+-------+---------+
+| name                             | status | count | size    |
++----------------------------------+--------+-------+---------+
+| .arlas                           | open   | 0     | 249b    |
++----------------------------------+--------+-------+---------+
+Total count: 0
+```
+
+and collections:
+
+```shell
+arlas_cli --config-file /tmp/arlas-cli.yaml collections list
+Using default configuration local.k8s.kc.data
++------+-------+
+| name | index |
++------+-------+
++------+-------+
+```
+### EO Catalog
+
+Just like the docker compose deployement, you can init a catalog:
+
+```shell
+./scripts/init_aias_catalog.sh local.k8s.kc.data main org.com
+```
+
+Remember to change `main` and `org.com` according to the values you changed in the arlas-stack chart values.yaml file.
 
 
 **Remove deployment**
