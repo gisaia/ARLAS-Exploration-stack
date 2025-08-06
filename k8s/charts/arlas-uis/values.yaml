@@ -1,0 +1,173 @@
+## @section Global parameters
+
+# -- DNS domain hosting ARLAS
+dnsDomain: localhost
+protocol: http
+
+uis:
+  servicePort: 8080
+  serviceType: ClusterIP
+
+  wui:
+    serviceName: arlas-wui
+    image: gisaia/arlas-wui:27.0.5
+    urlPrefix: /wui
+    tabName: ARLAS Exploration
+
+  famWui:
+    serviceName: arlas-fam-wui
+    image: gisaia/arlas-fam-wui:0.6.40
+    urlPrefix: /fam-wui
+    tabName: ARLAS FAM Wui
+    famDefaultURL:
+    collectionName: main
+    catalog: main catalog
+    archivePageSize: 10
+    filePageSize: 50
+ 
+  hub:
+    serviceName: arlas-hub
+    image: gisaia/arlas-wui-hub:27.0.2
+    urlPrefix: /hub
+    tabName: ARLAS Hub
+
+  builder: 
+    serviceName: arlas-builder
+    image: gisaia/arlas-wui-builder:27.0.5
+    urlPrefix: /builder/
+    tabName: ARLAS Studio
+    allowExternalNodeConfiguration: true
+    advancedFeatures: false
+    # @ignored
+    basemaps: '[
+        {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"},
+        {"name":"Dark","url":"/wui/assets/basemap/styles/protomap-dark.json","image":"/wui/assets/basemap/quicklook/dark.png", "type": "protomap"},
+        {"name":"Grayscale","url":"/wui/assets/basemap/styles/protomap-grayscale.json","image":"/wui/assets/basemap/quicklook/grayscale.png", "type": "protomap"},
+        {"name":"Light","url":"/wui/assets/basemap/styles/protomap-light.json","image":"/wui/assets/basemap/quicklook/light.png", "type": "protomap"},
+        {"name":"White","url":"/wui/assets/basemap/styles/protomap-white.json","image":"/wui/assets/basemap/quicklook/white.png", "type": "protomap"}
+        ]'
+
+services:
+  server:
+    urlPrefix: /arlas
+  persistence:
+    urlPrefix: /persist
+  permissions:
+    urlPrefix: /permissions
+  aprocService:
+    urlPrefix: /aproc
+  airs:
+    urlPrefix: /airs
+  fam:
+    urlPrefix: /fam
+
+# -- List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes.
+links: '
+        [
+            {
+                "name":"Hub",
+                "url":"/hub/",
+                "icon":"hub",
+                "check_url": "/persist/healthcheck"
+            },
+            {
+                "name": "Import",
+                "icon": "folder",
+                "url": "/fam-wui/",
+                "check_url": "/fam/healthcheck",
+                "check_url_response_type": "text"
+            }
+        ]'
+# -- The Google Analytics key of the wui app
+googleAnalyticsKey:
+# -- Version number of the ARLAS Hits Exporter to use
+hitsExporterVersion: 2.2
+# -- The text to display on the tab of the web browser (will be enriched with the dashboard name)
+# -- Whether to display the dashboard shortcut icon
+dashboardShortcut: false
+# -- Whether or not to enable result list export
+resultListEnableExport: false
+# -- Result list export size
+resultListExportSize: 1000
+# -- Maximum number of buckets for the histogram graph
+histogramsMaxBucket: 200
+# -- Maximum number of buckets for the histogram export
+histogramsExportNbBuckets: 1000
+# -- Enable or disable Geocoding feature
+enableGeocoding: false
+# -- Geocoding find place URL
+geocodingUrl:
+# -- Maximum zoom level for geocoding feature
+geocodingZoomTo: 11
+configuration: {}
+
+authent:
+  # -- When authentication is enabled, this option forces to be connected to Identity Provider at application bootstrap
+  forceConnect: true
+  # -- Defines whether to be authenticated to Identity Provider
+  useAuthent: true
+  # -- Defines authentication mode (i.e. "iam", "openid" or not defined)
+  authMode: openid
+  # -- Refresh token timer (arlas iam)
+  threshold: 60000
+  # -- Defines whether we use Identity Provider document discovery service
+  useDiscovery: true
+  #-- The requested scopes
+  scope: profile
+  # -- Custom query params
+  customQueryParams:
+    - audience: http://arlas.io/api/server
+  # -- Defines whether https is required
+  requireHttps: false
+  # -- Response type values
+  responseType: code
+  # -- Timeout for silent refresh
+  silentRefreshTimeout: "1000"
+  # -- Defines when the token_timeout event should be raised. If you set this to the default value 0.75, the event s triggered after 75% of the token's life time.
+  timeoutFactor: "0.75"
+  # -- If true, the app will try to check whether the user is still logged in on a regular basis as described
+  sessionChecksEnabled: true
+  # -- Defines whether to clear the hash fragment in url after logging in
+  clearHashAfterLogin: true
+  # -- This property has been introduced to disable at_hash checks and is indented for Identity Provider that does not deliver an at_hash EVEN THOUGH its recommended by the OIDC specs.
+  disableAtHashCheck: true
+  # -- Defines whether to display debug log in browser console
+  showDebugInformation: false
+  # -- Defines the kind of storage: localstorage or sessionstorage
+  storage: memorystorage
+  # -- The issuer's uri
+  issuer: 
+  # -- The logout URL to be used
+  logoutUrl:
+  # -- The client's id as registered with the auth server
+  clientId: arlas-front
+
+basemap:
+  # -- Size of the directory containing the basemap files
+  storageSize: 10Mi
+
+# -- Number of desired pods
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 0.05
+    memory: 10Mi
+  limits:
+    cpu: 0.1
+    memory: 50Mi
+
+logger:
+  # -- Default logging level
+  loggingLevel: INFO
+  # -- Default console logging level
+  loggingConsoleLevel: INFO
+
+
+# -- Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelector: {}
+# -- Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: []
+# -- Allows constraining pod(s) to only run on particular nodes, or to prefer to run on particular nodes. It is based on label-selection. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+

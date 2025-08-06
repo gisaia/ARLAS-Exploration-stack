@@ -9,6 +9,7 @@ conf/arlas-ks.jks
 conf/apisix/apisix.yaml
 conf/apisix/apisix.template.yaml
 conf/apisix/domains.generated.ext
+conf/apisix/apisix.template.yaml
 conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
 sample/dashboard.generated.json
@@ -23,3 +24,6 @@ __pycache__/
 .sonarlint/
 .vscode/
 conf/custom.env
+*.lock
+k8s/charts/arlas-stack/Chart.lock
+k8s/charts/arlas-stack/charts

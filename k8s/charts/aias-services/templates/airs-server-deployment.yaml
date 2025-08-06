@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.services.airs.serviceName }}
+  name: {{ .Values.services.airs.serviceName }}
+spec:
+  replicas: {{ int .Values.services.airs.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.services.airs.serviceName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .Values.services.airs.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.services.airs.serviceName }}
+          image: {{ .Values.services.airs.image }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.services.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.services.airs.urlPrefix }}/healthcheck
+              port: {{ .Values.services.servicePort }}
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.services.airs.urlPrefix }}/healthcheck
+              port: {{ .Values.services.servicePort }}
+            initialDelaySeconds: 40
+          resources:
+            {{- toYaml .Values.services.airs.resources | nindent 12 }}
+          env:
+
+            - name: AIRS_COLLECTION_URL
+              value: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/collection.json
+
+            # ENDPOINT CONFIGURATION              
+            - name: AIRS_CORS_HEADERS
+              value: {{ .Values.cors.allowedHeaders | quote }}
+            - name: AIRS_CORS_METHODS
+              value: {{ .Values.cors.allowedMethods | quote }}
+            - name: AIRS_CORS_ORIGINS
+              value: {{ .Values.cors.allowedOrigins | squote }}
+            - name: AIRS_HOST
+              value: {{ .Values.cors.allowedHosts | squote }}
+
+            - name: AIRS_PORT
+              value: {{ .Values.services.servicePort | quote }}
+            - name: AIRS_PREFIX
+              value: {{ .Values.services.airs.urlPrefix }}
+
+            # INDEX CONFIGURATION
+            - name: AIRS_INDEX_COLLECTION_PREFIX
+              value: "{{ .Values.organization }}@{{ .Values.airsIndexPrefix }}"
+
+            # INDEX MAPPING
+            - name: ARLASEO_MAPPING_URL
+              value: {{ .Values.arlasMappingUrl | quote }}
+
+            # ELASTICSEARCH CONFIGURATION
+            - name: AIRS_INDEX_ENDPOINT_URL
+              value: "https://{{ .Release.Name }}-elasticsearch:9200" # TO BE IMPROVED: remove the protocol
+            - name: ARLAS_ELASTIC_CLUSTER
+              value: {{ .Values.elastic.cluster }}
+            - name: ARLAS_ELASTIC_NODES
+              value: {{ .Release.Name }}-elasticsearch:9200
+            - name: AIRS_INDEX_LOGIN
+              value: {{ .Values.elastic.login }}
+            - name: AIRS_INDEX_PWD
+              value: {{ .Values.elastic.password }}
+
+            # LOGGING
+            - name: AIRS_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+
+            # OBJECT STORAGE
+            - name: AIRS_S3_ACCESS_KEY_ID
+              value: {{ .Values.s3.accessKeyId | quote }}
+            - name: AIRS_S3_SECRET_ACCESS_KEY
+              value: {{ .Values.s3.secret | quote }}
+            - name: AIRS_S3_ASSET_HTTP_ENDPOINT_URL
+              value: {{ .Values.s3.assetHttpEndpointUrlPattern | quote }}
+            - name: AIRS_S3_BUCKET
+              value: {{ .Values.s3.bucket | quote }}
+            - name: AIRS_S3_ENDPOINT_URL
+              value: {{ .Values.s3.endpoint | quote }}
+            - name: AIRS_S3_PLATFORM
+              value: {{ .Values.s3.platform | quote }}
+            - name: AIRS_S3_REGION
+              value: {{ .Values.s3.region | quote }}
+            - name: AIRS_S3_TIER
+              value: {{ .Values.s3.tier | quote }}
+
+      # NODE SELECTION      
+      {{- with .Values.services.airs.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.airs.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.airs.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

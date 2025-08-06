@@ -10,14 +10,14 @@ services:
     public_url_patterns: 
       - (?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
     url_header: $AGATE_URL_HEADER|X-Forwarded-Uri
-    url_header_prefix: $AGATE_URL_HEADER_PREFIX
+    url_header_prefix: airs-storage
     pattern_target:
   titiler:
     url_patterns:
       - $TITILER_PATTERN|(/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
     public_url_patterns: 
     url_header: $AGATE_URL_HEADER|X-Forwarded-Uri
-    url_header_prefix: $AGATE_URL_HEADER_PREFIX
+    url_header_prefix:
     pattern_target: $TITILER_PATTERN_TARGET|query.url.url.path # takes the query parametters, use it as a url, then extract the path
 urbac:
   url_header: $AGATE_URL_HEADER|x-forwarded-uri

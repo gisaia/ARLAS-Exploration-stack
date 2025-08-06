@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.services.server.serviceName }}
+  labels:
+    {{- include "arlasServices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.services.server.serviceName }}
+spec:
+  replicas: {{ int .Values.services.server.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arlasServices.labels" . | nindent 6 }}
+      app.kubernetes.io/component: {{ .Values.services.server.serviceName }}
+  template:
+    metadata:
+      labels:
+        {{- include "arlasServices.labels" . | nindent 8 }}
+        app.kubernetes.io/component: {{ .Values.services.server.serviceName }}
+      annotations:
+        co.elastic.logs/enabled: {{ .Values.services.server.apm | quote }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.services.server.serviceName }}
+          image: {{ .Values.services.server.image }}
+          resources:
+            {{- toYaml .Values.services.server.resources | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.services.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.services.server.urlPrefix }}/admin/healthcheck
+              port: http
+            initialDelaySeconds: 40            
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.services.server.urlPrefix }}/admin/healthcheck
+              port: http
+            initialDelaySeconds: 40
+          env:
+            # JVM CONFIG
+            - name: ARLAS_XMX
+              value: {{ .Values.services.server.jvmXmx }}
+            {{- if .Values.services.server.apm }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.server.jvmXmx }} -XX:+ExitOnOutOfMemoryError -javaagent:/opt/app/elastic-apm-agent.jar"
+            {{- else }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.server.jvmXmx }} -XX:+ExitOnOutOfMemoryError"
+            {{- end }}
+
+            # ENDPOINT CONFIGURATION
+            - name: ARLAS_PREFIX
+              value: {{ .Values.services.server.urlPrefix }}
+            - name: ARLAS_BASE_URI
+              value: "https://{{ .Values.dnsDomain }}{{ .Values.services.server.urlPrefix }}/"
+            - name: ARLAS_ADMIN_PATH
+              value: {{ .Values.services.server.urlPrefix }}/admin
+            - name: ARLAS_APP_PATH
+              value: /
+            - name: ARLAS_PORT
+              value: {{ .Values.services.servicePort | quote }}
+
+            - name: ARLAS_SWAGGER_RESOURCE_PKG
+              value: {{ .Values.swaggerResource | quote }}
+            - name: ARLAS_CUSTOM_JS
+              value: {{ .Values.services.server.urlPrefix }}/swagger-static/custom-request-interceptor.js
+
+            # SUB SERVICES ACTIVATION
+            - name: ARLAS_INSPIRE_ENABLED
+              value: {{ .Values.subServices.inspireActivated }}
+            - name: ARLAS_SERVICE_CSW_ENABLE
+              value: {{ .Values.subServices.cswActivated }}
+            - name: ARLAS_SERVICE_RASTER_TILES_ENABLE
+              value: {{ .Values.subServices.rasterTileActivated }}
+            - name: ARLAS_SERVICE_WFS_ENABLE
+              value: {{ .Values.subServices.wfsActivated }}
+
+            # ARLAS AUTH PUBLIC URIS
+            - name: ARLAS_AUTH_PUBLIC_URIS
+              value: {{ .Values.services.server.publicUris  | quote }}
+
+            {{- include "arlasServices.corsEnv" . | nindent 12 }}
+            {{- include "arlasServices.keycloakEnv" . | nindent 12 }}
+            {{- include "arlasServices.cacheEnv" . | nindent 12 }}
+            {{- include "arlasServices.loggingEnv" . | nindent 12 }}
+            {{- include "arlasServices.elasticEnv" . | nindent 12 }}
+
+
+      # NODE SELECTION      
+      {{- with .Values.services.server.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.server.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.server.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

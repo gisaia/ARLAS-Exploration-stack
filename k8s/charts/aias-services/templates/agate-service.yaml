@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.services.agate.serviceName }}
+  name: {{ .Values.services.agate.serviceName }}
+spec:
+  type: {{ .Values.services.serviceType }}
+  ports:
+    - name: "http"
+      port: {{ .Values.services.servicePort }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/component: {{ .Values.services.agate.serviceName }}

@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.services.persistence.serviceName }}
+  labels:
+    {{- include "arlasServices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.services.persistence.serviceName }}
+spec:
+  replicas: {{ int .Values.services.persistence.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arlasServices.labels" . | nindent 6 }}
+      app.kubernetes.io/component: {{ .Values.services.persistence.serviceName }}
+  template:
+    metadata:
+      labels:
+        {{- include "arlasServices.labels" . | nindent 8 }}
+        app.kubernetes.io/component: {{ .Values.services.persistence.serviceName }}
+      annotations:
+        co.elastic.logs/enabled: {{ .Values.services.server.apm | quote }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.services.persistence.serviceName }}
+          image: {{ .Values.services.persistence.image }}
+          resources:
+            {{- toYaml .Values.services.persistence.resources | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.services.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.services.persistence.urlPrefix }}/admin/healthcheck
+              port: http
+            initialDelaySeconds: 40            
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.services.persistence.urlPrefix }}/admin/healthcheck
+              port: http
+            initialDelaySeconds: 40
+          env:
+            # PERSISTENCE CONFIGURATION
+            - name: ARLAS_PERSISTENCE_ENGINE
+              value: {{ .Values.persistence.engine | quote }}
+            - name: ARLAS_PERSISTENCE_LOCAL_FOLDER
+              value: {{ .Values.persistence.localFolder | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_URL
+              value: {{ .Values.persistence.hibernate.url | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_USER
+              value: {{ .Values.persistence.hibernate.user | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_PASSWORD
+              value: {{ .Values.persistence.hibernate.password | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_DIALECT
+              value: {{ .Values.persistence.hibernate.dialect | quote }}
+            - name: ARLAS_PERSISTENCE_HIBERNATE_DRIVER
+              value: {{ .Values.persistence.hibernate.driver | quote }}
+
+            # ARLAS AUTH PUBLIC URIS
+            - name: ARLAS_AUTH_PUBLIC_URIS
+              value: {{ .Values.services.persistence.publicUris  | quote }}
+
+            # JVM CONFIG
+            {{- if .Values.apm }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError -javaagent:/opt/app/elastic-apm-agent.jar"
+            {{- else }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError"
+            {{- end }}
+            - name: ARLAS_XMX
+              value: {{ .Values.services.persistence.jvmXmx | quote }}
+
+            # ENDPOINT CONFIGURATION
+            - name: ARLAS_PERSISTENCE_APP_PATH
+              value: /
+            - name: ARLAS_PERSISTENCE_PREFIX
+              value: {{ .Values.services.persistence.urlPrefix | quote }}
+            - name: ARLAS_PERSISTENCE_BASE_URI
+              value: "https://{{ .Values.dnsDomain }}{{ .Values.services.persistence.urlPrefix }}/"
+            - name: ARLAS_PERSISTENCE_PORT
+              value: {{ .Values.services.servicePort  | quote }}
+            - name: ARLAS_PERSISTENCE_ADMIN_PATH
+              value: {{ .Values.services.persistence.urlPrefix }}/admin
+
+            {{- include "arlasServices.corsEnv" . | nindent 12 }}
+            {{- include "arlasServices.keycloakEnv" . | nindent 12 }}
+            {{- include "arlasServices.cacheEnv" . | nindent 12 }}
+            {{- include "arlasServices.loggingEnv" . | nindent 12 }}
+            {{- include "arlasServices.elasticEnv" . | nindent 12 }}
+
+          volumeMounts:
+            - mountPath: "/persistence"
+              name: arlas-persistence-file
+      volumes:
+        - name: arlas-persistence-file
+          persistentVolumeClaim:
+            claimName: arlas-persistence-file-pvc
+
+      # NODE SELECTION      
+      {{- with .Values.services.persistence.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.persistence.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.persistence.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.services.permissions.serviceName }}
+  labels:
+    {{- include "arlasServices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.services.permissions.serviceName }}
+spec:
+  replicas: {{ int .Values.services.permissions.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arlasServices.labels" . | nindent 6 }}
+      app.kubernetes.io/component: {{ .Values.services.permissions.serviceName }}
+  template:
+    metadata:
+      labels:
+        {{- include "arlasServices.labels" . | nindent 8 }}
+        app.kubernetes.io/component: {{ .Values.services.permissions.serviceName }}
+      annotations:
+        co.elastic.logs/enabled: {{ .Values.services.server.apm | quote }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.services.permissions.serviceName }}
+          image: {{ .Values.services.permissions.image }}
+          resources:
+            {{- toYaml .Values.services.permissions.resources | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.services.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /admin/healthcheck
+              port: http
+            initialDelaySeconds: 40            
+          readinessProbe:
+            httpGet:
+              path: /admin/healthcheck
+              port: http
+            initialDelaySeconds: 40
+          env:
+            # JVM CONFIG
+            {{- if .Values.apm }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError -javaagent:/opt/app/elastic-apm-agent.jar"
+            {{- else }}
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError"
+            {{- end }}
+            - name: ARLAS_XMX
+              value: {{ .Values.services.permissions.jvmXmx | quote }}
+
+            # ENDPOINT CONFIGURATION
+            - name: ARLAS_PERMISSIONS_APP_PATH
+              value: /
+            - name: ARLAS_PERMISSIONS_PREFIX
+              value: {{ .Values.services.permissions.urlPrefix | quote }}
+            - name: ARLAS_PERMISSIONS_BASE_URI
+              value: "https://{{ .Values.dnsDomain }}{{ .Values.services.permissions.urlPrefix }}/"
+            - name: ARLAS_PERMISSIONS_PORT
+              value: {{ .Values.services.servicePort  | quote }}
+
+            # ARLAS AUTH PUBLIC URIS
+            - name: ARLAS_AUTH_PUBLIC_URIS
+              value: {{ .Values.services.permissions.publicUris  | quote }}
+
+            {{- include "arlasServices.corsEnv" . | nindent 12 }}
+            {{- include "arlasServices.keycloakEnv" . | nindent 12 }}
+            {{- include "arlasServices.cacheEnv" . | nindent 12 }}
+            {{- include "arlasServices.loggingEnv" . | nindent 12 }}
+            {{- include "arlasServices.elasticEnv" . | nindent 12 }}
+
+      # NODE SELECTION      
+      {{- with .Values.services.permissions.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.permissions.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.permissions.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

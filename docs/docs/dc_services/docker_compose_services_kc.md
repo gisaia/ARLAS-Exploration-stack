@@ -206,6 +206,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.4` in `conf/v
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_keycloak.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env`<br>`'` in `conf/arlas_keycloak.env` |
+| `ARLAS_ENABLE_ADVANCED_FEATURES` | `ARLAS_ENABLE_ADVANCED_FEATURES` | `false` |  |  |
 
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub

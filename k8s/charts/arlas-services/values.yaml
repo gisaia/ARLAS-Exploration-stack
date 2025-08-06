@@ -1,0 +1,146 @@
+## @section Global parameters
+
+# -- DNS domain hosting ARLAS
+dnsDomain: localhost
+
+services:
+  servicePort: 8000
+  serviceType: ClusterIP
+  server: 
+    serviceName: arlas-server
+    image: gisaia/arlas-server:27.1.0
+    replicaCount: 1
+    jvmXmx: 1800m
+    apm: false
+    urlPrefix: /arlas
+    publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 256Mi
+      limits:
+        cpu: 1
+        memory: 1000Mi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  permissions:
+    serviceName: arlas-permissions-server
+    image: gisaia/arlas-permissions-server:27.0.1
+    replicaCount: 1
+    jvmXmx: 512m
+    apm: false
+    urlPrefix: /permissions
+    publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
+
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 128Mi
+      limits:
+        cpu: 0.5
+        memory: 512Mi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  persistence: 
+    serviceName: arlas-persistence-server
+    image: gisaia/arlas-persistence-server:27.0.1
+    replicaCount: 1
+    jvmXmx: 512m
+    # -- Whether ES APM should be activated or not
+    apm: false
+    urlPrefix: /persist
+    publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 128Mi
+      limits:
+        cpu: 0.5
+        memory: 512Mi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+auth:
+  checkOrganizations: false
+keycloak:
+  enabled: true
+  realm: arlas
+  client: arlas-backend
+  secret: rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+  url: http://172.18.0.2/auth
+
+# -- Cache TTL for items in cache (seconds), used for all deployments to ensure consistency
+cacheTimeout: 60
+# -- The factory class for the cache (io.arlas.server.core.impl.cache.HazelcastCacheFactory, io.arlas.server.core.impl.cache.LocalCacheFactory or io.arlas.server.core.impl.cache.NoCacheFactory)
+cacheFactoryClass: io.arlas.server.core.impl.cache.LocalCacheFactory
+# -- The java package to process for extracting the APIs displayed in Swagger
+swaggerResource: io.arlas.server.rest,io.arlas.server.stac
+
+
+cors:
+  # cors.enabled -- Enable CORS or not
+  enabled: false
+  # cors.allowedOrigins -- CORS Allowed Origins
+  allowedOrigins: '"*"'
+  # cors.allowedHeaders -- CORS Allowed Headers
+  allowedHeaders: "arlas-user,arlas-groups,arlas-organization,arlas-org-filter,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User"
+  # cors.allowedMethods -- CORS Allowed Methods
+  allowedMethods: "OPTIONS,GET,PUT,POST,DELETE,HEAD"
+  # cors.allowedCredentials -- CORS Allowed Credentials or not
+  allowedCredentials: true
+  # cors.exposedHeaders -- CORS Exposed Headers
+  exposedHeaders: "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,WWW-Authenticate"
+
+logger:
+  # -- Default logging level
+  loggingLevel: DEBUG
+  # -- Default console logging level
+  loggingConsoleLevel: DEBUG
+
+elastic:
+  cluster: elastic
+  login: elastic
+  password: password4elastic
+  skipMaster: true
+  sniffing: false
+  ssl:
+    enabled: true
+  apm:
+    secret:
+    url:
+
+persistence:
+  # -- Storage engine to use: either `file` or `hibernate`
+  engine: file
+  # -- Storage size in case of file persistence
+  storageSize: 100Mi
+  # -- Storage engine to use: either `file` or `hibernate`
+  localFolder: /tmp/
+  
+  # -- Configuration node if `engine=hibernate`, ignored otherwise
+  hibernate:
+    # -- JDBC URL
+    url: jdbc:postgresql://db:5432/arlas
+    # -- Database user login
+    user:
+    # -- Database user password
+    password:
+    # -- SQL Dialect
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+    # -- JDBC Driver
+    driver: org.postgresql.Driver
+
+subServices:
+  # -- Whether INSPIRE Service is activated or not
+  inspireActivated: '"false"'
+  # -- Whether Raster Tile Service is activated or not
+  rasterTileActivated: '"false"'
+  # -- Whether CSW Service is activated or not
+  cswActivated: '"false"'
+  # -- Whether WFS Service is activated or not
+  wfsActivated: '"false"'
