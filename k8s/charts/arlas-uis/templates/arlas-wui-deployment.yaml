@@ -59,7 +59,7 @@ spec:
 
             # USER INTERFACE CONFIGURATION
             - name: ARLAS_STATIC_LINKS
-              value: {{ .Values.links | toPrettyJson | quote }}
+              value: {{ .Values.links | quote }}
             - name: ARLAS_TAB_NAME
               value: {{ .Values.uis.wui.tabName | quote }}
             - name: ARLAS_GEOCODING_ENABLED

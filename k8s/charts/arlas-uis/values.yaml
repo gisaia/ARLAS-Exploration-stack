@@ -62,7 +62,22 @@ services:
     urlPrefix: /fam
 
 # -- List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes.
-links: []
+links: '
+        [
+            {
+                "name":"Hub",
+                "url":"/hub/",
+                "icon":"hub",
+                "check_url": "/persist/healthcheck"
+            },
+            {
+                "name": "Import",
+                "icon": "folder",
+                "url": "/fam-wui/",
+                "check_url": "/fam/healthcheck",
+                "check_url_response_type": "text"
+            }
+        ]'
 # -- The Google Analytics key of the wui app
 googleAnalyticsKey:
 # -- Version number of the ARLAS Hits Exporter to use
