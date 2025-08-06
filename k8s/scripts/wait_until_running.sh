@@ -19,7 +19,7 @@ for (( loop=1; loop<=$max_loops; loop++ )); do
     echo "Checking pod status (Loop $loop/$max_loops)..."
 
     # Get the list of pods not in Running phase
-    not_running_pods=$(kubectl get pods --namespace "$namespace" --no-headers | awk '$3 != "Running" {print $1}')
+    not_running_pods=$(kubectl get pods --namespace "$namespace" --no-headers  | grep -v "create-and-public-minio" | awk '$3 != "Running" {print $1}')
 
     # Check if there are any pods not running
     if [[ -z "$not_running_pods" ]]; then
@@ -33,7 +33,7 @@ for (( loop=1; loop<=$max_loops; loop++ )); do
     sleep 10
 done
 
-not_running_pods=$(kubectl get pods --namespace "$namespace" --no-headers | awk '$3 != "Running" {print $1}')
+not_running_pods=$(kubectl get pods --namespace "$namespace" --no-headers  | grep -v "create-and-public-minio" | awk '$3 != "Running" {print $1}')
 kubectl describe pod $not_running_pods
 
 # If the loop completes without all pods running, exit with an error
