@@ -12,7 +12,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | file://../arlas-services | arlas-services | 0.0.1 |
 | file://../arlas-uis | arlas-uis | 0.0.1 |
 | file://../titiler | titiler | 1.2.7 |
-| https://charts.bitnami.com/bitnami | apisix | 5.0.3 |
+| https://charts.bitnami.com/bitnami | apisix | 3.3.9 |
 | https://charts.bitnami.com/bitnami | elasticsearch | 22.0.4 |
 | https://charts.bitnami.com/bitnami | keycloak | 20.0.1 |
 | https://charts.bitnami.com/bitnami | minio | 16.0.10 |
@@ -23,17 +23,6 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| aias-services.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
-| aias-services.logger.loggingLevel | string | `"INFO"` | Logging level |
-| arlas-services.keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` |  |
-| arlas-services.keycloak.url | string | `"http://172.18.0.2/auth"` |  |
-| arlas-services.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
-| arlas-services.logger.loggingLevel | string | `"INFO"` | Logging level |
-| arlas-uis.authent | object | `{}` |  |
-| arlas-uis.basemap | object | `{"storageSize":"50Mi"}` | __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap |
-| arlas-uis.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
-| arlas-uis.logger.loggingLevel | string | `"INFO"` | Logging level |
-| arlas-uis.protocol | string | `"http"` |  |
 | deployment.apisix.enabled | bool | `true` | Should the chart deploy apisix |
 | deployment.elasticsearch.enabled | bool | `true` | Should the chart deploy elasticsearch |
 | deployment.keycloak.enabled | bool | `true` | __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs. |
@@ -41,12 +30,12 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
-| global.authIssuer | string | `"http://172.18.0.2/auth/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
-| global.dnsDomain | string | `"172.18.0.2"` | DNS domain hosting ARLAS |
+| global.authIssuer | string | `"http://keycloak.arlas.k8s:8080/auth/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
+| global.dnsDomain | string | `"site.arlas.k8s"` | DNS domain hosting ARLAS |
 | global.elasticLogin | string | `"elastic"` | Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.elasticPassword | string | `"secret4elastic"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` | __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm  |
-| global.keycloak.url | string | `"http://172.18.0.2/auth"` | __MUST BE CONFIGURED:__ Keycloak URL |
+| global.keycloak.url | string | `"http://keycloak.arlas.k8s:8080/auth"` | __MUST BE CONFIGURED:__ Keycloak URL |
 | global.keycloakLogin | string | `"admin"` | Keycloak admin login for keycloak deployment (for test only) |
 | global.keycloakPassword | string | `"secret4keycloak"` | __MUST BE CONFIGURED:__ Keycloak admin password  |
 | global.logoutUrl | string | `nil` | The logout URL to be used |

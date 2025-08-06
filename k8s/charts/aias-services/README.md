@@ -34,8 +34,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | download.message.request.user.content | string | `"ARLAS Services - Dear {arlas-user-email}. <br>Your download request for {collection}/{item_id} with projection {target_projection} ({target_format}) will shortly be taken into account. <br>ARLAS Services."` |  |
 | download.message.request.user.subject | string | `"ARLAS Services - Thank you for your download request (({collection}/{item_id})."` |  |
 | download.s3.bucket | string | `"downloads"` | bucket that will contain the downloads |
-| download.s3.endpoint | string | `"http://minio:9000"` | where downloads are uploaded once ready |
-| download.s3.http | string | `"http://minio:9000/{}/{}"` | where downloads are uploaded once ready, first {} is the bucket, second {} is the path to the object |
+| download.s3.endpoint | string | `"http://arlas-stack-minio:9000"` | where downloads are uploaded once ready |
+| download.s3.http | string | `"http://arlas-stack-minio:9000/{}/{}"` | where downloads are uploaded once ready, first {} is the bucket, second {} is the path to the object |
 | download.s3.key | string | `"airs"` |  |
 | download.s3.secret | string | `"airssecret"` |  |
 | download.tmpFolder | string | `"/tmp/outbox/"` | Where download are temporally built before copy |
@@ -57,14 +57,17 @@ A Helm Chart to deploy ARLAS AIAS Services
 | rabbitmq.login | string | `"guest"` |  |
 | rabbitmq.password | string | `"guest"` |  |
 | rabbitmq.port | int | `5672` |  |
+| redis.db | int | `0` |  |
 | redis.host | string | `"redis-master"` |  |
+| redis.password | string | `"somepassword"` |  |
 | redis.port | int | `6379` |  |
+| redis.username | string | `"default"` |  |
 | resourceIdHashStartAt | int | `0` |  |
-| s3 | object | `{"accessKeyId":"airs","assetHttpEndpointUrlPattern":"http://minio:9000/{}/{}","bucket":"airs-storage","endpoint":"http://minio:9000","platform":"MINIO","region":"Standard","secret":"airssecret","tier":"Standard"}` | Configuration of the s3 used for storing and accessing the STAC collections, items and managed assets |
+| s3 | object | `{"accessKeyId":"airs","assetHttpEndpointUrlPattern":"http://arlas-stack-minio:9000/{}/{}","bucket":"airs-storage","endpoint":"http://arlas-stack-minio:9000","platform":"MINIO","region":"Standard","secret":"airssecret","tier":"Standard"}` | Configuration of the s3 used for storing and accessing the STAC collections, items and managed assets |
 | s3.accessKeyId | string | `"airs"` | s3 key |
-| s3.assetHttpEndpointUrlPattern | string | `"http://minio:9000/{}/{}"` | asset_http_endpoint_url_pattern must look like https://storage.googleapis.com/{}/{} where first {} is the bucket, second {} is the path to the object   |
+| s3.assetHttpEndpointUrlPattern | string | `"http://arlas-stack-minio:9000/{}/{}"` | asset_http_endpoint_url_pattern must look like https://storage.googleapis.com/{}/{} where first {} is the bucket, second {} is the path to the object   |
 | s3.bucket | string | `"airs-storage"` | s3 bucket name for storing the STAC collections, items and managed assets |
-| s3.endpoint | string | `"http://minio:9000"` | s3 endpoint |
+| s3.endpoint | string | `"http://arlas-stack-minio:9000"` | s3 endpoint |
 | s3.platform | string | `"MINIO"` | Platform type. This value is provided in the item properties |
 | s3.region | string | `"Standard"` | Region. This value is provided in the item properties |
 | s3.secret | string | `"airssecret"` | s3 secret |
