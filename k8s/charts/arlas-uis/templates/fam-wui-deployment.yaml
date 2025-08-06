@@ -59,6 +59,10 @@ spec:
               value: {{ .Values.uis.famWui.tabName | quote }}
             - name: FAM_DEFAULT_PATH
               value: {{ .Values.uis.famWui.famDefaultURL | quote }}
+            - name: APROC_COLLECTION
+              value: {{ .Values.uis.famWui.collectionName | quote }}
+            - name: AIRS_COLLECTION
+              value: {{ .Values.uis.famWui.collectionName | quote }}
             - name: FAM_COLLECTION
               value: {{ .Values.uis.famWui.collectionName | quote }}
             - name: FAM_ARCHIVES_PAGES_SIZE
@@ -67,8 +71,6 @@ spec:
               value: {{ .Values.uis.famWui.filePageSize | quote }}
             - name: APROC_CATALOG
               value: {{ .Values.uis.famWui.catalog | quote }}
-            - name: AIRS_COLLECTION
-              value: {{ .Values.uis.famWui.collectionName | quote }}
 
 
 

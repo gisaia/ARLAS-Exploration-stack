@@ -17,10 +17,16 @@ apisix:
       - name: routes
         configMap:
           name: apisix-routes
+      - name: apisix-logs
+        emptyDir: {}
+
     extraVolumeMounts:
       - name: routes
         mountPath: /usr/local/apisix/conf/apisix.yaml
         subPath: apisix.yaml
+      - name: apisix-logs
+        mountPath: /usr/local/apisix/logs
+
   extraDeploy:
     - apiVersion: v1
       kind: ConfigMap
@@ -104,6 +110,7 @@ apisix:
                 forward-auth:
                   uri: http://arlas-agate:8000/agate/authorization/airs-storage
                   request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
             -
               uri: /fam/*
               upstream:
@@ -113,6 +120,7 @@ apisix:
                 forward-auth:
                   uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
             -
               uri: /fam/files
               upstream:
@@ -122,6 +130,7 @@ apisix:
                 forward-auth:
                   uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
             -
               uri: /airs/collections/*
               upstream:
@@ -131,6 +140,7 @@ apisix:
                 forward-auth:
                   uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
             -
               uri: /aproc/processes/*
               upstream:
@@ -140,6 +150,7 @@ apisix:
                 forward-auth:
                   uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
             -
               uri: /aproc/jobs
               upstream:
@@ -149,6 +160,7 @@ apisix:
                 forward-auth:
                   uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
             -
               uri: /aproc/jobs/*
               upstream:
@@ -158,7 +170,7 @@ apisix:
                 forward-auth:
                   uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
-
+                  keepalive: false
             -
               uri: /agate/healthcheck
               methods: ["GET"]

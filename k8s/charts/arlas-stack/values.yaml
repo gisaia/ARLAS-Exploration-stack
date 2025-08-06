@@ -131,6 +131,18 @@ aias-services:
   redis:
     password: *arlasAppRedisPassword
 
+  services:
+    aproc:
+      worker:
+        replicaCount: 1
+        resources:
+          limits:
+            cpu: 2
+            memory: 10Gi
+        nodeSelector: {}
+        tolerations: []
+        affinity: {}
+
 # ELASTICSEARCH
 # @ignored
 elasticsearch:
@@ -201,3 +213,4 @@ keycloak:
     ports:
       http: 8080
       https: 8443
+

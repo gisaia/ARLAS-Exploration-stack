@@ -15,9 +15,14 @@ if [ "$CONF" = "local.kc.data" ]
 then
     GROUPS_PARAMS=''
     USER_CONF="local.kc.data"
-else
-    GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
-    USER_CONF="local.iam.user"
+else if [ "$CONF" = "local.k8s.kc.data" ]
+    then
+        GROUPS_PARAMS=''
+        USER_CONF="local.k8s.kc.data"
+    else 
+        GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
+        USER_CONF="local.iam.user"
+    fi
 fi
 
 echo "Create collection '${COLLECTION}' on index '${INDEX}'"

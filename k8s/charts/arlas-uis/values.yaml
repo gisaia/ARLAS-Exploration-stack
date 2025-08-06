@@ -10,7 +10,7 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:27.1.0-rc.1
+    image: gisaia/arlas-wui:27.0.5
     urlPrefix: /wui
     tabName: ARLAS Exploration
 
@@ -27,7 +27,7 @@ uis:
  
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:27.1.0-rc.1
+    image: gisaia/arlas-wui-hub:27.0.2
     urlPrefix: /hub
     tabName: ARLAS Hub
 
