@@ -8,6 +8,12 @@
 - helm
 - load balancer for kubernetes
 
+Register the bitnami repository:
+
+```shell
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
 It will be necessary to bind domain names to the external IPs. In the present case, we use `arlas.k8s` as a local test domain with three sub domains: `elastic`, `keycloak` and `site`. You can for instance add them in /etc/hosts:
 
 ```
@@ -41,21 +47,24 @@ Files are organized as follow:
 
 IMPORTANT: configure the passwords before installing the chart!
 
-The main configuration is done in the "umbrella chart" contained in k8s/charts/arlas-stack/values.yaml. Configure in priority all the fields with the mention "__MUST BE CONFIGURED:__". Then detailed configuration can be done in the three sub charts: arlas-services (ARLAS Backend), arlas-uis (ARLAS User interfaces) and aias-services (ARLAS AIRS and AIAS services). The variables for these three charts are documented:
+The main initial configuration is done in the "umbrella chart" contained in k8s/charts/arlas-stack/values.yaml. Configure in priority all the fields with the mention "__MUST BE CONFIGURED:__". Once configured, the default stack can be installed.
+
+More configuration options can be set in the three sub charts: arlas-services (ARLAS Backend), arlas-uis (ARLAS User interfaces) and aias-services (ARLAS AIRS and AIAS services). The variables for these three charts are documented:
 - [ARLAS Stack](helm/arlas-stack/README.md)
 - [ARLAS Services](helm/arlas-services/README.md)
 - [ARLAS User interface](helm/arlas-uis/README.md)
 - [AIAS Services](helm/aias-services/README.md)
 
-Then configure carefully the AIAS configuration files:
-- conf/aias/agate.yaml
-- conf/aias/airs.yaml
-- conf/aias/aproc.yaml
-- conf/aias/drivers.yaml
-- conf/aias/download_drivers.yaml
-- conf/aias/enrich_drivers.yaml
-- conf/aias/fam.yaml
-- conf/aias/roles.yaml
+
+The detailed settings of AIAS services are located in the `conf/aias/` yaml files:
+- [conf/aias/agate.yaml](https://docs.arlas.io/external_docs/aias/agate/configuration/)
+- [conf/aias/airs.yaml](https://docs.arlas.io/external_docs/aias/airs/configuration/)
+- [conf/aias/aproc.yaml](https://docs.arlas.io/external_docs/aias/aproc/configuration/)
+- [conf/aias/drivers.yaml]()
+- [conf/aias/download_drivers.yaml]()
+- [conf/aias/enrich_drivers.yaml]()
+- [conf/aias/fam.yaml](https://docs.arlas.io/external_docs/aias/fam/configuration/)
+- [conf/aias/roles.yaml]()
 
 #### Basemap
 In case you want to use a local protomap basemap, you must specify the right Persistent Volume Claim storage size for the protomap file: set the `arlas-uis.basemap.storageSize` property in the arlas-stack chart values.yaml file (at least 120 Gi for full coverage). Then place the protomap file in `conf/protomaps/world.pmtiles` and launch `./k8s/scripts/copy_files.sh`.

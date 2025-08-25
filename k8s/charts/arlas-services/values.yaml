@@ -2,6 +2,7 @@
 
 # -- DNS domain hosting ARLAS
 dnsDomain: localhost
+defaultStorageClass: standard
 
 services:
   servicePort: 8000

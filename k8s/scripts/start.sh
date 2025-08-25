@@ -26,6 +26,12 @@ kubectl create configmap fam-files-configmap  \
   --dry-run=client  \
   -o yaml > ./k8s/charts/aias-services/templates/fam-files-configmap.yaml
 
+# Create configmap for keycloak realm
+kubectl create configmap keycloak-realm-configmap  \
+  --from-file=keycloak.realm.json=conf/keycloak/keycloak.realm.json  \
+  --dry-run=client  \
+  -o yaml > ./k8s/charts/arlas-stack/templates/keycloak-realm-configmap.yaml
+
 helm dependency update k8s/charts/arlas-stack 
 helm dependency build k8s/charts/arlas-stack
 
