@@ -27,3 +27,8 @@ conf/custom.env
 *.lock
 k8s/charts/arlas-stack/Chart.lock
 k8s/charts/arlas-stack/charts
+./k8s/charts/arlas-stack/templates/keycloak-realm-configmap.yaml
+./k8s/charts/titiler/templates/configmap.yaml
+./k8s/charts/aias-services/templates/fam-files-configmap.yaml
+./k8s/charts/aias-services/templates/agate-files-configmap.yaml
+./k8s/charts/aias-services/templates/aproc-files-configmap.yaml

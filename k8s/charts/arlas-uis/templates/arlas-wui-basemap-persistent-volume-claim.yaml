@@ -8,3 +8,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.basemap.storageSize }}
+  storageClassName: {{ .Values.defaultStorageClass }}
