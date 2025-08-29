@@ -9,11 +9,12 @@ else
 fi
 
 not_running_pods_fct(){
-    return $( kubectl get pods --namespace "$namespace" --no-headers  | grep -v "create-and-public-minio"  | grep -v "arlas-permissions-server"  | grep -v "arlas-persistence-server"  | grep -v "arlas-server" | awk '$3 != "Running" {print $1}' )
+    # for now, arlas-permissions-server, arlas-persistence-server and arlas-server can not be running since host names are not set.
+    echo $( kubectl get pods --namespace "$namespace" --no-headers  | grep -v "create-and-public-minio"  | grep -v "arlas-permissions-server"  | grep -v "arlas-persistence-server"  | grep -v "arlas-server" | awk '$3 != "Running" {print $1}' )
 }
 
 # Define the maximum number of loops
-max_loops=1
+max_loops=60
 
 # Define the namespace you want to check
 
@@ -26,7 +27,6 @@ for (( loop=1; loop<=$max_loops; loop++ )); do
 
     # Check if there are any pods not running
     if [[ -z "$not_running_pods" ]]; then
-        echo "All important pods are running."
         break
     else
         echo "The following pods are not running: $not_running_pods"
@@ -36,7 +36,6 @@ for (( loop=1; loop<=$max_loops; loop++ )); do
 
 done
 
-# for now, arlas-permissions-server, arlas-persistence-server and arlas-server can not be running since host names are not set.
 not_running_pods=$( not_running_pods_fct )
 
 if [[ -z "$not_running_pods" ]]; then
