@@ -7,11 +7,13 @@ defaultStorageClass: standard
 services:
   servicePort: 8000
   serviceType: ClusterIP
+  mountCertificate: false
   server: 
     serviceName: arlas-server
     image: gisaia/arlas-server:27.1.0
     replicaCount: 1
     jvmXmx: 1800m
+    trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
     apm: false
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET

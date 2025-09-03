@@ -79,3 +79,20 @@
 - name: ARLAS_CORS_EXPOSED_HEADERS
   value: {{ .Values.cors.exposedHeaders | quote }}
 {{- end }}
+
+
+{{- define "arlasServices.mountCertificate" -}}
+{{- if .Values.services.mountCertificate }}
+            - name: keycloak-certificate-configmap
+              mountPath: /opt/app/store/
+              readOnly: true
+{{- end }}
+{{- end }}
+
+{{- define "arlasServices.volumeCertificate" -}}
+{{- if .Values.services.mountCertificate }}
+        - name: keycloak-certificate-configmap
+          configMap:
+            name: keycloak-certificate-configmap
+{{- end }}
+{{- end }}

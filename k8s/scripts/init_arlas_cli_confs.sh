@@ -13,9 +13,9 @@ arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local.k8s.kc.data
 
 arlas_cli --config-file /tmp/arlas-cli.yaml \
     confs create local.k8s.kc.data \
-    --server http://${ARLAS_HOST}/arlas \
+    --server https://${ARLAS_HOST}/arlas \
     --headers "Content-Type:application/json" \
-    --persistence http://${ARLAS_HOST}/persist \
+    --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
     --elastic https://${ES_HOST} \
     --elastic-login elastic \
@@ -24,7 +24,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --allow-delete \
     --auth-grant-type password \
     --auth-client-id arlas-front \
-    --auth-token-url http://${KEYCLOAK_HOST}/auth/realms/arlas/protocol/openid-connect/token \
+    --auth-token-url https://${KEYCLOAK_HOST}/auth/realms/arlas/protocol/openid-connect/token \
     --auth-headers "Content-Type:application/x-www-form-urlencoded" \
     --auth-login user_all_roles \
     --auth-password secret \

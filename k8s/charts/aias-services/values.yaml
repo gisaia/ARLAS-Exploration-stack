@@ -155,7 +155,7 @@ download:
   # -- Name of the download index that will contain the download requests
   downloadReportIndex: aproc_downloads
   # -- Where download are temporally built before copy
-  tmpFolder: /tmp/outbox/
+  tmpFolder: /tmp/
   s3:
     # -- where downloads are uploaded once ready
     endpoint: http://arlas-stack-minio:9000
