@@ -61,15 +61,8 @@ spec:
               value: {{ .Values.services.persistence.publicUris  | quote }}
 
             # JVM CONFIG
-            {{- if .Values.apm }}
             - name: JDK_JAVA_OPTIONS
-              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError -javaagent:/opt/app/elastic-apm-agent.jar"
-            {{- else }}
-            - name: JDK_JAVA_OPTIONS
-              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError"
-            {{- end }}
-            - name: ARLAS_XMX
-              value: {{ .Values.services.persistence.jvmXmx | quote }}
+              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }} {{- if .Values.services.persistence.apm }}-javaagent:/opt/app/elastic-apm-agent.jar{{- end }}"
 
             # ENDPOINT CONFIGURATION
             - name: ARLAS_PERSISTENCE_APP_PATH
@@ -90,9 +83,11 @@ spec:
             {{- include "arlasServices.elasticEnv" . | nindent 12 }}
 
           volumeMounts:
+          {{- include "arlasServices.mountCertificate" . }}
             - mountPath: "/persistence"
               name: arlas-persistence-file
       volumes:
+        {{- include "arlasServices.volumeCertificate" . }}
         - name: arlas-persistence-file
           persistentVolumeClaim:
             claimName: arlas-persistence-file-pvc

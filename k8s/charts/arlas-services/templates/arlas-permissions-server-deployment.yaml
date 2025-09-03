@@ -41,15 +41,8 @@ spec:
             initialDelaySeconds: 40
           env:
             # JVM CONFIG
-            {{- if .Values.apm }}
             - name: JDK_JAVA_OPTIONS
-              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError -javaagent:/opt/app/elastic-apm-agent.jar"
-            {{- else }}
-            - name: JDK_JAVA_OPTIONS
-              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError"
-            {{- end }}
-            - name: ARLAS_XMX
-              value: {{ .Values.services.permissions.jvmXmx | quote }}
+              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }} {{- if .Values.services.permissions.apm }}-javaagent:/opt/app/elastic-apm-agent.jar{{- end }}"
 
             # ENDPOINT CONFIGURATION
             - name: ARLAS_PERMISSIONS_APP_PATH
@@ -70,6 +63,11 @@ spec:
             {{- include "arlasServices.cacheEnv" . | nindent 12 }}
             {{- include "arlasServices.loggingEnv" . | nindent 12 }}
             {{- include "arlasServices.elasticEnv" . | nindent 12 }}
+
+          volumeMounts:
+          {{- include "arlasServices.mountCertificate" . }}
+      volumes:
+        {{- include "arlasServices.volumeCertificate" . }}
 
       # NODE SELECTION      
       {{- with .Values.services.permissions.nodeSelector }}
