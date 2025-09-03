@@ -1,10 +1,10 @@
 #!/bin/sh -e
 
 # Generate documentation
-pip3.10 install ruamel.yaml
+pip3 install ruamel.yaml
 mkdir -p docs/docs/dc_services
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -24,7 +24,7 @@ python3.10 scripts/generate_dc_doc.py \
     conf/stack.env \
     > docs/docs/dc_services/docker_compose_services_simple.md
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -49,7 +49,7 @@ python3.10 scripts/generate_dc_doc.py \
     conf/postgres.env \
     > docs/docs/dc_services/docker_compose_services_iam.md
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -71,7 +71,7 @@ python3.10 scripts/generate_dc_doc.py \
     conf/arlas_keycloak.env \
     > docs/docs/dc_services/docker_compose_services_kc.md
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -109,7 +109,7 @@ python3.10 scripts/generate_dc_doc.py \
     > docs/docs/dc_services/docker_compose_services_aias.md
 
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
