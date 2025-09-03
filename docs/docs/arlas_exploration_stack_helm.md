@@ -35,11 +35,12 @@ k8s/scripts/install_nginx_ingress_controller.sh
 
 The repository contains files related to docker compose deployment and kubernetes deployment. Only the `docs` and `conf/aias/` directories are common to both deployments. The `k8s/` directory contains the charts and the scripts for running the stack with kubernetes.
 
-Files are organized as follow:
+Files are organized as follows:
+
 - `conf/aias/`: configuration files for ARLAS AIAS. IMPORTANT: The starting scripts transform them into `configmaps`. Other folders in `conf` are not used.
 - `k8s/`: everything for installing the ARLAS Stack chart
    - `scripts/`: scripts for initializing and installing the charts
-   - `charts/`: contains the umbrella chart (`k8s/charts/arlas-stack/Chart.yaml`) and sub charts for arlas backend, arlas front end and aias
+   - `charts/`: contains the umbrella chart (`k8s/charts/arlas-stack/Chart.yaml`) and sub charts for arlas backend, arlas front end and AIAS
 
 ### Storage
 
@@ -55,12 +56,14 @@ Once you changed all the "__MUST BE CONFIGURED:__" variables, the default stack 
 More configuration options can be set in the three sub charts: arlas-services (ARLAS Backend), arlas-uis (ARLAS User interfaces) and aias-services (ARLAS AIRS and AIAS services). 
 
 The variables for the charts are documented:
+
 - [ARLAS Stack](helm/arlas-stack/README.md)
 - [ARLAS Services](helm/arlas-services/README.md)
 - [ARLAS User interface](helm/arlas-uis/README.md)
 - [AIAS Services](helm/aias-services/README.md)
 
 The detailed settings of AIAS services are located in the `conf/aias/` yaml files:
+
 - [conf/aias/agate.yaml](https://docs.arlas.io/external_docs/aias/agate/configuration/)
 - [conf/aias/airs.yaml](https://docs.arlas.io/external_docs/aias/airs/configuration/)
 - [conf/aias/aproc.yaml](https://docs.arlas.io/external_docs/aias/aproc/configuration/)
@@ -85,7 +88,7 @@ To start, run:
 
 This script:
 
-- creates the configmaps for the aias configuration files
+- creates the configmaps for the AIAS configuration files
 - create a secret and configmap for keycloak certificate if the certificate exists (e.g. created with `./scripts/create_certificate.sh keycloak.arlas.k8s`)
 - update and build the sub charts
 - install or upgrade the arlas-stack chart
@@ -178,7 +181,7 @@ Using default configuration local.k8s.kc.data
 ```
 ## EO Catalog
 
-Just like the docker compose deployement, you can init a catalog:
+Just like the docker compose deployment, you can init a catalog:
 
 ```shell
 ./scripts/init_aias_catalog.sh local.k8s.kc.data main org.com

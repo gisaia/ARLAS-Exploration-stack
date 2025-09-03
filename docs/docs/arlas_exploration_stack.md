@@ -4,11 +4,11 @@ The [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack)
 
 - [Simple](#simple-deployment): ARLAS without authentication, on HTTP
 - [IAM](#iam-deployment): With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
-- [KC](#kc-deployment): ARLAS With Keycloak
+- [KC](#keycloak-deployment): ARLAS With Keycloak
 - [AIAS](#aias-deployment): With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 - [AIASKC](#aiaskc-deployment): With Keycloak and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 
-You can start the ARLAS Exploration Stack either with [docker compose](arlas_exploration_stack_dc.md) or with [helm](arlas_exploration_stack_helm.md).
+You can start the ARLAS Exploration Stack either with [docker compose](arlas_exploration_stack_dc.md) or with [kubernetes (helm)](arlas_exploration_stack_helm.md).
 
 
 ### Simple deployment
