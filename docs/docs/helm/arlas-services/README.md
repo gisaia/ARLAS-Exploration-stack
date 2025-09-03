@@ -17,6 +17,7 @@ A Helm Chart to deploy ARLAS Server
 | cors.allowedOrigins | string | `"\"*\""` | CORS Allowed Origins |
 | cors.enabled | bool | `false` | Enable CORS or not |
 | cors.exposedHeaders | string | `"Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,WWW-Authenticate"` | CORS Exposed Headers |
+| defaultStorageClass | string | `"standard"` |  |
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
 | elastic.apm.secret | string | `nil` |  |
 | elastic.apm.url | string | `nil` |  |
@@ -42,6 +43,7 @@ A Helm Chart to deploy ARLAS Server
 | persistence.hibernate.user | string | `nil` | Database user login |
 | persistence.localFolder | string | `"/tmp/"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.storageSize | string | `"100Mi"` | Storage size in case of file persistence |
+| services.mountCertificate | bool | `false` |  |
 | services.permissions.affinity | object | `{}` |  |
 | services.permissions.apm | bool | `false` |  |
 | services.permissions.image | string | `"gisaia/arlas-permissions-server:27.0.1"` |  |
@@ -83,6 +85,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.resources.requests.memory | string | `"256Mi"` |  |
 | services.server.serviceName | string | `"arlas-server"` |  |
 | services.server.tolerations | list | `[]` |  |
+| services.server.trustStoreOptions | string | `"-Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword"` |  |
 | services.server.urlPrefix | string | `"/arlas"` |  |
 | services.servicePort | int | `8000` |  |
 | services.serviceType | string | `"ClusterIP"` |  |

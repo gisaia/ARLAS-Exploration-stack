@@ -38,7 +38,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | download.s3.http | string | `"http://arlas-stack-minio:9000/{}/{}"` | where downloads are uploaded once ready, first {} is the bucket, second {} is the path to the object |
 | download.s3.key | string | `"airs"` |  |
 | download.s3.secret | string | `"airssecret"` |  |
-| download.tmpFolder | string | `"/tmp/outbox/"` | Where download are temporally built before copy |
+| download.tmpFolder | string | `"/tmp/"` | Where download are temporally built before copy |
 | elastic.cluster | string | `"elastic"` |  |
 | elastic.login | string | `"elastic"` |  |
 | elastic.password | string | `"elastic"` |  |
