@@ -31,6 +31,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | basemap.storageSize | string | `"10Mi"` | Size of the directory containing the basemap files |
 | configuration | object | `{}` |  |
 | dashboardShortcut | bool | `false` | Whether to display the dashboard shortcut icon |
+| defaultStorageClass | string | `"standard"` |  |
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
 | enableGeocoding | bool | `false` | Enable or disable Geocoding feature |
 | geocodingUrl | string | `nil` | Geocoding find place URL |
@@ -73,13 +74,13 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` |  |
-| uis.hub.image | string | `"gisaia/arlas-wui-hub:27.0.2"` |  |
+| uis.hub.image | string | `"gisaia/arlas-wui-hub:27.0.3"` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
 | uis.hub.urlPrefix | string | `"/hub"` |  |
 | uis.servicePort | int | `8080` |  |
 | uis.serviceType | string | `"ClusterIP"` |  |
-| uis.wui.image | string | `"gisaia/arlas-wui:27.0.5"` |  |
+| uis.wui.image | string | `"gisaia/arlas-wui:27.0.6"` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |
 | uis.wui.urlPrefix | string | `"/wui"` |  |

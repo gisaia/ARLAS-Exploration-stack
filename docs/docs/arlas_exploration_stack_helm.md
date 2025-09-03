@@ -3,37 +3,37 @@
 
 ## Prerequisites
 
-- kubernetes cluster (e.g. [KIND](https://kind.sigs.k8s.io/) for testing)
+- git
+- kubernetes cluster (e.g. [KIND](https://kind.sigs.k8s.io/) for testing: `kind create cluster --name arlas-kind-cluster`)
 - kubectl
 - helm
 - load balancer for kubernetes
 
-Register the bitnami repository:
-
-```shell
-helm repo add bitnami https://charts.bitnami.com/bitnami
-```
-
-It will be necessary to bind domain names to the external IPs. In the present case, we use `arlas.k8s` as a local test domain with three sub domains: `elastic`, `keycloak` and `site`. You can for instance add them in /etc/hosts:
-
-```
-172.18.0.5	keycloak.arlas.k8s
-172.18.0.3	elastic.arlas.k8s
-172.18.0.2	site.arlas.k8s
-```
-
-You will determine the external IPs [once the chart installed](#finding-the-external-ips-of-the-loadbalancers).
-
-## Configuring and running ARLAS stack
-
-To run ARLAS stack, clone the [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack) project and follow the guidelines.
+Get the project by cloning the [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack) project.
 
 ```shell
 git clone git@github.com:gisaia/ARLAS-Exploration-stack.git
 cd ARLAS-Exploration-stack
 ```
 
+The third party helm charts are provided by bitnami. Its repository must be registered:
+
+```shell
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
+__Note for test/dev environment__: If your cluster does not have an ingress controller, you can install `metallb` and `nginx_ingress_controller`:
+
+```shell
+k8s/scripts/install_metallb.sh
+k8s/scripts/install_nginx_ingress_controller.sh
+```
+
+## Configuring the ARLAS stack
+
 ### Directory structure
+
+The repository contains files related to docker compose deployment and kubernetes deployment. Only the `docs` and `conf/aias/` directories are common to both deployments. The `k8s/` directory contains the charts and the scripts for running the stack with kubernetes.
 
 Files are organized as follow:
 - `conf/aias/`: configuration files for ARLAS AIAS. IMPORTANT: The starting scripts transform them into `configmaps`. Other folders in `conf` are not used.
@@ -41,33 +41,40 @@ Files are organized as follow:
    - `scripts/`: scripts for initializing and installing the charts
    - `charts/`: contains the umbrella chart (`k8s/charts/arlas-stack/Chart.yaml`) and sub charts for arlas backend, arlas front end and aias
 
-### AIAS deployment with Keycloak
+### Storage
 
-#### Configuration
+The default storage class of the cluster might have a `delete` reclaim policy. For that reason, the chart deploys a `standard-retain` storage class based on `rancher.io/local-path` provisioner. You might want to use a different provisioner with a `reclaim` policy. See `defaultStorageClass` in  `k8s/charts/arlas-stack/values.yaml`
 
-IMPORTANT: configure the passwords before installing the chart!
+### Configuration
 
-The main initial configuration is done in the "umbrella chart" contained in k8s/charts/arlas-stack/values.yaml. Configure in priority all the fields with the mention "__MUST BE CONFIGURED:__". Once configured, the default stack can be installed.
+IMPORTANT: the passwords must be configured before the first install of the chart!
 
-More configuration options can be set in the three sub charts: arlas-services (ARLAS Backend), arlas-uis (ARLAS User interfaces) and aias-services (ARLAS AIRS and AIAS services). The variables for these three charts are documented:
+The main initial configuration is done in the "umbrella chart" contained in `k8s/charts/arlas-stack/values.yaml`. Configure in priority all the fields with the mention "__MUST BE CONFIGURED:__". Note that keycloak deployment uses by default the provided certificate. 
+Once you changed all the "__MUST BE CONFIGURED:__" variables, the default stack can be installed.
+
+More configuration options can be set in the three sub charts: arlas-services (ARLAS Backend), arlas-uis (ARLAS User interfaces) and aias-services (ARLAS AIRS and AIAS services). 
+
+The variables for the charts are documented:
 - [ARLAS Stack](helm/arlas-stack/README.md)
 - [ARLAS Services](helm/arlas-services/README.md)
 - [ARLAS User interface](helm/arlas-uis/README.md)
 - [AIAS Services](helm/aias-services/README.md)
 
-
 The detailed settings of AIAS services are located in the `conf/aias/` yaml files:
 - [conf/aias/agate.yaml](https://docs.arlas.io/external_docs/aias/agate/configuration/)
 - [conf/aias/airs.yaml](https://docs.arlas.io/external_docs/aias/airs/configuration/)
 - [conf/aias/aproc.yaml](https://docs.arlas.io/external_docs/aias/aproc/configuration/)
-- [conf/aias/drivers.yaml]()
-- [conf/aias/download_drivers.yaml]()
-- [conf/aias/enrich_drivers.yaml]()
+- [conf/aias/drivers.yaml](https://docs.arlas.io/external_docs/aias/aproc/configuration/#ingest-drivers)
+- [conf/aias/download_drivers.yaml](https://docs.arlas.io/external_docs/aias/aproc/configuration/#download-drivers)
+- [conf/aias/enrich_drivers.yaml](https://docs.arlas.io/external_docs/aias/aproc/configuration/#enrich-drivers)
+- [conf/aias/dc3build_drivers.yaml](https://docs.arlas.io/external_docs/aias/aproc/configuration/#dc3build-drivers)
 - [conf/aias/fam.yaml](https://docs.arlas.io/external_docs/aias/fam/configuration/)
-- [conf/aias/roles.yaml]()
+- [conf/aias/roles.yaml](https://docs.arlas.io/external_docs/aias/roles/)
 
-#### Basemap
+### Basemap
 In case you want to use a local protomap basemap, you must specify the right Persistent Volume Claim storage size for the protomap file: set the `arlas-uis.basemap.storageSize` property in the arlas-stack chart values.yaml file (at least 120 Gi for full coverage). Then place the protomap file in `conf/protomaps/world.pmtiles` and launch `./k8s/scripts/copy_files.sh`.
+
+## Running the ARLAS stack
 
 ### Start the ARLAS Stack
 
@@ -76,53 +83,75 @@ To start, run:
 ./k8s/scripts/start.sh 
 ```
 
-This scripts:
+This script:
+
 - creates the configmaps for the aias configuration files
+- create a secret and configmap for keycloak certificate if the certificate exists (e.g. created with `./scripts/create_certificate.sh keycloak.arlas.k8s`)
 - update and build the sub charts
 - install or upgrade the arlas-stack chart
 
 Note that a job is launched for creating the minio buckets used by AIAS (for AIRS assets and for the download).
 
-Once the chart installed, copy the basemap files in the Persistent Volume Claim.
-
-
-### Using the ARLAS Stack
-
-#### Finding the external IPs of the LoadBalancers
-
-It deploys the ARLAS Stack in the `arlas` namespace of the cluster. A kubernetes load balancer must be running. For testing, you can run `cloud-provider-kind`. The external ip address of the apisix load balancer can be found with the following commands
+Once the chart installed, copy the basemap files in the Persistent Volume Claim:
 
 ```shell
-kubectl get services arlas-stack-apisix-data-plane -n arlas -o=jsonpath={.status.loadBalancer.ingress[0].ip}; echo
-``` 
+./k8s/scripts/copy_files.sh
+```
 
-and the one of elasticsearch with the same method:
+### Stop the ARLAS Stack
+
+You can remove the deployment with:
+
 ```shell
-kubectl get services arlas-stack-elasticsearch -n arlas  -o=jsonpath={.status.loadBalancer.ingress[0].ip}; echo
-``` 
+./k8s/scripts/remove_deployment.sh
+```
 
-and the one of keycloak with the same method:
+The script:
+
+- uninstall the chart
+- delete the keycloak-tls secret if exists
+
+### Restart the ARLAS Stack
+
+Before re-starting the ARLAS stack, please make sure that the persistence volume have a `bound` or `available` status. If they are `released`, then you can make them `available` with the folmlowing script:
+
 ```shell
-kubectl get services arlas-stack-keycloak -n arlas  -o=jsonpath={.status.loadBalancer.ingress[0].ip}; echo
-``` 
+./k8s/scripts/free_released_persistence_volumes.sh
+```
 
-In the following, we assume that these three external IPs are bound to:
-- `site.arlas.k8s`
-- `elastic.arlas.k8s`
-- `keycloak.arlas.k8s`
+## Test/dev environment
 
-These domains must be configured/changed in the values.yaml file of the arlas-stack chart.
+### Services, DNS and Certificates
 
-The arlas service pods that are depending on keycloak availability will not be running until the keycloak client for arlas is created and available. You can import the keycloak test realm located in `conf/keycloak/keycloak.realm.json`. The import can be done from the user interface of keyckloak (eg http://keycloak.arlas.k8s:8080/auth/).
+Three services are exposed with an ingress:
 
+- `keycloak`, default DNS is `keycloak.arlas.k8s`
+- `elasticsearch`, default DNS is `elastic.arlas.k8s`
+- `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
 
-#### Configuring `arlas_cli` for the keycloak test realm
+These DNS names can be changed in `k8s/charts/arlas-stack/values.yaml`.
+
+In a test environment, you will need to link the ingress external IP with the domain names of the services. You can for instance add them in /etc/hosts:
+
+```
+172.18.0.10	keycloak.arlas.k8s
+172.18.0.10	elastic.arlas.k8s
+172.18.0.10	site.arlas.k8s
+```
+
+The arlas-ingress IP is obtained with:
+```shell
+kubectl get svc ingress-nginx-controller  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
+
+## Configuring `arlas_cli` for the keycloak test realm
 
 Let's assume the domain names are `elastic.arlas.k8s`, `keycloak.arlas.k8s` and `site.arlas.k8s`, then you can init your arlas_cli configuration file with:
 
 ```shell
-./k8s/scripts/init_arlas_cli_confs.sh site.arlas.k8s:80 elastic.arlas.k8s:9200 keycloak.arlas.k8s:8080
+./k8s/scripts/init_arlas_cli_confs.sh site.arlas.k8s:443 elastic.arlas.k8s:443 keycloak.arlas.k8s:443
 ```
+Replace `site.arlas.k8s:443`, `elastic.arlas.k8s:443` and `keycloak.arlas.k8s:443` with your own values.
 
 You can now list the indices:
 
@@ -147,7 +176,7 @@ Using default configuration local.k8s.kc.data
 +------+-------+
 +------+-------+
 ```
-### EO Catalog
+## EO Catalog
 
 Just like the docker compose deployement, you can init a catalog:
 
@@ -164,4 +193,3 @@ To start, run:
 ```shell
 ./k8s/scripts/remove_deployment.sh
 ```
-

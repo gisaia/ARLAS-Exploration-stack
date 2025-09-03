@@ -434,7 +434,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.31` in `conf/versi
 | `APROC_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
-| `TMP_FOLDER` | `"/outbox"` | `` |  |  |
+| `TMP_FOLDER` | `"/tmp"` | `` |  |  |
 | `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
 | `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
 | `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |
