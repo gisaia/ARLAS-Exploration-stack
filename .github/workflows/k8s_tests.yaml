@@ -4,6 +4,7 @@ on:
     paths:
       - 'k8s/**'
       - 'conf/aias/**'
+      - .github/workflows/k8s_tests.yaml
 
 jobs:
   aias-on-k8s-cluster:
