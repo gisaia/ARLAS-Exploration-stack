@@ -335,6 +335,7 @@ List of volumes:
 - `${PWD}/conf/protomaps/glyphs:/usr/share/nginx/html/assets/basemap/glyphs`
 - `${PWD}/conf/protomaps/quicklook:/usr/share/nginx/html/assets/basemap/quicklook`
 - `${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles`
+- `${PWD}/conf/wui/custom-style.css:/usr/share/nginx/html/assets/styles/custom-style.css`
 ## File dc/ref-dc-protomaps.yaml
 ### Service protomaps
 Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.28.0` in `conf/versions.env`

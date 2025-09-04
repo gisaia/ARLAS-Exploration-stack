@@ -1,4 +1,6 @@
 #!/bin/bash
+set -o errexit -o pipefail
+
 [ -z "$1" ] && echo "Please provide the version" && exit 1;
 VERSION=$1
 
