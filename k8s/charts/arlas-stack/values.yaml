@@ -2,6 +2,7 @@ global:
   # -- __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment
   dnsDomain: &arlasAppDnsDomain site.arlas.k8s
 
+
   # -- __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment
   elasticDnsDomain: &arlasAppElasticDnsDomain elastic.arlas.k8s
 
