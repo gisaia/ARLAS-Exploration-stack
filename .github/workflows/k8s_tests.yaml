@@ -17,7 +17,7 @@ jobs:
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
 
       - name: Install yq
-        run: snap install yq
+        run: sudo snap install yq
 
       - name: Configure dns naming
         run: ./k8s/scripts/configure_for_tests.sh 
