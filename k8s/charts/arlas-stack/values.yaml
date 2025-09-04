@@ -6,7 +6,7 @@ global:
   elasticDnsDomain: &arlasAppElasticDnsDomain elastic.arlas.k8s
 
   # -- __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment
-  keycloackDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
+  keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
 
   # -- __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment
   protocol: &arlasAppProtocol https

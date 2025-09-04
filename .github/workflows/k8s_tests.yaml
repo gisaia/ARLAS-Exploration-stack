@@ -16,6 +16,15 @@ jobs:
       - name: Add bitnami repo
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
 
+      - name: Install yq
+        run: snap install yq
+
+      - name: Configure dns naming
+        run: ./k8s/scripts/configure_for_tests.sh 
+
+      - name: Display conf
+        run: head -20 k8s/charts/arlas-stack/values.yaml
+        
       - name: deploy arlas
         run: ./k8s/scripts/start.sh 
         
