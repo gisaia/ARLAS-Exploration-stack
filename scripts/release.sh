@@ -25,6 +25,6 @@ send_chat_message(){
 git add docs/docs/dc_services/docker_compose_services_*.md
 git commit -m "Update docker compose services documentation"
 git tag -a ${VERSION} -m "ARLAS Exploration stack ${VERSION}"
-git push origin ${VERSION}
+git push --tags
 
 send_chat_message "Release of ARLAS Exploration Stack, version ${VERSION}"
