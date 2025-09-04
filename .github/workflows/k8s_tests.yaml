@@ -8,7 +8,7 @@ on:
 
 jobs:
   aias-on-k8s-cluster:
-    runs-on: ubuntu-latest
+    runs-on: runner-8core-32gb
     steps:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
