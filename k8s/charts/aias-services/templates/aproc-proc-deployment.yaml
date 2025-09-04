@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.services.aproc.worker.serviceName }}
+  name: {{ .Values.services.aproc.worker.serviceName }}
+spec:
+  replicas: {{ int .Values.services.aproc.worker.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.services.aproc.worker.serviceName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .Values.services.aproc.worker.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.services.aproc.worker.serviceName }}
+          image: {{ .Values.services.aproc.worker.image }}
+          livenessProbe:
+            exec:
+              command:
+              - /app/ping.sh
+            initialDelaySeconds: 40
+          readinessProbe:
+            exec:
+              command:
+              - /app/ping.sh
+            initialDelaySeconds: 40
+          resources:
+            {{- toYaml .Values.services.aproc.worker.resources | nindent 12 }}
+          env:
+
+            # LOGGING
+            - name: APROC_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+
+            {{- include "aias.aprocEnv" . | nindent 12 }}
+
+          volumeMounts:
+            - name: aproc-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: aproc-files
+          configMap:
+            name: aproc-files-configmap
+
+      # NODE SELECTION      
+      {{- with .Values.services.aproc.worker.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.aproc.worker.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.aproc.worker.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

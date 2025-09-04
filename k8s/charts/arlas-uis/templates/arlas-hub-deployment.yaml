@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "arlasWebUserInterface.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}
+  name: {{ .Values.uis.hub.serviceName }}
+spec:
+  replicas: {{ int .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arlasWebUserInterface.labels" . | nindent 6 }}
+      app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}
+  template:
+    metadata:
+      labels:
+        {{- include "arlasWebUserInterface.labels" . | nindent 8 }}
+        app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.uis.hub.serviceName }}
+          image: {{ .Values.uis.hub.image }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.uis.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.uis.hub.urlPrefix }}
+              port: http
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.uis.hub.urlPrefix }}
+              port: http
+            initialDelaySeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+
+            - name: ARLAS_AUTHENT_FORCE_CONNECT
+              value: {{ .Values.authent.forceConnect | quote  }}
+            - name: ARLAS_AUTHENT_REDIRECT_URI
+              value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.uis.hub.urlPrefix }}/callback
+            - name: ARLAS_AUTHENT_SILENT_REFRESH_REDIRECT_URI
+              value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.uis.hub.urlPrefix }}/silent-refresh.html
+            - name: ARLAS_STATIC_LINKS
+              value: {{ .Values.links | quote }}
+
+
+            {{- include "arlasWebUserInterface.auth2Env" . | nindent 12 }}
+
+            {{- include "arlasWebUserInterface.linksEnv" . | nindent 12 }}
+
+            {{- include "arlasWebUserInterface.servicesEnv" . | nindent 12 }}
+
+      # NODE SELECTION      
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

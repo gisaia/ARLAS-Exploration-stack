@@ -1,0 +1,231 @@
+## @section Global parameters
+
+# -- DNS domain hosting ARLAS
+dnsDomain: localhost
+protocol: http
+
+services: 
+  serviceType: ClusterIP
+  servicePort: 8000
+  airs:
+    serviceName: airs-server
+    image: gisaia/airs:0.6.40
+    urlPrefix: /airs
+    serviceBinding: 0.0.0.0
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 50Mi
+      limits:
+        cpu: 0.5
+        memory: 256Mi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  fam:
+    serviceName: arlas-fam
+    image: gisaia/fam:0.6.40
+    urlPrefix: /fam
+    serviceBinding: 0.0.0.0
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 50Mi
+      limits:
+        cpu: 0.5
+        memory: 256Mi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  agate: 
+    serviceName: arlas-agate
+    image: gisaia/agate:0.6.40
+    urlPrefix: /agate
+    serviceBinding: 0.0.0.0
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 50Mi
+      limits:
+        cpu: 0.5
+        memory: 256Mi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  aproc:
+    service:
+      serviceName: aproc-service
+      image: gisaia/aproc-service:0.6.40
+      urlPrefix: /aproc
+      serviceBinding: 0.0.0.0
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 0.1
+          memory: 50Mi
+        limits:
+          cpu: 0.5
+          memory: 256Mi
+      nodeSelector: {}
+      tolerations: []
+      affinity: {}
+
+    worker:
+      serviceName: aproc-proc
+      image: gisaia/aproc-proc:0.6.32
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 0.5
+          memory: 512Mi
+        limits:
+          cpu: 2
+          memory: 2Gi
+      nodeSelector: {}
+      tolerations: []
+      affinity: {}
+
+
+# -- Name of the organization using AIAS
+organization: org.com
+
+# -- Prefix appended to elasticsearch indices containing AIRS collections. The final name is of the form: prefix@organization_indexname
+airsIndexPrefix: airs
+
+# -- Root of the ingest folder
+ingestFolder: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
+
+cors:
+  # cors.allowedOrigins -- CORS Allowed Origins
+  allowedOrigins: '"*"'
+  # cors.allowedHeaders -- CORS Allowed Headers
+  allowedHeaders: "arlas-user,arlas-groups,arlas-organization,arlas-org-filter,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User"
+  # cors.allowedMethods -- CORS Allowed Methods
+  allowedMethods: "OPTIONS,GET,PUT,POST,DELETE,HEAD"
+  # cors.allowedMethods -- Allowed hosts
+  allowedHosts: "0.0.0.0"
+  # cors.allowedCredentials -- CORS Allowed Credentials or not
+  allowedCredentials: true
+  # cors.exposedHeaders -- CORS Exposed Headers
+  exposedHeaders: "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,WWW-Authenticate"
+
+logger:
+  # -- Default logging level
+  loggingLevel: INFO
+  # -- Default console logging level
+  loggingConsoleLevel: INFO
+
+elastic:
+  cluster: elastic
+  login: elastic
+  password: elastic
+
+# -- Configuration of the s3 used for storing and accessing the STAC collections, items and managed assets
+s3:
+  # -- s3 key
+  accessKeyId: airs
+  # -- s3 secret
+  secret: airssecret
+  # -- s3 endpoint
+  endpoint: http://arlas-stack-minio:9000
+  # -- asset_http_endpoint_url_pattern must look like https://storage.googleapis.com/{}/{} where first {} is the bucket, second {} is the path to the object  
+  assetHttpEndpointUrlPattern: "http://arlas-stack-minio:9000/{}/{}"
+  # -- s3 bucket name for storing the STAC collections, items and managed assets
+  bucket: airs-storage
+  # -- Platform type. This value is provided in the item properties
+  platform: MINIO
+  # -- Region. This value is provided in the item properties
+  region: Standard
+  # -- Tier. This value is provided in the item properties
+  tier: Standard
+
+# -- This elasticsearch mapping is used during the initialization of the index of a newly created collection
+arlasMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json
+
+# -- ARLAS URL Search for AGATE to check whether an item is accessible or not
+arlasSearchUrl: "http://arlas-server:9999/arlas/explore/{collection}/_search?f=id:eq:{item}"
+
+download:
+  # -- Name of the download index that will contain the download requests
+  downloadReportIndex: aproc_downloads
+  # -- Where download are temporally built before copy
+  tmpFolder: /tmp/
+  s3:
+    # -- where downloads are uploaded once ready
+    endpoint: http://arlas-stack-minio:9000
+    # -- bucket that will contain the downloads
+    bucket: downloads
+    key: airs
+    secret: airssecret
+    # -- where downloads are uploaded once ready, first {} is the bucket, second {} is the path to the object
+    http: http://arlas-stack-minio:9000/{}/{}
+  cleanAfterUpload: True
+  message: 
+    path:
+      # -- prefix to put in front of the path for emails
+      prefix: "file:/"
+      # -- change to windows path
+      windows: False
+    admin: 
+    # -- admin emails that will receive the download notifications, other than the user himself
+      emails: "admin@the.boss,someone.else@the.boss"
+    done: 
+      user: 
+        content: "ARLAS Services - Dear {arlas-user-email}. <br>Your download of {collection}/{item_id} is available for projection {target_projection} ({target_format}). <br>ARLAS Services."
+        subject: "ARLAS Services - Your download of {collection}/{item_id} is available."
+      admin: 
+        content: "The download of {collection}/{item_id} for {arlas-user-email} is available in {target_directory} ({file_name}) for projection {target_projection} ({target_format}). <br>ARLAS Services."
+        subject: "The download of {collection}/{item_id} for {arlas-user-email} is available."
+    request: 
+      user: 
+        content: "ARLAS Services - Dear {arlas-user-email}. <br>Your download request for {collection}/{item_id} with projection {target_projection} ({target_format}) will shortly be taken into account. <br>ARLAS Services."
+        subject: "ARLAS Services - Thank you for your download request (({collection}/{item_id})."
+      admin: 
+        content: "ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id} for projection {target_projection} ({target_format}). <br>ARLAS Services."
+        subject: "ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id}."
+    error:
+      content: "ARLAS Services - The download of {collection}/{item_id} failed ({error})."
+      subject: "ARLAS Services - ERROR - The download of {collection}/{item_id} failed."
+
+ingest:
+  # -- Folder used by FAM for ingestion  
+  folder: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
+  storage:
+    type: https
+    forceDownload: True
+    s3: 
+      bucket: ""
+      key: ""
+      secret: ""
+
+timeLimit: 1200
+softTimeLimit: 1190
+
+rabbitmq:
+  host: rabbitmq
+  port: 5672
+  login: guest
+  password: guest
+
+redis: 
+  host: redis-master
+  port: 6379
+  password: somepassword
+  username: default
+  db: 0
+
+smtp: 
+  enabled: False
+  host: "tobechanged"
+  port: 25
+  username: "tobechanged"
+  password: "tobechanged"
+  from: "tobechanged"
+
+resourceIdHashStartAt: 0

@@ -15,9 +15,14 @@ if [ "$CONF" = "local.kc.data" ]
 then
     GROUPS_PARAMS=''
     USER_CONF="local.kc.data"
-else
-    GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
-    USER_CONF="local.iam.user"
+else if [ "$CONF" = "local.k8s.kc.data" ]
+    then
+        GROUPS_PARAMS=''
+        USER_CONF="local.k8s.kc.data"
+    else 
+        GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
+        USER_CONF="local.iam.user"
+    fi
 fi
 
 echo "Create collection '${COLLECTION}' on index '${INDEX}'"
@@ -34,6 +39,5 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
 
 . conf/stack.env
 . conf/custom.env
-export ARLAS_SERVER_URL="https://$ARLAS_HOST"
-envsubst '$COLLECTION,$ARLAS_SERVER_URL' < conf/aias/dashboard.json > sample/dashboard.generated.json
+envsubst '$COLLECTION' < conf/aias/dashboard.json > sample/dashboard.generated.json
 arlas_cli --config-file /tmp/arlas-cli.yaml persist --config ${USER_CONF} add sample/dashboard.generated.json config.json --name "${COLLECTION}" $GROUPS_PARAMS

@@ -4,18 +4,12 @@ The [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack)
 
 - [Simple](#simple-deployment): ARLAS without authentication, on HTTP
 - [IAM](#iam-deployment): With ARLAS Identity and Access Management (ARLAS IAM), on HTTPS
-- [KC](#kc-deployment): ARLAS With Keycloak
+- [KC](#keycloak-deployment): ARLAS With Keycloak
 - [AIAS](#aias-deployment): With ARLAS IAM and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 - [AIASKC](#aiaskc-deployment): With Keycloak and ARLAS AIAS (ARLAS Item and Asset Services) for managing EO products for instance.
 
-## Run ARLAS stack
+You can start the ARLAS Exploration Stack either with [docker compose](arlas_exploration_stack_dc.md) or with [kubernetes (helm)](arlas_exploration_stack_helm.md).
 
-To run ARLAS stack, clone the [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack) project and follow the guidelines.
-
-```shell
-git clone git@github.com:gisaia/ARLAS-Exploration-stack.git
-cd ARLAS-Exploration-stack
-```
 
 ### Simple deployment
 
@@ -30,33 +24,6 @@ The simple deployment has:
 - [arlas-server](https://github.com/gisaia/ARLAS-server)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
 - [protomaps](https://protomaps.com/)
-
-
-**Start**
-
-To start the ARLAS stack in simple mode, run: 
-```shell
-./start.sh
-```
-
-!!! success
-    Once started, you can open ARLAS in your browser: [http://localhost/](http://localhost/). 
-
-!!! note
-    If you changed `ARLAS_HOST` in `conf/stack.env`, then open instead http://${ARLAS_HOST} .
-
-**Test**
-
-You can add a sample data set and a configured dashboard by running:
-
-```shell
-pip3.10 install arlas-cli
-./scripts/init_arlas_cli_confs.sh
-./scripts/init_stack_with_data.sh local
-```
-
-!!! success
-    A simple dashboard with AIS data is then available.
 
 
 ### IAM deployment

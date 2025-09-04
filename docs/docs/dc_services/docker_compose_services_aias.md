@@ -251,6 +251,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.4` in `conf/v
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
+| `ARLAS_ENABLE_ADVANCED_FEATURES` | `ARLAS_ENABLE_ADVANCED_FEATURES` | `false` |  |  |
 
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub
@@ -441,7 +442,6 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.31` in `conf/versi
 | `CELERY_RESULT_BACKEND` | `redis://redis:6379/0` | `` |  |  |
 | `AIRS_ENDPOINT` | `http://airs-server:8000/airs` | `` |  |  |
 | `APROC_ENDPOINT_FROM_APROC` | `http://aproc-service:8001/aproc` | `` |  |  |
-| `ROOT_DIRECTORY` | `/inputs` | `` |  |  |
 | `ARLAS_SMTP_ACTIVATED` | `ARLAS_SMTP_ACTIVATED` | `false` |  | `false` in `conf/aias.env`<br>`false` in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_HOST` | `ARLAS_SMTP_HOST` | `` |  | `tobechanged` in `conf/aias.env`<br>empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_PORT` | `ARLAS_SMTP_PORT` | `25` |  | `25` in `conf/aias.env` |
@@ -469,7 +469,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.6.31` in `conf/versi
 | `APROC_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
-| `TMP_FOLDER` | `"/outbox"` | `` |  |  |
+| `TMP_FOLDER` | `"/tmp"` | `` |  |  |
 | `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
 | `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
 | `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |

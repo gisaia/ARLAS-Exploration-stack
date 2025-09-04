@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.services.aproc.service.serviceName }}
+  name: {{ .Values.services.aproc.service.serviceName }}
+spec:
+  replicas: {{ int .Values.services.aproc.service.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.services.aproc.service.serviceName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .Values.services.aproc.service.serviceName }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ .Values.services.aproc.service.serviceName }}
+          image: {{ .Values.services.aproc.service.image }}
+          resources:
+            {{- toYaml .Values.services.aproc.service.resources | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.services.servicePort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.services.aproc.service.urlPrefix }}/healthcheck
+              port: http
+            initialDelaySeconds: 40            
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.services.aproc.service.urlPrefix }}/healthcheck
+              port: http
+            initialDelaySeconds: 40
+          env:
+            - name: APROC_HOST
+              value: {{ .Values.services.aproc.service.serviceBinding | quote }}
+            - name: APROC_PORT
+              value: {{ .Values.services.servicePort | quote }}
+            - name: APROC_PREFIX
+              value: {{ .Values.services.aproc.service.urlPrefix | quote }}
+
+            # LOGGING
+            - name: APROC_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+
+            {{- include "aias.aprocEnv" . | nindent 12 }}
+          volumeMounts:
+            - name: aproc-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: aproc-files
+          configMap:
+            name: aproc-files-configmap
+
+
+      # NODE SELECTION      
+      {{- with .Values.services.aproc.service.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.aproc.service.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.services.aproc.service.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

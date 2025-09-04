@@ -1,10 +1,10 @@
 #!/bin/sh -e
 
 # Generate documentation
-pip3.10 install ruamel.yaml
+pip3 install ruamel.yaml
 mkdir -p docs/docs/dc_services
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -24,7 +24,7 @@ python3.10 scripts/generate_dc_doc.py \
     conf/stack.env \
     > docs/docs/dc_services/docker_compose_services_simple.md
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -49,7 +49,7 @@ python3.10 scripts/generate_dc_doc.py \
     conf/postgres.env \
     > docs/docs/dc_services/docker_compose_services_iam.md
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -71,7 +71,7 @@ python3.10 scripts/generate_dc_doc.py \
     conf/arlas_keycloak.env \
     > docs/docs/dc_services/docker_compose_services_kc.md
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -109,7 +109,7 @@ python3.10 scripts/generate_dc_doc.py \
     > docs/docs/dc_services/docker_compose_services_aias.md
 
 
-python3.10 scripts/generate_dc_doc.py \
+python3 scripts/generate_dc_doc.py \
     dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
@@ -145,8 +145,32 @@ python3.10 scripts/generate_dc_doc.py \
     conf/postgres.env \
     > docs/docs/dc_services/docker_compose_services_aiaskc.md
 
+# Check if helm-docs is already installed
+if command -v helm-docs >/dev/null 2>&1; then
+    echo "helm-docs already installed: $(helm-docs --version)"
+else
+    echo "helm-docs not found, installing..."
+    # Download the precompiled binary archive
+    VERSION="v1.14.2"
+    BINARY_URL="https://github.com/norwoodj/helm-docs/releases/download/${VERSION}/helm-docs_${VERSION#v}_Linux_x86_64.tar.gz"
+    wget -q "$BINARY_URL" -O /tmp/helm-docs.tar.gz
+    # Extract the binary
+    tar -xzf /tmp/helm-docs.tar.gz -C /tmp
+fi
+    echo "helm-docs installed: $(helm-docs --version)"
+    rm /tmp/helm-docs.tar.gz
+    # Clean up
+    sudo mv /tmp/helm-docs /usr/local/bin/
+    # Move it into /usr/local/bin so it's available in PATH
+# Generate helm documentation
+helm-docs k8s/charts/
+cp k8s/charts/aias-services/README.md docs/docs/helm/aias-services
+cp k8s/charts/arlas-services/README.md docs/docs/helm/arlas-services
+cp k8s/charts/arlas-stack/README.md docs/docs/helm/arlas-stack
+cp k8s/charts/arlas-uis/README.md docs/docs/helm/arlas-uis
+
 # Copy documentation to target
 rm -rf target/generated-docs
 mkdir -p target/generated-docs
-
 cp -r docs/docs/* target/generated-docs
+

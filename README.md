@@ -14,7 +14,7 @@ where `X.Y` is the version of the stack. `X` must be aligned with the major vers
 
 To update the version of the dependencies, such as ARLAS containers, edit `conf/versions.env`.
 
-## Tests
+## Docker Compose Stack
 
 Launch tests for IAM:
 
@@ -23,4 +23,12 @@ Launch tests for IAM:
 pip3.10 install arlas_cli
 pip3.10 install pytest==8.3.4
 pytest -s scripts/pytest/test_iam.py
+```
+
+## K8S Stack
+
+Generate the chart docs:
+
+```shell
+helm-docs -c k8s/charts -u 
 ```
