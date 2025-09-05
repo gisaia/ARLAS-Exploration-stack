@@ -161,7 +161,7 @@ List of volumes:
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.4` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.1.0-rc.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -202,7 +202,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.0.4` in `conf/v
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.0.2` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.1.0-rc.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -238,7 +238,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.0.2` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.5` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.0-rc.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -270,7 +270,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.0.5` in `conf/versions.env`
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_keycloak.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env`<br>`'` in `conf/arlas_keycloak.env` |
 | `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_PROCESS_URL` | `` |  | `/aproc/processes/download/execution` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/download` in `conf/arlas.env` |
@@ -543,7 +543,7 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.31` in `conf/versi
 | `ARLAS_AUTHENT_ISSUER` | `ARLAS_AUTHENT_ISSUER` | `` |  | `https://${ARLAS_HOST}:9443/auth/realms/arlas` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_LOGOUT_URL` | `ARLAS_AUTHENT_LOGOUT_URL` | `` |  |  |
 | `ARLAS_AUTHENT_MODE` | `ARLAS_AUTHENT_MODE` | `` |  | `openid` in `conf/arlas_keycloak.env` |
-| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `ARLAS_AUTHENT_REDIRECT_URI` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
 | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `ARLAS_AUTHENT_REQUIRE_HTTPS` | `false` |  | `false` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_RESPONSE_TYPE` | `ARLAS_AUTHENT_RESPONSE_TYPE` | `` |  | `code` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_SCOPE` | `ARLAS_AUTHENT_SCOPE` | `` |  | `profile` in `conf/arlas_keycloak.env` |
@@ -555,17 +555,17 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.6.31` in `conf/versi
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_USE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_USE_AUTHENT` | `true` | `` |  |  |
-| `ARLAS_IAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `ARLAS_IAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
 | `ARLAS_TAB_NAME` | `"ARLAS FAM Wui"` | `` |  |  |
-| `FAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `FAM_SERVER_URL` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
 | `FAM_DEFAULT_PATH` | `''` | `` |  |  |
 | `FAM_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `FAM_ARCHIVES_PAGES_SIZE` | `FAM_ARCHIVES_PAGES_SIZE` | `` |  |  |
 | `FAM_FILES_PAGES_SIZE` | `FAM_FILES_PAGES_SIZE` | `` |  |  |
-| `APROC_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `APROC_SERVER_URL` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
 | `APROC_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `APROC_CATALOG` | `AIAS_CATALOG_NAME` | `` |  |  |
-| `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
+| `AIRS_SERVER_URL` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
 | `AIRS_COLLECTION` | `AIRS_COLLECTION` | `` |  | `main` in `conf/aias.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_FAM_LINKS` | `` |  | `'` in `conf/aias.env` |
 

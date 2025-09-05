@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit -o pipefail
 [ -z "$1" ] && echo "Please provide the name of the component" && exit 1;
 [ -z "$2" ] && echo "Please provide the version" && exit 1;
  
