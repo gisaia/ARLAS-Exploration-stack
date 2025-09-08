@@ -109,6 +109,9 @@ arlas-services:
   services:
     # -- __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc.
     mountCertificate: true
+    # -- __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is flase, comment otherwise
+    #server:
+    #  trustStoreOptions:
 
 # ARLAS WUI
 arlas-uis:
