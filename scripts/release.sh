@@ -22,7 +22,8 @@ send_chat_message(){
 ./mkDocs.sh
 
 # Tag the version
-git add docs/docs/dc_services/docker_compose_services_*.md
+echo "ARLAS Exploration Stack version ${VERSION}" > docs/docs/version.md
+git add docs/docs/
 git commit -m "Update docker compose services documentation"
 git tag -a ${VERSION} -m "ARLAS Exploration stack ${VERSION}"
 git push --tags
