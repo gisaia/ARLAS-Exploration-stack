@@ -11,7 +11,7 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:27.0.6
+    image: gisaia/arlas-wui:27.1.0
     urlPrefix: /wui
     tabName: ARLAS Exploration
 
@@ -28,13 +28,13 @@ uis:
  
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:27.0.3
+    image: gisaia/arlas-wui-hub:27.1.0
     urlPrefix: /hub
     tabName: ARLAS Hub
 
   builder: 
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:27.0.5
+    image: gisaia/arlas-wui-builder:27.1.0
     urlPrefix: /builder/
     tabName: ARLAS Studio
     allowExternalNodeConfiguration: true
