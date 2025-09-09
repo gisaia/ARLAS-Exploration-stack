@@ -181,7 +181,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.1.0` in `conf/v
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIONS_URL` | `/arlas_permissions_server` |  |  |
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env` |
-| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  |  |
+| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `https://${ARLAS_HOST}/arlas` in `conf/arlas.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  |  |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  |  |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
@@ -222,6 +222,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.1.0` in `conf/versions.
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  |  |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  |  |
 | `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env` |
+| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `` |  | `https://${ARLAS_HOST}/arlas` in `conf/arlas.env` |
 
 ## File dc/ref-dc-arlas-wui.yaml
 ### Service arlas-wui
