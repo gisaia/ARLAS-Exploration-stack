@@ -91,7 +91,7 @@ or as admin:
 The Keycloak deployment has:
 
 - [apisix](https://apisix.apache.org/)
-- [keycloak](https://www.keycloak.org/) __This is to demonstrate ARLAS with KC, do not use this keycloak in production__
+- [keycloak](https://www.keycloak.org/)
 - [arlas-wui](https://github.com/gisaia/ARLAS-wui)
 - [arlas-hub](https://github.com/gisaia/ARLAS-wui-hub)
 - [arlas-builder](https://github.com/gisaia/ARLAS-wui-builder)
@@ -108,13 +108,20 @@ To start, run:
 ./start.sh kc
 ```
 
+
+!!! warning
+    This is to demonstrate ARLAS with KC. KC user data persistence is not guaranteed.
+
+    __Do not use this keycloak in production__
+
 !!! success
     Once started, you can open ARLAS in your browser: [https://localhost/](https://localhost/). 
 
 This keycloak service is for demo only. Three accounts are created:
-- user_basic with roles `role/arlas/user`, `group/public` and `group/config.json/gisaia.com`
-- user_builder with roles `role/arlas/builder` and the roles of user_basic
-- user_all_roles with roles `role/arlas/tagger`, `role/m2m/importer`, `role/arlas/datasets`, `role/arlas/downloader`, `role/arlas/builder` and the roles of user_basic
+- **user_basic** with roles `role/arlas/user`, `group/public` and `group/config.json/gisaia.com`
+- **user_builder** with roles `role/arlas/builder` and the roles of user_basic
+- **user_all_roles** with roles `role/arlas/tagger`, `role/m2m/importer`, `role/arlas/datasets`, `role/arlas/downloader`, `role/arlas/builder` and the roles of user_basic
+
 
 The password is `secret`.
 
@@ -241,6 +248,11 @@ To start, run:
 ```shell
 ./start.sh aiaskc
 ```
+
+!!! warning
+    This is to demonstrate AIAS with KC. KC user data persistence is not guaranteed.
+
+    __Do not use this keycloak in production__
 
 You can access ARLAS just like the [Keycloak deployment](#keycloak-deployment). You can also use the same script for initializing the stack with data.
 
