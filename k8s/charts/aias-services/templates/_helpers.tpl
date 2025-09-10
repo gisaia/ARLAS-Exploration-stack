@@ -37,12 +37,6 @@
   value: {{ .Values.download.cleanAfterUpload  | quote }}
 - name: INGESTED_FOLDER
   value: {{ .Values.ingest.folder  | quote }}
-- name: APROC_INPUT_STORAGE_TYPE
-  value: {{ .Values.ingest.storage.type  | quote }}
-- name: APROC_INPUT_STORAGE_BUCKET
-  value: {{ .Values.ingest.storage.s3.bucket  | quote }}
-- name: APROC_INPUT_STORAGE_FORCE_DOWNLOAD
-  value: {{ .Values.ingest.storage.forceDownload  | quote }}
 - name: APROC_TASK_TIME_LIMIT
   value: {{ .Values.timeLimit  | quote }}
 - name: APROC_TASK_SOFT_TIME_LIMIT

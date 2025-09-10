@@ -98,9 +98,6 @@ organization: org.com
 # -- Prefix appended to elasticsearch indices containing AIRS collections. The final name is of the form: prefix@organization_indexname
 airsIndexPrefix: airs
 
-# -- Root of the ingest folder
-ingestFolder: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
-
 cors:
   # cors.allowedOrigins -- CORS Allowed Origins
   allowedOrigins: '"*"'
@@ -194,15 +191,8 @@ download:
       subject: "ARLAS Services - ERROR - The download of {collection}/{item_id} failed."
 
 ingest:
-  # -- Folder used by FAM for ingestion  
+  # -- Folder used by FAM and APROC for ingestion  
   folder: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
-  storage:
-    type: https
-    forceDownload: True
-    s3: 
-      bucket: ""
-      key: ""
-      secret: ""
 
 timeLimit: 1200
 softTimeLimit: 1190

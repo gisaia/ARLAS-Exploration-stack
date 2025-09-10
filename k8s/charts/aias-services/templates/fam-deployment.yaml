@@ -37,7 +37,7 @@ spec:
           env:
             # FAM CONFIGURATION
             - name: INGESTED_FOLDER
-              value: {{ .Values.ingestFolder | quote }}
+              value: {{ .Values.ingest.folder | quote }}
             - name: APROC_RESOURCE_ID_HASH_STARTS_AT
               value: {{ .Values.resourceIdHashStartAt | quote }}
 

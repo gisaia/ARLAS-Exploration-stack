@@ -155,6 +155,9 @@ aias-services:
     loggingConsoleLevel: INFO
   # @ignored  
   organisation: *arlasAppOrganization
+  ingest:
+    # -- Folder used by FAM and APROC for ingestion  
+    folder: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
 
   # @ignored
   rabbitmq: 
