@@ -247,11 +247,11 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.1.0` in `conf/v
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIONS_URL` | `/arlas_permissions_server` |  |  |
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_iam.env` |
-| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `https://${ARLAS_HOST}/arlas` in `conf/arlas.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
 | `ARLAS_ENABLE_ADVANCED_FEATURES` | `ARLAS_ENABLE_ADVANCED_FEATURES` | `false` |  |  |
+| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `/arlas` in `conf/arlas.env` |
 
 ## File dc/ref-dc-arlas-hub.yaml
 ### Service arlas-hub
@@ -288,7 +288,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.1.0` in `conf/versions.
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_HUB_LINKS` | `` |  | `'` in `conf/arlas.env` |
-| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `` |  | `https://${ARLAS_HOST}/arlas` in `conf/arlas.env` |
+| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `/arlas` in `conf/arlas.env` |
 
 ## File dc/ref-dc-arlas-wui.yaml
 ### Service arlas-wui
@@ -338,6 +338,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.0` in `conf/versions.env`
 | `ARLAS_ENRICH_PROCESS_MAX_ITEMS` | `ARLAS_ENRICH_PROCESS_MAX_ITEMS` | `` |  |  |
 | `ARLAS_ENRICH_PROCESS_SETTINGS_URL` | `ARLAS_ENRICH_PROCESS_SETTINGS_URL` | `` |  |  |
 | `ARLAS_ENRICH_PROCESS_STATUS_URL` | `ARLAS_ENRICH_PROCESS_STATUS_URL` | `` |  | `/aproc/jobs` in `conf/arlas.env` |
+| `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `/arlas` in `conf/arlas.env` |
 
 List of volumes:
 

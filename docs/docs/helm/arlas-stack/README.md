@@ -23,6 +23,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| aias-services.ingest.folder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Folder used by FAM and APROC for ingestion   |
 | aias-services.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
 | aias-services.logger.loggingLevel | string | `"INFO"` | Logging level |
 | aias-services.services.aproc.worker.affinity | object | `{}` |  |

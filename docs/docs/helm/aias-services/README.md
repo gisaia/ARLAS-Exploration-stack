@@ -42,13 +42,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | elastic.cluster | string | `"elastic"` |  |
 | elastic.login | string | `"elastic"` |  |
 | elastic.password | string | `"elastic"` |  |
-| ingest.folder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Folder used by FAM for ingestion   |
-| ingest.storage.forceDownload | bool | `true` |  |
-| ingest.storage.s3.bucket | string | `""` |  |
-| ingest.storage.s3.key | string | `""` |  |
-| ingest.storage.s3.secret | string | `""` |  |
-| ingest.storage.type | string | `"https"` |  |
-| ingestFolder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Root of the ingest folder |
+| ingest.folder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Folder used by FAM and APROC for ingestion   |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
 | organization | string | `"org.com"` | Name of the organization using AIAS |
