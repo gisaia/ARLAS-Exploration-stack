@@ -9,8 +9,8 @@ ARLAS_HOST=$1
 ES_HOST=$2
 KEYCLOAK_HOST=$3
 
-arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local.k8s.kc.data
-
+rm -rf  /tmp/arlas-cli.yaml
+arlas_cli --config-file /tmp/arlas-cli.yaml confs list
 arlas_cli --config-file /tmp/arlas-cli.yaml \
     confs create local.k8s.kc.data \
     --server https://${ARLAS_HOST}/arlas \

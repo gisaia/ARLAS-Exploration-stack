@@ -67,7 +67,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | s3.secret | string | `"airssecret"` | s3 secret |
 | s3.tier | string | `"Standard"` | Tier. This value is provided in the item properties |
 | services.agate.affinity | object | `{}` |  |
-| services.agate.image | string | `"gisaia/agate:0.6.40"` |  |
+| services.agate.image | string | `"gisaia/agate:0.7.0"` |  |
 | services.agate.nodeSelector | object | `{}` |  |
 | services.agate.replicaCount | int | `1` |  |
 | services.agate.resources.limits.cpu | float | `0.5` |  |
@@ -79,7 +79,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.tolerations | list | `[]` |  |
 | services.agate.urlPrefix | string | `"/agate"` |  |
 | services.airs.affinity | object | `{}` |  |
-| services.airs.image | string | `"gisaia/airs:0.6.40"` |  |
+| services.airs.image | string | `"gisaia/airs:0.7.0"` |  |
 | services.airs.nodeSelector | object | `{}` |  |
 | services.airs.replicaCount | int | `1` |  |
 | services.airs.resources.limits.cpu | float | `0.5` |  |
@@ -91,7 +91,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.tolerations | list | `[]` |  |
 | services.airs.urlPrefix | string | `"/airs"` |  |
 | services.aproc.service.affinity | object | `{}` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.6.40"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.7.0"` |  |
 | services.aproc.service.nodeSelector | object | `{}` |  |
 | services.aproc.service.replicaCount | int | `1` |  |
 | services.aproc.service.resources.limits.cpu | float | `0.5` |  |
@@ -113,7 +113,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.serviceName | string | `"aproc-proc"` |  |
 | services.aproc.worker.tolerations | list | `[]` |  |
 | services.fam.affinity | object | `{}` |  |
-| services.fam.image | string | `"gisaia/fam:0.6.40"` |  |
+| services.fam.image | string | `"gisaia/fam:0.7.0"` |  |
 | services.fam.nodeSelector | object | `{}` |  |
 | services.fam.replicaCount | int | `1` |  |
 | services.fam.resources.limits.cpu | float | `0.5` |  |

@@ -17,8 +17,7 @@ fi
 
 openssl genrsa -out conf/server.key 2048
 openssl req -new -key conf/server.key -out conf/server.csr \
-  -subj "/CN="${ARLAS_HOST}  \
-  -addext "subjectAltName = DNS:${ARLAS_HOST}"
+  -subj "/CN="${ARLAS_HOST} 
 
 openssl x509 -req -in conf/server.csr -signkey conf/server.key \
   -out conf/server.crt -days 365

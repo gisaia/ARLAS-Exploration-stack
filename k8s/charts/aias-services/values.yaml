@@ -9,7 +9,7 @@ services:
   servicePort: 8000
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.6.40
+    image: gisaia/airs:0.7.0
     urlPrefix: /airs
     serviceBinding: 0.0.0.0
     replicaCount: 1
@@ -26,7 +26,7 @@ services:
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.6.40
+    image: gisaia/fam:0.7.0
     urlPrefix: /fam
     serviceBinding: 0.0.0.0
     replicaCount: 1
@@ -43,7 +43,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.6.40
+    image: gisaia/agate:0.7.0
     urlPrefix: /agate
     serviceBinding: 0.0.0.0
     replicaCount: 1
@@ -61,7 +61,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.6.40
+      image: gisaia/aproc-service:0.7.0
       urlPrefix: /aproc
       serviceBinding: 0.0.0.0
       replicaCount: 1

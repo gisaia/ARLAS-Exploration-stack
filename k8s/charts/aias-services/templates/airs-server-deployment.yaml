@@ -95,6 +95,14 @@ spec:
               value: {{ .Values.s3.region | quote }}
             - name: AIRS_S3_TIER
               value: {{ .Values.s3.tier | quote }}
+          volumeMounts:
+            - name: airs-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: airs-files
+          configMap:
+            name: airs-files-configmap
 
       # NODE SELECTION      
       {{- with .Values.services.airs.nodeSelector }}

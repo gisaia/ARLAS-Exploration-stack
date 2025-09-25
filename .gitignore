@@ -32,3 +32,4 @@ k8s/charts/aias-services/templates/fam-files-configmap.yaml
 k8s/charts/aias-services/templates/agate-files-configmap.yaml
 k8s/charts/aias-services/templates/aproc-files-configmap.yaml
 k8s/charts/arlas-stack/templates/*-certificate-configmap.yaml
+k8s/charts/aias-services/templates/airs-files-configmap.yaml

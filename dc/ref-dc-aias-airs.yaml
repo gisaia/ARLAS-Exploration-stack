@@ -50,6 +50,8 @@ services:
       - "8000"
     networks:
       - arlas-net
+    volumes:
+      - ${PWD}/conf/aias/airs.yaml:/app/conf/airs.yaml:ro
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:

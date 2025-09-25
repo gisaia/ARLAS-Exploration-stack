@@ -3,7 +3,6 @@ index:
   collection_prefix: $AIRS_INDEX_COLLECTION_PREFIX|airs
   login: $AIRS_INDEX_LOGIN
   pwd: $AIRS_INDEX_PWD
-
 s3:
   bucket: $AIRS_S3_BUCKET|airs-storage
   access_key_id: $AIRS_S3_ACCESS_KEY_ID
@@ -11,6 +10,8 @@ s3:
   region: $AIRS_S3_REGION|None
   tier: $AIRS_S3_TIER|"Standard"
   platform: $AIRS_S3_PLATFORM
+  writable_paths:
+    - /
 
 # asset_http_endpoint_url must look like https://storage.googleapis.com/{}/{}
 # first element is the bucket, second is the path to the object
