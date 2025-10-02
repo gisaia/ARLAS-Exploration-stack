@@ -8,7 +8,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: mc
-          image: docker.io/bitnami/minio:2025.4.22-debian-12-r1
+          image: docker.io/bitnamilegacy/minio:2025.4.22-debian-12-r1
           command:
             - /bin/sh
             - -c
