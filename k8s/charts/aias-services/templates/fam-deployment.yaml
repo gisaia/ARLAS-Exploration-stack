@@ -59,6 +59,8 @@ spec:
             # LOGGING
             - name: FAM_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
+            - name: ACCESS_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
           volumeMounts:
             - name: fam-files
               mountPath: /app/conf/

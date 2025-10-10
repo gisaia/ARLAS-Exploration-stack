@@ -101,9 +101,9 @@ cors:
 
 logger:
   # -- Default logging level
-  loggingLevel: DEBUG
+  loggingLevel: INFO
   # -- Default console logging level
-  loggingConsoleLevel: DEBUG
+  loggingConsoleLevel: INFO
 
 elastic:
   cluster: elastic

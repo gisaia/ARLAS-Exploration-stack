@@ -28,12 +28,20 @@ spec:
             httpGet:
               path: {{ .Values.services.aproc.service.urlPrefix }}/healthcheck
               port: http
-            initialDelaySeconds: 40            
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           readinessProbe:
             httpGet:
               path: {{ .Values.services.aproc.service.urlPrefix }}/healthcheck
               port: http
-            initialDelaySeconds: 40
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           env:
             - name: APROC_HOST
               value: {{ .Values.services.aproc.service.serviceBinding | quote }}
@@ -44,6 +52,8 @@ spec:
 
             # LOGGING
             - name: APROC_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+            - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
 
             {{- include "aias.aprocEnv" . | nindent 12 }}

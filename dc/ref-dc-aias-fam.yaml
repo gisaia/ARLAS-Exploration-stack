@@ -9,6 +9,7 @@ services:
     restart: always
     environment:
       - FAM_LOGGER_LEVEL=${FAM_LOGGER_LEVEL:-INFO}
+      - ACCESS_LOGGER_LEVEL=${ACCESS_LOGGER_LEVEL:-INFO}
       - FAM_PREFIX=/fam
       - INGESTED_FOLDER=${INGESTED_FOLDER:-/inputs}
       - APROC_RESOURCE_ID_HASH_STARTS_AT=3

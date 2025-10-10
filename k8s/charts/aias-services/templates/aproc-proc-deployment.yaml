@@ -22,18 +22,28 @@ spec:
             exec:
               command:
               - /app/ping.sh
-            initialDelaySeconds: 40
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           readinessProbe:
             exec:
               command:
               - /app/ping.sh
-            initialDelaySeconds: 40
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           resources:
             {{- toYaml .Values.services.aproc.worker.resources | nindent 12 }}
           env:
 
             # LOGGING
             - name: APROC_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
+            - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
 
             {{- include "aias.aprocEnv" . | nindent 12 }}

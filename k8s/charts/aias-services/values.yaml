@@ -9,7 +9,8 @@ services:
   servicePort: 8000
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.7.0
+    image: gisaia/airs:0.7.2
+    
     urlPrefix: /airs
     serviceBinding: 0.0.0.0
     replicaCount: 1
@@ -19,14 +20,14 @@ services:
         memory: 50Mi
       limits:
         cpu: 0.5
-        memory: 256Mi
+        memory: 2Gi
     nodeSelector: {}
     tolerations: []
     affinity: {}
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.7.0
+    image: gisaia/fam:0.7.2
     urlPrefix: /fam
     serviceBinding: 0.0.0.0
     replicaCount: 1
@@ -43,7 +44,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.7.0
+    image: gisaia/agate:0.7.2
     urlPrefix: /agate
     serviceBinding: 0.0.0.0
     replicaCount: 1
@@ -57,11 +58,15 @@ services:
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
+    openIdProvider: https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
+    verifyJwt: true
+    verifySsl: true
+    audience: arlas-backend
+    
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.7.0
+      image: gisaia/aproc-service:0.7.2
       urlPrefix: /aproc
       serviceBinding: 0.0.0.0
       replicaCount: 1
@@ -78,7 +83,7 @@ services:
 
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.6.32
+      image: gisaia/aproc-proc:0.7.2
       replicaCount: 1
       resources:
         requests:
@@ -146,7 +151,7 @@ s3:
 arlasMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json
 
 # -- ARLAS URL Search for AGATE to check whether an item is accessible or not
-arlasSearchUrl: "http://arlas-server:9999/arlas/explore/{collection}/_search?f=id:eq:{item}"
+arlasSearchUrl: "http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"
 
 download:
   # -- Name of the download index that will contain the download requests

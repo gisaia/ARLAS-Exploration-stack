@@ -32,8 +32,8 @@ A Helm Chart to deploy ARLAS Server
 | keycloak.realm | string | `"arlas"` |  |
 | keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` |  |
 | keycloak.url | string | `"http://172.18.0.2/auth"` |  |
-| logger.loggingConsoleLevel | string | `"DEBUG"` | Default console logging level |
-| logger.loggingLevel | string | `"DEBUG"` | Default logging level |
+| logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
+| logger.loggingLevel | string | `"INFO"` | Default logging level |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
 | persistence.hibernate.dialect | string | `"org.hibernate.dialect.PostgreSQLDialect"` | SQL Dialect |

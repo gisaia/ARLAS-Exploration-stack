@@ -21,6 +21,7 @@ A dynamic Web Map tile server
 | env.GDAL_HTTP_MERGE_CONSECUTIVE_RANGES | string | `"YES"` |  |
 | env.GDAL_HTTP_MULTIPLEX | string | `"YES"` |  |
 | env.GDAL_HTTP_VERSION | int | `2` |  |
+| env.GDAL_INGESTED_BYTES_AT_OPEN | int | `32768` |  |
 | env.PYTHONWARNINGS | string | `"ignore"` |  |
 | env.VSI_CACHE | string | `"TRUE"` |  |
 | env.VSI_CACHE_SIZE | int | `5000000` |  |
@@ -32,11 +33,11 @@ A dynamic Web Map tile server
 | image.args[3] | string | `"--port"` |  |
 | image.args[4] | string | `"8000"` |  |
 | image.args[5] | string | `"--workers"` |  |
-| image.args[6] | string | `"1"` |  |
+| image.args[6] | string | `"8"` |  |
 | image.command | string | `"uvicorn"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/developmentseed/titiler"` |  |
-| image.tag | string | `"latest"` |  |
+| image.tag | string | `"0.22.4"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |

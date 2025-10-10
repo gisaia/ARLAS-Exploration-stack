@@ -396,7 +396,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.7.0` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.7.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -410,6 +410,7 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.7.0` in `conf/versions.env`
 | `AIRS_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
 | `AIRS_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `AIRS_LOGGER_LEVEL` | `AIRS_LOGGER_LEVEL` | `` |  | `INFO` in `conf/aias.env` |
+| `ACCESS_LOGGER_LEVEL` | `ACCESS_LOGGER_LEVEL` | `INFO` |  |  |
 | `ARLASEO_MAPPING_URL` | `ARLASEO_MAPPING_URL` | `/app/conf/mapping.json` |  | `https://raw.githubusercontent.com/gisaia/ARLAS-EO/ ...` in `conf/aias.env` |
 | `AIRS_PORT` | `AIRS_PORT` | `8000` |  |  |
 | `AIRS_PREFIX` | `AIRS_PREFIX` | `/airs` |  |  |
@@ -438,11 +439,12 @@ List of volumes:
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.7.0` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.7.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
 | `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `ACCESS_LOGGER_LEVEL` | `ACCESS_LOGGER_LEVEL` | `INFO` |  |  |
 | `APROC_CONFIGURATION_FILE` | `/app/conf/aproc.yaml` | `` |  |  |
 | `CELERY_BROKER_URL` | `pyamqp://guest:guest@rabbitmq:5672//` | `` |  |  |
 | `CELERY_RESULT_BACKEND` | `redis://redis:6379/0` | `` |  |  |
@@ -505,11 +507,12 @@ List of volumes:
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.7.0` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.7.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
 | `APROC_LOGGER_LEVEL` | `APROC_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `ACCESS_LOGGER_LEVEL` | `ACCESS_LOGGER_LEVEL` | `INFO` |  |  |
 | `APROC_HOST` | `0.0.0.0` | `` |  |  |
 | `APROC_PORT` | `8001` | `` |  |  |
 | `APROC_PREFIX` | `/aproc` | `` |  |  |
@@ -570,7 +573,7 @@ List of volumes:
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.7.0` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.7.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -613,11 +616,12 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.7.0` in `conf/versio
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.7.0` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.7.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
 | `FAM_LOGGER_LEVEL` | `FAM_LOGGER_LEVEL` | `INFO` |  | `INFO` in `conf/aias.env` |
+| `ACCESS_LOGGER_LEVEL` | `ACCESS_LOGGER_LEVEL` | `INFO` |  |  |
 | `FAM_PREFIX` | `/fam` | `` |  |  |
 | `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/OPEND ...` in `conf/aias.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
@@ -663,7 +667,7 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.7.0` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.7.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -674,6 +678,9 @@ Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.7.0` in `conf/versions.env`
 | `AGATE_PORT` | `AGATE_PORT` | `8004` |  |  |
 | `AGATE_URL_HEADER` | `X-Forwarded-Uri` | `` |  |  |
 | `AGATE_URL_HEADER_PREFIX` | `AIRS_S3_BUCKET` | `` |  | `airs-storage` in `conf/aias.env` |
+| `VERIFY_JWT` | `VERIFY_JWT` | `true` |  | `false` in `conf/arlas_iam.env` |
+| `VERIFY_SSL` | `VERIFY_SSL` | `true` |  | `false` in `conf/arlas_iam.env` |
+| `OPEN_ID_PROVIDER` | `OPEN_ID_PROVIDER` | `https://keycloak:9443/auth/realms/arlas/.well-known/openid-configuration` |   |  |
 
 List of volumes:
 

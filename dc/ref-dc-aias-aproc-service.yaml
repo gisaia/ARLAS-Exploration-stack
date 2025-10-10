@@ -22,6 +22,7 @@ services:
       co.elastic.logs/json.expand_keys: true
     environment:
       - APROC_LOGGER_LEVEL=${APROC_LOGGER_LEVEL:-INFO}
+      - ACCESS_LOGGER_LEVEL=${ACCESS_LOGGER_LEVEL:-INFO}
       - APROC_HOST=0.0.0.0
       - APROC_PORT=8001
       - APROC_PREFIX=/aproc
