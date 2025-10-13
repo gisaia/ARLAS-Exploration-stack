@@ -42,6 +42,10 @@ if [[ -z "$not_running_pods" ]]; then
     echo "All important pods are running."
 else
     kubectl describe pod --namespace "$namespace" $not_running_pods
+    
     echo "Error: Not all pods are running after $max_loops checks: $not_running_pods"
+    for pod in $not_running_pods; do
+        kubectl logs --namespace arlas $pod
+    done
     exit 1
 fi
