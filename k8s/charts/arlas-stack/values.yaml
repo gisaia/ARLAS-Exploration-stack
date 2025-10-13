@@ -11,6 +11,9 @@ global:
   # -- __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment
   keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
 
+  # -- __MUST BE CONFIGURED:__ The access to the openid-configuration
+  openIdProvider: &arlasAppOpenIdProvider https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
+
   # -- __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment
   protocol: &arlasAppProtocol https
 
@@ -182,7 +185,7 @@ aias-services:
         tolerations: []
         affinity: {}
     agate: 
-      openIdProvider: https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
+      openIdProvider: *arlasAppOpenIdProvider
       verifyJwt: true
       # -- __MUST BE CONFIGURED:__ Set to true in production if your OpenID provider uses https with a valid certificate, false otherwise (for test with self-signed certificate or http)
       verifySsl: false

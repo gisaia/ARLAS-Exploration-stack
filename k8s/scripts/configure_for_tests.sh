@@ -9,4 +9,5 @@ yq eval \
     | .global.keycloakDnsDomain = "'keycloak.${DOMAIN}'" 
     | .global.keycloak.url = "'https://keycloak.${DOMAIN}'/auth" 
     | .global.authIssuer = "'https://keycloak.${DOMAIN}'/auth/realms/arlas"' \
+    | .global.arlasAppOpenIdProvider = "'https://keycloak.${DOMAIN}'/auth/realms/arlas/.well-known/openid-configuration"' \
     -i k8s/charts/arlas-stack/values.yaml
