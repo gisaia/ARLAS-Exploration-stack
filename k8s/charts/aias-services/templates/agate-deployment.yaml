@@ -22,16 +22,24 @@ spec:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: {{ .Values.services.agate.urlPrefix }}/healthcheck
-          #     port: {{ .Values.services.servicePort }}
-          #   initialDelaySeconds: 40
-          # readinessProbe:
-          #   httpGet:
-          #     path: {{ .Values.services.agate.urlPrefix }}/healthcheck
-          #     port: {{ .Values.services.servicePort }}
-          #   initialDelaySeconds: 40
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.services.agate.urlPrefix }}/healthcheck
+              port: {{ .Values.services.servicePort }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.services.agate.urlPrefix }}/healthcheck
+              port: {{ .Values.services.servicePort }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           resources:
             {{- toYaml .Values.services.agate.resources | nindent 12 }}
           env:
@@ -44,6 +52,14 @@ spec:
               value: x-forwarded-method
             - name: AGATE_JWT_HEADER
               value: authorization
+            - name: OPEN_ID_PROVIDER
+              value: {{ .Values.services.agate.openIdProvider | quote }}
+            - name: VERIFY_JWT
+              value: {{ .Values.services.agate.verifyJwt | quote }}
+            - name: VERIFY_SSL
+              value: {{ .Values.services.agate.verifySsl | quote }}
+            - name: JWT_AUDIENCE
+              value: {{ .Values.services.agate.audience | quote }}
 
             # ENDPOINT CONFIGURATION              
             - name: AGATE_CORS_HEADERS

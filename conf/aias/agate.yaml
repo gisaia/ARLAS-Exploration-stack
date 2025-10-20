@@ -2,25 +2,54 @@ arlas_url_search: $ARLAS_URL_SEARCH|http://arlas-server:9999/arlas/explore/{coll
 agate_prefix: $AGATE_PREFIX|/arlas/agate
 host: $AGATE_HOST|127.0.0.1
 port: $AGATE_PORT|8004
+nb_workers: 4
+url_header: $AGATE_URL_HEADER|x-forwarded-uri
+headers_for_arlas:
+  - authorization
+  - arlas-org-filter
+
 services:
   airs-storage:
-    url_patterns:
-      - (?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
-      - (?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
-    public_url_patterns: 
-      - (?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
-    url_header: $AGATE_URL_HEADER|X-Forwarded-Uri
-    url_header_prefix: airs-storage
-    pattern_target:
-  titiler:
-    url_patterns:
-      - $TITILER_PATTERN|(/collections/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
-    public_url_patterns: 
-    url_header: $AGATE_URL_HEADER|X-Forwarded-Uri
-    url_header_prefix:
-    pattern_target: $TITILER_PATTERN_TARGET|query.url.url.path # takes the query parametters, use it as a url, then extract the path
+    jwt_name: authorization
+    jwt_location:
+      - headers
+    private:
+      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
+        part: path
+      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
+        part: path
+    public:
+      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
+        part: path
+  cog_preview:
+    jwt_name: authorization
+    jwt_location:
+      - headers
+      - query_params
+    public:
+      - pattern: (/cog/preview)(.*)
+        part: path
+  cog_statistics:
+    jwt_name: authorization
+    jwt_location:
+      - headers
+      - query_params
+    public:
+      - pattern: (/cog/statistics)(.*)
+        part: path
+  cog:
+    jwt_name: authorization
+    jwt_location:
+      - headers
+      - query_params
+    private:
+      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
+        part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
 urbac:
-  url_header: $AGATE_URL_HEADER|x-forwarded-uri
+  role_file: conf/roles.yaml
   method_header: $AGATE_METHOD_HEADER|x-forwarded-method
   jwt_header: $AGATE_JWT_HEADER|authorization
-  role_file: conf/roles.yaml
+  open_id_provider: $OPEN_ID_PROVIDER|
+  verify_jwt: $VERIFY_JWT|true
+  verify_ssl: $VERIFY_SSL|true
+  jwt_audience: $JWT_AUDIENCE|arlas-backend

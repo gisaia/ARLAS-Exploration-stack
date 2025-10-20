@@ -26,6 +26,7 @@ services:
       - AIRS_INDEX_LOGIN=${ELASTIC_USER}
       - AIRS_INDEX_PWD=${ELASTIC_PASSWORD}
       - AIRS_LOGGER_LEVEL=${AIRS_LOGGER_LEVEL}
+      - ACCESS_LOGGER_LEVEL=${ACCESS_LOGGER_LEVEL:-INFO}
       - ARLASEO_MAPPING_URL=${ARLASEO_MAPPING_URL:-/app/conf/mapping.json}
       - AIRS_PORT=${AIRS_PORT:-8000}
       - AIRS_PREFIX=${AIRS_PREFIX:-/airs}
@@ -50,6 +51,8 @@ services:
       - "8000"
     networks:
       - arlas-net
+    volumes:
+      - ${PWD}/conf/aias/airs.yaml:/app/conf/airs.yaml:ro
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:

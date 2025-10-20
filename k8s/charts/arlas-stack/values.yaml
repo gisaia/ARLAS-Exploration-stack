@@ -2,12 +2,17 @@ global:
   # -- __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment
   dnsDomain: &arlasAppDnsDomain site.arlas.k8s
 
-
   # -- __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment
   elasticDnsDomain: &arlasAppElasticDnsDomain elastic.arlas.k8s
 
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment
+  minioDnsDomain: &arlasAppMinioDnsDomain minio.arlas.k8s
+
   # -- __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment
   keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
+
+  # -- __MUST BE CONFIGURED:__ The access to the openid-configuration
+  openIdProvider: &arlasAppOpenIdProvider https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
 
   # -- __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment
   protocol: &arlasAppProtocol https
@@ -99,9 +104,9 @@ arlas-services:
     password: *arlasAppElasticPassword
   logger:
     # -- Logging level
-    loggingLevel: DEBUG
+    loggingLevel: INFO
     # -- Console logging level
-    loggingConsoleLevel: DEBUG
+    loggingConsoleLevel: INFO
   # @ignored  
   keycloak:
     secret: *arlasAppKeycloakSecret
@@ -179,6 +184,22 @@ aias-services:
         nodeSelector: {}
         tolerations: []
         affinity: {}
+    agate: 
+      openIdProvider: *arlasAppOpenIdProvider
+      verifyJwt: true
+      # -- __MUST BE CONFIGURED:__ Set to true in production if your OpenID provider uses https with a valid certificate, false otherwise (for test with self-signed certificate or http)
+      verifySsl: false
+
+# TITILER
+titiler:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 1Gi
+    limits:
+      cpu: 4
+      memory: 4Gi
 
 # ELASTICSEARCH
 elasticsearch:
@@ -288,6 +309,7 @@ minio:
   auth:
     rootUser: *arlasAppMinioLogin
     rootPassword: *arlasAppMinioPassword  
+  resourcesPreset: medium
 
 # KEYCLOAK
 keycloak:

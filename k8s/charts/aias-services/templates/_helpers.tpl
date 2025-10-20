@@ -6,9 +6,9 @@
 - name: CELERY_RESULT_BACKEND
   value: "redis://{{ .Values.redis.username }}:{{ .Values.redis.password }}@{{ .Release.Name }}-{{ .Values.redis.host}}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
 - name: AIRS_ENDPOINT
-  value: http://airs-server:{{ .Values.services.servicePort }}/{{ .Values.services.airs.urlPrefix }}
+  value: http://airs-server:{{ .Values.services.servicePort }}{{ .Values.services.airs.urlPrefix }}
 - name: APROC_ENDPOINT_FROM_APROC
-  value: http://aproc-service:{{ .Values.services.servicePort }}/{{ .Values.services.aproc.service.urlPrefix }}
+  value: http://aproc-service:{{ .Values.services.servicePort }}{{ .Values.services.aproc.service.urlPrefix }}
 - name: ARLAS_URL_SEARCH
   value: {{ .Values.arlasSearchUrl | quote }}
 - name: APROC_INDEX_NAME

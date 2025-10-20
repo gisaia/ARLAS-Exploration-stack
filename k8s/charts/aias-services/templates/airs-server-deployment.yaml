@@ -26,12 +26,20 @@ spec:
             httpGet:
               path: {{ .Values.services.airs.urlPrefix }}/healthcheck
               port: {{ .Values.services.servicePort }}
-            initialDelaySeconds: 40
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           readinessProbe:
             httpGet:
               path: {{ .Values.services.airs.urlPrefix }}/healthcheck
               port: {{ .Values.services.servicePort }}
-            initialDelaySeconds: 40
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           resources:
             {{- toYaml .Values.services.airs.resources | nindent 12 }}
           env:
@@ -77,6 +85,8 @@ spec:
             # LOGGING
             - name: AIRS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
+            - name: ACCESS_LOGGER_LEVEL
+              value: {{ .Values.logger.loggingLevel }}
 
             # OBJECT STORAGE
             - name: AIRS_S3_ACCESS_KEY_ID
@@ -95,6 +105,14 @@ spec:
               value: {{ .Values.s3.region | quote }}
             - name: AIRS_S3_TIER
               value: {{ .Values.s3.tier | quote }}
+          volumeMounts:
+            - name: airs-files
+              mountPath: /app/conf/
+              readOnly: true
+      volumes:
+        - name: airs-files
+          configMap:
+            name: airs-files-configmap
 
       # NODE SELECTION      
       {{- with .Values.services.airs.nodeSelector }}

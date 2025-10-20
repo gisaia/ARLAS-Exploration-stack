@@ -26,6 +26,7 @@ services:
       co.elastic.logs/json.expand_keys: true
     environment:
       - APROC_LOGGER_LEVEL=${APROC_LOGGER_LEVEL:-INFO}
+      - ACCESS_LOGGER_LEVEL=${ACCESS_LOGGER_LEVEL:-INFO}
       - APROC_CONFIGURATION_FILE=/app/conf/aproc.yaml
       - CELERY_BROKER_URL=pyamqp://guest:guest@rabbitmq:5672//
       - CELERY_RESULT_BACKEND=redis://redis:6379/0

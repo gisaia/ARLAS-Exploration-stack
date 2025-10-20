@@ -126,11 +126,12 @@ Before re-starting the ARLAS stack, please make sure that the persistence volume
 
 ### Services, DNS and Certificates
 
-Three services are exposed with an ingress:
+Four services are exposed with an ingress:
 
 - `keycloak`, default DNS is `keycloak.arlas.k8s`
 - `elasticsearch`, default DNS is `elastic.arlas.k8s`
 - `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
+- `minio`, which serves as the object store, default DNS is `minio.arlas.k8s`
 
 These DNS names can be changed in `k8s/charts/arlas-stack/values.yaml`.
 

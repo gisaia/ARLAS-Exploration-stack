@@ -3,7 +3,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/developmentseed/titiler
-  tag: latest
+  tag: 0.22.4
   pullPolicy: IfNotPresent
   command: "uvicorn"
   args:
@@ -13,7 +13,7 @@ image:
     - "--port"
     - "8000"
     - "--workers"
-    - "1"
+    - "8"
 
 nameOverride: ""
 fullnameOverride: ""
@@ -52,6 +52,7 @@ env:
   VSI_CACHE: "TRUE"
   VSI_CACHE_SIZE: 5000000  # 5 MB (per file-handle)
   GDAL_DISABLE_READDIR_ON_OPEN: "EMPTY_DIR"
+  GDAL_INGESTED_BYTES_AT_OPEN: 32768
   GDAL_HTTP_MERGE_CONSECUTIVE_RANGES: "YES"
   GDAL_HTTP_MULTIPLEX: "YES"
   GDAL_HTTP_VERSION: 2

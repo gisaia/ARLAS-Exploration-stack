@@ -42,6 +42,8 @@ access_manager:
     -
       type: gs
       bucket: gisaia-public
+      readable_paths:
+        - /OPENDATA
       # api_key:
       #   project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
       #   private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
@@ -50,6 +52,8 @@ access_manager:
       type: s3
       bucket: archives
       endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
+      readable_paths:
+        - /inputs
     # -
     #   type: https
     #   headers: $APROC_INPUT_STORAGE_HEADERS
@@ -60,3 +64,13 @@ access_manager:
       type: s3
       bucket: gisaia-public
       endpoint: "https://storage.googleapis.com"
+      readable_paths:
+        - /OPENDATA      
+    -
+      type: s3
+      bucket: downloads
+      endpoint: "http://minio:9000"
+      readable_paths:
+        - "/"
+      writable_paths:
+        - "/"

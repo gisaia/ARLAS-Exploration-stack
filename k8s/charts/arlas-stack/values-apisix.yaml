@@ -94,7 +94,43 @@ apisix:
                 nodes:
                   "arlas-persistence-server:8000": 1
             -
+              uri: /cog/preview*
+              upstream:
+                nodes:
+                  "arlas-stack-titiler:8000": 1
+              plugins:
+                proxy-rewrite:
+                  regex_uri: ["/(.*)", "/$1"]
+                forward-auth:
+                  uri: http://arlas-agate:8000/agate/authorization/cog_preview
+                  request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
+            -
+              uri: /cog/statistics*
+              upstream:
+                nodes:
+                  "arlas-stack-titiler:8000": 1
+              plugins:
+                proxy-rewrite:
+                  regex_uri: ["/(.*)", "/$1"]
+                forward-auth:
+                  uri: http://arlas-agate:8000/agate/authorization/cog_statistics
+                  request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
+            -
               uri: /cog/*
+              upstream:
+                nodes:
+                  "arlas-stack-titiler:8000": 1
+              plugins:
+                proxy-rewrite:
+                  regex_uri: ["/(.*)", "/$1"]
+                forward-auth:
+                  uri: http://arlas-agate:8000/agate/authorization/cog
+                  request_headers: ["Authorization", "arlas-org-filter"]
+                  keepalive: false
+            -
+              uri: /colorMaps*
               upstream:
                 nodes:
                   "arlas-stack-titiler:8000": 1
@@ -155,6 +191,8 @@ apisix:
                   uri: http://arlas-agate:8000/agate/url-role-based-authorization
                   request_headers: ["Authorization", "arlas-org-filter"]
                   keepalive: false
+                proxy-control: 
+                  request_buffering: false
             -
               uri: /aproc/processes/*
               upstream:

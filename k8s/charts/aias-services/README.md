@@ -10,7 +10,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 |-----|------|---------|-------------|
 | airsIndexPrefix | string | `"airs"` | Prefix appended to elasticsearch indices containing AIRS collections. The final name is of the form: prefix@organization_indexname |
 | arlasMappingUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json"` | This elasticsearch mapping is used during the initialization of the index of a newly created collection |
-| arlasSearchUrl | string | `"http://arlas-server:9999/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS URL Search for AGATE to check whether an item is accessible or not |
+| arlasSearchUrl | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS URL Search for AGATE to check whether an item is accessible or not |
 | cors.allowedCredentials | bool | `true` | CORS Allowed Credentials or not |
 | cors.allowedHeaders | string | `"arlas-user,arlas-groups,arlas-organization,arlas-org-filter,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User"` | CORS Allowed Headers |
 | cors.allowedHosts | string | `"0.0.0.0"` |  |
@@ -42,13 +42,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | elastic.cluster | string | `"elastic"` |  |
 | elastic.login | string | `"elastic"` |  |
 | elastic.password | string | `"elastic"` |  |
-| ingest.folder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Folder used by FAM for ingestion   |
-| ingest.storage.forceDownload | bool | `true` |  |
-| ingest.storage.s3.bucket | string | `""` |  |
-| ingest.storage.s3.key | string | `""` |  |
-| ingest.storage.s3.secret | string | `""` |  |
-| ingest.storage.type | string | `"https"` |  |
-| ingestFolder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Root of the ingest folder |
+| ingest.folder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Folder used by FAM and APROC for ingestion   |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
 | organization | string | `"org.com"` | Name of the organization using AIAS |
@@ -73,8 +67,10 @@ A Helm Chart to deploy ARLAS AIAS Services
 | s3.secret | string | `"airssecret"` | s3 secret |
 | s3.tier | string | `"Standard"` | Tier. This value is provided in the item properties |
 | services.agate.affinity | object | `{}` |  |
-| services.agate.image | string | `"gisaia/agate:0.6.40"` |  |
+| services.agate.audience | string | `"arlas-backend"` |  |
+| services.agate.image | string | `"gisaia/agate:0.7.2"` |  |
 | services.agate.nodeSelector | object | `{}` |  |
+| services.agate.openIdProvider | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration"` |  |
 | services.agate.replicaCount | int | `1` |  |
 | services.agate.resources.limits.cpu | float | `0.5` |  |
 | services.agate.resources.limits.memory | string | `"256Mi"` |  |
@@ -84,12 +80,14 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.serviceName | string | `"arlas-agate"` |  |
 | services.agate.tolerations | list | `[]` |  |
 | services.agate.urlPrefix | string | `"/agate"` |  |
+| services.agate.verifyJwt | bool | `true` |  |
+| services.agate.verifySsl | bool | `true` |  |
 | services.airs.affinity | object | `{}` |  |
-| services.airs.image | string | `"gisaia/airs:0.6.40"` |  |
+| services.airs.image | string | `"gisaia/airs:0.7.2"` |  |
 | services.airs.nodeSelector | object | `{}` |  |
 | services.airs.replicaCount | int | `1` |  |
 | services.airs.resources.limits.cpu | float | `0.5` |  |
-| services.airs.resources.limits.memory | string | `"256Mi"` |  |
+| services.airs.resources.limits.memory | string | `"2Gi"` |  |
 | services.airs.resources.requests.cpu | float | `0.1` |  |
 | services.airs.resources.requests.memory | string | `"50Mi"` |  |
 | services.airs.serviceBinding | string | `"0.0.0.0"` |  |
@@ -97,7 +95,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.tolerations | list | `[]` |  |
 | services.airs.urlPrefix | string | `"/airs"` |  |
 | services.aproc.service.affinity | object | `{}` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.6.40"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.7.2"` |  |
 | services.aproc.service.nodeSelector | object | `{}` |  |
 | services.aproc.service.replicaCount | int | `1` |  |
 | services.aproc.service.resources.limits.cpu | float | `0.5` |  |
@@ -109,7 +107,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.tolerations | list | `[]` |  |
 | services.aproc.service.urlPrefix | string | `"/aproc"` |  |
 | services.aproc.worker.affinity | object | `{}` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.6.32"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.7.2"` |  |
 | services.aproc.worker.nodeSelector | object | `{}` |  |
 | services.aproc.worker.replicaCount | int | `1` |  |
 | services.aproc.worker.resources.limits.cpu | int | `2` |  |
@@ -119,7 +117,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.serviceName | string | `"aproc-proc"` |  |
 | services.aproc.worker.tolerations | list | `[]` |  |
 | services.fam.affinity | object | `{}` |  |
-| services.fam.image | string | `"gisaia/fam:0.6.40"` |  |
+| services.fam.image | string | `"gisaia/fam:0.7.2"` |  |
 | services.fam.nodeSelector | object | `{}` |  |
 | services.fam.replicaCount | int | `1` |  |
 | services.fam.resources.limits.cpu | float | `0.5` |  |

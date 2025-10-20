@@ -3,6 +3,12 @@ set -o errexit -o pipefail
 
 kubectl create namespace arlas --dry-run=client -o yaml | kubectl apply -f -
 
+# Create configmap for airs
+kubectl create configmap airs-files-configmap  \
+  --from-file=airs.yaml=conf/aias/airs.yaml  \
+  --dry-run=client  \
+  -o yaml > k8s/charts/aias-services/templates/airs-files-configmap.yaml
+
 # Create configmap for agate
 kubectl create configmap agate-files-configmap  \
   --from-file=agate.yaml=conf/aias/agate.yaml  \
