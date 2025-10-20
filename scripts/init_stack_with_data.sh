@@ -13,9 +13,9 @@ if [ ${CONF} == "local.iam.admin" ]; then
     GROUPS_PARAMS='--reader group/config.json/org.com --writer group/config.json/org.com'
     USER_CONF="local.iam.user"
     echo "Create user"
-    USERID=`arlas_cli --config-file /tmp/arlas-cli.yaml iam --config ${CONF} users add user@org.com`
+    USERID=`arlas_cli --config-file /tmp/arlas-cli.yaml --quiet iam --config ${CONF} users add user@org.com`
     echo "Create organisation"
-    ORGID=`arlas_cli --config-file /tmp/arlas-cli.yaml iam --config ${CONF} orgs add org.com`
+    ORGID=`arlas_cli --config-file /tmp/arlas-cli.yaml --quiet iam --config ${CONF} orgs add org.com`
     echo "Extract roles and group ids"
     USER_ROLE_ID=`arlas_cli --config-file /tmp/arlas-cli.yaml  iam --config local.iam.admin orgs groups ${ORGID} | grep role/arlas/user | awk -F '\|' '{print $2}' | xargs`
     SEE_ALL_GROUP_ID=`arlas_cli --config-file /tmp/arlas-cli.yaml  iam --config local.iam.admin orgs groups ${ORGID} | grep 'group/config.json/org.com' | awk -F '\|' '{print $2}' | xargs`
