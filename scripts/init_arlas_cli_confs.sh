@@ -103,7 +103,9 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --auth-org "" \
     --no-auth-arlas-iam
 
-arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local
+if arlas_cli --config-file /tmp/arlas-cli.yaml confs list | grep -q " local "; then
+    arlas_cli --config-file /tmp/arlas-cli.yaml confs delete local
+fi
 
 arlas_cli --config-file /tmp/arlas-cli.yaml confs create local \
     --server http://${ARLAS_HOST}/arlas \
