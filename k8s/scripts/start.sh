@@ -1,6 +1,29 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
+check_command(){
+    COMMAND_NAME=$1
+    if ! command -v $COMMAND_NAME >/dev/null 2>&1; then
+        echo "Error: '$COMMAND_NAME' is not installed. Please install it first."
+        exit 1
+    fi
+}
+
+check_command "kubectl"
+check_command "helm"
+check_command "curl"
+check_command "yq"
+
+FILE="custom_values.yaml"
+
+if [ -f "$FILE" ]; then
+    echo "$FILE found: using it to override default values."
+    yq eval-all 'select(fileIndex == 0) *+ select(fileIndex == 1)' k8s/charts/arlas-stack/values_template.yaml "$FILE" > k8s/charts/arlas-stack/values-final.yaml
+else
+    echo "No $FILE found, using default values."
+    cp k8s/charts/arlas-stack/values_template.yaml k8s/charts/arlas-stack/values-final.yaml
+fi
+
 kubectl create namespace arlas --dry-run=client -o yaml | kubectl apply -f -
 
 # Create configmap for airs
@@ -67,4 +90,4 @@ else
   fi
 fi
 
-helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml -f k8s/charts/arlas-stack/values-apisix.yaml
+helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values-apisix.yaml -f k8s/charts/arlas-stack/values-final.yaml
