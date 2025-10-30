@@ -18,10 +18,10 @@ FILE="custom_values.yaml"
 
 if [ -f "$FILE" ]; then
     echo "$FILE found: using it to override default values."
-    yq eval-all 'select(fileIndex == 0) *+ select(fileIndex == 1)' k8s/charts/arlas-stack/values_template.yaml "$FILE" > k8s/charts/arlas-stack/values-final.yaml
+    yq eval-all 'select(fileIndex == 0) *+ select(fileIndex == 1)' k8s/charts/arlas-stack/values_template.yaml "$FILE" > k8s/charts/arlas-stack/values.yaml
 else
     echo "No $FILE found, using default values."
-    cp k8s/charts/arlas-stack/values_template.yaml k8s/charts/arlas-stack/values-final.yaml
+    cp k8s/charts/arlas-stack/values_template.yaml k8s/charts/arlas-stack/values.yaml
 fi
 
 kubectl create namespace arlas --dry-run=client -o yaml | kubectl apply -f -
@@ -90,4 +90,4 @@ else
   fi
 fi
 
-helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values-apisix.yaml -f k8s/charts/arlas-stack/values-final.yaml
+helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values-apisix.yaml -f k8s/charts/arlas-stack/values.yaml
