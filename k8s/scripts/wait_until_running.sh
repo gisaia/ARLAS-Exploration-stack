@@ -1,3 +1,4 @@
+#!/bin/bash
 set -o errexit -o pipefail
 namespace="arlas"
 if [ -z "$1" ]

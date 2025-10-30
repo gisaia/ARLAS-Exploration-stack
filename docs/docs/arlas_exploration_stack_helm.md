@@ -48,6 +48,17 @@ The default storage class of the cluster might have a `delete` reclaim policy. F
 
 ### Configuration
 
+Most of the configuration should be done by setting values for the charts. Default values are set in the `values.yaml` files of the various charts. The `k8s/charts/arlas-stack/values_template.yaml` file is a __template__ that contains the values for a coherent stack deployment. If you need to change values, __do not modify directly this template file__. Instead, create a file in the project root directory named `custom_values.yaml` and set there the values you want to overwrite. Bellow is an example:
+
+```yaml
+global: 
+  dnsDomain: &arlasAppDnsDomain site.mydomain.io
+  elasticDnsDomain: &arlasAppElasticDnsDomain elastic.mydomain.k8s
+  minioDnsDomain: &arlasAppMinioDnsDomain minio.mydomain.k8s
+  keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.mydomain.k8s
+  openIdProvider: &arlasAppOpenIdProvider https://keycloak.mydomain.k8s/auth/realms/arlas/.well-known/openid-configuration
+```
+
 IMPORTANT: the passwords must be configured before the first install of the chart!
 
 The main initial configuration is done in the "umbrella chart" contained in `k8s/charts/arlas-stack/values.yaml`. Configure in priority all the fields with the mention "__MUST BE CONFIGURED:__". Note that keycloak deployment uses by default the provided certificate. 
@@ -133,7 +144,7 @@ Four services are exposed with an ingress:
 - `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
 - `minio`, which serves as the object store, default DNS is `minio.arlas.k8s`
 
-These DNS names can be changed in `k8s/charts/arlas-stack/values.yaml`.
+These DNS names can be changed in `custom_values.yaml` with the model in `k8s/charts/arlas-stack/values.yaml`.
 
 In a test environment, you will need to link the ingress external IP with the domain names of the services. You can for instance add them in /etc/hosts:
 

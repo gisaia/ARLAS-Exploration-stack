@@ -78,6 +78,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.minioDnsDomain | string | `"minio.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment |
 | global.minioLogin | string | `"minioadmin"` | Minio login for minio itself and the services that are connecting to minio |
 | global.minioPassword | string | `"secret4minio"` | __MUST BE CONFIGURED:__ Minio password for minio itself and the services that are connecting to minio |
+| global.openIdProvider | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration"` | __MUST BE CONFIGURED:__ The access to the openid-configuration |
 | global.organization | string | `"org.com"` | __MUST BE CONFIGURED:__ Name of the organization using AIAS |
 | global.postgresql.auth.password | string | `"secret4postgres"` | __MUST BE CONFIGURED:__ postgres password for keycloak |
 | global.protocol | string | `"https"` | __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment |
