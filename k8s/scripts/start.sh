@@ -15,7 +15,7 @@ check_command "curl"
 check_command "yq"
 
 FILE="custom_values.yaml"
-
+rm -f k8s/charts/arlas-stack/values.yaml
 if [ -f "$FILE" ]; then
     echo "$FILE found: using it to override default values."
     yq eval-all 'select(fileIndex == 0) *+ select(fileIndex == 1)' k8s/charts/arlas-stack/values_template.yaml "$FILE" > k8s/charts/arlas-stack/values.yaml
