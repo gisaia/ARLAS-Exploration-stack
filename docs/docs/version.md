@@ -1,1 +1,1 @@
-ARLAS Exploration Stack version 27.23
+ARLAS Exploration Stack version 27.24
