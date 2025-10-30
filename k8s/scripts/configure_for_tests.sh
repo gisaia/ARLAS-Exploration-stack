@@ -6,9 +6,10 @@ DOMAIN=${IP}.nip.io
 
 echo "
 global:
-    dnsDomain: 'site.${DOMAIN}'
-    elasticDnsDomain: 'elastic.${DOMAIN}'
-    keycloakDnsDomain: 'keycloak.${DOMAIN}'
-    keycloak.url: 'https://keycloak.${DOMAIN}/auth'
-    authIssuer: 'https://keycloak.${DOMAIN}/auth/realms/arlas'
-    openIdProvider: 'https://keycloak.${DOMAIN}/auth/realms/arlas/.well-known/openid-configuration'" > custom_values.yaml
+    dnsDomain: &arlasAppDnsDomain 'site.${DOMAIN}'
+    elasticDnsDomain: &arlasAppElasticDnsDomain 'elastic.${DOMAIN}'
+    keycloakDnsDomain: &arlasAppKeycloakDnsDomain 'keycloak.${DOMAIN}'
+    keycloak:
+        url: &arlasAppKeycloakUrl 'https://keycloak.${DOMAIN}/auth'
+    authIssuer: &arlasAppAuthIssuer 'https://keycloak.${DOMAIN}/auth/realms/arlas'
+    openIdProvider: &arlasAppOpenIdProvider 'https://keycloak.${DOMAIN}/auth/realms/arlas/.well-known/openid-configuration'" > custom_values.yaml
