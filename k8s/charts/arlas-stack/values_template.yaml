@@ -4,7 +4,7 @@ global:
 
   # -- __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment
   elasticDnsDomain: &arlasAppElasticDnsDomain elastic.arlas.k8s
-
+  
   # -- __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment
   minioDnsDomain: &arlasAppMinioDnsDomain minio.arlas.k8s
 
@@ -90,7 +90,7 @@ deployment:
     enabled: true
 
 
-# ARLAS SERVICES
+# -- See the documentation of the sub-chart arlas-services
 arlas-services:
   # @ignored  
   dnsDomain: *arlasAppDnsDomain
@@ -102,6 +102,7 @@ arlas-services:
   elastic:
     login: *arlasAppElasticLogin
     password: *arlasAppElasticPassword
+    endpoint: https://arlas-stack-elasticsearch:9200
   logger:
     # -- Logging level
     loggingLevel: INFO
@@ -118,7 +119,7 @@ arlas-services:
     #server:
     #  trustStoreOptions:
 
-# ARLAS WUI
+# -- See the documentation of the sub-chart arlas-uis
 arlas-uis:
   # @ignored  
   dnsDomain: *arlasAppDnsDomain
@@ -139,41 +140,33 @@ arlas-uis:
   basemap:
     storageSize: 50Mi
 
-# AIAS SERVICES
+# -- See the documentation of the sub-chart aias-services
 aias-services:
   # @ignored  
   dnsDomain: *arlasAppDnsDomain
   # @ignored  
   protocol: *arlasAppProtocol
   # @ignored  
-  s3:
-    accessKeyId: *arlasAppMinioLogin
-    secret: *arlasAppMinioPassword
-  # @ignored  
-  elastic:
-    login: *arlasAppElasticLogin
-    password: *arlasAppElasticPassword
-  logger:
-    # -- Logging level
-    loggingLevel: INFO
-    # -- Console logging level
-    loggingConsoleLevel: INFO
-  # @ignored  
-  organisation: *arlasAppOrganization
-  ingest:
-    # -- Folder used by FAM and APROC for ingestion  
-    folder: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
-
-  # @ignored
-  rabbitmq: 
-    login: *arlasAppRabbitMQLogin
-    password: *arlasAppRabbitMQPassword
-
-  # @ignored
-  redis:
-    password: *arlasAppRedisPassword
-
   services:
+    airs:
+      configuration:
+        s3:
+          accessKeyId: *arlasAppMinioLogin
+          secretAccessKey: *arlasAppMinioPassword
+          endpoint: http://arlas-stack-minio:9000
+          # -- __IMPORTANT:__ If you change the bucket name here, make sure to overwrite the patterns in agate.configuration.services (k8s/charts/aias-services/values.yaml).
+          bucket: airs-storages
+          writablePaths:
+            - /
+          # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
+          assetHttpEndpointUrl: https://site.arlas.k8s/{}/{}
+    agate:
+      configuration:
+        arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
+        urbac:
+          openIdProvider: *arlasAppOpenIdProvider
+          jwtAudience: arlas-backend
+
     aproc:
       worker:
         replicaCount: 1
@@ -184,11 +177,49 @@ aias-services:
         nodeSelector: {}
         tolerations: []
         affinity: {}
-    agate: 
-      openIdProvider: *arlasAppOpenIdProvider
-      verifyJwt: true
-      # -- __MUST BE CONFIGURED:__ Set to true in production if your OpenID provider uses https with a valid certificate, false otherwise (for test with self-signed certificate or http)
-      verifySsl: false
+      configuration:
+        # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
+        celeryBrokerUrl: pyamqp://guest:guest@rabbitmq:5672//
+        # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
+        celeryResultBackend: redis://:somepassword@redis-master:6379/0
+        # -- AIRS service endpoint URL accessed by APROC
+        airsEndpoint: http://airs-server:8000/arlas/airs
+        # -- ARLAS search URL used by APROC to check whether an item exists
+        arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
+        extensions:
+          download:
+            outboxS3:
+              accessKeyId: *arlasAppMinioLogin
+              secretAccessKey: *arlasAppMinioPassword
+              endpointUrl: http://arlas-stack-minio:9000
+              bucket: downloads
+              # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
+              assetHttpEndpointUrl: https://site.arlas.k8s/{}/{}
+            index:
+              # -- __MUST BE CONFIGURED:__ Change with the domain (org.com) with your own organization name
+              name: org.com@aproc_downloads
+          ingest:
+            inputsDirectory: /inputs
+            aprocEndpoint: http://aproc-service:8001
+
+  # @ignored  
+  elastic:
+    login: *arlasAppElasticLogin
+    password: *arlasAppElasticPassword
+  logger:
+    # -- Logging level
+    loggingLevel: INFO
+    # -- Console logging level
+    loggingConsoleLevel: INFO
+
+  # @ignored
+  rabbitmq: 
+    login: *arlasAppRabbitMQLogin
+    password: *arlasAppRabbitMQPassword
+
+  # @ignored
+  redis:
+    password: *arlasAppRedisPassword
 
 # TITILER
 titiler:

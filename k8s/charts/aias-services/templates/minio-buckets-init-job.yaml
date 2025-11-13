@@ -14,12 +14,12 @@ spec:
             - -c
             - |
               echo "🔐 Configuring mc client..."
-              mc alias set local {{ .Values.s3.endpoint }} {{ .Values.s3.accessKeyId }} {{ .Values.s3.secret }}
+              mc alias set local {{ .Values.services.airs.configuration.s3.endpointUrl }} {{ .Values.services.airs.configuration.s3.accessKeyId }} {{ .Values.services.airs.configuration.s3.secretAccessKey }}
 
               echo "📦 Creating buckets..."
-              mc mb local/{{ .Values.s3.bucket }} || echo "Bucket {{ .Values.s3.bucket }} already exists"
-              mc mb local/{{ .Values.download.s3.bucket }} || echo "Bucket {{ .Values.download.s3.bucket }} already exists"
+              mc mb local/{{ .Values.services.airs.configuration.s3.bucket }} || echo "Bucket {{ .Values.services.airs.configuration.s3.bucket }} already exists"
+              mc mb local/{{ .Values.services.aproc.configuration.extensions.download.outboxS3.bucket }} || echo "Bucket {{ .Values.services.aproc.configuration.extensions.download.outboxS3.bucket }} already exists"
 
               echo "🌍 Making buckets public..."
-              mc anonymous set download local/{{ .Values.s3.bucket }}
-              mc anonymous set download local/{{ .Values.download.s3.bucket }}
+              mc anonymous set download local/{{ .Values.services.airs.configuration.s3.bucket }}
+              mc anonymous set download local/{{ .Values.services.aproc.configuration.extensions.download.outboxS3.bucket }}

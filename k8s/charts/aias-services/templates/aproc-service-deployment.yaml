@@ -43,6 +43,9 @@ spec:
             failureThreshold: 3
             successThreshold: 1
           env:
+            - name: APROC_CONFIGURATION_FILE
+              value: /app/conf/aproc.yaml
+
             - name: APROC_HOST
               value: {{ .Values.services.aproc.service.serviceBinding | quote }}
             - name: APROC_PORT
@@ -56,7 +59,6 @@ spec:
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
 
-            {{- include "aias.aprocEnv" . | nindent 12 }}
           volumeMounts:
             - name: aproc-files
               mountPath: /app/conf/

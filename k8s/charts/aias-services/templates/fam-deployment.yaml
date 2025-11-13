@@ -35,11 +35,8 @@ spec:
           resources:
             {{- toYaml .Values.services.fam.resources | nindent 12 }}
           env:
-            # FAM CONFIGURATION
-            - name: INGESTED_FOLDER
-              value: {{ .Values.ingest.folder | quote }}
-            - name: APROC_RESOURCE_ID_HASH_STARTS_AT
-              value: {{ .Values.resourceIdHashStartAt | quote }}
+            - name: APROC_CONFIGURATION_FILE
+              value: /app/conf/aproc.yaml
 
             # ENDPOINT CONFIGURATION              
             - name: FAM_CORS_HEADERS
@@ -68,7 +65,7 @@ spec:
       volumes:
         - name: fam-files
           configMap:
-            name: fam-files-configmap
+            name: aproc-files-configmap
 
       # NODE SELECTION      
       {{- with .Values.services.fam.nodeSelector }}

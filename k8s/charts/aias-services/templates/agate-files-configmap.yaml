@@ -1,0 +1,140 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agate-files-configmap
+data:
+  agate.yaml: |
+    arlas_url_search: {{ .Values.services.agate.configuration.arlasUrlSearch  }}
+    agate_prefix: {{ .Values.services.agate.configuration.agatePrefix }}
+    host: {{ .Values.services.agate.serviceBinding }}
+    port: $AGATE_PORT|8004
+    nb_workers: {{ .Values.services.agate.configuration.nbWorkers }}
+    url_header: {{ .Values.services.agate.configuration.urlHeader  }}
+
+    headers_for_arlas:
+      - authorization
+      - arlas-org-filter
+
+    services:
+      {{ .Values.services.agate.configuration.services | toYaml | nindent 6 }}
+
+    urbac:
+      role_file: conf/roles.yaml
+      method_header: {{ .Values.services.agate.configuration.urbac.methodHeader }}|header
+      jwt_header: {{ .Values.services.agate.configuration.urbac.jwtHeader }}|authorization
+      open_id_provider: {{ .Values.services.agate.configuration.urbac.openIdProvider }}
+      verify_jwt: {{ .Values.services.agate.configuration.urbac.verifyJwt }}|true
+      verify_ssl: {{ .Values.services.agate.configuration.urbac.verifySsl }}|true
+      jwt_audience: {{ .Values.services.agate.configuration.urbac.jwtAudience  }} |arlas-backend
+  roles.yaml: |
+    technicalRoles:
+      {{ .Values.services.agate.configuration.extraRoles | toYaml | nindent 6 }}
+
+      group/public:
+        description:
+        - "Public group"
+        permissions:
+        # ARLAS IAM session management
+        - r:session:DELETE
+        - r:permissions:GET
+        - r:organisations:GET,POST
+        - r:organisations/check:GET
+        - r:users/.*:GET,PUT,DELETE
+
+      role/arlas/user:
+        description:
+        - "Viewing data in ARLAS"
+        permissions:
+    # ARLAS explore
+        - h:arlas-organization:${org}
+        - h:arlas-workspace:${ws}
+        - r:explore/.*:GET,POST
+        - r:collections/.*:GET
+        - r:explore/_list:GET
+        - r:explore/ogc/opensearch/.*:GET
+        - r:ogc/.*:GET
+        - r:stac:GET
+        - r:openapi.json:GET
+        - r:stac/.*:GET,POST
+    # ARLAS persistence
+        - r:persist/resource/.*:GET
+        - r:persist/groups/.*:GET
+        - r:persist/resources/.*:GET
+    # ARLAS permissions
+        - r:authorize/resources:GET
+
+      role/arlas/tagger:
+        description:
+        - "Tagging data in ARLAS"
+        permissions:
+        - r:write/.*:POST
+        - r:status/.*:GET
+
+      role/arlas/downloader:
+        description:
+        - "Download data from ARLAS"
+        permissions:
+        - r:/aproc/processes/download:GET
+        - r:/aproc/processes/download/execution:POST
+        - r:/aproc/jobs/.*:GET,DELETE
+
+      role/arlas/datasets:
+        description:
+        - "Managing data (ingest, update and enrich) in ARLAS"
+        permissions:
+        - r:datasets/.*:GET,PUT,POST,DELETE
+        - r:/aproc/processes/ingest:GET
+        - r:/aproc/processes/ingest/execution:POST
+        - r:/aproc/processes/enrich:GET
+        - r:/aproc/processes/enrich/execution:POST
+        - r:/aproc/processes/directory_ingest:GET
+        - r:/aproc/processes/directory_ingest/execution:POST
+        - r:/aproc/processes/dc3build:GET
+        - r:/aproc/processes/dc3build/execution:POST
+        - r:/fam/.*:GET,POST
+        - r:/aproc/jobs/.*:GET,DELETE
+        - r:/aproc/jobs:GET
+        - r:/airs/collections/.*:GET,POST,PUT,DELETE
+
+      role/arlas/builder:
+        description:
+        - "Building dashboards in ARLAS"
+        permissions:
+        - r:collections:GET
+        - r:collections/.*:PATCH,PUT,DELETE
+        - r:collections/_export:GET
+        - r:collections/_import:POST
+        - r:persist/resource/.*:PUT,POST,DELETE
+
+      role/arlas/owner:
+        description:
+        - "Managing users and permissions of ARLAS"
+        permissions:
+        - r:permissions:GET
+        - r:collections:GET
+        - r:organisations:GET,POST
+        - r:organisations/.*:GET,POST,PUT,DELETE
+        - r:users/.*:GET,PUT,DELETE
+        - r:session:DELETE
+
+    # M2M role
+      role/m2m/importer:
+        description:
+        - "M2M account for importing collections"
+        permissions:
+        - r:collections:GET
+        - r:collections/.*:PATCH,PUT,DELETE
+        - r:collections/_import:POST
+        - r:organisations/.*:GET
+        - r:persist/resource/.*:POST,PUT
+
+    # IAM super admin role
+      role/iam/admin:
+        description:
+        - "IAM admin"
+        permissions:
+        - r:organisations:GET,POST
+        - r:organisations/.*:GET,POST,DELETE
+        - r:users/.*:GET,PUT,DELETE
+        - r:session:DELETE
+        - r:permissions:GET

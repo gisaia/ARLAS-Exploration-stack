@@ -44,9 +44,6 @@ spec:
             {{- toYaml .Values.services.airs.resources | nindent 12 }}
           env:
 
-            - name: AIRS_COLLECTION_URL
-              value: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/collection.json
-
             # ENDPOINT CONFIGURATION              
             - name: AIRS_CORS_HEADERS
               value: {{ .Values.cors.allowedHeaders | quote }}
@@ -62,49 +59,12 @@ spec:
             - name: AIRS_PREFIX
               value: {{ .Values.services.airs.urlPrefix }}
 
-            # INDEX CONFIGURATION
-            - name: AIRS_INDEX_COLLECTION_PREFIX
-              value: "{{ .Values.organization }}@{{ .Values.airsIndexPrefix }}"
-
-            # INDEX MAPPING
-            - name: ARLASEO_MAPPING_URL
-              value: {{ .Values.arlasMappingUrl | quote }}
-
-            # ELASTICSEARCH CONFIGURATION
-            - name: AIRS_INDEX_ENDPOINT_URL
-              value: "https://{{ .Release.Name }}-elasticsearch:9200" # TO BE IMPROVED: remove the protocol
-            - name: ARLAS_ELASTIC_CLUSTER
-              value: {{ .Values.elastic.cluster }}
-            - name: ARLAS_ELASTIC_NODES
-              value: {{ .Release.Name }}-elasticsearch:9200
-            - name: AIRS_INDEX_LOGIN
-              value: {{ .Values.elastic.login }}
-            - name: AIRS_INDEX_PWD
-              value: {{ .Values.elastic.password }}
-
             # LOGGING
             - name: AIRS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
 
-            # OBJECT STORAGE
-            - name: AIRS_S3_ACCESS_KEY_ID
-              value: {{ .Values.s3.accessKeyId | quote }}
-            - name: AIRS_S3_SECRET_ACCESS_KEY
-              value: {{ .Values.s3.secret | quote }}
-            - name: AIRS_S3_ASSET_HTTP_ENDPOINT_URL
-              value: {{ .Values.s3.assetHttpEndpointUrlPattern | quote }}
-            - name: AIRS_S3_BUCKET
-              value: {{ .Values.s3.bucket | quote }}
-            - name: AIRS_S3_ENDPOINT_URL
-              value: {{ .Values.s3.endpoint | quote }}
-            - name: AIRS_S3_PLATFORM
-              value: {{ .Values.s3.platform | quote }}
-            - name: AIRS_S3_REGION
-              value: {{ .Values.s3.region | quote }}
-            - name: AIRS_S3_TIER
-              value: {{ .Values.s3.tier | quote }}
           volumeMounts:
             - name: airs-files
               mountPath: /app/conf/

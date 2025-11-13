@@ -22,6 +22,8 @@ The third party helm charts are provided by bitnami. Its repository must be regi
 helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
+__Important__: Bitnami charts are not supported anymore by bitnamy. The charts are used for development purpose only. You must deploy your own third party service charts.
+
 __Note for test/dev environment__: If your cluster does not have an ingress controller, you can install `metallb` and `nginx_ingress_controller`:
 
 ```shell
@@ -33,11 +35,10 @@ k8s/scripts/install_nginx_ingress_controller.sh
 
 ### Directory structure
 
-The repository contains files related to docker compose deployment and kubernetes deployment. Only the `docs` and `conf/aias/` directories are common to both deployments. The `k8s/` directory contains the charts and the scripts for running the stack with kubernetes.
+The repository contains files related to docker compose deployment and kubernetes deployment. The `k8s/` directory contains the charts and the scripts for running the stack with kubernetes.
 
 Files are organized as follows:
 
-- `conf/aias/`: configuration files for ARLAS AIAS. IMPORTANT: The starting scripts transform them into `configmaps`. Other folders in `conf` are not used.
 - `k8s/`: everything for installing the ARLAS Stack chart
    - `scripts/`: scripts for initializing and installing the charts
    - `charts/`: contains the umbrella chart (`k8s/charts/arlas-stack/Chart.yaml`) and sub charts for arlas backend, arlas front end and AIAS

@@ -40,13 +40,14 @@ spec:
             {{- toYaml .Values.services.aproc.worker.resources | nindent 12 }}
           env:
 
+            - name: APROC_CONFIGURATION_FILE
+              value: /app/conf/aproc.yaml
+
             # LOGGING
             - name: APROC_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
-
-            {{- include "aias.aprocEnv" . | nindent 12 }}
 
           volumeMounts:
             - name: aproc-files
