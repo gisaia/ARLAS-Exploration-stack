@@ -116,6 +116,7 @@ elastic:
   apm:
     secret:
     url:
+  nodes: elasticsearch:9200
 
 persistence:
   # -- Storage engine to use: either `file` or `hibernate`

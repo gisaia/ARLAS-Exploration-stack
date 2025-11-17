@@ -105,7 +105,6 @@ services:
     configuration:
       # -- ARLAS endpoint used by AGATE to check whether an item is accessible or not
       arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
-      agatePrefix: /arlas/agate
       # -- Number of worker processes for AGATE
       nbWorkers: 4
       # -- HTTP header containing the original request URL
@@ -124,7 +123,7 @@ services:
         # -- Expected audience in the JWT token
         jwtAudience: arlas-backend
       # -- Custom roles to be added to the roles.yaml file used by URBAC. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml
-      extraRoles:
+      extraRoles: 
 
       services:
         airs-storage:
@@ -383,31 +382,11 @@ services:
             readable_paths:
               - /inputs
           -
-            type: gs
-            bucket: gisaia-public
-            readable_paths:
-              - /OPENDATA
-            # api_key:
-            #   project_id: 
-            #   private_key_id: 
-            #   private_key: 
-          -
             type: s3
             bucket: archives
             endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
             readable_paths:
               - /inputs
-          # -
-          #   type: https
-          #   headers: 
-          #   domain: 
-          #   force_download: 
-          -
-            type: s3
-            bucket: gisaia-public
-            endpoint: "https://storage.googleapis.com"
-            readable_paths:
-              - /OPENDATA      
           -
             type: s3
             bucket: downloads

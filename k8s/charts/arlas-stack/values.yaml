@@ -54,12 +54,16 @@ global:
 
   # -- RabbitMQ Login
   rabbitMQLogin: &arlasAppRabbitMQLogin admin
-  
   # -- __MUST BE CONFIGURED:__ RabbitMQ Password
   rabbitMQPassword: &arlasAppRabbitMQPassword secret4rabbitmq
+  # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
+  celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//
+
 
   # -- __MUST BE CONFIGURED:__ redis Password
   redisPassword: &arlasAppRedisPassword secret4redis
+  # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
+  celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-stack-redis-master:6379/0
 
   postgresql:
     auth:
@@ -90,7 +94,7 @@ deployment:
     enabled: true
 
 
-# -- See the documentation of the sub-chart arlas-services
+# -- See the documentation of the sub-chart arlas-services https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/arlas-services/
 arlas-services:
   # @ignored  
   dnsDomain: *arlasAppDnsDomain
@@ -102,7 +106,7 @@ arlas-services:
   elastic:
     login: *arlasAppElasticLogin
     password: *arlasAppElasticPassword
-    endpoint: https://arlas-stack-elasticsearch:9200
+    nodes: arlas-stack-elasticsearch:9200
   logger:
     # -- Logging level
     loggingLevel: INFO
@@ -119,7 +123,7 @@ arlas-services:
     #server:
     #  trustStoreOptions:
 
-# -- See the documentation of the sub-chart arlas-uis
+# -- See the documentation of the sub-chart arlas-uis https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/arlas-uis/
 arlas-uis:
   # @ignored  
   dnsDomain: *arlasAppDnsDomain
@@ -140,7 +144,7 @@ arlas-uis:
   basemap:
     storageSize: 50Mi
 
-# -- See the documentation of the sub-chart aias-services
+# -- See the documentation of the sub-chart aias-services https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/aias-services/
 aias-services:
   # @ignored  
   dnsDomain: *arlasAppDnsDomain
@@ -149,6 +153,7 @@ aias-services:
   # @ignored  
   services:
     airs:
+      serviceName: airs-server
       configuration:
         s3:
           accessKeyId: *arlasAppMinioLogin
@@ -161,13 +166,20 @@ aias-services:
           # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
           assetHttpEndpointUrl: https://site.arlas.k8s/{}/{}
     agate:
+      serviceName: arlas-agate
       configuration:
         arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
         urbac:
           openIdProvider: *arlasAppOpenIdProvider
           jwtAudience: arlas-backend
+          # -- __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified
+          verifySsl: false
+    fam:
+      serviceName: arlas-fam
 
     aproc:
+      service:
+        serviceName: aproc-service
       worker:
         replicaCount: 1
         resources:
@@ -179,9 +191,9 @@ aias-services:
         affinity: {}
       configuration:
         # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
-        celeryBrokerUrl: pyamqp://guest:guest@rabbitmq:5672//
+        celeryBrokerUrl: *arlasAppCeleryBrokerUrl
         # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
-        celeryResultBackend: redis://:somepassword@redis-master:6379/0
+        celeryResultBackend: *arlasAppCeleryResultBackend
         # -- AIRS service endpoint URL accessed by APROC
         airsEndpoint: http://airs-server:8000/arlas/airs
         # -- ARLAS search URL used by APROC to check whether an item exists
@@ -198,28 +210,69 @@ aias-services:
             index:
               # -- __MUST BE CONFIGURED:__ Change with the domain (org.com) with your own organization name
               name: org.com@aproc_downloads
+
           ingest:
-            inputsDirectory: /inputs
+            # -- Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo
+            inputsDirectory: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
             aprocEndpoint: http://aproc-service:8001
+        accessManager:
+          # -- Temporary directory used by the access manager
+          tmpDir: /tmp/
+          # -- Configuration of the storages used by the access manager to provide access to various storage backends
+          storages:
+            -
+              type: file
+              writable_paths:
+                - /tmp
+                - /outbox
+              readable_paths:
+                - /inputs
+            -
+              type: gs
+              bucket: gisaia-public
+              readable_paths:
+                - /OPENDATA
+              # api_key:
+              #   project_id: 
+              #   private_key_id: 
+              #   private_key: 
+            -
+              type: s3
+              bucket: archives
+              endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
+              readable_paths:
+                - /inputs
+            # -
+            #   type: https
+            #   headers: 
+            #   domain: 
+            #   force_download: 
+            -
+              type: s3
+              bucket: gisaia-public
+              endpoint: "https://storage.googleapis.com"
+              readable_paths:
+                - /OPENDATA      
+            -
+              type: s3
+              bucket: downloads
+              endpoint: "http://minio:9000"
+              readable_paths:
+                - "/"
+              writable_paths:
+                - "/"
 
   # @ignored  
   elastic:
     login: *arlasAppElasticLogin
     password: *arlasAppElasticPassword
+    endpoint: https://arlas-stack-elasticsearch:9200
+
   logger:
-    # -- Logging level
+    # -- Logging level for aias-services
     loggingLevel: INFO
-    # -- Console logging level
+    # -- Console logging level for aias-services
     loggingConsoleLevel: INFO
-
-  # @ignored
-  rabbitmq: 
-    login: *arlasAppRabbitMQLogin
-    password: *arlasAppRabbitMQPassword
-
-  # @ignored
-  redis:
-    password: *arlasAppRedisPassword
 
 # TITILER
 titiler:
@@ -232,7 +285,7 @@ titiler:
       cpu: 4
       memory: 4Gi
 
-# ELASTICSEARCH
+# -- Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead.
 elasticsearch:
   image:
     repository: bitnamilegacy/elasticsearch
@@ -270,7 +323,7 @@ elasticsearch:
     image:
       repository: bitnamilegacy/os-shell	
 
-# RABBITMQ
+# -- Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead.
 rabbitmq:
   image:
     repository: bitnamilegacy/rabbitmq
@@ -295,7 +348,7 @@ rabbitmq:
   persistentVolumeClaimRetentionPolicy:
     enabled: true
 
-# REDIS
+# -- Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead.
 redis:
   image:
     repository: bitnamilegacy/redis
@@ -325,7 +378,7 @@ redis:
     persistence:
       storageClass: *arlasAppDefaultStorageClass
 
-# MINIO
+# -- Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead.
 minio:
   image:
     repository: bitnamilegacy/minio
@@ -342,7 +395,7 @@ minio:
     rootPassword: *arlasAppMinioPassword  
   resourcesPreset: medium
 
-# KEYCLOAK
+# -- Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead.
 keycloak:
   image:
     repository: bitnamilegacy/keycloak
