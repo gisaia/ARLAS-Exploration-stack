@@ -28,5 +28,4 @@ conf/custom.env
 k8s/charts/arlas-stack/Chart.lock
 k8s/charts/arlas-stack/charts
 k8s/charts/arlas-stack/templates/*-certificate-configmap.yaml
-k8s/charts/arlas-stack/templates/keycloak-realm-configmap.yaml
 custom_values.yaml
