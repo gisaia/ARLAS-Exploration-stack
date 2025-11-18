@@ -18,9 +18,9 @@ data:
     services:
       {{ .Values.services.agate.configuration.services | toYaml | nindent 6 }}
 
+    method_header: {{ .Values.services.agate.configuration.methodHeader }}
     urbac:
       role_file: conf/roles.yaml
-      method_header: {{ .Values.services.agate.configuration.urbac.methodHeader }}
       jwt_header: {{ .Values.services.agate.configuration.urbac.jwtHeader }}
       open_id_provider: {{ .Values.services.agate.configuration.urbac.openIdProvider }}
       verify_jwt: {{ .Values.services.agate.configuration.urbac.verifyJwt }}

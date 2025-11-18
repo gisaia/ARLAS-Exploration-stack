@@ -1,0 +1,21 @@
+{{- if .Values.deployment.aias.uis.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arlas-fam-wui-ingress
+  annotations:
+    {{ .Values.deployment.aias.uis.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.global.ingressClassName }}
+  rules:
+    - host: {{ .Values.global.dnsDomain }}
+      http:
+        paths:
+          - path: /fam-wui/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ (get .Values "arlas-uis").uis.famWui.serviceName }}
+                port:
+                  number: {{ (get .Values "arlas-uis").uis.servicePort }}
+{{- end }}

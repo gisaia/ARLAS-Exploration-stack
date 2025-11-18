@@ -33,11 +33,6 @@ dependencies:
   version: 16.0.10
   condition: deployment.minio.enabled
 
-- name: apisix
-  repository: https://charts.bitnami.com/bitnami
-  version: 3.3.9
-  condition: deployment.apisix.enabled
-
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
   version: 16.0.11

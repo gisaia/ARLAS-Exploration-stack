@@ -1,0 +1,28 @@
+{{- if .Values.deployment.aias.services.aproc.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arlas-aproc-ingress
+  annotations:
+    {{ .Values.deployment.aias.services.aproc.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.global.ingressClassName }}
+  rules:
+    - host: {{ .Values.global.dnsDomain }}
+      http:
+        paths:
+          - path: /aproc/processes/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ (get .Values "aias-services").services.aproc.service.serviceName }}
+                port:
+                  number: {{ (get .Values "aias-services").services.servicePort }}
+          - path: /aproc/jobs
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ (get .Values "aias-services").services.aproc.service.serviceName }}
+                port:
+                  number: {{ (get .Values "aias-services").services.servicePort }}
+{{- end }}

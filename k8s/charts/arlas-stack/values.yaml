@@ -73,14 +73,65 @@ deployment:
   arlas:
     uis:
       enabled: true
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/use-regex: "true"
+          nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+
     services:
       enabled: true
-    ingress:
-      enabled: true
+      ingress:
+        enabled: true
+        annotations:
+
   aias:
     enabled: true
-    ingress:
-      enabled: true
+    uis:
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/use-regex: "true"
+          nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+
+    services:
+      airs:
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+            nginx.ingress.kubernetes.io/proxy-buffering: "off"
+
+      aproc:
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+      fam:
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+      minio:
+        serviceName: arlas-stack-minio
+        port: 9000
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+      titiler:
+        serviceName: arlas-stack-minio
+        port: 9000
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+
   elasticsearch:
     # -- Should the chart deploy elasticsearch
     enabled: true
@@ -91,9 +142,6 @@ deployment:
     enabled: true
     ingress:
       enabled: true
-  apisix:
-    # -- Should the chart deploy apisix
-    enabled: true
   rabbitmq:
     # -- Should the chart deploy rabbitmq
     enabled: true
@@ -165,8 +213,9 @@ aias-services:
   # @ignored  
   protocol: *arlasAppProtocol
   # @ignored  
+  initBuckets: false
   services:
-    initBuckets: false
+
     airs:
       serviceName: airs-server
       configuration:
@@ -180,15 +229,19 @@ aias-services:
             - /
           # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
           assetHttpEndpointUrl: https://site.arlas.k8s/{}/{}
+
     agate:
       serviceName: arlas-agate
       configuration:
         arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
+        urlHeader: x-auth-request-redirect
+        methodHeader: x-original-method
         urbac:
           openIdProvider: *arlasAppOpenIdProvider
           jwtAudience: arlas-backend
           # -- __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified
           verifySsl: false
+
     fam:
       serviceName: arlas-fam
 

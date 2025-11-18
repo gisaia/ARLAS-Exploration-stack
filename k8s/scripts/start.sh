@@ -41,4 +41,4 @@ else
   fi
 fi
 
-helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values-apisix.yaml -f k8s/charts/arlas-stack/values.yaml
+helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml

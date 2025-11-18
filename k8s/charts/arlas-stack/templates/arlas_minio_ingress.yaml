@@ -1,0 +1,21 @@
+{{- if .Values.deployment.aias.services.minio.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arlas-minio-ingress
+  annotations:
+    {{ .Values.deployment.aias.services.minio.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.global.ingressClassName }}
+  rules:
+    - host: {{ .Values.global.dnsDomain }}
+      http:
+        paths:
+          - path: /airs-storage/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.deployment.aias.services.minio.serviceName }}
+                port:
+                  number: {{ .Values.deployment.aias.services.minio.port }}
+{{- end }}

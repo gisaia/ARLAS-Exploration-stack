@@ -4,10 +4,10 @@
 dnsDomain: localhost
 protocol: http
 
+initBuckets: false
 services: 
   serviceType: ClusterIP
   servicePort: 8000
-  initBuckets: false
   airs:
     serviceName: airs-server
     image: gisaia/airs:0.7.2
@@ -110,9 +110,9 @@ services:
       nbWorkers: 4
       # -- HTTP header containing the original request URL
       urlHeader: x-forwarded-uri
+      # -- URBAC HTTP header containing the method of the original request
+      methodHeader: x-forwarded-method
       urbac:
-        # -- URBAC HTTP header containing the method of the original request
-        methodHeader: x-forwarded-method
         # -- URBAC HTTP header containing the JWT token of the original request
         jwtHeader: authorization
         # -- OpenID Provider configuration URL

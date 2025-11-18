@@ -1,4 +1,4 @@
-{{- if .Values.services.initBuckets }}
+{{- if .Values.initBuckets }}
 apiVersion: batch/v1
 kind: Job
 metadata:
