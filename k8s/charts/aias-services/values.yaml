@@ -7,6 +7,7 @@ protocol: http
 services: 
   serviceType: ClusterIP
   servicePort: 8000
+  initBuckets: false
   airs:
     serviceName: airs-server
     image: gisaia/airs:0.7.2

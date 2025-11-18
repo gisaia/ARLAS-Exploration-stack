@@ -59,7 +59,6 @@ global:
   # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
   celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//
 
-
   # -- __MUST BE CONFIGURED:__ redis Password
   redisPassword: &arlasAppRedisPassword secret4redis
   # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
@@ -71,12 +70,27 @@ global:
       password: secret4postgres
 
 deployment: 
+  arlas:
+    uis:
+      enabled: true
+    services:
+      enabled: true
+    ingress:
+      enabled: true
+  aias:
+    enabled: true
+    ingress:
+      enabled: true
   elasticsearch:
     # -- Should the chart deploy elasticsearch
     enabled: true
+    ingress:
+      enabled: true
   minio:
     # -- Should the chart deploy minio
     enabled: true
+    ingress:
+      enabled: true
   apisix:
     # -- Should the chart deploy apisix
     enabled: true
@@ -152,6 +166,7 @@ aias-services:
   protocol: *arlasAppProtocol
   # @ignored  
   services:
+    initBuckets: false
     airs:
       serviceName: airs-server
       configuration:
@@ -213,7 +228,8 @@ aias-services:
 
           ingest:
             # -- Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo
-            inputsDirectory: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
+            inputsDirectory: http://arlas-stack-minio:9000/inputs
+            #https://storage.googleapis.com/gisaia-public/OPENDATA/eo
             aprocEndpoint: http://aproc-service:8001
         accessManager:
           # -- Temporary directory used by the access manager
@@ -239,7 +255,10 @@ aias-services:
             -
               type: s3
               bucket: archives
-              endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
+              endpoint: $APROC_ARCHIVE_ENDPOINT|http://arlas-stack-minio:9000"
+              api_key:
+                access_key: *arlasAppMinioLogin
+                secret_key: *arlasAppMinioPassword
               readable_paths:
                 - /inputs
             # -
@@ -256,10 +275,22 @@ aias-services:
             -
               type: s3
               bucket: downloads
-              endpoint: "http://minio:9000"
+              endpoint: "http://arlas-stack-minio:9000"
+              api_key:
+                access_key: *arlasAppMinioLogin
+                secret_key: *arlasAppMinioPassword
               readable_paths:
                 - "/"
               writable_paths:
+                - "/"
+            -
+              type: s3
+              bucket: inputs
+              endpoint: "http://arlas-stack-minio:9000"
+              api_key:
+                access_key: *arlasAppMinioLogin
+                secret_key: *arlasAppMinioPassword
+              readable_paths:
                 - "/"
 
   # @ignored  
@@ -270,9 +301,9 @@ aias-services:
 
   logger:
     # -- Logging level for aias-services
-    loggingLevel: INFO
+    loggingLevel: DEBUG
     # -- Console logging level for aias-services
-    loggingConsoleLevel: INFO
+    loggingConsoleLevel: DEBUG
 
 # TITILER
 titiler:
@@ -406,11 +437,14 @@ keycloak:
     defaultStorageClass: *arlasAppDefaultStorageClass
 
   # Add extra volumes and volume mounts for realm import
+  realm:
+    configmap:
+      enabled: true
+  # Comment if realm.configmap.enabled is false:
   extraVolumes:
     - name: realm-config
       configMap:
         name: keycloak-realm-configmap
-
   extraVolumeMounts:
     - name: realm-config
       mountPath: /opt/bitnami/keycloak/data/import

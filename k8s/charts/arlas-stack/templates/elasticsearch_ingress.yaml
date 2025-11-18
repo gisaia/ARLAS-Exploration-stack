@@ -1,3 +1,4 @@
+{{- if .Values.deployment.elasticsearch.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -21,4 +22,4 @@ spec:
                   number: 9200
             path: /
             pathType: ImplementationSpecific
- 
+ {{- end }}

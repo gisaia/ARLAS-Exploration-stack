@@ -1,3 +1,4 @@
+{{- if .Values.services.initBuckets }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -23,3 +24,4 @@ spec:
               echo "🌍 Making buckets public..."
               mc anonymous set download local/{{ .Values.services.airs.configuration.s3.bucket }}
               mc anonymous set download local/{{ .Values.services.aproc.configuration.extensions.download.outboxS3.bucket }}
+{{- end }}

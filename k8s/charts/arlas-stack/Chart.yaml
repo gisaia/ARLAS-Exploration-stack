@@ -9,40 +9,50 @@ dependencies:
 - name: arlas-services
   version: 0.0.1
   repository: "file://../arlas-services"
+  condition: deployment.arlas.services.enabled
+
 - name: aias-services
   version: 0.0.1
   repository: "file://../aias-services"
+  condition: deployment.aias.enabled
 
 # ARLAS FRONTEND DEPENDENCIES
 - name: arlas-uis
   version: 0.0.1
   repository: "file://../arlas-uis"
+  condition: deployment.arlas.uis.enabled
 
 # THIRD PARTY DEPENDENCIES
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
   version: 22.0.4
   condition: deployment.elasticsearch.enabled
+
 - name: minio
   repository: https://charts.bitnami.com/bitnami
   version: 16.0.10
   condition: deployment.minio.enabled
+
 - name: apisix
   repository: https://charts.bitnami.com/bitnami
   version: 3.3.9
   condition: deployment.apisix.enabled
+
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
   version: 16.0.11
   condition: deployment.rabbitmq.enabled
+
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 21.2.13
   condition: deployment.redis.enabled
+
 - name: keycloak
   repository: https://charts.bitnami.com/bitnami
   version: 20.0.1
   condition: deployment.keycloak.enabled
+  
 - name: titiler
   repository: "file://../titiler"
   version: 1.2.7
