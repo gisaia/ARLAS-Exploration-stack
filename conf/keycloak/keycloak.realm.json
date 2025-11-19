@@ -50,7 +50,7 @@
       "description" : "${role_offline-access}",
       "composite" : false,
       "clientRole" : false,
-      "containerId" : "5b2d6e05-5835-4462-b012-5534c6b4b98b",
+      "containerId" : "arlas",
       "attributes" : { }
     }, {
       "id" : "4f198dd6-0ab6-402b-90bb-8f1b432a8a64",
@@ -64,7 +64,7 @@
         }
       },
       "clientRole" : false,
-      "containerId" : "5b2d6e05-5835-4462-b012-5534c6b4b98b",
+      "containerId" : "arlas",
       "attributes" : { }
     }, {
       "id" : "51b5ecc6-51dd-4049-a9c7-f641ec163705",
@@ -72,7 +72,7 @@
       "description" : "${role_uma_authorization}",
       "composite" : false,
       "clientRole" : false,
-      "containerId" : "5b2d6e05-5835-4462-b012-5534c6b4b98b",
+      "containerId" : "arlas",
       "attributes" : { }
     } ],
     "client" : {
@@ -315,6 +315,14 @@
         "clientRole" : true,
         "containerId" : "77721784-2757-4b47-bf1b-7817193a3fb9",
         "attributes" : { }
+      }, {
+        "id" : "967871d9-c830-4133-82c1-ebf8a5ec9d47",
+        "name" : "role/data/all",
+        "description" : "",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "77721784-2757-4b47-bf1b-7817193a3fb9",
+        "attributes" : {}
       } ],
       "security-admin-console" : [ ],
       "admin-cli" : [ ],
@@ -424,7 +432,7 @@
     "description" : "${role_default-roles}",
     "composite" : true,
     "clientRole" : false,
-    "containerId" : "5b2d6e05-5835-4462-b012-5534c6b4b98b"
+    "containerId" : "arlas"
   },
   "requiredCredentials" : [ "password" ],
   "otpPolicyType" : "totp",
@@ -511,7 +519,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-arlas" ],
     "clientRoles" : {
-      "arlas-backend" : [ "role/arlas/tagger", "role/m2m/importer", "role/arlas/datasets", "role/arlas/downloader", "role/arlas/builder", "role/arlas/user" ]
+      "arlas-backend" : [ "role/arlas/tagger", "role/m2m/importer", "role/arlas/datasets", "role/arlas/downloader", "role/arlas/builder", "role/arlas/user", "role/data/all"]
     },
     "notBefore" : 0,
     "groups" : [ "/basic-user-group" ]
@@ -533,6 +541,12 @@
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-arlas" ],
+    "clientRoles" : {
+      "arlas-backend" : [
+        "role/data/all",
+        "role/arlas/user"
+        ]
+      },
     "notBefore" : 0,
     "groups" : [ "/basic-user-group" ]
   }, {
@@ -554,7 +568,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-arlas" ],
     "clientRoles" : {
-      "arlas-backend" : [ "role/arlas/builder" ]
+      "arlas-backend" : [ "role/arlas/builder", "role/data/all",  "role/arlas/user" ]
     },
     "notBefore" : 0,
     "groups" : [ "/basic-user-group" ]
@@ -831,6 +845,16 @@
           "roles" : "[{\"id\":\"arlas-backend/role/arlas/user\",\"required\":false}]"
         }
       }, {
+        "id" : "e50e9f86-054c-4de4-9251-0e5439c20513",
+        "name" : "is role/data/all",
+        "description" : "",
+        "type" : "role",
+        "logic" : "POSITIVE",
+        "decisionStrategy" : "UNANIMOUS",
+        "config" : {
+          "roles" : "[{\"id\":\"arlas-backend/role/data/all\",\"required\":false}]"
+        }
+      }, {
         "id" : "1ba39df8-c26c-4e5a-8796-d6a614178ed8",
         "name" : "is role/arlas/downloader",
         "description" : "",
@@ -859,7 +883,7 @@
         "decisionStrategy" : "UNANIMOUS",
         "config" : {
           "resources" : "[\"h:column-filter:*:*\"]",
-          "applyPolicies" : "[\"is role/arlas/user\"]"
+          "applyPolicies" : "[\"is role/data/all\"]"
         }
       } ],
       "scopes" : [ ],
