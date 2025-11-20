@@ -39,9 +39,11 @@ spec:
           resources:
             {{- toYaml .Values.services.aproc.worker.resources | nindent 12 }}
           env:
-
             - name: APROC_CONFIGURATION_FILE
               value: /app/conf/aproc.yaml
+
+            - name: BROKER
+              value: {{ .Values.services.aproc.configuration.celeryBrokerUrl}}
 
             # LOGGING
             - name: APROC_LOGGER_LEVEL
@@ -53,10 +55,16 @@ spec:
             - name: aproc-files
               mountPath: /app/conf/
               readOnly: true
+            - name: arlas-eo-mappings
+              mountPath: /app/mappings/
+              readOnly: true
       volumes:
         - name: aproc-files
           configMap:
             name: aproc-files-configmap
+        - name: arlas-eo-mappings
+          configMap:
+            name: arlas-eo-mappings-configmap
 
       # NODE SELECTION      
       {{- with .Values.services.aproc.worker.nodeSelector }}

@@ -10,7 +10,7 @@ services:
   servicePort: 8000
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.7.2
+    image: gisaia/airs:0.7.4
     urlPrefix: /airs
     serviceBinding: 0.0.0.0
     # -- Number of AIRS service replicas
@@ -56,13 +56,13 @@ services:
         tier: Standard
 
       # -- ARLAS-EO mapping and collection URLs used for initializing new indices of new collections
-      arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json
+      arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
       arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/collection.json      
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.7.2
+    image: gisaia/fam:0.7.4
     urlPrefix: /fam
     serviceBinding: 0.0.0.0
     # -- Number of FAM service replicas
@@ -84,7 +84,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.7.2
+    image: gisaia/agate:0.7.4
     urlPrefix: /agate
     serviceBinding: 0.0.0.0
     # -- Number of AGATE service replicas
@@ -115,8 +115,8 @@ services:
       urbac:
         # -- URBAC HTTP header containing the JWT token of the original request
         jwtHeader: authorization
-        # -- OpenID Provider configuration URL
-        openIdProvider: https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
+        # -- Keys endpoint
+        jwks_uri: https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs
         # -- Whether to verify the JWT signature or not
         verifyJwt: true
         # -- Whether to verify the SSL certificate of the OpenID Provider or not
@@ -181,7 +181,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.7.2
+      image: gisaia/aproc-service:0.7.4
       urlPrefix: /aproc
       serviceBinding: 0.0.0.0
       # -- Number of APROC service replicas
@@ -202,7 +202,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.7.2
+      image: gisaia/aproc-proc:0.7.4
       # -- Number of APROC worker replicas
       replicaCount: 1
       # -- Resources configuration for APROC worker
@@ -317,7 +317,7 @@ services:
               priority: 1
 
           # -- Downloads mapping configuration for indexing the download requests
-          downloadMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/downloads_mapping.json
+          downloadMappingUrl: /app/mappings/arlas_eo_download_mapping.json
           # -- should directory where download are temporally built before copy are cleaned
           cleanOutboxDir: true
           # -- where downloads are placed

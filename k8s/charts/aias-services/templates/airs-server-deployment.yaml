@@ -69,10 +69,16 @@ spec:
             - name: airs-files
               mountPath: /app/conf/
               readOnly: true
+            - name: arlas-eo-mappings
+              mountPath: /app/mappings/
+              readOnly: true
       volumes:
         - name: airs-files
           configMap:
             name: airs-files-configmap
+        - name: arlas-eo-mappings
+          configMap:
+            name: arlas-eo-mappings-configmap
 
       # NODE SELECTION      
       {{- with .Values.services.airs.nodeSelector }}

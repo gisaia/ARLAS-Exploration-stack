@@ -8,9 +8,6 @@ A Helm Chart to deploy ARLAS AIAS Services
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| airsIndexPrefix | string | `"airs"` | Prefix appended to elasticsearch indices containing AIRS collections. The final name is of the form: prefix@organization_indexname |
-| arlasMappingUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json"` | This elasticsearch mapping is used during the initialization of the index of a newly created collection |
-| arlasSearchUrl | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS URL Search for AGATE to check whether an item is accessible or not |
 | cors.allowedCredentials | bool | `true` | CORS Allowed Credentials or not |
 | cors.allowedHeaders | string | `"arlas-user,arlas-groups,arlas-organization,arlas-org-filter,X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Forwarded-User"` | CORS Allowed Headers |
 | cors.allowedHosts | string | `"0.0.0.0"` |  |
@@ -18,126 +15,171 @@ A Helm Chart to deploy ARLAS AIAS Services
 | cors.allowedOrigins | string | `"\"*\""` | CORS Allowed Origins |
 | cors.exposedHeaders | string | `"Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,WWW-Authenticate"` | CORS Exposed Headers |
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
-| download.cleanAfterUpload | bool | `true` |  |
-| download.downloadReportIndex | string | `"aproc_downloads"` | Name of the download index that will contain the download requests |
-| download.message.admin.emails | string | `"admin@the.boss,someone.else@the.boss"` | admin emails that will receive the download notifications, other than the user himself |
-| download.message.done.admin.content | string | `"The download of {collection}/{item_id} for {arlas-user-email} is available in {target_directory} ({file_name}) for projection {target_projection} ({target_format}). <br>ARLAS Services."` |  |
-| download.message.done.admin.subject | string | `"The download of {collection}/{item_id} for {arlas-user-email} is available."` |  |
-| download.message.done.user.content | string | `"ARLAS Services - Dear {arlas-user-email}. <br>Your download of {collection}/{item_id} is available for projection {target_projection} ({target_format}). <br>ARLAS Services."` |  |
-| download.message.done.user.subject | string | `"ARLAS Services - Your download of {collection}/{item_id} is available."` |  |
-| download.message.error.content | string | `"ARLAS Services - The download of {collection}/{item_id} failed ({error})."` |  |
-| download.message.error.subject | string | `"ARLAS Services - ERROR - The download of {collection}/{item_id} failed."` |  |
-| download.message.path.prefix | string | `"file:/"` | prefix to put in front of the path for emails |
-| download.message.path.windows | bool | `false` | change to windows path |
-| download.message.request.admin.content | string | `"ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id} for projection {target_projection} ({target_format}). <br>ARLAS Services."` |  |
-| download.message.request.admin.subject | string | `"ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id}."` |  |
-| download.message.request.user.content | string | `"ARLAS Services - Dear {arlas-user-email}. <br>Your download request for {collection}/{item_id} with projection {target_projection} ({target_format}) will shortly be taken into account. <br>ARLAS Services."` |  |
-| download.message.request.user.subject | string | `"ARLAS Services - Thank you for your download request (({collection}/{item_id})."` |  |
-| download.s3.bucket | string | `"downloads"` | bucket that will contain the downloads |
-| download.s3.endpoint | string | `"http://arlas-stack-minio:9000"` | where downloads are uploaded once ready |
-| download.s3.http | string | `"http://arlas-stack-minio:9000/{}/{}"` | where downloads are uploaded once ready, first {} is the bucket, second {} is the path to the object |
-| download.s3.key | string | `"airs"` |  |
-| download.s3.secret | string | `"airssecret"` |  |
-| download.tmpFolder | string | `"/tmp/"` | Where download are temporally built before copy |
-| elastic.cluster | string | `"elastic"` |  |
-| elastic.login | string | `"elastic"` |  |
-| elastic.password | string | `"elastic"` |  |
-| ingest.folder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Folder used by FAM and APROC for ingestion   |
+| elastic.cluster | string | `"elastic"` | Elasticsearch cluster name |
+| elastic.endpoint | string | `"https://elasticsearch:9200"` | Elasticsearch endpoint URL for AIRS and APROC services |
+| elastic.login | string | `"elastic"` | Elasticsearch login |
+| elastic.password | string | `"elastic"` | Elasticsearch password |
+| initBuckets | bool | `false` |  |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
-| organization | string | `"org.com"` | Name of the organization using AIAS |
 | protocol | string | `"http"` |  |
-| rabbitmq.host | string | `"rabbitmq"` |  |
-| rabbitmq.login | string | `"guest"` |  |
-| rabbitmq.password | string | `"guest"` |  |
-| rabbitmq.port | int | `5672` |  |
-| redis.db | int | `0` |  |
-| redis.host | string | `"redis-master"` |  |
-| redis.password | string | `"somepassword"` |  |
-| redis.port | int | `6379` |  |
-| redis.username | string | `"default"` |  |
-| resourceIdHashStartAt | int | `0` |  |
-| s3 | object | `{"accessKeyId":"airs","assetHttpEndpointUrlPattern":"http://arlas-stack-minio:9000/{}/{}","bucket":"airs-storage","endpoint":"http://arlas-stack-minio:9000","platform":"MINIO","region":"Standard","secret":"airssecret","tier":"Standard"}` | Configuration of the s3 used for storing and accessing the STAC collections, items and managed assets |
-| s3.accessKeyId | string | `"airs"` | s3 key |
-| s3.assetHttpEndpointUrlPattern | string | `"http://arlas-stack-minio:9000/{}/{}"` | asset_http_endpoint_url_pattern must look like https://storage.googleapis.com/{}/{} where first {} is the bucket, second {} is the path to the object   |
-| s3.bucket | string | `"airs-storage"` | s3 bucket name for storing the STAC collections, items and managed assets |
-| s3.endpoint | string | `"http://arlas-stack-minio:9000"` | s3 endpoint |
-| s3.platform | string | `"MINIO"` | Platform type. This value is provided in the item properties |
-| s3.region | string | `"Standard"` | Region. This value is provided in the item properties |
-| s3.secret | string | `"airssecret"` | s3 secret |
-| s3.tier | string | `"Standard"` | Tier. This value is provided in the item properties |
-| services.agate.affinity | object | `{}` |  |
-| services.agate.audience | string | `"arlas-backend"` |  |
-| services.agate.image | string | `"gisaia/agate:0.7.2"` |  |
-| services.agate.nodeSelector | object | `{}` |  |
-| services.agate.openIdProvider | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration"` |  |
-| services.agate.replicaCount | int | `1` |  |
-| services.agate.resources.limits.cpu | float | `0.5` |  |
-| services.agate.resources.limits.memory | string | `"256Mi"` |  |
-| services.agate.resources.requests.cpu | float | `0.1` |  |
-| services.agate.resources.requests.memory | string | `"50Mi"` |  |
+| services.agate.affinity | object | `{}` | Affinity for AGATE service pods |
+| services.agate.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS endpoint used by AGATE to check whether an item is accessible or not |
+| services.agate.configuration.extraRoles | string | `nil` | Custom roles to be added to the roles.yaml file used by URBAC. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml |
+| services.agate.configuration.methodHeader | string | `"x-forwarded-method"` | URBAC HTTP header containing the method of the original request |
+| services.agate.configuration.nbWorkers | int | `4` | Number of worker processes for AGATE |
+| services.agate.configuration.services.airs-storage.jwt_location | list | `["headers"]` | Locations where to find the JWT token for storage access |
+| services.agate.configuration.services.airs-storage.jwt_name | string | `"authorization"` | Name of the header containing the JWT token |
+| services.agate.configuration.services.airs-storage.private | list | `[{"part":"path","pattern":"(/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview"},{"part":"path","pattern":"(/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog"}]` | Patterns for private assets |
+| services.agate.configuration.services.airs-storage.public | list | `[{"part":"path","pattern":"(/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail"}]` | Patterns for private assets |
+| services.agate.configuration.services.cog | object | `{"jwt_location":["headers","query_params"],"jwt_name":"authorization","private":[{"part":"query.url.url.path","pattern":"(/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)"}]}` | Configuration for accessing private COG assets |
+| services.agate.configuration.services.cog.jwt_location | list | `["headers","query_params"]` | Locations where to find the JWT token for COG access |
+| services.agate.configuration.services.cog.jwt_name | string | `"authorization"` | Name of the header containing the JWT token for COG access |
+| services.agate.configuration.services.cog.private | list | `[{"part":"query.url.url.path","pattern":"(/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)"}]` | Patterns for private COG assets |
+| services.agate.configuration.services.cog_preview.jwt_location | list | `["headers","query_params"]` | Locations where to find the JWT token for COG preview access |
+| services.agate.configuration.services.cog_preview.jwt_name | string | `"authorization"` | Name of the header containing the JWT token for COG preview access |
+| services.agate.configuration.services.cog_preview.public | list | `[{"part":"path","pattern":"(/cog/preview)(.*)"}]` | Patterns for public COG preview access |
+| services.agate.configuration.services.cog_statistics.jwt_location | list | `["headers","query_params"]` | Locations where to find the JWT token for COG statistics access |
+| services.agate.configuration.services.cog_statistics.jwt_name | string | `"authorization"` | Name of the header containing the JWT token for COG statistics access |
+| services.agate.configuration.services.cog_statistics.public | list | `[{"part":"path","pattern":"(/cog/statistics)(.*)"}]` | Patterns for public COG statistics access |
+| services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs"` | Keys endpoint |
+| services.agate.configuration.urbac.jwtAudience | string | `"arlas-backend"` | Expected audience in the JWT token |
+| services.agate.configuration.urbac.jwtHeader | string | `"authorization"` | URBAC HTTP header containing the JWT token of the original request |
+| services.agate.configuration.urbac.verifyJwt | bool | `true` | Whether to verify the JWT signature or not |
+| services.agate.configuration.urbac.verifySsl | bool | `true` | Whether to verify the SSL certificate of the OpenID Provider or not |
+| services.agate.configuration.urlHeader | string | `"x-forwarded-uri"` | HTTP header containing the original request URL |
+| services.agate.image | string | `"gisaia/agate:0.7.4"` |  |
+| services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
+| services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
+| services.agate.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AGATE service |
 | services.agate.serviceBinding | string | `"0.0.0.0"` |  |
 | services.agate.serviceName | string | `"arlas-agate"` |  |
-| services.agate.tolerations | list | `[]` |  |
+| services.agate.tolerations | list | `[]` | Tolerations for AGATE service pods |
 | services.agate.urlPrefix | string | `"/agate"` |  |
-| services.agate.verifyJwt | bool | `true` |  |
-| services.agate.verifySsl | bool | `true` |  |
-| services.airs.affinity | object | `{}` |  |
-| services.airs.image | string | `"gisaia/airs:0.7.2"` |  |
-| services.airs.nodeSelector | object | `{}` |  |
-| services.airs.replicaCount | int | `1` |  |
-| services.airs.resources.limits.cpu | float | `0.5` |  |
-| services.airs.resources.limits.memory | string | `"2Gi"` |  |
-| services.airs.resources.requests.cpu | float | `0.1` |  |
-| services.airs.resources.requests.memory | string | `"50Mi"` |  |
+| services.airs.affinity | object | `{}` | Affinity for AIRS service pods |
+| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
+| services.airs.configuration.arlaseoMappingUrl | string | `"/app/mappings/arlas_eo_mapping.json"` | ARLAS-EO mapping and collection URLs used for initializing new indices of new collections |
+| services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
+| services.airs.configuration.s3.accessKeyId | string | `"airs"` | S3 access key id |
+| services.airs.configuration.s3.assetHttpEndpointUrl | string | `"https://arlas-stack-minio:9000/{}/{}"` | Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item |
+| services.airs.configuration.s3.bucket | string | `"airs-storage"` | S3 bucket name for storing and accessing the STAC collections, items and managed assets |
+| services.airs.configuration.s3.endpointUrl | string | `"http://arlas-stack-minio:9000"` | S3 internal endpoint URL, e.g. http://minio:9000 |
+| services.airs.configuration.s3.platform | string | `"MINIO"` | S3 platform type. This value is provided in the item properties of the STAC item |
+| services.airs.configuration.s3.region | string | `nil` | S3 bucket's region. This value is provided in the item properties of the STAC item |
+| services.airs.configuration.s3.secretAccessKey | string | `"airssecret"` | S3 secret access key |
+| services.airs.configuration.s3.tier | string | `"Standard"` | S3 bucket's tier. This value is provided in the item properties of the STAC item |
+| services.airs.configuration.s3.writablePaths | list | `["/"]` | List of writable paths in the S3 bucket |
+| services.airs.image | string | `"gisaia/airs:0.7.4"` |  |
+| services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
+| services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
+| services.airs.resources | object | `{"limits":{"cpu":0.5,"memory":"2Gi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AIRS service |
 | services.airs.serviceBinding | string | `"0.0.0.0"` |  |
 | services.airs.serviceName | string | `"airs-server"` |  |
-| services.airs.tolerations | list | `[]` |  |
+| services.airs.tolerations | list | `[]` | Tolerations for AIRS service pods |
 | services.airs.urlPrefix | string | `"/airs"` |  |
-| services.aproc.service.affinity | object | `{}` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.7.2"` |  |
-| services.aproc.service.nodeSelector | object | `{}` |  |
-| services.aproc.service.replicaCount | int | `1` |  |
-| services.aproc.service.resources.limits.cpu | float | `0.5` |  |
-| services.aproc.service.resources.limits.memory | string | `"256Mi"` |  |
-| services.aproc.service.resources.requests.cpu | float | `0.1` |  |
-| services.aproc.service.resources.requests.memory | string | `"50Mi"` |  |
+| services.aproc.configuration.accessManager.storages | list | `[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://minio:9000\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"downloads","endpoint":"http://minio:9000","readable_paths":["/"],"type":"s3","writable_paths":["/"]}]` | Configuration of the storages used by the access manager to provide access to various storage backends |
+| services.aproc.configuration.accessManager.tmpDir | string | `"/tmp/"` | Temporary directory used by the access manager |
+| services.aproc.configuration.airsEndpoint | string | `"http://airs-server:8000/arlas/airs"` | AIRS service endpoint URL accessed by APROC |
+| services.aproc.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS search URL used by APROC to check whether an item exists |
+| services.aproc.configuration.celeryBrokerUrl | string | `"pyamqp://guest:guest@rabbitmq:5672//"` | Celery broker URL for APROC tasks |
+| services.aproc.configuration.celeryResultBackend | string | `"redis://:somepassword@redis-master:6379/0"` | Celery result backend URL for APROC tasks |
+| services.aproc.configuration.extensions.dc3build.drivers.safe.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.dc3build.drivers.safe.priority | int | `1` |  |
+| services.aproc.configuration.extensions.dc3build.enabled | bool | `true` | Whether the DC3 build extension is enabled or not |
+| services.aproc.configuration.extensions.directoryIngest.enabled | bool | `true` | Whether the directory ingest extension is enabled or not |
+| services.aproc.configuration.extensions.download.cleanOutboxDir | bool | `true` | should directory where download are temporally built before copy are cleaned |
+| services.aproc.configuration.extensions.download.downloadMappingUrl | string | `"/app/mappings/arlas_eo_download_mapping.json"` | Downloads mapping configuration for indexing the download requests |
+| services.aproc.configuration.extensions.download.drivers.copy | object | `{"enabled":true,"priority":4}` | drivers used for building the downloads. This list should remain as is unless you have custom download drivers |
+| services.aproc.configuration.extensions.download.drivers.imageFile.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.download.drivers.imageFile.priority | int | `3` |  |
+| services.aproc.configuration.extensions.download.drivers.metFile.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.download.drivers.metFile.priority | int | `2` |  |
+| services.aproc.configuration.extensions.download.drivers.zarr.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.download.drivers.zarr.priority | int | `1` |  |
+| services.aproc.configuration.extensions.download.emails.message.admin.emails | string | `"admin@the.boss,someone.else@the.boss"` | admin emails that will receive the download notifications, other than the user himself |
+| services.aproc.configuration.extensions.download.emails.message.done.admin | object | `{"content":"The download of {collection}/{item_id} for {arlas-user-email} is available in {target_directory} ({file_name}) for projection {target_projection} ({target_format}). <br>ARLAS Services.","subject":"The download of {collection}/{item_id} for {arlas-user-email} is available."}` | Message templates for download done notifications to admins |
+| services.aproc.configuration.extensions.download.emails.message.done.user | object | `{"content":"ARLAS Services - Dear {arlas-user-email}. <br>Your download of {collection}/{item_id} is available for projection {target_projection} ({target_format}). <br>ARLAS Services.","subject":"ARLAS Services - Your download of {collection}/{item_id} is available."}` | Message templates for download done notifications to users |
+| services.aproc.configuration.extensions.download.emails.message.error | object | `{"content":"ARLAS Services - The download of {collection}/{item_id} failed ({error}).","subject":"ARLAS Services - ERROR - The download of {collection}/{item_id} failed."}` | Message templates for download error notifications to users and admins |
+| services.aproc.configuration.extensions.download.emails.message.path.prefix | string | `"file:/"` | prefix to put in front of the path for emails |
+| services.aproc.configuration.extensions.download.emails.message.path.windows | bool | `false` | change to windows path |
+| services.aproc.configuration.extensions.download.emails.message.request.admin | object | `{"content":"ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id} for projection {target_projection} ({target_format}). <br>ARLAS Services.","subject":"ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id}."}` | Message templates for download request notifications to admins |
+| services.aproc.configuration.extensions.download.emails.message.request.user | object | `{"content":"ARLAS Services - Dear {arlas-user-email}. <br>Your download request for {collection}/{item_id} with projection {target_projection} ({target_format}) will shortly be taken into account. <br>ARLAS Services.","subject":"ARLAS Services - Thank you for your download request (({collection}/{item_id})."}` | Message templates for download request notifications to users |
+| services.aproc.configuration.extensions.download.enabled | bool | `true` | Whether the download extension is enabled or not |
+| services.aproc.configuration.extensions.download.index.name | string | `"aproc_downloads"` | Elasticsearch index name for the download requests |
+| services.aproc.configuration.extensions.download.outboxDirectory | string | `"/downloads"` | where downloads are placed |
+| services.aproc.configuration.extensions.download.outboxS3 | object | `{"accessKeyId":"airs","assetHttpEndpointUrl":"http://arlas-stack-minio:9000/{}/{}","bucket":"downloads","endpointUrl":"http://arlas-stack-minio:9000","secretAccessKey":"airssecret"}` | S3 configuration for uploading the built downloads |
+| services.aproc.configuration.extensions.download.outboxS3.accessKeyId | string | `"airs"` | S3 access key id for uploading the built downloads |
+| services.aproc.configuration.extensions.download.outboxS3.assetHttpEndpointUrl | string | `"http://arlas-stack-minio:9000/{}/{}"` | Public URL Pattern to access the built downloads over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object |
+| services.aproc.configuration.extensions.download.outboxS3.bucket | string | `"downloads"` | S3 bucket name for uploading the built downloads |
+| services.aproc.configuration.extensions.download.outboxS3.endpointUrl | string | `"http://arlas-stack-minio:9000"` | S3 endpoint URL for uploading the built downloads |
+| services.aproc.configuration.extensions.download.outboxS3.secretAccessKey | string | `"airssecret"` | S3 secret access key for uploading the built downloads |
+| services.aproc.configuration.extensions.enrich.drivers.safe.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.enrich.drivers.safe.priority | int | `1` |  |
+| services.aproc.configuration.extensions.enrich.enabled | bool | `true` | Whether the enrich extension is enabled or not |
+| services.aproc.configuration.extensions.ingest.aprocEndpoint | string | `"http://aproc-service:8001"` | APROC endpoint URL accessed by the ingest extension |
+| services.aproc.configuration.extensions.ingest.drivers.astDem.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.astDem.priority | int | `4` |  |
+| services.aproc.configuration.extensions.ingest.drivers.bsg.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.bsg.priority | int | `10` |  |
+| services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.priority | int | `8` |  |
+| services.aproc.configuration.extensions.ingest.drivers.digitalglobe.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.digitalglobe.priority | int | `3` |  |
+| services.aproc.configuration.extensions.ingest.drivers.dimap.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.dimap.priority | int | `1` |  |
+| services.aproc.configuration.extensions.ingest.drivers.geoeyes.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.geoeyes.priority | int | `2` |  |
+| services.aproc.configuration.extensions.ingest.drivers.jpeg2000.enabled | bool | `false` |  |
+| services.aproc.configuration.extensions.ingest.drivers.jpeg2000.priority | int | `12` |  |
+| services.aproc.configuration.extensions.ingest.drivers.rapideye.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.rapideye.priority | int | `5` |  |
+| services.aproc.configuration.extensions.ingest.drivers.sentinel2.enabled | bool | `false` |  |
+| services.aproc.configuration.extensions.ingest.drivers.sentinel2.priority | int | `13` |  |
+| services.aproc.configuration.extensions.ingest.drivers.spot5.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.spot5.priority | int | `6` |  |
+| services.aproc.configuration.extensions.ingest.drivers.terrasarx.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.terrasarx.priority | int | `7` |  |
+| services.aproc.configuration.extensions.ingest.drivers.tiff.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.tiff.priority | int | `11` |  |
+| services.aproc.configuration.extensions.ingest.drivers.umbra.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.umbra.priority | int | `9` |  |
+| services.aproc.configuration.extensions.ingest.enabled | bool | `true` | Whether the archive ingest extension is enabled or not |
+| services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"/inputs"` | Directory where archives to ingest are stored |
+| services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest | int | `100000` | Maximum number of archives that can be ingested in a single batch |
+| services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
+| services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.7.4"` |  |
+| services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
+| services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
+| services.aproc.service.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for APROC service |
 | services.aproc.service.serviceBinding | string | `"0.0.0.0"` |  |
 | services.aproc.service.serviceName | string | `"aproc-service"` |  |
-| services.aproc.service.tolerations | list | `[]` |  |
+| services.aproc.service.tolerations | list | `[]` | Tolerations for APROC service pods |
 | services.aproc.service.urlPrefix | string | `"/aproc"` |  |
-| services.aproc.worker.affinity | object | `{}` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.7.2"` |  |
-| services.aproc.worker.nodeSelector | object | `{}` |  |
-| services.aproc.worker.replicaCount | int | `1` |  |
-| services.aproc.worker.resources.limits.cpu | int | `2` |  |
-| services.aproc.worker.resources.limits.memory | string | `"2Gi"` |  |
-| services.aproc.worker.resources.requests.cpu | float | `0.5` |  |
-| services.aproc.worker.resources.requests.memory | string | `"512Mi"` |  |
+| services.aproc.worker.affinity | object | `{}` | Affinity for APROC worker pods |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.7.4"` |  |
+| services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
+| services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
+| services.aproc.worker.resources | object | `{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":0.5,"memory":"512Mi"}}` | Resources configuration for APROC worker |
 | services.aproc.worker.serviceName | string | `"aproc-proc"` |  |
-| services.aproc.worker.tolerations | list | `[]` |  |
-| services.fam.affinity | object | `{}` |  |
-| services.fam.image | string | `"gisaia/fam:0.7.2"` |  |
-| services.fam.nodeSelector | object | `{}` |  |
-| services.fam.replicaCount | int | `1` |  |
-| services.fam.resources.limits.cpu | float | `0.5` |  |
-| services.fam.resources.limits.memory | string | `"256Mi"` |  |
-| services.fam.resources.requests.cpu | float | `0.1` |  |
-| services.fam.resources.requests.memory | string | `"50Mi"` |  |
+| services.aproc.worker.tolerations | list | `[]` | Tolerations for APROC worker pods |
+| services.fam.affinity | object | `{}` | Affinity for FAM service pods |
+| services.fam.image | string | `"gisaia/fam:0.7.4"` |  |
+| services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
+| services.fam.replicaCount | int | `1` | Number of FAM service replicas |
+| services.fam.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for FAM service |
 | services.fam.serviceBinding | string | `"0.0.0.0"` |  |
 | services.fam.serviceName | string | `"arlas-fam"` |  |
-| services.fam.tolerations | list | `[]` |  |
+| services.fam.tolerations | list | `[]` | Tolerations for FAM service pods |
 | services.fam.urlPrefix | string | `"/fam"` |  |
 | services.servicePort | int | `8000` |  |
 | services.serviceType | string | `"ClusterIP"` |  |
-| smtp.enabled | bool | `false` |  |
-| smtp.from | string | `"tobechanged"` |  |
-| smtp.host | string | `"tobechanged"` |  |
-| smtp.password | string | `"tobechanged"` |  |
-| smtp.port | int | `25` |  |
-| smtp.username | string | `"tobechanged"` |  |
-| softTimeLimit | int | `1190` |  |
-| timeLimit | int | `1200` |  |
+| smtp.enabled | bool | `false` | Whether SMTP email sending is enabled or not |
+| smtp.from | string | `"tobechanged"` | SMTP sender email address |
+| smtp.host | string | `"tobechanged"` | SMTP server host |
+| smtp.password | string | `"tobechanged"` | SMTP password |
+| smtp.port | int | `25` | SMTP server port |
+| smtp.username | string | `"tobechanged"` | SMTP username |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

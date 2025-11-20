@@ -12,7 +12,6 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | file://../arlas-services | arlas-services | 0.0.1 |
 | file://../arlas-uis | arlas-uis | 0.0.1 |
 | file://../titiler | titiler | 1.2.7 |
-| https://charts.bitnami.com/bitnami | apisix | 3.3.9 |
 | https://charts.bitnami.com/bitnami | elasticsearch | 22.0.4 |
 | https://charts.bitnami.com/bitnami | keycloak | 20.0.1 |
 | https://charts.bitnami.com/bitnami | minio | 16.0.10 |
@@ -23,46 +22,72 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| aias-services.ingest.folder | string | `"https://storage.googleapis.com/gisaia-public/OPENDATA/eo"` | Folder used by FAM and APROC for ingestion   |
-| aias-services.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
-| aias-services.logger.loggingLevel | string | `"INFO"` | Logging level |
-| aias-services.services.agate.openIdProvider | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration"` |  |
-| aias-services.services.agate.verifyJwt | bool | `true` |  |
-| aias-services.services.agate.verifySsl | bool | `false` | __MUST BE CONFIGURED:__ Set to true in production if your OpenID provider uses https with a valid certificate, false otherwise (for test with self-signed certificate or http) |
-| aias-services.services.aproc.worker.affinity | object | `{}` |  |
-| aias-services.services.aproc.worker.nodeSelector | object | `{}` |  |
-| aias-services.services.aproc.worker.replicaCount | int | `1` |  |
-| aias-services.services.aproc.worker.resources.limits.cpu | int | `2` |  |
-| aias-services.services.aproc.worker.resources.limits.memory | string | `"10Gi"` |  |
-| aias-services.services.aproc.worker.tolerations | list | `[]` |  |
+| aias-services | object | `{"logger":{"loggingConsoleLevel":"DEBUG","loggingLevel":"DEBUG"},"services":{"agate":{"configuration":{"arlasUrlSearch":"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}","methodHeader":"x-original-method","urbac":{"jwtAudience":"arlas-backend","openIdProvider":"https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration","verifySsl":false},"urlHeader":"x-auth-request-redirect"},"serviceName":"arlas-agate"},"airs":{"configuration":{"s3":{"accessKeyId":"minioadmin","assetHttpEndpointUrl":"https://site.arlas.k8s/{}/{}","bucket":"airs-storages","endpoint":"http://arlas-stack-minio:9000","secretAccessKey":"secret4minio","writablePaths":["/"]}},"serviceName":"airs-server"},"aproc":{"configuration":{"accessManager":{"storages":[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"gisaia-public","readable_paths":["/OPENDATA"],"type":"gs"},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://arlas-stack-minio:9000\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"gisaia-public","endpoint":"https://storage.googleapis.com","readable_paths":["/OPENDATA"],"type":"s3"},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"downloads","endpoint":"http://arlas-stack-minio:9000","readable_paths":["/"],"type":"s3","writable_paths":["/"]},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"inputs","endpoint":"http://arlas-stack-minio:9000","readable_paths":["/"],"type":"s3"}],"tmpDir":"/tmp/"},"airsEndpoint":"http://airs-server:8000/arlas/airs","arlasUrlSearch":"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}","celeryBrokerUrl":"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//","celeryResultBackend":"redis://:secret4redis@arlas-stack-redis-master:6379/0","extensions":{"download":{"index":{"name":"org.com@aproc_downloads"},"outboxS3":{"accessKeyId":"minioadmin","assetHttpEndpointUrl":"https://site.arlas.k8s/{}/{}","bucket":"downloads","endpointUrl":"http://arlas-stack-minio:9000","secretAccessKey":"secret4minio"}},"ingest":{"aprocEndpoint":"http://aproc-service:8001","inputsDirectory":"http://arlas-stack-minio:9000/inputs"}}},"service":{"serviceName":"aproc-service"},"worker":{"affinity":{},"nodeSelector":{},"replicaCount":1,"resources":{"limits":{"cpu":2,"memory":"10Gi"}},"tolerations":[]}},"fam":{"serviceName":"arlas-fam"}}}` | See the documentation of the sub-chart aias-services https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/aias-services/ |
+| aias-services.logger.loggingConsoleLevel | string | `"DEBUG"` | Console logging level for aias-services |
+| aias-services.logger.loggingLevel | string | `"DEBUG"` | Logging level for aias-services |
+| aias-services.services.agate.configuration.urbac.verifySsl | bool | `false` | __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified |
+| aias-services.services.airs.configuration.s3.assetHttpEndpointUrl | string | `"https://site.arlas.k8s/{}/{}"` | __MUST BE CONFIGURED:__ Change with the domain of your deployment |
+| aias-services.services.airs.configuration.s3.bucket | string | `"airs-storages"` | __IMPORTANT:__ If you change the bucket name here, make sure to overwrite the patterns in agate.configuration.services (k8s/charts/aias-services/values.yaml). |
+| aias-services.services.aproc.configuration.accessManager.storages | list | `[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"gisaia-public","readable_paths":["/OPENDATA"],"type":"gs"},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://arlas-stack-minio:9000\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"gisaia-public","endpoint":"https://storage.googleapis.com","readable_paths":["/OPENDATA"],"type":"s3"},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"downloads","endpoint":"http://arlas-stack-minio:9000","readable_paths":["/"],"type":"s3","writable_paths":["/"]},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"inputs","endpoint":"http://arlas-stack-minio:9000","readable_paths":["/"],"type":"s3"}]` | Configuration of the storages used by the access manager to provide access to various storage backends |
+| aias-services.services.aproc.configuration.accessManager.tmpDir | string | `"/tmp/"` | Temporary directory used by the access manager |
+| aias-services.services.aproc.configuration.airsEndpoint | string | `"http://airs-server:8000/arlas/airs"` | AIRS service endpoint URL accessed by APROC |
+| aias-services.services.aproc.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS search URL used by APROC to check whether an item exists |
+| aias-services.services.aproc.configuration.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
+| aias-services.services.aproc.configuration.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
+| aias-services.services.aproc.configuration.extensions.download.index.name | string | `"org.com@aproc_downloads"` | __MUST BE CONFIGURED:__ Change with the domain (org.com) with your own organization name |
+| aias-services.services.aproc.configuration.extensions.download.outboxS3.assetHttpEndpointUrl | string | `"https://site.arlas.k8s/{}/{}"` | __MUST BE CONFIGURED:__ Change with the domain of your deployment |
+| aias-services.services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"http://arlas-stack-minio:9000/inputs"` | Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo |
+| arlas-services | object | `{"logger":{"loggingConsoleLevel":"INFO","loggingLevel":"INFO"},"services":{"mountCertificate":true}}` | See the documentation of the sub-chart arlas-services https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/arlas-services/ |
 | arlas-services.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
 | arlas-services.logger.loggingLevel | string | `"INFO"` | Logging level |
 | arlas-services.services.mountCertificate | bool | `true` | __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc. |
+| arlas-uis | object | `{"basemap":{"storageSize":"50Mi"},"logger":{"loggingConsoleLevel":"INFO","loggingLevel":"INFO"}}` | See the documentation of the sub-chart arlas-uis https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/arlas-uis/ |
 | arlas-uis.basemap | object | `{"storageSize":"50Mi"}` | __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap |
 | arlas-uis.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
 | arlas-uis.logger.loggingLevel | string | `"INFO"` | Logging level |
-| deployment.apisix.enabled | bool | `true` | Should the chart deploy apisix |
+| deployment.aias.enabled | bool | `true` |  |
+| deployment.aias.services.airs.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` |  |
+| deployment.aias.services.airs.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"` |  |
+| deployment.aias.services.airs.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffering" | string | `"off"` |  |
+| deployment.aias.services.airs.ingress.enabled | bool | `true` |  |
+| deployment.aias.services.aproc.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` |  |
+| deployment.aias.services.aproc.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"` |  |
+| deployment.aias.services.aproc.ingress.enabled | bool | `true` |  |
+| deployment.aias.services.fam.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` |  |
+| deployment.aias.services.fam.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"` |  |
+| deployment.aias.services.fam.ingress.enabled | bool | `true` |  |
+| deployment.aias.services.minio.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` |  |
+| deployment.aias.services.minio.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"` |  |
+| deployment.aias.services.minio.ingress.enabled | bool | `true` |  |
+| deployment.aias.services.minio.port | int | `9000` |  |
+| deployment.aias.services.minio.serviceName | string | `"arlas-stack-minio"` |  |
+| deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` |  |
+| deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` |  |
+| deployment.aias.services.titiler.ingress.enabled | bool | `true` |  |
+| deployment.aias.services.titiler.port | int | `9000` |  |
+| deployment.aias.services.titiler.serviceName | string | `"arlas-stack-minio"` |  |
+| deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
+| deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
+| deployment.aias.uis.ingress.enabled | bool | `true` |  |
+| deployment.arlas.services.enabled | bool | `true` |  |
+| deployment.arlas.services.ingress.annotations | string | `nil` |  |
+| deployment.arlas.services.ingress.enabled | bool | `true` |  |
+| deployment.arlas.uis.enabled | bool | `true` |  |
+| deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
+| deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
+| deployment.arlas.uis.ingress.enabled | bool | `true` |  |
 | deployment.elasticsearch.enabled | bool | `true` | Should the chart deploy elasticsearch |
+| deployment.elasticsearch.ingress.enabled | bool | `true` |  |
 | deployment.keycloak.enabled | bool | `true` | __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs. |
 | deployment.minio.enabled | bool | `true` | Should the chart deploy minio |
+| deployment.minio.ingress.enabled | bool | `true` |  |
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
-| elasticsearch.coordinating.replicaCount | int | `0` |  |
-| elasticsearch.copyTlsCerts.image.repository | string | `"bitnamilegacy/os-shell"` |  |
-| elasticsearch.data.persistentVolumeClaimRetentionPolicy.enabled | bool | `true` |  |
-| elasticsearch.data.replicaCount | int | `0` |  |
-| elasticsearch.image.repository | string | `"bitnamilegacy/elasticsearch"` |  |
-| elasticsearch.ingest.replicaCount | int | `0` |  |
-| elasticsearch.master.masterOnly | bool | `false` |  |
-| elasticsearch.master.persistentVolumeClaimRetentionPolicy.enabled | bool | `true` |  |
-| elasticsearch.master.replicaCount | int | `1` |  |
-| elasticsearch.master.resourcesPreset | string | `"large"` |  |
-| elasticsearch.security.enabled | bool | `true` |  |
-| elasticsearch.security.tls.autoGenerated | bool | `true` |  |
-| elasticsearch.service.type | string | `"ClusterIP"` |  |
-| elasticsearch.sysctlImage.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch | object | `{"coordinating":{"replicaCount":0},"copyTlsCerts":{"image":{"repository":"bitnamilegacy/os-shell"}},"data":{"persistentVolumeClaimRetentionPolicy":{"enabled":true},"replicaCount":0},"image":{"repository":"bitnamilegacy/elasticsearch"},"ingest":{"replicaCount":0},"master":{"masterOnly":false,"persistentVolumeClaimRetentionPolicy":{"enabled":true},"replicaCount":1,"resourcesPreset":"large"},"security":{"enabled":true,"tls":{"autoGenerated":true}},"service":{"type":"ClusterIP"},"sysctlImage":{"repository":"bitnamilegacy/os-shell"}}` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
 | global.authIssuer | string | `"https://keycloak.arlas.k8s/auth/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
+| global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
+| global.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
 | global.defaultStorageClass | string | `"standard-retain"` | __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy. |
 | global.dnsDomain | string | `"site.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment |
 | global.elasticDnsDomain | string | `"elastic.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment |
@@ -85,47 +110,12 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.rabbitMQLogin | string | `"admin"` | RabbitMQ Login |
 | global.rabbitMQPassword | string | `"secret4rabbitmq"` | __MUST BE CONFIGURED:__ RabbitMQ Password |
 | global.redisPassword | string | `"secret4redis"` | __MUST BE CONFIGURED:__ redis Password |
-| keycloak.auth.adminPassword | string | `"secret4keycloak"` |  |
-| keycloak.auth.adminUser | string | `"admin"` |  |
-| keycloak.extraEnvVars[0].name | string | `"KEYCLOAK_EXTRA_ARGS"` |  |
-| keycloak.extraEnvVars[0].value | string | `"--import-realm"` |  |
-| keycloak.extraVolumeMounts[0].mountPath | string | `"/opt/bitnami/keycloak/data/import"` |  |
-| keycloak.extraVolumeMounts[0].name | string | `"realm-config"` |  |
-| keycloak.extraVolumes[0].configMap.name | string | `"keycloak-realm-configmap"` |  |
-| keycloak.extraVolumes[0].name | string | `"realm-config"` |  |
-| keycloak.httpRelativePath | string | `"/auth/"` |  |
-| keycloak.image.repository | string | `"bitnamilegacy/keycloak"` |  |
+| keycloak | object | `{"auth":{"adminPassword":"secret4keycloak","adminUser":"admin"},"extraEnvVars":[{"name":"KEYCLOAK_EXTRA_ARGS","value":"--import-realm"}],"extraVolumeMounts":[{"mountPath":"/opt/bitnami/keycloak/data/import","name":"realm-config"}],"extraVolumes":[{"configMap":{"name":"keycloak-realm-configmap"},"name":"realm-config"}],"httpRelativePath":"/auth/","image":{"repository":"bitnamilegacy/keycloak"},"ingress":{"annotations":{"nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffers-number":"8"},"enabled":true,"extraTls":[{"hosts":["keycloak.arlas.k8s"],"secretName":"keycloak-tls"}],"path":"/","servicePort":8080,"tls":true},"postgresql":{"global":{"security":{"allowInsecureImages":true}},"image":{"repository":"bitnamilegacy/postgresql"}},"proxy":"edge","readinessProbe":{"initialDelaySeconds":300,"timeoutSeconds":60},"realm":{"configmap":{"enabled":true}},"resourcesPreset":"medium","service":{"http":{"enabled":true},"ports":{"http":8080,"https":8443},"type":"ClusterIP"},"startupProbe":{"initialDelaySeconds":300,"timeoutSeconds":60}}` | Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead. |
 | keycloak.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" | string | `"16k"` | Default nginx ingress has default proxy buffers that are too small for keycloak headers. |
-| keycloak.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffers-number" | string | `"8"` |  |
-| keycloak.ingress.enabled | bool | `true` |  |
 | keycloak.ingress.extraTls | list | `[{"hosts":["keycloak.arlas.k8s"],"secretName":"keycloak-tls"}]` | __MUST BE CONFIGURED:__ Enable extraTls bloc if you provide the certificate in the keycloak-tls secret, comment the block below otherwise. If the block is enabled, then set arlas-services.services.mountCertificate must be true, false otherwise (so that the certificate is mounted on the pods). start-of-block    |
-| keycloak.ingress.path | string | `"/"` |  |
-| keycloak.ingress.servicePort | int | `8080` |  |
-| keycloak.ingress.tls | bool | `true` |  |
-| keycloak.postgresql.global.security.allowInsecureImages | bool | `true` |  |
-| keycloak.postgresql.image.repository | string | `"bitnamilegacy/postgresql"` |  |
-| keycloak.proxy | string | `"edge"` |  |
-| keycloak.readinessProbe.initialDelaySeconds | int | `300` |  |
-| keycloak.readinessProbe.timeoutSeconds | int | `60` |  |
-| keycloak.resourcesPreset | string | `"medium"` |  |
-| keycloak.service.http.enabled | bool | `true` |  |
-| keycloak.service.ports.http | int | `8080` |  |
-| keycloak.service.ports.https | int | `8443` |  |
-| keycloak.service.type | string | `"ClusterIP"` |  |
-| keycloak.startupProbe.initialDelaySeconds | int | `300` |  |
-| keycloak.startupProbe.timeoutSeconds | int | `60` |  |
-| minio.image.repository | string | `"bitnamilegacy/minio"` |  |
-| minio.persistence.storageClass | string | `"standard-retain"` |  |
-| minio.resourcesPreset | string | `"medium"` |  |
-| rabbitmq.image.repository | string | `"bitnamilegacy/rabbitmq"` |  |
-| rabbitmq.persistentVolumeClaimRetentionPolicy.enabled | bool | `true` |  |
-| rabbitmq.resources.limits.memory | string | `"2Gi"` |  |
-| rabbitmq.resources.requests.memory | string | `"1Gi"` |  |
-| redis.architecture | string | `"standalone"` |  |
-| redis.commonConfiguration | string | `"loadmodule /opt/bitnami/redis/lib/redis/modules/redisbloom.so\nloadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so\nloadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so\nloadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so\n"` |  |
-| redis.image.repository | string | `"bitnamilegacy/redis"` |  |
-| redis.replica.persistence.storageClass | string | `"standard-retain"` |  |
-| redis.replica.persistentVolumeClaimRetentionPolicy.enabled | bool | `true` |  |
+| minio | object | `{"image":{"repository":"bitnamilegacy/minio"},"persistence":{"storageClass":"standard-retain"},"resourcesPreset":"medium"}` | Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead. |
+| rabbitmq | object | `{"image":{"repository":"bitnamilegacy/rabbitmq"},"persistentVolumeClaimRetentionPolicy":{"enabled":true},"resources":{"limits":{"memory":"2Gi"},"requests":{"memory":"1Gi"}}}` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
+| redis | object | `{"architecture":"standalone","commonConfiguration":"loadmodule /opt/bitnami/redis/lib/redis/modules/redisbloom.so\nloadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so\nloadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so\nloadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so\n","image":{"repository":"bitnamilegacy/redis"},"replica":{"persistence":{"storageClass":"standard-retain"},"persistentVolumeClaimRetentionPolicy":{"enabled":true}}}` | Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead. |
 | titiler.replicaCount | int | `1` |  |
 | titiler.resources.limits.cpu | int | `4` |  |
 | titiler.resources.limits.memory | string | `"4Gi"` |  |

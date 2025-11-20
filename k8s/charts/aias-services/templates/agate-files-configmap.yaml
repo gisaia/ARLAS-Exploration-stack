@@ -22,7 +22,7 @@ data:
     urbac:
       role_file: conf/roles.yaml
       jwt_header: {{ .Values.services.agate.configuration.urbac.jwtHeader }}
-      open_id_provider: {{ .Values.services.agate.configuration.urbac.openIdProvider }}
+      jwks_uri: {{ .Values.services.agate.configuration.urbac.jwks_uri }}
       verify_jwt: {{ .Values.services.agate.configuration.urbac.verifyJwt }}
       verify_ssl: {{ .Values.services.agate.configuration.urbac.verifySsl }}
       jwt_audience: {{ .Values.services.agate.configuration.urbac.jwtAudience  }}

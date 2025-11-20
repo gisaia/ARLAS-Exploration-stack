@@ -78,7 +78,6 @@ deployment:
         annotations:
           nginx.ingress.kubernetes.io/use-regex: "true"
           nginx.ingress.kubernetes.io/rewrite-target: "/$1"
-
     services:
       enabled: true
       ingress:
@@ -282,7 +281,7 @@ aias-services:
           ingest:
             # -- Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo
             inputsDirectory: http://arlas-stack-minio:9000/inputs
-            #https://storage.googleapis.com/gisaia-public/OPENDATA/eo
+            #inputsDirectory: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
             aprocEndpoint: http://aproc-service:8001
         accessManager:
           # -- Temporary directory used by the access manager

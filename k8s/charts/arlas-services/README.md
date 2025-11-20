@@ -23,6 +23,7 @@ A Helm Chart to deploy ARLAS Server
 | elastic.apm.url | string | `nil` |  |
 | elastic.cluster | string | `"elastic"` |  |
 | elastic.login | string | `"elastic"` |  |
+| elastic.nodes | string | `"elasticsearch:9200"` |  |
 | elastic.password | string | `"password4elastic"` |  |
 | elastic.skipMaster | bool | `true` |  |
 | elastic.sniffing | bool | `false` |  |
