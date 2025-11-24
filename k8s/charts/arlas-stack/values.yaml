@@ -61,8 +61,13 @@ global:
 
   # -- __MUST BE CONFIGURED:__ redis Password
   redisPassword: &arlasAppRedisPassword secret4redis
+
+  # Example of a redis connection url without sentinel:
   # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
   celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-stack-redis-master:6379/0
+  # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
+  # celery_result_backend: &arlasAppCeleryResultBackend sentinel://sentinel1:26379;sentinel://sentinel2:26379;sentinel://sentinel3:26379
+  
 
   postgresql:
     auth:
@@ -78,6 +83,9 @@ deployment:
         annotations:
           nginx.ingress.kubernetes.io/use-regex: "true"
           nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+          nginx.ingress.kubernetes.io/proxy-buffering: "off"  # Disable buffering
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
     services:
       enabled: true
       ingress:
@@ -261,6 +269,10 @@ aias-services:
         celeryBrokerUrl: *arlasAppCeleryBrokerUrl
         # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
         celeryResultBackend: *arlasAppCeleryResultBackend
+        #celeryResultBackendTransportOptions:
+        #  master_name: mymaster
+        #  sentinel_password: your-strong-password
+
         # -- AIRS service endpoint URL accessed by APROC
         airsEndpoint: http://airs-server:8000/arlas/airs
         # -- ARLAS search URL used by APROC to check whether an item exists
@@ -475,8 +487,11 @@ minio:
   # @ignored  
   auth:
     rootUser: *arlasAppMinioLogin
-    rootPassword: *arlasAppMinioPassword  
+    rootPassword: *arlasAppMinioPassword
   resourcesPreset: medium
+  console:
+    image:
+      repository: bitnamilegacy/minio-object-browser
 
 # -- Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead.
 keycloak:

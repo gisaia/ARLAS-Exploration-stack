@@ -1,5 +1,14 @@
 celery_broker_url: $CELERY_BROKER_URL|pyamqp://guest:guest@127.0.0.1:5672//
+
+# Direct Redis connection without a sentinel:               
 celery_result_backend: $CELERY_RESULT_BACKEND|redis://127.0.0.1:6379/0
+
+# alternatively, with sentinels: 
+# celery_result_backend: sentinel://sentinel1:26379;sentinel://sentinel2:26379;sentinel://sentinel3:26379
+# celery_result_backend_transport_options:
+#   master_name: mymaster
+#   sentinel_password: your-strong-password
+
 airs_endpoint: $AIRS_ENDPOINT|http://127.0.0.1:8000/arlas/airs
 processes:
   -

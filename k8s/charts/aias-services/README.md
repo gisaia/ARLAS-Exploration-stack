@@ -48,7 +48,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.configuration.urbac.verifyJwt | bool | `true` | Whether to verify the JWT signature or not |
 | services.agate.configuration.urbac.verifySsl | bool | `true` | Whether to verify the SSL certificate of the OpenID Provider or not |
 | services.agate.configuration.urlHeader | string | `"x-forwarded-uri"` | HTTP header containing the original request URL |
-| services.agate.image | string | `"gisaia/agate:0.7.4"` |  |
+| services.agate.image | string | `"gisaia/agate:0.7.5"` |  |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
 | services.agate.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AGATE service |
@@ -69,7 +69,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.configuration.s3.secretAccessKey | string | `"airssecret"` | S3 secret access key |
 | services.airs.configuration.s3.tier | string | `"Standard"` | S3 bucket's tier. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.writablePaths | list | `["/"]` | List of writable paths in the S3 bucket |
-| services.airs.image | string | `"gisaia/airs:0.7.4"` |  |
+| services.airs.image | string | `"gisaia/airs:0.7.5"` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
 | services.airs.resources | object | `{"limits":{"cpu":0.5,"memory":"2Gi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AIRS service |
@@ -148,7 +148,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest | int | `100000` | Maximum number of archives that can be ingested in a single batch |
 | services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
 | services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.7.4"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.7.5"` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
 | services.aproc.service.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for APROC service |
@@ -157,14 +157,14 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.tolerations | list | `[]` | Tolerations for APROC service pods |
 | services.aproc.service.urlPrefix | string | `"/aproc"` |  |
 | services.aproc.worker.affinity | object | `{}` | Affinity for APROC worker pods |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.7.4"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.7.5"` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
 | services.aproc.worker.resources | object | `{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":0.5,"memory":"512Mi"}}` | Resources configuration for APROC worker |
 | services.aproc.worker.serviceName | string | `"aproc-proc"` |  |
 | services.aproc.worker.tolerations | list | `[]` | Tolerations for APROC worker pods |
 | services.fam.affinity | object | `{}` | Affinity for FAM service pods |
-| services.fam.image | string | `"gisaia/fam:0.7.4"` |  |
+| services.fam.image | string | `"gisaia/fam:0.7.5"` |  |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
 | services.fam.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for FAM service |

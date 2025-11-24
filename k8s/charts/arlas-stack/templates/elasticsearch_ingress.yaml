@@ -7,6 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: 100240m
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     blackbox.monitoring/enabled: "true"
 spec:
   ingressClassName: {{ .Values.global.ingressClassName }}

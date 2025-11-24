@@ -156,7 +156,12 @@ python3.10 scripts/generate_dc_doc.py \
 
 
 # Generate helm documentation
-helm-docs k8s/charts/
+
+
+helm-docs \
+    -f values.yaml \
+    k8s/charts/
+
 cp k8s/charts/aias-services/README.md docs/docs/helm/aias-services
 cp k8s/charts/arlas-services/README.md docs/docs/helm/arlas-services
 cp k8s/charts/arlas-stack/README.md docs/docs/helm/arlas-stack

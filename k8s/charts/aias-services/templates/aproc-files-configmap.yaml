@@ -6,6 +6,12 @@ data:
   aproc.yaml: |
     celery_broker_url: {{ .Values.services.aproc.configuration.celeryBrokerUrl }}
     celery_result_backend: {{ .Values.services.aproc.configuration.celeryResultBackend }}
+    celery_result_backend_transport_options:
+    {{- if .Values.services.aproc.configuration.celeryResultBackendTransportOptions }}
+    {{- toYaml .Values.services.aproc.configuration.celeryResultBackendTransportOptions | nindent 6 }}
+    {{- end }}
+
+
     airs_endpoint: {{ .Values.services.aproc.configuration.airsEndpoint }}
     processes:
       {{- if .Values.services.aproc.configuration.extensions.ingest.enabled }}
