@@ -11,9 +11,9 @@ spec:
         paths:
           - backend:
               service:
-                name: arlas-stack-minio
+                name: arlas-stack-minio-console
                 port:
-                  number: 9001
+                  number: 9090
             path: /
             pathType: ImplementationSpecific
  {{- end }}

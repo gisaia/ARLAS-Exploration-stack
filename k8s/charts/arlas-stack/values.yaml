@@ -242,8 +242,8 @@ aias-services:
   dnsDomain: *arlasAppDnsDomain
   # @ignored  
   protocol: *arlasAppProtocol
-  # @ignored  
-  initBuckets: false
+  # -- Init the AIAS minio buckets  
+  initBuckets: true
   services:
 
     airs:
@@ -307,7 +307,7 @@ aias-services:
         #  sentinel_password: your-strong-password
 
         # -- AIRS service endpoint URL accessed by APROC
-        airsEndpoint: http://airs-server:8000/arlas/airs
+        airsEndpoint: http://airs-server:8000/airs
         # -- ARLAS search URL used by APROC to check whether an item exists
         arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
         extensions:

@@ -65,22 +65,16 @@
 # SERVICES
 - name: ARLAS_SERVER_URL
   value: {{ .Values.services.server.urlPrefix }}
-  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.server.urlPrefix }}
 - name: FAM_SERVER_URL
   value: {{ .Values.services.fam.urlPrefix }}
-  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.fam.urlPrefix }}
 - name: APROC_SERVER_URL
   value: {{ .Values.services.aprocService.urlPrefix }}
-  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.aprocService.urlPrefix }}
 - name: AIRS_SERVER_URL
   value: {{ .Values.services.airs.urlPrefix }}
-  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.airs.urlPrefix }}
 - name: ARLAS_PERSISTENCE_URL
   value: {{ .Values.services.persistence.urlPrefix }}
-  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.persistence.urlPrefix }}
 - name: ARLAS_PERMISSIONS_URL
   value: {{ .Values.services.permissions.urlPrefix }}
-  # value: {{ .Values.protocol }}://{{ .Values.dnsDomain }}{{ .Values.services.permissions.urlPrefix }}
 - name: ARLAS_GEOCODING_FIND_PLACE_URL
   value: {{ .Values.geocodingUrl }}
 {{- end }}
