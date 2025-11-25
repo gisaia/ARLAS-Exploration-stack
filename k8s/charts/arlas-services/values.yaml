@@ -11,6 +11,8 @@ services:
   server: 
     serviceName: arlas-server
     image: gisaia/arlas-server:27.1.0
+    # -- Extra environment variables for the arlas server container
+    extraEnvVars:
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
@@ -31,6 +33,8 @@ services:
   permissions:
     serviceName: arlas-permissions-server
     image: gisaia/arlas-permissions-server:27.0.1
+    # -- Extra environment variables for the permission server container
+    extraEnvVars:
     replicaCount: 1
     jvmXmx: 512m
     apm: false
@@ -51,6 +55,8 @@ services:
   persistence: 
     serviceName: arlas-persistence-server
     image: gisaia/arlas-persistence-server:27.0.1
+    # -- Extra environment variables for the persistence server container
+    extraEnvVars:
     replicaCount: 1
     jvmXmx: 512m
     # -- Whether ES APM should be activated or not

@@ -11,6 +11,8 @@ services:
   airs:
     serviceName: airs-server
     image: gisaia/airs:0.7.5
+    # -- Extra environment variables for the airs container
+    extraEnvVars:
     urlPrefix: /airs
     serviceBinding: 0.0.0.0
     # -- Number of AIRS service replicas
@@ -63,6 +65,8 @@ services:
   fam:
     serviceName: arlas-fam
     image: gisaia/fam:0.7.5
+    # -- Extra environment variables for the fam container
+    extraEnvVars:
     urlPrefix: /fam
     serviceBinding: 0.0.0.0
     # -- Number of FAM service replicas
@@ -85,6 +89,8 @@ services:
   agate: 
     serviceName: arlas-agate
     image: gisaia/agate:0.7.5
+    # -- Extra environment variables for the agate container
+    extraEnvVars:
     urlPrefix: /agate
     serviceBinding: 0.0.0.0
     # -- Number of AGATE service replicas
@@ -182,6 +188,8 @@ services:
     service:
       serviceName: aproc-service
       image: gisaia/aproc-service:0.7.5
+      # -- Extra environment variables for the aproc service container
+      extraEnvVars:
       urlPrefix: /aproc
       serviceBinding: 0.0.0.0
       # -- Number of APROC service replicas
@@ -203,6 +211,8 @@ services:
     worker:
       serviceName: aproc-proc
       image: gisaia/aproc-proc:0.7.5
+      # -- Extra environment variables for the aproc worker container
+      extraEnvVars:
       # -- Number of APROC worker replicas
       replicaCount: 1
       # -- Resources configuration for APROC worker

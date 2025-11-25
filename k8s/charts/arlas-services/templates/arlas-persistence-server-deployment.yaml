@@ -40,6 +40,10 @@ spec:
               port: http
             initialDelaySeconds: 40
           env:
+            {{- if .Values.services.persistence.extraEnvVars }}
+            {{ .Values.services.persistence.extraEnvVars | toYaml | nindent 12 }}
+            {{- end }}
+
             # PERSISTENCE CONFIGURATION
             - name: ARLAS_PERSISTENCE_ENGINE
               value: {{ .Values.persistence.engine | quote }}

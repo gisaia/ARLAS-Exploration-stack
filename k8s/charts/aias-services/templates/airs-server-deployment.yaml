@@ -43,7 +43,9 @@ spec:
           resources:
             {{- toYaml .Values.services.airs.resources | nindent 12 }}
           env:
-
+            {{- if .Values.services.airs.extraEnvVars }}
+            {{ .Values.services.airs.extraEnvVars | toYaml | nindent 12 }}
+            {{- end }}
             # ENDPOINT CONFIGURATION              
             - name: AIRS_CORS_HEADERS
               value: {{ .Values.cors.allowedHeaders | quote }}

@@ -43,6 +43,10 @@ spec:
             failureThreshold: 3
             successThreshold: 1
           env:
+            {{- if .Values.services.aproc.service.extraEnvVars }}
+            {{ .Values.services.aproc.service.extraEnvVars | toYaml | nindent 12 }}
+            {{- end }}
+
             - name: APROC_CONFIGURATION_FILE
               value: /app/conf/aproc.yaml
 

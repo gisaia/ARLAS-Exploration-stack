@@ -12,12 +12,16 @@ uis:
   wui:
     serviceName: arlas-wui
     image: gisaia/arlas-wui:27.1.0
+    # -- Extra environment variables for the arlas wui container
+    extraEnvVars:
     urlPrefix: /wui
     tabName: ARLAS Exploration
 
   famWui:
     serviceName: arlas-fam-wui
     image: gisaia/arlas-fam-wui:0.7.5
+    # -- Extra environment variables for the arlas fam wui container
+    extraEnvVars:
     urlPrefix: /fam-wui
     tabName: ARLAS FAM Wui
     famDefaultURL:
@@ -29,12 +33,16 @@ uis:
   hub:
     serviceName: arlas-hub
     image: gisaia/arlas-wui-hub:27.1.0
+    # -- Extra environment variables for the arlas hub container
+    extraEnvVars:
     urlPrefix: /hub
     tabName: ARLAS Hub
 
   builder: 
     serviceName: arlas-builder
     image: gisaia/arlas-wui-builder:27.1.0
+    # -- Extra environment variables for the arlas builder container
+    extraEnvVars:
     urlPrefix: /builder/
     tabName: ARLAS Studio
     allowExternalNodeConfiguration: true

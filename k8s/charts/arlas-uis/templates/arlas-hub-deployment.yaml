@@ -38,6 +38,9 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+            {{- if .Values.uis.hub.extraEnvVars }}
+            {{ .Values.uis.hub.extraEnvVars | toYaml | nindent 12 }}
+            {{- end }}
 
             - name: ARLAS_AUTHENT_FORCE_CONNECT
               value: {{ .Values.authent.forceConnect | quote  }}

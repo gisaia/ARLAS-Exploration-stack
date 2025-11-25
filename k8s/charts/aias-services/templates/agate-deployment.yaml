@@ -43,6 +43,9 @@ spec:
           resources:
             {{- toYaml .Values.services.agate.resources | nindent 12 }}
           env:
+            {{- if .Values.services.agate.extraEnvVars }}
+            {{ toYaml .Values.services.agate.extraEnvVars | nindent 12 }}
+            {{- end }}
 
             # ENDPOINT CONFIGURATION              
             - name: AGATE_CORS_HEADERS

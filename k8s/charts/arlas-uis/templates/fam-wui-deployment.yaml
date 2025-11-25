@@ -38,6 +38,9 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+            {{- if .Values.uis.famWui.extraEnvVars }}
+            {{ .Values.uis.famWui.extraEnvVars | toYaml | nindent 12 }}
+            {{- end }}
 
             {{- include "arlasWebUserInterface.auth2Env" . | nindent 12 }}
 

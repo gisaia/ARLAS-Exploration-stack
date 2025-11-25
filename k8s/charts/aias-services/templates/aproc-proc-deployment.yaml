@@ -39,6 +39,9 @@ spec:
           resources:
             {{- toYaml .Values.services.aproc.worker.resources | nindent 12 }}
           env:
+            {{- if .Values.services.aproc.worker.extraEnvVars }}
+            {{ .Values.services.aproc.worker.extraEnvVars | toYaml | nindent 12 }}
+            {{- end }}
             - name: APROC_CONFIGURATION_FILE
               value: /app/conf/aproc.yaml
 
