@@ -66,7 +66,7 @@ global:
   # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
   celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-stack-redis-master:6379/0
   # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
-  # celery_result_backend: &arlasAppCeleryResultBackend sentinel://sentinel1:26379;sentinel://sentinel2:26379;sentinel://sentinel3:26379
+  # celery_result_backend: &arlasAppCeleryResultBackend sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
   
 
   postgresql:
