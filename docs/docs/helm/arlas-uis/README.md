@@ -61,6 +61,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | tolerations | list | `[]` | Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | uis.builder.advancedFeatures | bool | `false` |  |
 | uis.builder.allowExternalNodeConfiguration | bool | `true` |  |
+| uis.builder.extraEnvVars | string | `nil` | Extra environment variables for the arlas builder container |
 | uis.builder.image | string | `"gisaia/arlas-wui-builder:27.1.0"` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
@@ -68,18 +69,21 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.archivePageSize | int | `10` |  |
 | uis.famWui.catalog | string | `"main catalog"` |  |
 | uis.famWui.collectionName | string | `"main"` |  |
+| uis.famWui.extraEnvVars | string | `nil` | Extra environment variables for the arlas fam wui container |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.7.5"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.7.6"` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` |  |
+| uis.hub.extraEnvVars | string | `nil` | Extra environment variables for the arlas hub container |
 | uis.hub.image | string | `"gisaia/arlas-wui-hub:27.1.0"` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
 | uis.hub.urlPrefix | string | `"/hub"` |  |
 | uis.servicePort | int | `8080` |  |
 | uis.serviceType | string | `"ClusterIP"` |  |
+| uis.wui.extraEnvVars | string | `nil` | Extra environment variables for the arlas wui container |
 | uis.wui.image | string | `"gisaia/arlas-wui:27.1.0"` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |

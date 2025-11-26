@@ -10,7 +10,7 @@ services:
   servicePort: 8000
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.7.5
+    image: gisaia/airs:0.7.6
     # -- Extra environment variables for the airs container
     extraEnvVars:
     urlPrefix: /airs
@@ -64,7 +64,7 @@ services:
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.7.5
+    image: gisaia/fam:0.7.6
     # -- Extra environment variables for the fam container
     extraEnvVars:
     urlPrefix: /fam
@@ -88,7 +88,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.7.5
+    image: gisaia/agate:0.7.6
     # -- Extra environment variables for the agate container
     extraEnvVars:
     urlPrefix: /agate
@@ -187,7 +187,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.7.5
+      image: gisaia/aproc-service:0.7.6
       # -- Extra environment variables for the aproc service container
       extraEnvVars:
       urlPrefix: /aproc
@@ -210,7 +210,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.7.5
+      image: gisaia/aproc-proc:0.7.6
       # -- Extra environment variables for the aproc worker container
       extraEnvVars:
       # -- Number of APROC worker replicas
@@ -239,10 +239,12 @@ services:
       celeryResultBackend: redis://:somepassword@redis-master:6379/0
 
       # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
-      # celery_result_backend: sentinel://sentinel1:26379;sentinel://sentinel2:26379;sentinel://sentinel3:26379
+      # celery_result_backend: sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
       celeryResultBackendTransportOptions:
       #   master_name: mymaster
-      #   sentinel_password: your-strong-password
+      #     sentinel_kwargs:
+      #       password: mypassword
+
 
       # -- AIRS service endpoint URL accessed by APROC
       airsEndpoint: http://airs-server:8000/arlas/airs

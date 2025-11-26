@@ -47,6 +47,7 @@ A Helm Chart to deploy ARLAS Server
 | services.mountCertificate | bool | `false` |  |
 | services.permissions.affinity | object | `{}` |  |
 | services.permissions.apm | bool | `false` |  |
+| services.permissions.extraEnvVars | string | `nil` | Extra environment variables for the permission server container |
 | services.permissions.image | string | `"gisaia/arlas-permissions-server:27.0.1"` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
@@ -61,6 +62,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.urlPrefix | string | `"/permissions"` |  |
 | services.persistence.affinity | object | `{}` |  |
 | services.persistence.apm | bool | `false` | Whether ES APM should be activated or not |
+| services.persistence.extraEnvVars | string | `nil` | Extra environment variables for the persistence server container |
 | services.persistence.image | string | `"gisaia/arlas-persistence-server:27.0.1"` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
@@ -75,6 +77,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.urlPrefix | string | `"/persist"` |  |
 | services.server.affinity | object | `{}` |  |
 | services.server.apm | bool | `false` |  |
+| services.server.extraEnvVars | string | `nil` | Extra environment variables for the arlas server container |
 | services.server.image | string | `"gisaia/arlas-server:27.1.0"` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
