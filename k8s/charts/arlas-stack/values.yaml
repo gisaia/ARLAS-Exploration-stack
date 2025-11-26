@@ -302,9 +302,10 @@ aias-services:
         celeryBrokerUrl: *arlasAppCeleryBrokerUrl
         # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
         celeryResultBackend: *arlasAppCeleryResultBackend
-        #celeryResultBackendTransportOptions:
-        #  master_name: mymaster
-        #  sentinel_password: your-strong-password
+        celeryResultBackendTransportOptions:
+        #   master_name: mymaster
+        #     sentinel_kwargs:
+        #       password: mypassword
 
         # -- AIRS service endpoint URL accessed by APROC
         airsEndpoint: http://airs-server:8000/airs
