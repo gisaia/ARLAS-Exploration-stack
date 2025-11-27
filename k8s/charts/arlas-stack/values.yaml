@@ -277,28 +277,28 @@ aias-services:
           verifySsl: false
         # -- If a prefix is added to the arlas deployment, then you must add it to the path permissions below (change "myprefix" with your own prefix and uncomment).
         roles: 
-          role/arlas/downloader:
-            permissions:
-            - r:/aproc/processes/download:GET
-            - r:/aproc/processes/download/execution:POST
-            - r:/aproc/jobs/.*:GET,DELETE
+          # role/arlas/downloader:
+          #   permissions:
+          #   - r:/myprefix/aproc/processes/download:GET
+          #   - r:/myprefix/aproc/processes/download/execution:POST
+          #   - r:/myprefix/aproc/jobs/.*:GET,DELETE
 
-          role/arlas/datasets:
-            description:
-            - "Managing data (ingest, update and enrich) in ARLAS"
-            permissions:
-            - r:/myprefix/aproc/processes/ingest:GET
-            - r:/myprefix/aproc/processes/ingest/execution:POST
-            - r:/myprefix/aproc/processes/enrich:GET
-            - r:/myprefix/aproc/processes/enrich/execution:POST
-            - r:/myprefix/aproc/processes/directory_ingest:GET
-            - r:/myprefix/aproc/processes/directory_ingest/execution:POST
-            - r:/myprefix/aproc/processes/dc3build:GET
-            - r:/myprefix/aproc/processes/dc3build/execution:POST
-            - r:/myprefix/fam/.*:GET,POST
-            - r:/myprefix/aproc/jobs/.*:GET,DELETE
-            - r:/myprefix/aproc/jobs:GET
-            - r:/myprefix/airs/collections/.*:GET,POST,PUT,DELETE
+          # role/arlas/datasets:
+          #   description:
+          #   - "Managing data (ingest, update and enrich) in ARLAS"
+          #   permissions:
+          #   - r:/myprefix/aproc/processes/ingest:GET
+          #   - r:/myprefix/aproc/processes/ingest/execution:POST
+          #   - r:/myprefix/aproc/processes/enrich:GET
+          #   - r:/myprefix/aproc/processes/enrich/execution:POST
+          #   - r:/myprefix/aproc/processes/directory_ingest:GET
+          #   - r:/myprefix/aproc/processes/directory_ingest/execution:POST
+          #   - r:/myprefix/aproc/processes/dc3build:GET
+          #   - r:/myprefix/aproc/processes/dc3build/execution:POST
+          #   - r:/myprefix/fam/.*:GET,POST
+          #   - r:/myprefix/aproc/jobs/.*:GET,DELETE
+          #   - r:/myprefix/aproc/jobs:GET
+          #   - r:/myprefix/airs/collections/.*:GET,POST,PUT,DELETE
 
     fam:
       serviceName: arlas-fam

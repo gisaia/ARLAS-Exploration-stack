@@ -129,7 +129,7 @@ services:
         verifySsl: true
         # -- Expected audience in the JWT token
         jwtAudience: arlas-backend
-      # -- Custom roles to be added to the roles.yaml file used by URBAC. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml
+      # -- Roles used by URBAC. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml
       roles: 
         group/public:
           description:
