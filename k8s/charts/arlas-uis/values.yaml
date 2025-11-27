@@ -19,7 +19,7 @@ uis:
 
   famWui:
     serviceName: arlas-fam-wui
-    image: gisaia/arlas-fam-wui:0.7.6
+    image: gisaia/arlas-fam-wui0.7.7
     # -- Extra environment variables for the arlas fam wui container
     extraEnvVars:
     urlPrefix: /fam-wui
