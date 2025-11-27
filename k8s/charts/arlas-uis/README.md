@@ -72,7 +72,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.extraEnvVars | string | `nil` | Extra environment variables for the arlas fam wui container |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui0.7.7"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.7.7"` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` |  |
