@@ -298,6 +298,38 @@ data:
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.priority }}
       {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.enabled }}
+      -
+        name: sentinel1
+        class_name: extensions.aproc.proc.ingest.drivers.impl.sentinel_1
+        assets_dir: /tmp/aproc/sentinel1
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.enabled }}
+      -
+        name: iceye
+        class_name: extensions.aproc.proc.ingest.drivers.impl.iceye
+        assets_dir: /tmp/aproc/iceye
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.enabled }}
+      -
+        name: radarsat2
+        class_name: extensions.aproc.proc.ingest.drivers.impl.radarsat2
+        assets_dir: /tmp/aproc/radarsat2
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.priority }}
+      {{- end }}
+
+
   enrich_drivers.yaml: |
     drivers:
       {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.safe.enabled }}
