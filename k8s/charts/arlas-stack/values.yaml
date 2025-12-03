@@ -276,7 +276,7 @@ aias-services:
           # -- __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified
           verifySsl: false
         # -- If a prefix is added to the arlas deployment, then you must add it to the path permissions below (change "myprefix" with your own prefix and uncomment).
-        roles: 
+        #roles: 
           # role/arlas/downloader:
           #   permissions:
           #   - r:/myprefix/aproc/processes/download:GET
@@ -350,8 +350,8 @@ aias-services:
 
           ingest:
             # -- Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo
-            inputsDirectory: http://arlas-stack-minio:9000/inputs
-            #inputsDirectory: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
+            #inputsDirectory: http://arlas-stack-minio:9000/inputs
+            inputsDirectory: https://storage.googleapis.com/gisaia-public/test-aias
             aprocEndpoint: http://aproc-service:8001
         accessManager:
           # -- Temporary directory used by the access manager
@@ -369,7 +369,7 @@ aias-services:
               type: gs
               bucket: gisaia-public
               readable_paths:
-                - /OPENDATA
+                - /
               # api_key:
               #   project_id: 
               #   private_key_id: 
@@ -393,7 +393,7 @@ aias-services:
               bucket: gisaia-public
               endpoint: "https://storage.googleapis.com"
               readable_paths:
-                - /OPENDATA      
+                - /      
             -
               type: s3
               bucket: downloads

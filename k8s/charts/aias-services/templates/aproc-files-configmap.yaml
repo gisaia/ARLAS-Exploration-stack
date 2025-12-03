@@ -18,6 +18,7 @@ data:
       -
         name: ingest
         class_name: extensions.aproc.proc.ingest.ingest_process
+        queue_name: small_task_queue
         configuration:
           drivers: conf/drivers.yaml
       {{- end }}
@@ -26,6 +27,7 @@ data:
       -
         name: directory_ingest
         class_name: extensions.aproc.proc.ingest.directory_ingest_process
+        queue_name: small_task_queue
         configuration:
           drivers: conf/drivers.yaml
       {{- end }}
@@ -33,6 +35,7 @@ data:
       -
         name: download
         class_name: extensions.aproc.proc.download.download_process
+        queue_name: large_task_queue
         configuration:
           drivers: conf/download_drivers.yaml
       {{- end }}
@@ -40,6 +43,7 @@ data:
       -
         name: enrich
         class_name: extensions.aproc.proc.enrich.enrich_process
+        queue_name: large_task_queue
         configuration:
           drivers: conf/enrich_drivers.yaml
       {{- end }}
@@ -47,6 +51,7 @@ data:
       -
         name: dc3build
         class_name: extensions.aproc.proc.dc3build.dc3build_process
+        queue_name: large_task_queue
         configuration:
           drivers: conf/dc3build_drivers.yaml
       {{- end }}
@@ -322,7 +327,7 @@ data:
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.enabled }}
       -
         name: radarsat2
-        class_name: extensions.aproc.proc.ingest.drivers.impl.radarsat2
+        class_name: extensions.aproc.proc.ingest.drivers.impl.radarsat_2
         assets_dir: /tmp/aproc/radarsat2
         configuration:
           tmp_directory: /tmp

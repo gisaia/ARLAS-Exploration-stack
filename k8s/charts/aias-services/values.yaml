@@ -401,24 +401,23 @@ services:
               enabled: true
               priority: 10
             sentinel2:
-              enabled: false
+              enabled: true
               priority: 11
             sentinel1:
-              enabled: false
+              enabled: true
               priority: 12
             iceye:
-              enabled: false
+              enabled: true
               priority: 13
             radarsat2:
-              enabled: false
+              enabled: true
               priority: 14
             tiff:
               enabled: true
               priority: 100
             jpeg2000:
-              enabled: false
+              enabled: true
               priority: 101
-
 
         directoryIngest:
           # -- Whether the directory ingest extension is enabled or not

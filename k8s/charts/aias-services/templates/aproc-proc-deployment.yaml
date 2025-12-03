@@ -47,6 +47,8 @@ spec:
 
             - name: BROKER
               value: {{ .Values.services.aproc.configuration.celeryBrokerUrl}}
+            - name: QUEUE_NAMES
+              value: small_task_queue,medium_task_queue,large_task_queue,aproc_default_queue
 
             # LOGGING
             - name: APROC_LOGGER_LEVEL
