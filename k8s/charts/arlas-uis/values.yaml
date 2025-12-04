@@ -57,9 +57,9 @@ uis:
         ]'
   colors:
     arlas:
-      bg: "#ffaaff"
+      bg: "#B0BC97"
     handle:
-      color: "#22aa00"
+      color: "#76880e"
     
 services:
   server:
