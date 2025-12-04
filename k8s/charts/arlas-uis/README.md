@@ -66,13 +66,15 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
 | uis.builder.urlPrefix | string | `"/builder/"` |  |
+| uis.colors.arlas.bg | string | `"#ffaaff"` |  |
+| uis.colors.handle.color | string | `"#22aa00"` |  |
 | uis.famWui.archivePageSize | int | `10` |  |
 | uis.famWui.catalog | string | `"main catalog"` |  |
 | uis.famWui.collectionName | string | `"main"` |  |
 | uis.famWui.extraEnvVars | string | `nil` | Extra environment variables for the arlas fam wui container |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.9.1"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.9.3"` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` |  |

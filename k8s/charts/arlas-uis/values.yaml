@@ -19,7 +19,7 @@ uis:
 
   famWui:
     serviceName: arlas-fam-wui
-    image: gisaia/arlas-fam-wui:0.9.1
+    image: gisaia/arlas-fam-wui:0.9.3
     # -- Extra environment variables for the arlas fam wui container
     extraEnvVars:
     urlPrefix: /fam-wui
@@ -55,7 +55,12 @@ uis:
         {"name":"Light","url":"/wui/assets/basemap/styles/protomap-light.json","image":"/wui/assets/basemap/quicklook/light.png", "type": "protomap"},
         {"name":"White","url":"/wui/assets/basemap/styles/protomap-white.json","image":"/wui/assets/basemap/quicklook/white.png", "type": "protomap"}
         ]'
-
+  colors:
+    arlas:
+      bg: "#ffaaff"
+    handle:
+      color: "#22aa00"
+    
 services:
   server:
     urlPrefix: /arlas

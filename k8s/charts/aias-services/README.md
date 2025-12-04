@@ -49,7 +49,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.configuration.urbac.verifySsl | bool | `true` | Whether to verify the SSL certificate of the OpenID Provider or not |
 | services.agate.configuration.urlHeader | string | `"x-forwarded-uri"` | HTTP header containing the original request URL |
 | services.agate.extraEnvVars | string | `nil` | Extra environment variables for the agate container |
-| services.agate.image | string | `"gisaia/agate:0.9.1"` |  |
+| services.agate.image | string | `"gisaia/agate:0.9.3"` |  |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
 | services.agate.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AGATE service |
@@ -58,7 +58,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.tolerations | list | `[]` | Tolerations for AGATE service pods |
 | services.agate.urlPrefix | string | `"/agate"` |  |
 | services.airs.affinity | object | `{}` | Affinity for AIRS service pods |
-| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
+| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.0.0/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
 | services.airs.configuration.arlaseoMappingUrl | string | `"/app/mappings/arlas_eo_mapping.json"` | ARLAS-EO mapping and collection URLs used for initializing new indices of new collections |
 | services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
 | services.airs.configuration.s3.accessKeyId | string | `"airs"` | S3 access key id |
@@ -71,7 +71,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.configuration.s3.tier | string | `"Standard"` | S3 bucket's tier. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.writablePaths | list | `["/"]` | List of writable paths in the S3 bucket |
 | services.airs.extraEnvVars | string | `nil` | Extra environment variables for the airs container |
-| services.airs.image | string | `"gisaia/airs:0.9.1"` |  |
+| services.airs.image | string | `"gisaia/airs:0.9.3"` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
 | services.airs.resources | object | `{"limits":{"cpu":0.5,"memory":"2Gi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AIRS service |
@@ -132,17 +132,17 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.dimap.priority | int | `1` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeyes.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeyes.priority | int | `2` |  |
-| services.aproc.configuration.extensions.ingest.drivers.iceye.enabled | bool | `false` |  |
+| services.aproc.configuration.extensions.ingest.drivers.iceye.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.iceye.priority | int | `13` |  |
-| services.aproc.configuration.extensions.ingest.drivers.jpeg2000.enabled | bool | `false` |  |
+| services.aproc.configuration.extensions.ingest.drivers.jpeg2000.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.jpeg2000.priority | int | `101` |  |
-| services.aproc.configuration.extensions.ingest.drivers.radarsat2.enabled | bool | `false` |  |
+| services.aproc.configuration.extensions.ingest.drivers.radarsat2.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.radarsat2.priority | int | `14` |  |
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.priority | int | `5` |  |
-| services.aproc.configuration.extensions.ingest.drivers.sentinel1.enabled | bool | `false` |  |
+| services.aproc.configuration.extensions.ingest.drivers.sentinel1.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.sentinel1.priority | int | `12` |  |
-| services.aproc.configuration.extensions.ingest.drivers.sentinel2.enabled | bool | `false` |  |
+| services.aproc.configuration.extensions.ingest.drivers.sentinel2.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.sentinel2.priority | int | `11` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.priority | int | `6` |  |
@@ -158,7 +158,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
 | services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
 | services.aproc.service.extraEnvVars | string | `nil` | Extra environment variables for the aproc service container |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.9.1"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.9.3"` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
 | services.aproc.service.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for APROC service |
@@ -168,7 +168,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.urlPrefix | string | `"/aproc"` |  |
 | services.aproc.worker.affinity | object | `{}` | Affinity for APROC worker pods |
 | services.aproc.worker.extraEnvVars | string | `nil` | Extra environment variables for the aproc worker container |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.9.1"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.9.3"` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
 | services.aproc.worker.resources | object | `{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":0.5,"memory":"512Mi"}}` | Resources configuration for APROC worker |
@@ -176,7 +176,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.tolerations | list | `[]` | Tolerations for APROC worker pods |
 | services.fam.affinity | object | `{}` | Affinity for FAM service pods |
 | services.fam.extraEnvVars | string | `nil` | Extra environment variables for the fam container |
-| services.fam.image | string | `"gisaia/fam:0.9.1"` |  |
+| services.fam.image | string | `"gisaia/fam:0.9.3"` |  |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
 | services.fam.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for FAM service |

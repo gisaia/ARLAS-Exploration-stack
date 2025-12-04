@@ -86,10 +86,18 @@ spec:
           volumeMounts:
             - mountPath: "/usr/share/nginx/html/assets/basemap"
               name: basemap-volume
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html/assets/styles/custom-style.css"
+              name: custom-style-volume
+              subPath: custom-style.css
+          
       volumes:
         - name: basemap-volume
           persistentVolumeClaim:
             claimName: basemap-pvc
+        - name: custom-style-volume
+          configMap:
+            name: arlas-custom-style
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}

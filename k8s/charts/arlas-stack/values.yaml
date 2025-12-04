@@ -223,6 +223,11 @@ arlas-uis:
   basemap:
     storageSize: 50Mi
   uis:
+    arlas:
+      bg: "#B0BC97"
+    handle:
+      color: "#76880e"
+
     wui:
       # -- Extra environment variables for the arlas wui container
       extraEnvVars:
@@ -251,6 +256,8 @@ aias-services:
       # -- Extra environment variables for the airs container
       extraEnvVars:
       configuration:
+        # -- __MUST BE CONFIGURED:__ Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs
+        indexCollectionPrefix: org.com@airs
         s3:
           accessKeyId: *arlasAppMinioLogin
           secretAccessKey: *arlasAppMinioPassword
