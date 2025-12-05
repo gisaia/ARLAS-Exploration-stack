@@ -129,8 +129,8 @@ persistence:
   engine: file
   # -- Storage size in case of file persistence
   storageSize: 100Mi
-  # -- Storage engine to use: either `file` or `hibernate`
-  localFolder: /tmp/
+  # -- Path to use for file persistence
+  localFolder: /persistence/
   
   # -- Configuration node if `engine=hibernate`, ignored otherwise
   hibernate:
