@@ -334,6 +334,16 @@ data:
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.priority }}
       {{- end }}
 
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.enabled }}
+      -
+        name: skysat
+        class_name: extensions.aproc.proc.ingest.drivers.impl.skysat
+        assets_dir: /tmp/aproc/skysat
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.priority }}
+      {{- end }}
+
 
   enrich_drivers.yaml: |
     drivers:

@@ -11,15 +11,15 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:27.1.0
+    image: gisaia/arlas-wui:27.1.3
     # -- Extra environment variables for the arlas wui container
     extraEnvVars:
     urlPrefix: /wui
     tabName: ARLAS Exploration
-
+    basemapUrl: 
   famWui:
     serviceName: arlas-fam-wui
-    image: gisaia/arlas-fam-wui:0.9.3
+    image: gisaia/arlas-fam-wui:0.9.4
     # -- Extra environment variables for the arlas fam wui container
     extraEnvVars:
     urlPrefix: /fam-wui
@@ -32,7 +32,7 @@ uis:
  
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:27.1.0
+    image: gisaia/arlas-wui-hub:27.1.2
     # -- Extra environment variables for the arlas hub container
     extraEnvVars:
     urlPrefix: /hub
@@ -40,7 +40,7 @@ uis:
 
   builder: 
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:27.1.0
+    image: gisaia/arlas-wui-builder:27.1.2
     # -- Extra environment variables for the arlas builder container
     extraEnvVars:
     urlPrefix: /builder/
@@ -57,9 +57,13 @@ uis:
         ]'
   colors:
     arlas:
-      bg: "#B0BC97"
+      bg: "#ff4081"
     handle:
-      color: "#76880e"
+      color: "#ff4081"
+  logoImagePng60x60Base64: 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
+  spinnerGifBase64: 
+  noViewPngBase64: 
+  logoInnerPngBase64: 
     
 services:
   server:

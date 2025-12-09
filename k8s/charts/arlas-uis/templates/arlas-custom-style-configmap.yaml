@@ -12,7 +12,7 @@ data:
     /* Slider toggle */
     html .mat-mdc-slide-toggle.mat-accent {
       /* For the handle */
-      /* --mdc-switch-selected-focus-state-layer-color: {{ .Values.uis.colors.handle.color }};
+      --mdc-switch-selected-focus-state-layer-color: {{ .Values.uis.colors.handle.color }};
       --mdc-switch-selected-handle-color: {{ .Values.uis.colors.handle.color }}
       --mdc-switch-selected-hover-state-layer-color: {{ .Values.uis.colors.handle.color }}
       --mdc-switch-selected-pressed-state-layer-color: {{ .Values.uis.colors.handle.color }}

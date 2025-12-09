@@ -42,7 +42,7 @@ A Helm Chart to deploy ARLAS Server
 | persistence.hibernate.password | string | `nil` | Database user password |
 | persistence.hibernate.url | string | `"jdbc:postgresql://db:5432/arlas"` | JDBC URL |
 | persistence.hibernate.user | string | `nil` | Database user login |
-| persistence.localFolder | string | `"/tmp/"` | Storage engine to use: either `file` or `hibernate` |
+| persistence.localFolder | string | `"/persistence/"` | Path to use for file persistence |
 | persistence.storageSize | string | `"100Mi"` | Storage size in case of file persistence |
 | services.mountCertificate | bool | `false` |  |
 | services.permissions.affinity | object | `{}` |  |

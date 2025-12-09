@@ -18,6 +18,22 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
     spec:
       automountServiceAccountToken: false
+
+      {{- if .Values.uis.wui.basemapUrl }}
+      initContainers:
+        - name: download-file
+          image: curlimages/curl:latest
+          command: ["sh", "-c"]
+          args:
+            - '[ ! -f "/usr/share/nginx/html/assets/basemap/world.pmtiles" ] && (echo "Downloading basemap from ${BASEMAP_URL} ..." && curl -L -o /usr/share/nginx/html/assets/basemap/world.pmtiles  ${BASEMAP_URL} && ls -hl /usr/share/nginx/html/assets/basemap/world.pmtiles ) || echo "Basemap already exists, skipping download."'
+          env:
+            - name: BASEMAP_URL
+              value: {{ .Values.uis.wui.basemapUrl | quote }}
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html/assets/basemap"
+              name: basemap-volume
+      {{- end }}
+
       containers:
         - name: {{ .Values.uis.wui.serviceName }}
           image: {{ .Values.uis.wui.image }}
@@ -84,20 +100,46 @@ spec:
               value: file://{{ (index $.Values.configuration $configurationName).mountPath }}
           {{- end }}
           volumeMounts:
+            {{- if .Values.uis.wui.basemapUrl }}
             - mountPath: "/usr/share/nginx/html/assets/basemap"
               name: basemap-volume
-          volumeMounts:
+            {{- end }}            
             - mountPath: "/usr/share/nginx/html/assets/styles/custom-style.css"
               name: custom-style-volume
               subPath: custom-style.css
+            {{- if .Values.uis.logoImagePng60x60Base64 }}
+            - name: logo-volume
+              mountPath: /usr/share/nginx/html/assets/logo-only.png
+              subPath: logo-only.png
+            {{- end }}
+            {{- if .Values.uis.spinnerGifBase64 }}
+            - name: logo-volume
+              mountPath: /usr/share/nginx/html/assets/spinner.gif
+              subPath: spinner.gif
+            {{- end }}
+            {{- if .Values.uis.noViewPngBase64 }}
+            - name: logo-volume
+              mountPath: /usr/share/nginx/html/assets/no-view.png
+              subPath: no-view.png
+            {{- end }}
+            {{- if .Values.uis.logoInnerPngBase64 }}
+            - name: logo-volume
+              mountPath: /usr/share/nginx/html/assets/arlas-logo-inner-white-24.png
+              subPath: arlas-logo-inner-white-24.png
+            {{- end }}
           
       volumes:
+        {{- if .Values.uis.wui.basemapUrl }}
         - name: basemap-volume
           persistentVolumeClaim:
             claimName: basemap-pvc
+        {{- end }}
         - name: custom-style-volume
           configMap:
             name: arlas-custom-style
+        - name: logo-volume
+          configMap:
+            name: arlas-logo-configmap
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}

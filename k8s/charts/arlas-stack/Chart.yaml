@@ -30,7 +30,7 @@ dependencies:
 
 - name: minio
   repository: https://charts.bitnami.com/bitnami
-  version: 17.0.21
+  version: 14.10.5
   condition: deployment.minio.enabled
 
 - name: rabbitmq

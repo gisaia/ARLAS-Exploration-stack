@@ -10,7 +10,7 @@ services:
   servicePort: 8000
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.9.3
+    image: gisaia/airs:0.9.4
     # -- Extra environment variables for the airs container
     extraEnvVars:
     urlPrefix: /airs
@@ -64,7 +64,7 @@ services:
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.9.3
+    image: gisaia/fam:0.9.4
     # -- Extra environment variables for the fam container
     extraEnvVars:
     urlPrefix: /fam
@@ -88,7 +88,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.9.3
+    image: gisaia/agate:0.9.4
     # -- Extra environment variables for the agate container
     extraEnvVars:
     urlPrefix: /agate
@@ -295,7 +295,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.9.3
+      image: gisaia/aproc-service:0.9.4
       # -- Extra environment variables for the aproc service container
       extraEnvVars:
       urlPrefix: /aproc
@@ -318,7 +318,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.9.3
+      image: gisaia/aproc-proc:0.9.4
       # -- Extra environment variables for the aproc worker container
       extraEnvVars:
       # -- Number of APROC worker replicas
@@ -412,6 +412,9 @@ services:
             radarsat2:
               enabled: true
               priority: 14
+            skysat:
+              enabled: true
+              priority: 15
             tiff:
               enabled: true
               priority: 100
