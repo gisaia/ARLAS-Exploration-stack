@@ -334,12 +334,6 @@ routes:
             Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
             # Fix CWE Id: 693
             X-Content-Type-Options: nosniff
-  -
-    uri: /basemaps/*
-    methods: ["GET"]
-    upstream:
-      nodes:
-        "protomaps:8080": 1
 ssls:
   -
     snis:
