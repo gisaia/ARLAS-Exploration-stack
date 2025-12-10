@@ -25,12 +25,12 @@ spec:
           image: curlimages/curl:latest
           command: ["sh", "-c"]
           args:
-            - '[ ! -f "/usr/share/nginx/html/assets/basemap/world.pmtiles" ] && (echo "Downloading basemap from ${BASEMAP_URL} ..." && curl -L -o /usr/share/nginx/html/assets/basemap/world.pmtiles  ${BASEMAP_URL} && ls -hl /usr/share/nginx/html/assets/basemap/world.pmtiles ) || echo "Basemap already exists, skipping download."'
+            - '[ ! -f "/usr/share/nginx/html/assets/basemap/data/world.pmtiles" ] && (echo "Downloading basemap from ${BASEMAP_URL} ..." && curl -L -o /usr/share/nginx/html/assets/basemap/data/world.pmtiles  ${BASEMAP_URL} && ls -hl /usr/share/nginx/html/assets/basemap/data/world.pmtiles ) || echo "Basemap already exists, skipping download."'
           env:
             - name: BASEMAP_URL
               value: {{ .Values.uis.wui.basemapUrl | quote }}
           volumeMounts:
-            - mountPath: "/usr/share/nginx/html/assets/basemap"
+            - mountPath: "/usr/share/nginx/html/assets/basemap/data"
               name: basemap-volume
       {{- end }}
 
@@ -101,7 +101,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- if .Values.uis.wui.basemapUrl }}
-            - mountPath: "/usr/share/nginx/html/assets/basemap"
+            - mountPath: "/usr/share/nginx/html/assets/basemap/data"
               name: basemap-volume
             {{- end }}            
             - mountPath: "/usr/share/nginx/html/assets/styles/custom-style.css"

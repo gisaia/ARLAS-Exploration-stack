@@ -92,4 +92,10 @@ And for AIAS:
 
 ## Basemap
 
-The basemap provided with the ARLAS Stack is the first zoom levels of protomaps. [Download](https://maps.protomaps.com/builds/) and replace `conf/protomaps/world.pmtiles` to get all zoom levels.
+The basemap provided with the ARLAS Stack is the first zoom levels of protomaps. You can build your own:
+
+```shell
+pmtiles extract https://build.protomaps.com/20231225.pmtiles world.pmtiles --minzoom=0 --maxzoom $MAX_ZOOM
+```
+
+and mount it in arlas-wui container in `/usr/share/nginx/html/assets/basemap/data/world.pmtiles`.

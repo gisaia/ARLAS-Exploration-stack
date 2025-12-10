@@ -21,7 +21,6 @@ python3.10 scripts/generate_dc_doc.py \
     dc/ref-dc-arlas-builder.yaml \
     dc/ref-dc-arlas-hub.yaml \
     dc/ref-dc-arlas-wui.yaml \
-    dc/ref-dc-protomaps.yaml \
     dc/ref-dc-apisix.yaml \
     conf/versions.env \
     conf/elastic.env \
@@ -43,7 +42,6 @@ python3.10 scripts/generate_dc_doc.py \
     dc/ref-dc-arlas-builder.yaml \
     dc/ref-dc-arlas-hub.yaml \
     dc/ref-dc-arlas-wui.yaml \
-    dc/ref-dc-protomaps.yaml \
     dc/ref-dc-apisix.yaml \
     dc/ref-dc-postgres.yaml \
     conf/versions.env \
@@ -67,7 +65,6 @@ python3.10 scripts/generate_dc_doc.py \
     dc/ref-dc-arlas-builder.yaml \
     dc/ref-dc-arlas-hub.yaml \
     dc/ref-dc-arlas-wui.yaml \
-    dc/ref-dc-protomaps.yaml \
     dc/ref-dc-apisix.yaml \
     conf/versions.env \
     conf/elastic.env \
@@ -90,7 +87,6 @@ python3.10 scripts/generate_dc_doc.py \
     dc/ref-dc-arlas-builder.yaml \
     dc/ref-dc-arlas-hub.yaml \
     dc/ref-dc-arlas-wui.yaml \
-    dc/ref-dc-protomaps.yaml \
     dc/ref-dc-apisix.yaml \
     dc/ref-dc-postgres.yaml \
     dc/ref-dc-aias-airs.yaml \
@@ -126,7 +122,6 @@ python3.10 scripts/generate_dc_doc.py \
     dc/ref-dc-arlas-builder.yaml \
     dc/ref-dc-arlas-hub.yaml \
     dc/ref-dc-arlas-wui.yaml \
-    dc/ref-dc-protomaps.yaml \
     dc/ref-dc-apisix.yaml \
     dc/ref-dc-keycloak.yaml \
     dc/ref-dc-postgres.yaml \

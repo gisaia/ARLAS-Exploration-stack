@@ -236,7 +236,7 @@ arlas-uis:
     logoInnerPngBase64: 
 
     wui:
-      # -- Extra environment variables for the basemap url to download at init container startup (no download if already present). If none specified, a small basemap is used. See for instance https://build.protomaps.com/20231225.pmtiles for a full basemap.
+      # -- Extra environment variables for the basemap url to download at init container startup (no download if already present). If none specified, a small basemap is used. See for instance https://build.protomaps.com/20231225.pmtiles for a full basemap or https://storage.googleapis.com/gisaia-public/protomaps/world-20231225-0-9.pmtiles for zoom 0 to 9.
       basemapUrl: 
       # -- Extra environment variables for the arlas wui container
       extraEnvVars:
