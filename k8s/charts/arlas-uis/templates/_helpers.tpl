@@ -89,10 +89,10 @@
 {{- define "arlasWebUserInterface.actionsEnv" -}}
 # -- Relative AIAS download execution URL
 - name: ARLAS_DOWNLOAD_PROCESS_URL
-  value: /aproc/processes/download/execution
+  value: {{ .Values.uis.hub.urlPrefix }}/aproc/processes/download/execution
 # -- Relative AIAS download URL
 - name: ARLAS_DOWNLOAD_PROCESS_CHECK_URL
-  value: /aproc/processes/download
+  value: {{ .Values.uis.hub.urlPrefix }}/aproc/processes/download
 # -- AIAS download max number of items
 - name: ARLAS_DOWNLOAD_PROCESS_MAX_ITEMS
   value: "100"
@@ -101,13 +101,13 @@
   value: assets/processes/download.json
 # -- AIAS download status relative url
 - name: ARLAS_DOWNLOAD_PROCESS_STATUS_URL
-  value: /aproc/jobs
+  value: {{ .Values.uis.hub.urlPrefix }}/aproc/jobs
 # -- Relative AIAS enrich execution URL
 - name: ARLAS_ENRICH_PROCESS_URL
-  value: /aproc/processes/enrich/execution
+  value: {{ .Values.uis.hub.urlPrefix }}/aproc/processes/enrich/execution
 # -- Relative AIAS enrich URL
 - name: ARLAS_ENRICH_PROCESS_CHECK_URL
-  value: /aproc/processes/enrich
+  value: {{ .Values.uis.hub.urlPrefix }}/aproc/processes/enrich
 # -- AIAS enrich max number of items
 - name: ARLAS_ENRICH_PROCESS_MAX_ITEMS
   value: "100"
@@ -116,5 +116,5 @@
   value: assets/processes/enrich.json
 # -- AIAS enrich status relative url
 - name: ARLAS_ENRICH_PROCESS_STATUS_URL
-  value: /aproc/jobs
+  value: {{ .Values.uis.hub.urlPrefix }}/aproc/jobs
 {{- end }}
