@@ -14,6 +14,31 @@ uis:
     image: gisaia/arlas-wui:27.1.0
     urlPrefix: /wui
     tabName: ARLAS Exploration
+    imagePullSecrets: []
+    #  - name: "regcred"
+    extraContainers: []
+    extraInitContainers:
+    #  - name: init-world-pmtiles
+    #    image: some-image
+    #    command:
+    #      - /copy
+    #    args:
+    #      - artifact/data/world.pmtiles
+    #      - /usr/share/nginx/html/assets/basemap/data/world.pmtiles
+    #    resources: {}
+    #    volumeMounts:
+    #      - name: world-pmtiles
+    #        mountPath: /usr/share/nginx/html/assets/basemap
+    extraEnv:
+    #  - name: KEY
+    #    value: "value"
+    extraVolumeMounts:
+    #  - name: some-volume
+    #    mountPath: /usr/share/nginx/html/assets/basemap/data/world.pmtiles
+    #    subPath: world.pmtiles
+    extraVolumes:
+    #  - name: world-pmtiles
+    #    emptyDir: {}
 
   famWui:
     serviceName: arlas-fam-wui

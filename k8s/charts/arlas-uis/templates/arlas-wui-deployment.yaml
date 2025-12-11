@@ -18,6 +18,14 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
     spec:
       automountServiceAccountToken: false
+      {{- with .Values.uis.wui.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.uis.wui.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Values.uis.wui.serviceName }}
           image: {{ .Values.uis.wui.image }}
@@ -79,13 +87,25 @@ spec:
             - name: {{ (index $.Values.configuration $configurationName).environmentVariable }}
               value: file://{{ (index $.Values.configuration $configurationName).mountPath }}
           {{- end }}
+          {{- with .Values.uis.wui.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - mountPath: "/usr/share/nginx/html/assets/basemap"
               name: basemap-volume
+          {{- with .Values.uis.wui.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.uis.wui.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: basemap-volume
           persistentVolumeClaim:
             claimName: basemap-pvc
+      {{- with .Values.uis.wui.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}
