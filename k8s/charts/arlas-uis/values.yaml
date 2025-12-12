@@ -23,13 +23,14 @@ uis:
     extraEnv:
     #  - name: KEY
     #    value: "value"
-    extraVolumeMounts:
-    #  - name: some-volume
-    #    mountPath: /usr/share/nginx/html/assets/...
-    #    subPath: ...
-    extraVolumes:
-    #  - name: some-volume
-    #    emptyDir: {}
+    # extraVolumeMounts:
+    #  - name: extra-assets-volume
+    #    mountPath: /usr/share/nginx/html/assets/logo-only.png
+    #    subPath: logo-only.png
+    # extraVolumes:
+    #  - name: extra-assets-volume
+    #    configMap:
+    #      name: arlas-example-assets-configmap
 
   famWui:
     serviceName: arlas-fam-wui

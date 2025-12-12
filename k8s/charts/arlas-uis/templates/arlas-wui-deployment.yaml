@@ -26,7 +26,6 @@ spec:
         {{- if .Values.uis.wui.extraInitContainers }}
         {{ .Values.uis.wui.extraInitContainers | toYaml | nindent 12 }}
         {{- end }}
-
         {{- if .Values.uis.wui.basemapUrl }}
         - name: download-file
           image: curlimages/curl:latest
@@ -117,27 +116,8 @@ spec:
             - mountPath: "/usr/share/nginx/html/assets/styles/custom-style.css"
               name: custom-style-volume
               subPath: custom-style.css
-            {{- if .Values.uis.logoImagePng60x60Base64 }}
-            - name: logo-volume
-              mountPath: /usr/share/nginx/html/assets/logo-only.png
-              subPath: logo-only.png
-            {{- end }}
-            {{- if .Values.uis.spinnerGifBase64 }}
-            - name: logo-volume
-              mountPath: /usr/share/nginx/html/assets/spinner.gif
-              subPath: spinner.gif
-            {{- end }}
-            {{- if .Values.uis.noViewPngBase64 }}
-            - name: logo-volume
-              mountPath: /usr/share/nginx/html/assets/no-view.png
-              subPath: no-view.png
-            {{- end }}
-            {{- if .Values.uis.logoInnerPngBase64 }}
-            - name: logo-volume
-              mountPath: /usr/share/nginx/html/assets/arlas-logo-inner-white-24.png
-              subPath: arlas-logo-inner-white-24.png
-            {{- end }}
-          {{- with .Values.uis.wui.extraVolumeMounts }}
+
+         {{- with .Values.uis.wui.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
@@ -150,9 +130,6 @@ spec:
         - name: custom-style-volume
           configMap:
             name: arlas-custom-style
-        - name: logo-volume
-          configMap:
-            name: arlas-logo-configmap
       {{- with .Values.uis.wui.extraVolumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
