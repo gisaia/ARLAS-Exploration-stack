@@ -59,6 +59,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | services.persistence.urlPrefix | string | `"/persist"` |  |
 | services.server.urlPrefix | string | `"/arlas"` |  |
 | tolerations | list | `[]` | Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| uis.builder.aboutConfigMapName | string | `"arlas-builder-default-about-configmap"` |  |
 | uis.builder.advancedFeatures | bool | `false` |  |
 | uis.builder.allowExternalNodeConfiguration | bool | `true` |  |
 | uis.builder.extraContainers | list | `[]` |  |
@@ -90,6 +91,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` |  |
+| uis.hub.aboutConfigMapName | string | `"arlas-hub-default-about-configmap"` |  |
 | uis.hub.extraContainers | list | `[]` |  |
 | uis.hub.extraEnv | string | `nil` |  |
 | uis.hub.extraEnvVars | string | `nil` | Extra environment variables for the arlas hub container |
@@ -103,11 +105,14 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.hub.urlPrefix | string | `"/hub"` |  |
 | uis.servicePort | int | `8080` |  |
 | uis.serviceType | string | `"ClusterIP"` |  |
+| uis.wui.aboutAndTourConfigMapName | string | `"arlas-default-about-and-tour-configmap"` |  |
 | uis.wui.basemapUrl | string | `nil` |  |
 | uis.wui.extraContainers | list | `[]` |  |
 | uis.wui.extraEnv | string | `nil` |  |
 | uis.wui.extraEnvVars | string | `nil` | Extra environment variables for the arlas wui container |
 | uis.wui.extraInitContainers | string | `nil` |  |
+| uis.wui.extraVolumeMounts | string | `nil` |  |
+| uis.wui.extraVolumes | string | `nil` |  |
 | uis.wui.image | string | `"gisaia/arlas-wui:27.1.4"` |  |
 | uis.wui.imagePullSecrets | list | `[]` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
