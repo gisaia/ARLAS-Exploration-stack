@@ -117,6 +117,19 @@ spec:
               name: custom-style-volume
               subPath: custom-style.css
 
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_en.md"
+              subPath: about_en.md
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_fr.md"
+              subPath: about_fr.md
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/tour/tour_en.json"
+              subPath: tour_en.json
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/tour/tour_fr.json"
+              subPath: tour_fr.json
+
          {{- with .Values.uis.wui.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -130,6 +143,10 @@ spec:
         - name: custom-style-volume
           configMap:
             name: arlas-custom-style
+        - name: arlas-about-and-tour-configmap-volume
+          configMap:
+            name: {{ .Values.uis.wui.aboutAndTourConfigMapName }}
+
       {{- with .Values.uis.wui.extraVolumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

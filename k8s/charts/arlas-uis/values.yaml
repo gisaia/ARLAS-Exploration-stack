@@ -17,17 +17,18 @@ uis:
     urlPrefix: /wui
     tabName: ARLAS Exploration
     basemapUrl: 
+    aboutAndTourConfigMapName: arlas-default-about-and-tour-configmap
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
     extraEnv:
     #  - name: KEY
     #    value: "value"
-    # extraVolumeMounts:
+    extraVolumeMounts:
     #  - name: extra-assets-volume
     #    mountPath: /usr/share/nginx/html/assets/logo-only.png
     #    subPath: logo-only.png
-    # extraVolumes:
+    extraVolumes:
     #  - name: extra-assets-volume
     #    configMap:
     #      name: arlas-example-assets-configmap
@@ -58,6 +59,7 @@ uis:
     extraEnvVars:
     urlPrefix: /hub
     tabName: ARLAS Hub
+    aboutConfigMapName: arlas-hub-default-about-configmap
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -72,6 +74,7 @@ uis:
     extraEnvVars:
     urlPrefix: /builder/
     tabName: ARLAS Studio
+    aboutConfigMapName: arlas-builder-default-about-configmap
     allowExternalNodeConfiguration: true
     advancedFeatures: false
     imagePullSecrets: []

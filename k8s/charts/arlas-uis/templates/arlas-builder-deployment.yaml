@@ -79,8 +79,15 @@ spec:
             {{ toYaml . | nindent 12 }}
           {{- end }}
 
-          {{- with .Values.uis.builder.extraVolumeMounts }}
           volumeMounts:
+            - name: arlas-builder-about-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_en.md"
+              subPath: about_en.md
+            - name: arlas-builder-about-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_fr.md"
+              subPath: about_fr.md
+
+          {{- with .Values.uis.builder.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
@@ -88,8 +95,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.uis.builder.extraVolumes }}
       volumes:
+        - name: arlas-builder-about-configmap-volume
+          configMap:
+            name: {{ .Values.uis.builder.aboutConfigMapName }}
+      {{- with .Values.uis.builder.extraVolumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
