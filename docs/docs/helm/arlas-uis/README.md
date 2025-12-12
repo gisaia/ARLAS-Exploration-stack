@@ -61,8 +61,14 @@ A Helm Chart to deploy ARLAS User Interfaces
 | tolerations | list | `[]` | Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | uis.builder.advancedFeatures | bool | `false` |  |
 | uis.builder.allowExternalNodeConfiguration | bool | `true` |  |
+| uis.builder.extraContainers | list | `[]` |  |
+| uis.builder.extraEnv | string | `nil` |  |
 | uis.builder.extraEnvVars | string | `nil` | Extra environment variables for the arlas builder container |
+| uis.builder.extraInitContainers | string | `nil` |  |
+| uis.builder.extraVolumeMounts | string | `nil` |  |
+| uis.builder.extraVolumes | string | `nil` |  |
 | uis.builder.image | string | `"gisaia/arlas-wui-builder:27.1.2"` |  |
+| uis.builder.imagePullSecrets | list | `[]` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
 | uis.builder.urlPrefix | string | `"/builder/"` |  |
@@ -71,27 +77,39 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.archivePageSize | int | `10` |  |
 | uis.famWui.catalog | string | `"main catalog"` |  |
 | uis.famWui.collectionName | string | `"main"` |  |
+| uis.famWui.extraContainers | list | `[]` |  |
+| uis.famWui.extraEnv | string | `nil` |  |
 | uis.famWui.extraEnvVars | string | `nil` | Extra environment variables for the arlas fam wui container |
+| uis.famWui.extraInitContainers | string | `nil` |  |
+| uis.famWui.extraVolumeMounts | string | `nil` |  |
+| uis.famWui.extraVolumes | string | `nil` |  |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
 | uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.9.4"` |  |
+| uis.famWui.imagePullSecrets | list | `[]` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` |  |
+| uis.hub.extraContainers | list | `[]` |  |
+| uis.hub.extraEnv | string | `nil` |  |
 | uis.hub.extraEnvVars | string | `nil` | Extra environment variables for the arlas hub container |
+| uis.hub.extraInitContainers | string | `nil` |  |
+| uis.hub.extraVolumeMounts | string | `nil` |  |
+| uis.hub.extraVolumes | string | `nil` |  |
 | uis.hub.image | string | `"gisaia/arlas-wui-hub:27.1.2"` |  |
+| uis.hub.imagePullSecrets | list | `[]` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
 | uis.hub.urlPrefix | string | `"/hub"` |  |
-| uis.logoImagePng60x60Base64 | string | `nil` |  |
-| uis.logoInnerPngBase64 | string | `nil` |  |
-| uis.noViewPngBase64 | string | `nil` |  |
 | uis.servicePort | int | `8080` |  |
 | uis.serviceType | string | `"ClusterIP"` |  |
-| uis.spinnerGifBase64 | string | `nil` |  |
 | uis.wui.basemapUrl | string | `nil` |  |
+| uis.wui.extraContainers | list | `[]` |  |
+| uis.wui.extraEnv | string | `nil` |  |
 | uis.wui.extraEnvVars | string | `nil` | Extra environment variables for the arlas wui container |
+| uis.wui.extraInitContainers | string | `nil` |  |
 | uis.wui.image | string | `"gisaia/arlas-wui:27.1.4"` |  |
+| uis.wui.imagePullSecrets | list | `[]` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |
 | uis.wui.urlPrefix | string | `"/wui"` |  |

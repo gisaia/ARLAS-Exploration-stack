@@ -94,11 +94,6 @@ uis:
     handle:
       color: "#ff4081"
 
-  logoImagePng60x60Base64: 
-  spinnerGifBase64: 
-  noViewPngBase64: 
-  logoInnerPngBase64: 
-    
 services:
   server:
     urlPrefix: /arlas
