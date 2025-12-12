@@ -246,7 +246,7 @@
       } ],
       "arlas-backend" : [ {
         "id" : "b2cbcdf5-80aa-4e21-bd62-2323fe04cc22",
-        "name" : "group/config.json/gisaia.com",
+        "name" : "group/config.json/everyone",
         "description" : "",
         "composite" : false,
         "clientRole" : true,
@@ -423,7 +423,7 @@
     "attributes" : { },
     "realmRoles" : [ ],
     "clientRoles" : {
-      "arlas-backend" : [ "group/config.json/gisaia.com", "group/public", "role/arlas/user" ]
+      "arlas-backend" : [ "group/config.json/everyone", "group/public", "role/arlas/user" ]
     }
   } ],
   "defaultRole" : {
@@ -786,13 +786,13 @@
       } ],
       "policies" : [ {
         "id" : "551bc15c-9a02-43ef-9b5d-a166764958a2",
-        "name" : "is group/config.json/gisaia.com",
+        "name" : "is group/config.json/everyone",
         "description" : "",
         "type" : "role",
         "logic" : "POSITIVE",
         "decisionStrategy" : "UNANIMOUS",
         "config" : {
-          "roles" : "[{\"id\":\"arlas-backend/group/config.json/gisaia.com\",\"required\":false}]"
+          "roles" : "[{\"id\":\"arlas-backend/group/config.json/everyone\",\"required\":false}]"
         }
       }, {
         "id" : "79020508-88e1-4f13-8ad0-38176c6cbc49",
