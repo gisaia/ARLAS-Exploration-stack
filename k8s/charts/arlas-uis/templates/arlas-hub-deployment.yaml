@@ -18,6 +18,15 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}
     spec:
       automountServiceAccountToken: false
+      {{- with .Values.uis.hub.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.uis.hub.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Values.uis.hub.serviceName }}
           image: {{ .Values.uis.hub.image }}
@@ -57,6 +66,24 @@ spec:
             {{- include "arlasWebUserInterface.linksEnv" . | nindent 12 }}
 
             {{- include "arlasWebUserInterface.servicesEnv" . | nindent 12 }}
+
+          {{- with .Values.uis.hub.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.uis.hub.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.uis.hub.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.uis.hub.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}

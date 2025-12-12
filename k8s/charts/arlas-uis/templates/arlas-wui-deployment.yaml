@@ -18,9 +18,16 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
     spec:
       automountServiceAccountToken: false
-
-      {{- if .Values.uis.wui.basemapUrl }}
+      {{- with .Values.uis.wui.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       initContainers:
+        {{- if .Values.uis.wui.extraInitContainers }}
+        {{ .Values.uis.wui.extraInitContainers | toYaml | nindent 12 }}
+        {{- end }}
+
+        {{- if .Values.uis.wui.basemapUrl }}
         - name: download-file
           image: curlimages/curl:latest
           command: ["sh", "-c"]
@@ -32,7 +39,7 @@ spec:
           volumeMounts:
             - mountPath: "/usr/share/nginx/html/assets/basemap/data"
               name: basemap-volume
-      {{- end }}
+        {{- end }}
 
       containers:
         - name: {{ .Values.uis.wui.serviceName }}
@@ -94,11 +101,14 @@ spec:
               value: {{ .Values.histogramsMaxBucket | quote }}
             - name: ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS
               value: {{ .Values.histogramsExportNbBuckets | quote }}
-
+          {{- with .Values.uis.wui.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
           {{- range $configurationName, $configurationInfo := .Values.configuration }}
             - name: {{ (index $.Values.configuration $configurationName).environmentVariable }}
               value: file://{{ (index $.Values.configuration $configurationName).mountPath }}
           {{- end }}
+
           volumeMounts:
             {{- if .Values.uis.wui.basemapUrl }}
             - mountPath: "/usr/share/nginx/html/assets/basemap/data"
@@ -127,7 +137,10 @@ spec:
               mountPath: /usr/share/nginx/html/assets/arlas-logo-inner-white-24.png
               subPath: arlas-logo-inner-white-24.png
             {{- end }}
-          
+          {{- with .Values.uis.wui.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
       volumes:
         {{- if .Values.uis.wui.basemapUrl }}
         - name: basemap-volume
@@ -140,6 +153,9 @@ spec:
         - name: logo-volume
           configMap:
             name: arlas-logo-configmap
+      {{- with .Values.uis.wui.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}

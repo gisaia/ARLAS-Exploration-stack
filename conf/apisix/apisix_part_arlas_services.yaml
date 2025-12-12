@@ -1,3 +1,22 @@
+openid_connect_frontend: &openid_connect_frontend
+  client_id: "arlas-front"
+  client_secret: bBZGlWTrjCoT3i12UkNhjEmZmyaTyuOP
+  discovery: "https://issarbe:9443/auth/realms/arlas/.well-known/openid-configuration"
+  ssl_verify: false
+  bearer_only: false
+  logout_path: "/logout"
+
+  set_access_token_header: true
+  access_token_in_authorization_header: true # les backends arlas ont besoin du token
+
+  set_id_token_header: false
+  set_userinfo_header: false
+
+  session:
+    secret: "geo4earth-shared-secret-32-chars-min-to-be-changed"
+  session_cookie_name: "APISIX_AUTH_SESSION"
+
+
 routes:
   -
     uri: /builder
@@ -43,6 +62,10 @@ routes:
   -
     uri: /
     plugins:
+      openid-connect:
+        <<: *openid_connect_frontend
+        redirect_uri: "https://localhost:443/hub/redirect"
+        post_logout_redirect_uri: "https://localhost:443/hub/"
       redirect:
         uri: /hub/
         plugins:
@@ -59,6 +82,10 @@ routes:
   -
     uri: /hub
     plugins:
+      openid-connect:
+        <<: *openid_connect_frontend
+        redirect_uri: "https://localhost:443/hub/redirect"
+        post_logout_redirect_uri: "https://localhost:443/hub/"
       redirect:
         uri: /hub/
       response-rewrite:
@@ -77,6 +104,10 @@ routes:
       nodes:
         "arlas-hub:8080": 1
     plugins:
+      openid-connect:
+        <<: *openid_connect_frontend
+        redirect_uri: "https://localhost:443/hub/redirect"
+        post_logout_redirect_uri: "https://localhost:443/hub/"
       response-rewrite:
         headers: 
           set:
@@ -138,6 +169,10 @@ routes:
       nodes:
         "arlas-permissions-server:9996": 1
     plugins:
+      openid-connect:
+        <<: *openid_connect_frontend
+        redirect_uri: "https://localhost:443/hub/redirect"
+        post_logout_redirect_uri: "https://localhost:443/hub/"
       proxy-rewrite:
         regex_uri: ["/arlas_permissions_server/healthcheck", "/admin/healthcheck"]
       response-rewrite:
@@ -157,6 +192,10 @@ routes:
       nodes:
         "arlas-permissions-server:9996": 1
     plugins:
+      openid-connect:
+        <<: *openid_connect_frontend
+        redirect_uri: "https://localhost:443/hub/redirect"
+        post_logout_redirect_uri: "https://localhost:443/hub/"
       response-rewrite:
         headers: 
           set:

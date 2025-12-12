@@ -18,6 +18,16 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.builder.serviceName }}
     spec:
       automountServiceAccountToken: false
+      {{- with .Values.uis.builder.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.uis.builder.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
         - name: {{ .Values.uis.builder.serviceName }}
           image: {{ .Values.uis.builder.image }}
@@ -64,6 +74,24 @@ spec:
               value: {{ .Values.uis.builder.allowExternalNodeConfiguration | quote }}
             - name: ARLAS_ENABLE_ADVANCED_FEATURES
               value: {{ .Values.uis.builder.advancedFeatures | default "false" | quote }}
+
+          {{- with .Values.uis.builder.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.uis.builder.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.uis.builder.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.uis.builder.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
 
       # NODE SELECTION      
