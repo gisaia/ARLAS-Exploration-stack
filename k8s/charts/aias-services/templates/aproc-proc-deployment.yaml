@@ -15,9 +15,23 @@ spec:
         app.kubernetes.io/component: {{ .Values.services.aproc.worker.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.services.podSecurityContext | nindent 8 }}
+      {{- with .Values.services.aproc.worker.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.services.aproc.worker.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
         - name: {{ .Values.services.aproc.worker.serviceName }}
           image: {{ .Values.services.aproc.worker.image }}
+          securityContext:
+            {{- toYaml .Values.services.containerSecurityContext | nindent 12 }}
           livenessProbe:
             exec:
               command:
@@ -39,14 +53,11 @@ spec:
           resources:
             {{- toYaml .Values.services.aproc.worker.resources | nindent 12 }}
           env:
-            {{- if .Values.services.aproc.worker.extraEnvVars }}
-            {{ .Values.services.aproc.worker.extraEnvVars | toYaml | nindent 12 }}
-            {{- end }}
             - name: APROC_CONFIGURATION_FILE
               value: /app/conf/aproc.yaml
 
             - name: BROKER
-              value: {{ .Values.services.aproc.configuration.celeryBrokerUrl}}
+              value: {{ .Values.services.aproc.configuration.celeryBrokerUrl }}
             - name: QUEUE_NAMES
               value: small_task_queue,medium_task_queue,large_task_queue,aproc_default_queue
 
@@ -56,6 +67,10 @@ spec:
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
 
+            {{- with .Values.services.aproc.worker.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+
           volumeMounts:
             - name: aproc-files
               mountPath: /app/conf/
@@ -63,6 +78,14 @@ spec:
             - name: arlas-eo-mappings
               mountPath: /app/mappings/
               readOnly: true
+          {{- with .Values.services.aproc.worker.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.services.aproc.worker.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       volumes:
         - name: aproc-files
           configMap:
@@ -70,6 +93,9 @@ spec:
         - name: arlas-eo-mappings
           configMap:
             name: arlas-eo-mappings-configmap
+        {{- with .Values.services.aproc.worker.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.services.aproc.worker.nodeSelector }}

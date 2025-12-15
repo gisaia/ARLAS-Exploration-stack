@@ -15,9 +15,24 @@ spec:
         app.kubernetes.io/component: {{ .Values.services.fam.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.services.podSecurityContext | nindent 8 }}
+
+      {{- with .Values.services.fam.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.services.fam.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
         - name: {{ .Values.services.fam.serviceName }}
           image: {{ .Values.services.fam.image }}
+          securityContext:
+            {{- toYaml .Values.services.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
@@ -35,10 +50,6 @@ spec:
           resources:
             {{- toYaml .Values.services.fam.resources | nindent 12 }}
           env:
-            {{- if .Values.services.fam.extraEnvVars }}
-            {{ .Values.services.fam.extraEnvVars | toYaml | nindent 12 }}
-            {{- end }}
-
             - name: APROC_CONFIGURATION_FILE
               value: /app/conf/aproc.yaml
 
@@ -62,14 +73,30 @@ spec:
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
+
+            {{- with .Values.services.fam.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+
           volumeMounts:
             - name: fam-files
               mountPath: /app/conf/
               readOnly: true
+          {{- with .Values.services.fam.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.services.fam.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       volumes:
         - name: fam-files
           configMap:
             name: aproc-files-configmap
+        {{- with .Values.services.fam.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.services.fam.nodeSelector }}

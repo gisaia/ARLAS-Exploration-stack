@@ -8,15 +8,25 @@ services:
   servicePort: 8000
   serviceType: ClusterIP
   mountCertificate: false
+  podSecurityContext:
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   server: 
     serviceName: arlas-server
     image: gisaia/arlas-server:27.1.0
-    # -- Extra environment variables for the arlas server container
-    extraEnvVars:
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
     apm: false
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
@@ -33,11 +43,15 @@ services:
   permissions:
     serviceName: arlas-permissions-server
     image: gisaia/arlas-permissions-server:27.0.1
-    # -- Extra environment variables for the permission server container
-    extraEnvVars:
     replicaCount: 1
     jvmXmx: 512m
     apm: false
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /permissions
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
 
@@ -55,12 +69,16 @@ services:
   persistence: 
     serviceName: arlas-persistence-server
     image: gisaia/arlas-persistence-server:27.0.1
-    # -- Extra environment variables for the persistence server container
-    extraEnvVars:
     replicaCount: 1
     jvmXmx: 512m
     # -- Whether ES APM should be activated or not
     apm: false
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /persist
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:

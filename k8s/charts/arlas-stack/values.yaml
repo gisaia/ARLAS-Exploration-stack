@@ -188,19 +188,9 @@ arlas-services:
   services:
     # -- __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc.
     mountCertificate: true
-    server:
+    # server:
       # -- __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is flase, comment otherwise
       #  trustStoreOptions:
-
-      # -- Extra environment variables for the arlas server container
-      extraEnvVars:
-    permissions:
-      # -- Extra environment variables for the permission server container
-      extraEnvVars:
-    persistence: 
-      # -- Extra environment variables for the persistence server container
-      extraEnvVars:
-
 
 # -- See the documentation of the sub-chart arlas-uis https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/arlas-uis/
 arlas-uis:
@@ -232,17 +222,6 @@ arlas-uis:
     wui:
       # -- Extra environment variables for the basemap url to download at init container startup (no download if already present). If none specified, a small basemap is used. See for instance https://build.protomaps.com/20231225.pmtiles for a full basemap or https://storage.googleapis.com/gisaia-public/protomaps/world-20231225-0-9.pmtiles for zoom 0 to 9.
       basemapUrl: 
-      # -- Extra environment variables for the arlas wui container
-      extraEnvVars:
-    famWui:
-      # -- Extra environment variables for the arlas fam wui container
-      extraEnvVars:
-    hub:
-      # -- Extra environment variables for the arlas hub container
-      extraEnvVars:
-    builder: 
-      # -- Extra environment variables for the arlas builder container
-      extraEnvVars:
 
 # -- See the documentation of the sub-chart aias-services https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/aias-services/
 aias-services:
@@ -256,8 +235,6 @@ aias-services:
 
     airs:
       serviceName: airs-server
-      # -- Extra environment variables for the airs container
-      extraEnvVars:
       configuration:
         # -- __MUST BE CONFIGURED:__ Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs
         indexCollectionPrefix: org.com@airs
@@ -274,8 +251,6 @@ aias-services:
 
     agate:
       serviceName: arlas-agate
-      # -- Extra environment variables for the agate container
-      extraEnvVars:
       configuration:
         arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
         urlHeader: x-auth-request-redirect
@@ -312,17 +287,11 @@ aias-services:
 
     fam:
       serviceName: arlas-fam
-      # -- Extra environment variables for the fam container
-      extraEnvVars:
 
     aproc:
       service:
         serviceName: aproc-service
-        # -- Extra environment variables for the aproc service container
-        extraEnvVars:
       worker:
-        # -- Extra environment variables for the aproc worker container
-        extraEnvVars:
         replicaCount: 1
         resources:
           limits:

@@ -18,6 +18,8 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.builder.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.uis.podSecurityContext | nindent 8 }}
       {{- with .Values.uis.builder.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -31,6 +33,8 @@ spec:
       containers:
         - name: {{ .Values.uis.builder.serviceName }}
           image: {{ .Values.uis.builder.image }}
+          securityContext:
+            {{- toYaml .Values.uis.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.uis.servicePort }}
@@ -48,9 +52,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            {{- if .Values.uis.builder.extraEnvVars }}
-            {{ .Values.uis.builder.extraEnvVars | toYaml | nindent 12 }}
-            {{- end }}
 
             {{- include "arlasWebUserInterface.auth2Env" . | nindent 12 }}
 
@@ -75,9 +76,9 @@ spec:
             - name: ARLAS_ENABLE_ADVANCED_FEATURES
               value: {{ .Values.uis.builder.advancedFeatures | default "false" | quote }}
 
-          {{- with .Values.uis.builder.extraEnv }}
+            {{- with .Values.uis.builder.extraEnv }}
             {{ toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
 
           volumeMounts:
             - name: arlas-builder-about-configmap-volume

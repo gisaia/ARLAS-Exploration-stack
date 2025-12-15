@@ -18,6 +18,8 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.uis.podSecurityContext | nindent 8 }}
       {{- with .Values.uis.hub.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -30,6 +32,8 @@ spec:
       containers:
         - name: {{ .Values.uis.hub.serviceName }}
           image: {{ .Values.uis.hub.image }}
+          securityContext:
+            {{- toYaml .Values.uis.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.uis.servicePort }}
@@ -47,10 +51,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            {{- if .Values.uis.hub.extraEnvVars }}
-            {{ .Values.uis.hub.extraEnvVars | toYaml | nindent 12 }}
-            {{- end }}
-
             - name: ARLAS_AUTHENT_FORCE_CONNECT
               value: {{ .Values.authent.forceConnect | quote  }}
             - name: ARLAS_AUTHENT_REDIRECT_URI

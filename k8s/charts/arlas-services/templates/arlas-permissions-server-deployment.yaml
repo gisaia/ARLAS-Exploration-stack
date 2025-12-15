@@ -20,9 +20,13 @@ spec:
         co.elastic.logs/enabled: {{ .Values.services.server.apm | quote }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.services.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Values.services.permissions.serviceName }}
           image: {{ .Values.services.permissions.image }}
+          securityContext:
+            {{- toYaml .Values.services.containerSecurityContext | nindent 12 }}
           resources:
             {{- toYaml .Values.services.permissions.resources | nindent 12 }}
           ports:
@@ -40,10 +44,6 @@ spec:
               port: http
             initialDelaySeconds: 40
           env:
-            {{- if .Values.services.permissions.extraEnvVars }}
-            {{ .Values.services.permissions.extraEnvVars | toYaml | nindent 12 }}
-            {{- end }}
-
             # JVM CONFIG
             - name: JDK_JAVA_OPTIONS
               value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }} {{- if .Values.services.permissions.apm }}-javaagent:/opt/app/elastic-apm-agent.jar{{- end }}"
@@ -67,6 +67,10 @@ spec:
             {{- include "arlasServices.cacheEnv" . | nindent 12 }}
             {{- include "arlasServices.loggingEnv" . | nindent 12 }}
             {{- include "arlasServices.elasticEnv" . | nindent 12 }}
+
+            {{- with .Values.services.permissions.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
 
           volumeMounts:
           {{- include "arlasServices.mountCertificate" . }}

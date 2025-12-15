@@ -44,11 +44,17 @@ A Helm Chart to deploy ARLAS Server
 | persistence.hibernate.user | string | `nil` | Database user login |
 | persistence.localFolder | string | `"/persistence/"` | Path to use for file persistence |
 | persistence.storageSize | string | `"100Mi"` | Storage size in case of file persistence |
+| services.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | services.mountCertificate | bool | `false` |  |
 | services.permissions.affinity | object | `{}` |  |
 | services.permissions.apm | bool | `false` |  |
-| services.permissions.extraEnvVars | string | `nil` | Extra environment variables for the permission server container |
+| services.permissions.extraContainers | list | `[]` |  |
+| services.permissions.extraEnv | string | `nil` |  |
+| services.permissions.extraInitContainers | string | `nil` |  |
+| services.permissions.extraVolumeMounts | string | `nil` |  |
+| services.permissions.extraVolumes | string | `nil` |  |
 | services.permissions.image | string | `"gisaia/arlas-permissions-server:27.0.1"` |  |
+| services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
 | services.permissions.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
@@ -62,8 +68,13 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.urlPrefix | string | `"/permissions"` |  |
 | services.persistence.affinity | object | `{}` |  |
 | services.persistence.apm | bool | `false` | Whether ES APM should be activated or not |
-| services.persistence.extraEnvVars | string | `nil` | Extra environment variables for the persistence server container |
+| services.persistence.extraContainers | list | `[]` |  |
+| services.persistence.extraEnv | string | `nil` |  |
+| services.persistence.extraInitContainers | string | `nil` |  |
+| services.persistence.extraVolumeMounts | string | `nil` |  |
+| services.persistence.extraVolumes | string | `nil` |  |
 | services.persistence.image | string | `"gisaia/arlas-persistence-server:27.0.1"` |  |
+| services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
 | services.persistence.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
@@ -75,10 +86,18 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.serviceName | string | `"arlas-persistence-server"` |  |
 | services.persistence.tolerations | list | `[]` |  |
 | services.persistence.urlPrefix | string | `"/persist"` |  |
+| services.podSecurityContext.fsGroup | int | `1000` |  |
+| services.podSecurityContext.runAsNonRoot | bool | `true` |  |
+| services.podSecurityContext.runAsUser | int | `1000` |  |
 | services.server.affinity | object | `{}` |  |
 | services.server.apm | bool | `false` |  |
-| services.server.extraEnvVars | string | `nil` | Extra environment variables for the arlas server container |
+| services.server.extraContainers | list | `[]` |  |
+| services.server.extraEnv | string | `nil` |  |
+| services.server.extraInitContainers | string | `nil` |  |
+| services.server.extraVolumeMounts | string | `nil` |  |
+| services.server.extraVolumes | string | `nil` |  |
 | services.server.image | string | `"gisaia/arlas-server:27.1.0"` |  |
+| services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
 | services.server.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |

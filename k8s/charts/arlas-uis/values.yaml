@@ -8,12 +8,17 @@ defaultStorageClass: standard
 uis:
   servicePort: 8080
   serviceType: ClusterIP
+  podSecurityContext:
+    #fsGroup: 1000
+    #runAsNonRoot: true
+    #runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
 
   wui:
     serviceName: arlas-wui
     image: gisaia/arlas-wui:27.1.4
     # -- Extra environment variables for the arlas wui container
-    extraEnvVars:
     urlPrefix: /wui
     tabName: ARLAS Exploration
     basemapUrl: 
@@ -37,7 +42,6 @@ uis:
     serviceName: arlas-fam-wui
     image: gisaia/arlas-fam-wui:0.9.4
     # -- Extra environment variables for the arlas fam wui container
-    extraEnvVars:
     urlPrefix: /fam-wui
     tabName: ARLAS FAM Wui
     famDefaultURL:
@@ -55,8 +59,6 @@ uis:
   hub:
     serviceName: arlas-hub
     image: gisaia/arlas-wui-hub:27.1.2
-    # -- Extra environment variables for the arlas hub container
-    extraEnvVars:
     urlPrefix: /hub
     tabName: ARLAS Hub
     aboutConfigMapName: arlas-hub-default-about-configmap
@@ -70,8 +72,6 @@ uis:
   builder: 
     serviceName: arlas-builder
     image: gisaia/arlas-wui-builder:27.1.2
-    # -- Extra environment variables for the arlas builder container
-    extraEnvVars:
     urlPrefix: /builder/
     tabName: ARLAS Studio
     aboutConfigMapName: arlas-builder-default-about-configmap
