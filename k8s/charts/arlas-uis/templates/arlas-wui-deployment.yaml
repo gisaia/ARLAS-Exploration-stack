@@ -18,9 +18,9 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
     spec:
       automountServiceAccountToken: false
-      {{- with .Values.uis.wui.imagePullSecrets }}
       securityContext:
         {{- toYaml .Values.uis.podSecurityContext | nindent 8 }}
+      {{- with .Values.uis.wui.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
