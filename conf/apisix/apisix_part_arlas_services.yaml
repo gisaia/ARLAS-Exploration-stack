@@ -253,3 +253,37 @@ routes:
     upstream:
       nodes:
         "protomaps:8080": 1
+
+  -
+    uri: /cog/preview*
+    upstream:
+      nodes:
+        "titiler:8000": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/(.*)", "/$1"]
+  -
+    uri: /cog/statistics*
+    upstream:
+      nodes:
+        "titiler:8000": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/(.*)", "/$1"]
+  -
+    uri: /cog/*
+    upstream:
+      nodes:
+        "titiler:8000": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/(.*)", "/$1"]
+  -
+    uri: /colorMaps*
+    upstream:
+      nodes:
+        "titiler:8000": 1
+    plugins:
+      proxy-rewrite:
+        regex_uri: ["/(.*)", "/$1"]
+
