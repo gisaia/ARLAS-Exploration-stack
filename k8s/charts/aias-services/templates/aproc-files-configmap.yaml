@@ -111,6 +111,7 @@ data:
     email_path_to_windows: {{ .Values.services.aproc.configuration.extensions.download.emails.message.path.windows }}
 
     smtp:
+      enabled: {{ .Values.smtp.enabled }}
       host: {{ .Values.smtp.host }}
       port: {{ .Values.smtp.port }}
       login: {{ .Values.smtp.username }}

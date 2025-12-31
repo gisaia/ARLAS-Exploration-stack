@@ -116,6 +116,7 @@ deployment:
           annotations:
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
             nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+
       fam:
         ingress:
           enabled: true
