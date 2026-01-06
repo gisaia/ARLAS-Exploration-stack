@@ -53,12 +53,10 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.uis.wui.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.uis.wui.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           resources:
