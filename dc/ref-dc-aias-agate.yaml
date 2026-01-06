@@ -17,12 +17,14 @@ services:
       - AGATE_URL_HEADER_PREFIX=/${AIRS_S3_BUCKET}/
       - VERIFY_JWT=${VERIFY_JWT:-true}
       - VERIFY_SSL=${VERIFY_SSL:-true}
-      - OPEN_ID_PROVIDER=${OPEN_ID_PROVIDER:-https://keycloak:9443/auth/realms/arlas/.well-known/openid-configuration}
+      - JWKS_URI=${JWKS_URI}
 
     expose:
       - "8004"
     networks:
       - arlas-net
+    extra_hosts:
+      - ${ARLAS_HOST}:host-gateway
     volumes:
       - ${PWD}/conf/aias/agate.yaml:/app/conf/agate.yaml:ro
       - ${PWD}/conf/aias/roles.yaml:/app/conf/roles.yaml:ro

@@ -47,9 +47,9 @@ services:
         part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
 urbac:
   role_file: conf/roles.yaml
-  method_header: $AGATE_METHOD_HEADER|x-forwarded-method
   jwt_header: $AGATE_JWT_HEADER|authorization
-  open_id_provider: $OPEN_ID_PROVIDER|
+  method_header: $AGATE_METHOD_HEADER|x-forwarded-method
   verify_jwt: $VERIFY_JWT|true
   verify_ssl: $VERIFY_SSL|true
   jwt_audience: $JWT_AUDIENCE|arlas-backend
+  jwks_uri: $JWKS_URI
