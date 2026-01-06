@@ -53,7 +53,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.extraInitContainers | string | `nil` |  |
 | services.agate.extraVolumeMounts | string | `nil` |  |
 | services.agate.extraVolumes | string | `nil` |  |
-| services.agate.image | string | `"gisaia/agate:0.9.5"` |  |
+| services.agate.image | string | `"gisaia/agate:0.10.4"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
@@ -80,7 +80,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.extraInitContainers | list | `[]` |  |
 | services.airs.extraVolumeMounts | list | `[]` |  |
 | services.airs.extraVolumes | list | `[]` |  |
-| services.airs.image | string | `"gisaia/airs:0.9.5"` |  |
+| services.airs.image | string | `"gisaia/airs:0.10.4"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
@@ -107,7 +107,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.download.drivers.imageFile.priority | int | `3` |  |
 | services.aproc.configuration.extensions.download.drivers.metFile.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.download.drivers.metFile.priority | int | `2` |  |
-| services.aproc.configuration.extensions.download.drivers.zarr.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.download.drivers.zarr.enabled | bool | `false` |  |
 | services.aproc.configuration.extensions.download.drivers.zarr.priority | int | `1` |  |
 | services.aproc.configuration.extensions.download.emails.message.admin.emails | string | `"admin@the.boss,someone.else@the.boss"` | admin emails that will receive the download notifications, other than the user himself |
 | services.aproc.configuration.extensions.download.emails.message.done.admin | object | `{"content":"The download of {collection}/{item_id} for {arlas-user-email} is available in {target_directory} ({file_name}) for projection {target_projection} ({target_format}). <br>ARLAS Services.","subject":"The download of {collection}/{item_id} for {arlas-user-email} is available."}` | Message templates for download done notifications to admins |
@@ -119,7 +119,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.download.emails.message.request.user | object | `{"content":"ARLAS Services - Dear {arlas-user-email}. <br>Your download request for {collection}/{item_id} with projection {target_projection} ({target_format}) will shortly be taken into account. <br>ARLAS Services.","subject":"ARLAS Services - Thank you for your download request (({collection}/{item_id})."}` | Message templates for download request notifications to users |
 | services.aproc.configuration.extensions.download.enabled | bool | `true` | Whether the download extension is enabled or not |
 | services.aproc.configuration.extensions.download.index.name | string | `"aproc_downloads"` | Elasticsearch index name for the download requests |
-| services.aproc.configuration.extensions.download.outboxDirectory | string | `"/downloads"` | where downloads are placed |
+| services.aproc.configuration.extensions.download.outboxDirectory | string | `"/tmp/downloads"` | where downloads are placed |
 | services.aproc.configuration.extensions.download.outboxS3 | object | `{"accessKeyId":"airs","assetHttpEndpointUrl":"http://arlas-stack-minio:9000/{}/{}","bucket":"downloads","endpointUrl":"http://arlas-stack-minio:9000","secretAccessKey":"airssecret"}` | S3 configuration for uploading the built downloads |
 | services.aproc.configuration.extensions.download.outboxS3.accessKeyId | string | `"airs"` | S3 access key id for uploading the built downloads |
 | services.aproc.configuration.extensions.download.outboxS3.assetHttpEndpointUrl | string | `"http://arlas-stack-minio:9000/{}/{}"` | Public URL Pattern to access the built downloads over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object |
@@ -174,7 +174,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.extraInitContainers | string | `nil` |  |
 | services.aproc.service.extraVolumeMounts | string | `nil` |  |
 | services.aproc.service.extraVolumes | string | `nil` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.9.5"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.10.4"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
@@ -189,7 +189,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
 | services.aproc.worker.extraVolumeMounts | string | `nil` |  |
 | services.aproc.worker.extraVolumes | string | `nil` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.9.5"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.10.4"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
@@ -203,7 +203,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.extraInitContainers | string | `nil` |  |
 | services.fam.extraVolumeMounts | string | `nil` |  |
 | services.fam.extraVolumes | string | `nil` |  |
-| services.fam.image | string | `"gisaia/fam:0.9.5"` |  |
+| services.fam.image | string | `"gisaia/fam:0.10.4"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
