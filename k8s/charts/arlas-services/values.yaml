@@ -8,6 +8,12 @@ services:
   servicePort: 8000
   serviceType: ClusterIP
   mountCertificate: false
+  podSecurityContext:
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   server: 
     serviceName: arlas-server
     image: gisaia/arlas-server:27.1.0
@@ -15,6 +21,12 @@ services:
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
     apm: false
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
@@ -34,6 +46,12 @@ services:
     replicaCount: 1
     jvmXmx: 512m
     apm: false
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /permissions
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
 
@@ -55,6 +73,12 @@ services:
     jvmXmx: 512m
     # -- Whether ES APM should be activated or not
     apm: false
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /persist
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
@@ -116,14 +140,15 @@ elastic:
   apm:
     secret:
     url:
+  nodes: elasticsearch:9200
 
 persistence:
   # -- Storage engine to use: either `file` or `hibernate`
   engine: file
   # -- Storage size in case of file persistence
   storageSize: 100Mi
-  # -- Storage engine to use: either `file` or `hibernate`
-  localFolder: /tmp/
+  # -- Path to use for file persistence
+  localFolder: /persistence/
   
   # -- Configuration node if `engine=hibernate`, ignored otherwise
   hibernate:

@@ -18,27 +18,37 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.famWui.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.uis.podSecurityContext | nindent 8 }}
+      {{- with .Values.uis.famWui.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.uis.famWui.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Values.uis.famWui.serviceName }}
           image: {{ .Values.uis.famWui.image }}
+          securityContext:
+            {{- toYaml .Values.uis.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.uis.servicePort }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.uis.famWui.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.uis.famWui.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-
             {{- include "arlasWebUserInterface.auth2Env" . | nindent 12 }}
 
             {{- include "arlasWebUserInterface.linksEnv" . | nindent 12 }}
@@ -72,6 +82,23 @@ spec:
             - name: APROC_CATALOG
               value: {{ .Values.uis.famWui.catalog | quote }}
 
+          {{- with .Values.uis.famWui.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.uis.famWui.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.uis.famWui.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.uis.famWui.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
 
       # NODE SELECTION      

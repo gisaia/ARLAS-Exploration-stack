@@ -1,0 +1,609 @@
+global: 
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment
+  dnsDomain: &arlasAppDnsDomain site.arlas.k8s
+
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment
+  elasticDnsDomain: &arlasAppElasticDnsDomain elastic.arlas.k8s
+  
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment
+  minioDnsDomain: &arlasAppMinioDnsDomain minio.arlas.k8s
+
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment
+  keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
+
+  # -- __MUST BE CONFIGURED:__ The access to the openid-configuration
+  openIdProvider: &arlasAppOpenIdProvider https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
+
+  # -- __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment
+  protocol: &arlasAppProtocol https
+
+  # -- __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used.
+  ingressClassName: &arlasAppIngressClassName nginx
+
+  # -- __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy.
+  defaultStorageClass: &arlasAppDefaultStorageClass standard-retain
+
+  keycloak:
+    # -- __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm 
+    secret: &arlasAppKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+    # -- __MUST BE CONFIGURED:__ Keycloak URL
+    url: &arlasAppKeycloakUrl https://keycloak.arlas.k8s/auth
+
+  # -- __MUST BE CONFIGURED:__ The issuer's uri
+  authIssuer: &arlasAppAuthIssuer https://keycloak.arlas.k8s/auth/realms/arlas 
+  # -- The logout URL to be used
+  logoutUrl: &arlasAppLogoutUrl 
+
+  # -- __MUST BE CONFIGURED:__ Name of the organization using AIAS
+  organization: &arlasAppOrganization org.com
+
+  # -- Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch
+  elasticLogin: &arlasAppElasticLogin elastic
+  # -- __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
+  elasticPassword: &arlasAppElasticPassword secret4elastic
+
+  # -- Minio login for minio itself and the services that are connecting to minio
+  minioLogin: &arlasAppMinioLogin minioadmin
+  # -- __MUST BE CONFIGURED:__ Minio password for minio itself and the services that are connecting to minio
+  minioPassword: &arlasAppMinioPassword secret4minio
+
+  # -- Keycloak admin login for keycloak deployment (for test only)
+  keycloakLogin: &arlasAppKeycloakLogin admin
+  # -- __MUST BE CONFIGURED:__ Keycloak admin password 
+  keycloakPassword: &arlasAppKeycloakPassword secret4keycloak
+
+  # -- RabbitMQ Login
+  rabbitMQLogin: &arlasAppRabbitMQLogin admin
+  # -- __MUST BE CONFIGURED:__ RabbitMQ Password
+  rabbitMQPassword: &arlasAppRabbitMQPassword secret4rabbitmq
+  # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
+  celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//
+
+  # -- __MUST BE CONFIGURED:__ redis Password
+  redisPassword: &arlasAppRedisPassword secret4redis
+
+  # Example of a redis connection url without sentinel:
+  # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
+  celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-stack-redis-master:6379/0
+  # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
+  # celery_result_backend: &arlasAppCeleryResultBackend sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
+  
+
+  postgresql:
+    auth:
+      # -- __MUST BE CONFIGURED:__ postgres password for keycloak
+      password: secret4postgres
+
+deployment: 
+  arlas:
+    uis:
+      enabled: true
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/use-regex: "true"
+          nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+          nginx.ingress.kubernetes.io/proxy-buffering: "off"  # Disable buffering
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+    services:
+      enabled: true
+      ingress:
+        enabled: true
+        annotations:
+
+  aias:
+    enabled: true
+    uis:
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/use-regex: "true"
+          nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+
+    services:
+      airs:
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+            nginx.ingress.kubernetes.io/proxy-buffering: "off"
+
+      aproc:
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+      fam:
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+      minio:
+        serviceName: arlas-stack-minio
+        port: 9000
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+      titiler:
+        serviceName: arlas-stack-minio
+        port: 9000
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"
+            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+
+  elasticsearch:
+    # -- Should the chart deploy elasticsearch
+    enabled: true
+    ingress:
+      enabled: true
+  minio:
+    # -- Should the chart deploy minio
+    enabled: true
+    ingress:
+      enabled: true
+  rabbitmq:
+    # -- Should the chart deploy rabbitmq
+    enabled: true
+  redis:
+    # -- Should the chart deploy redis
+    enabled: true
+  keycloak: 
+    # -- __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs.
+    enabled: true
+  titiler:
+    # -- Should the chart deploy titiler
+    enabled: true
+
+
+# -- See the documentation of the sub-chart arlas-services https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/arlas-services/
+arlas-services:
+  # @ignored  
+  dnsDomain: *arlasAppDnsDomain
+  # @ignored  
+  protocol: *arlasAppProtocol
+  # @ignored  
+  defaultStorageClass: *arlasAppDefaultStorageClass
+  # @ignored  
+  elastic:
+    login: *arlasAppElasticLogin
+    password: *arlasAppElasticPassword
+    nodes: arlas-stack-elasticsearch:9200
+  logger:
+    # -- Logging level
+    loggingLevel: INFO
+    # -- Console logging level
+    loggingConsoleLevel: INFO
+  # @ignored  
+  keycloak:
+    secret: *arlasAppKeycloakSecret
+    url: *arlasAppKeycloakUrl
+  services:
+    # -- __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc.
+    mountCertificate: true
+    # server:
+      # -- __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is flase, comment otherwise
+      #  trustStoreOptions:
+
+# -- See the documentation of the sub-chart arlas-uis https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/arlas-uis/
+arlas-uis:
+  # @ignored  
+  dnsDomain: *arlasAppDnsDomain
+  # @ignored  
+  protocol: *arlasAppProtocol
+  # @ignored  
+  defaultStorageClass: *arlasAppDefaultStorageClass
+  # @ignored  
+  authent:
+    issuer: *arlasAppAuthIssuer
+    logoutUrl: *arlasAppLogoutUrl
+  logger:
+    # -- Logging level
+    loggingLevel: INFO
+    # -- Console logging level
+    loggingConsoleLevel: INFO
+  # -- __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap
+  basemap:
+    storageSize: 50Mi
+  uis:
+    colors:
+      arlas:
+        bg: "#182e6f"
+      handle:
+        color: "#182e6f"
+
+    wui:
+      # -- Extra environment variables for the basemap url to download at init container startup (no download if already present). If none specified, a small basemap is used. See for instance https://build.protomaps.com/20231225.pmtiles for a full basemap or https://storage.googleapis.com/gisaia-public/protomaps/world-20231225-0-9.pmtiles for zoom 0 to 9.
+      basemapUrl: 
+
+# -- See the documentation of the sub-chart aias-services https://docs.arlas.io/external_docs/ARLAS-Exploration-stack/helm/aias-services/
+aias-services:
+  # @ignored  
+  dnsDomain: *arlasAppDnsDomain
+  # @ignored  
+  protocol: *arlasAppProtocol
+  # -- Init the AIAS minio buckets  
+  initBuckets: true
+  services:
+
+    airs:
+      serviceName: airs-server
+      configuration:
+        # -- __MUST BE CONFIGURED:__ Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs
+        indexCollectionPrefix: org.com@airs
+        s3:
+          accessKeyId: *arlasAppMinioLogin
+          secretAccessKey: *arlasAppMinioPassword
+          endpoint: http://arlas-stack-minio:9000
+          # -- __IMPORTANT:__ If you change the bucket name here, make sure to overwrite the patterns in agate.configuration.services (k8s/charts/aias-services/values.yaml).
+          bucket: airs-storage
+          writablePaths:
+            - /
+          # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
+          assetHttpEndpointUrl: https://site.arlas.k8s/{}/{}
+
+    agate:
+      serviceName: arlas-agate
+      configuration:
+        arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
+        urlHeader: x-auth-request-redirect
+        methodHeader: x-original-method
+        urbac:
+          openIdProvider: *arlasAppOpenIdProvider
+          jwtAudience: arlas-backend
+          # -- __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified
+          verifySsl: false
+        # -- If a prefix is added to the arlas deployment, then you must add it to the path permissions below (change "myprefix" with your own prefix and uncomment).
+        #roles: 
+          # role/arlas/downloader:
+          #   permissions:
+          #   - r:/myprefix/aproc/processes/download:GET
+          #   - r:/myprefix/aproc/processes/download/execution:POST
+          #   - r:/myprefix/aproc/jobs/.*:GET,DELETE
+
+          # role/arlas/datasets:
+          #   description:
+          #   - "Managing data (ingest, update and enrich) in ARLAS"
+          #   permissions:
+          #   - r:/myprefix/aproc/processes/ingest:GET
+          #   - r:/myprefix/aproc/processes/ingest/execution:POST
+          #   - r:/myprefix/aproc/processes/enrich:GET
+          #   - r:/myprefix/aproc/processes/enrich/execution:POST
+          #   - r:/myprefix/aproc/processes/directory_ingest:GET
+          #   - r:/myprefix/aproc/processes/directory_ingest/execution:POST
+          #   - r:/myprefix/aproc/processes/dc3build:GET
+          #   - r:/myprefix/aproc/processes/dc3build/execution:POST
+          #   - r:/myprefix/fam/.*:GET,POST
+          #   - r:/myprefix/aproc/jobs/.*:GET,DELETE
+          #   - r:/myprefix/aproc/jobs:GET
+          #   - r:/myprefix/airs/collections/.*:GET,POST,PUT,DELETE
+
+    fam:
+      serviceName: arlas-fam
+
+    aproc:
+      service:
+        serviceName: aproc-service
+      worker:
+        replicaCount: 1
+        resources:
+          limits:
+            cpu: 2
+            memory: 10Gi
+        nodeSelector: {}
+        tolerations: []
+        affinity: {}
+      configuration:
+        # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
+        celeryBrokerUrl: *arlasAppCeleryBrokerUrl
+        # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
+        celeryResultBackend: *arlasAppCeleryResultBackend
+        celeryResultBackendTransportOptions:
+        #   master_name: mymaster
+        #     sentinel_kwargs:
+        #       password: mypassword
+
+        # -- AIRS service endpoint URL accessed by APROC
+        airsEndpoint: http://airs-server:8000/airs
+        # -- ARLAS search URL used by APROC to check whether an item exists
+        arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
+        extensions:
+          download:
+            outboxS3:
+              accessKeyId: *arlasAppMinioLogin
+              secretAccessKey: *arlasAppMinioPassword
+              endpointUrl: http://arlas-stack-minio:9000
+              bucket: downloads
+              # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
+              assetHttpEndpointUrl: https://site.arlas.k8s/{}/{}
+            index:
+              # -- __MUST BE CONFIGURED:__ Change with the domain (org.com) with your own organization name
+              name: org.com@aproc_downloads
+
+          ingest:
+            # -- Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo
+            #inputsDirectory: http://arlas-stack-minio:9000/inputs
+            inputsDirectory: https://storage.googleapis.com/gisaia-public/test-aias
+            aprocEndpoint: http://aproc-service:8001
+        accessManager:
+          # -- Temporary directory used by the access manager
+          tmpDir: /tmp/
+          # -- Configuration of the storages used by the access manager to provide access to various storage backends
+          storages:
+            -
+              type: file
+              writable_paths:
+                - /tmp
+                - /outbox
+              readable_paths:
+                - /inputs
+            -
+              type: gs
+              bucket: gisaia-public
+              readable_paths:
+                - /
+              # api_key:
+              #   project_id: 
+              #   private_key_id: 
+              #   private_key: 
+            -
+              type: s3
+              bucket: archives
+              endpoint: $APROC_ARCHIVE_ENDPOINT|http://arlas-stack-minio:9000"
+              api_key:
+                access_key: *arlasAppMinioLogin
+                secret_key: *arlasAppMinioPassword
+              readable_paths:
+                - /inputs
+            # -
+            #   type: https
+            #   headers: 
+            #   domain: 
+            #   force_download: 
+            -
+              type: s3
+              bucket: gisaia-public
+              endpoint: "https://storage.googleapis.com"
+              readable_paths:
+                - /      
+            -
+              type: s3
+              bucket: downloads
+              endpoint: "http://arlas-stack-minio:9000"
+              api_key:
+                access_key: *arlasAppMinioLogin
+                secret_key: *arlasAppMinioPassword
+              readable_paths:
+                - "/"
+              writable_paths:
+                - "/"
+            -
+              type: s3
+              bucket: inputs
+              endpoint: "http://arlas-stack-minio:9000"
+              api_key:
+                access_key: *arlasAppMinioLogin
+                secret_key: *arlasAppMinioPassword
+              readable_paths:
+                - "/"
+
+  # @ignored  
+  elastic:
+    login: *arlasAppElasticLogin
+    password: *arlasAppElasticPassword
+    endpoint: https://arlas-stack-elasticsearch:9200
+
+  logger:
+    # -- Logging level for aias-services
+    loggingLevel: DEBUG
+    # -- Console logging level for aias-services
+    loggingConsoleLevel: DEBUG
+
+# TITILER
+titiler:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 1Gi
+    limits:
+      cpu: 4
+      memory: 4Gi
+
+# -- Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead.
+elasticsearch:
+  image:
+    repository: bitnamilegacy/elasticsearch
+  # @ignored  
+  global:
+    security:
+      allowInsecureImages: true
+    defaultStorageClass: *arlasAppDefaultStorageClass
+  service:
+    type: ClusterIP
+  master:
+    resourcesPreset: large
+    masterOnly: false
+    replicaCount: 1
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+  data:
+    replicaCount: 0 # 0 for a single node cluster
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+  coordinating:
+    replicaCount: 0
+  ingest:
+    replicaCount: 0
+  security:
+    enabled: true
+  # @ignored  
+    elasticPassword: *arlasAppElasticPassword
+    tls:
+      # AutoGenerate TLS certs for elastic
+      autoGenerated: true
+  sysctlImage:
+    repository: bitnamilegacy/os-shell
+  copyTlsCerts:
+    image:
+      repository: bitnamilegacy/os-shell	
+
+# -- Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead.
+rabbitmq:
+  image:
+    repository: bitnamilegacy/rabbitmq
+  # @ignored  
+  global:
+    security:
+      allowInsecureImages: true
+    defaultStorageClass: *arlasAppDefaultStorageClass
+  resources:
+    limits:
+      memory: 2Gi
+    requests:
+      memory: 1Gi
+
+  # @ignored  
+  auth:
+    username: *arlasAppRabbitMQLogin
+    password: *arlasAppRabbitMQPassword
+  # @ignored  
+  persistence:
+    storageClass: *arlasAppDefaultStorageClass
+  persistentVolumeClaimRetentionPolicy:
+    enabled: true
+
+# -- Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead.
+redis:
+  image:
+    repository: bitnamilegacy/redis
+  # @ignored  
+  global:
+    security:
+      allowInsecureImages: true
+    defaultStorageClass: *arlasAppDefaultStorageClass
+  architecture: standalone
+  # @ignored  
+  auth:
+    password: *arlasAppRedisPassword
+  commonConfiguration: |
+    loadmodule /opt/bitnami/redis/lib/redis/modules/redisbloom.so
+    loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
+    loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
+    loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
+  # @ignored  
+  master:
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+    persistence:
+      storageClass: *arlasAppDefaultStorageClass
+  replica:
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+    persistence:
+      storageClass: *arlasAppDefaultStorageClass
+
+# -- Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead.
+minio:
+  image:
+    repository: bitnamilegacy/minio
+  # @ignored  
+  global:
+    security:
+      allowInsecureImages: true
+    defaultStorageClass: *arlasAppDefaultStorageClass
+  persistence:
+    storageClass: *arlasAppDefaultStorageClass
+  # @ignored  
+  auth:
+    rootUser: *arlasAppMinioLogin
+    rootPassword: *arlasAppMinioPassword
+  resourcesPreset: medium
+  console:
+    image:
+      repository: bitnamilegacy/minio-object-browser
+
+
+# -- Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead.
+keycloak:
+  image:
+    repository: bitnamilegacy/keycloak
+  # @ignored  
+  global:
+    security:
+      allowInsecureImages: true
+    defaultStorageClass: *arlasAppDefaultStorageClass
+
+  # Add extra volumes and volume mounts for realm import
+  realm:
+    configmap:
+      enabled: true
+  # Comment if realm.configmap.enabled is false:
+  extraVolumes:
+    - name: realm-config
+      configMap:
+        name: keycloak-realm-configmap
+  extraVolumeMounts:
+    - name: realm-config
+      mountPath: /opt/bitnami/keycloak/data/import
+      
+  # Enable realm import at startup
+  extraEnvVars:
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "--import-realm"
+
+  httpRelativePath: /auth/
+  resourcesPreset: medium
+  readinessProbe:
+    initialDelaySeconds: 300
+    timeoutSeconds: 60
+  startupProbe:
+    initialDelaySeconds: 300
+    timeoutSeconds: 60
+  auth:
+    adminUser: *arlasAppKeycloakLogin
+    adminPassword: *arlasAppKeycloakPassword
+  service:
+    type: ClusterIP
+    http:
+      enabled: true
+    ports:
+      http: 8080
+      https: 8443
+  ingress:
+  # @ignored  
+    ingressClassName: *arlasAppIngressClassName 
+    enabled: true
+  # @ignored  
+    hostname: *arlasAppKeycloakDnsDomain
+    tls: true
+    path: "/"
+    servicePort: 8080
+    annotations:
+      # -- Default nginx ingress has default proxy buffers that are too small for keycloak headers.
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+      nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+
+    # -- __MUST BE CONFIGURED:__ Enable extraTls bloc if you provide the certificate in the keycloak-tls secret, comment the block below otherwise. If the block is enabled, then set arlas-services.services.mountCertificate must be true, false otherwise (so that the certificate is mounted on the pods).
+    # start-of-block   
+    extraTls:
+      - hosts: 
+        - *arlasAppKeycloakDnsDomain
+        secretName: keycloak-tls
+    # end-of-block   
+  proxy: edge
+  postgresql:
+    image:
+      repository: bitnamilegacy/postgresql
+    global:
+      security:
+        allowInsecureImages: true
+  
+

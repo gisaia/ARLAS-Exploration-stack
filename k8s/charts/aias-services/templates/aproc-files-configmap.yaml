@@ -1,0 +1,360 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aproc-files-configmap
+data:
+  aproc.yaml: |
+    celery_broker_url: {{ .Values.services.aproc.configuration.celeryBrokerUrl }}
+    celery_result_backend: {{ .Values.services.aproc.configuration.celeryResultBackend }}
+    celery_result_backend_transport_options:
+    {{- if .Values.services.aproc.configuration.celeryResultBackendTransportOptions }}
+    {{- toYaml .Values.services.aproc.configuration.celeryResultBackendTransportOptions | nindent 6 }}
+    {{- end }}
+
+
+    airs_endpoint: {{ .Values.services.aproc.configuration.airsEndpoint }}
+    processes:
+      {{- if .Values.services.aproc.configuration.extensions.ingest.enabled }}
+      -
+        name: ingest
+        class_name: extensions.aproc.proc.ingest.ingest_process
+        queue_name: small_task_queue
+        configuration:
+          drivers: conf/drivers.yaml
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.directoryIngest.enabled }}
+      -
+        name: directory_ingest
+        class_name: extensions.aproc.proc.ingest.directory_ingest_process
+        queue_name: small_task_queue
+        configuration:
+          drivers: conf/drivers.yaml
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.download.enabled }}
+      -
+        name: download
+        class_name: extensions.aproc.proc.download.download_process
+        queue_name: large_task_queue
+        configuration:
+          drivers: conf/download_drivers.yaml
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.enrich.enabled }}
+      -
+        name: enrich
+        class_name: extensions.aproc.proc.enrich.enrich_process
+        queue_name: large_task_queue
+        configuration:
+          drivers: conf/enrich_drivers.yaml
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.dc3build.enabled }}
+      -
+        name: dc3build
+        class_name: extensions.aproc.proc.dc3build.dc3build_process
+        queue_name: large_task_queue
+        configuration:
+          drivers: conf/dc3build_drivers.yaml
+      {{- end }}
+
+    access_manager:
+      tmp_dir: {{ .Values.services.aproc.configuration.accessManager.tmpDir }}
+      storages:
+        {{- range .Values.services.aproc.configuration.accessManager.storages }}
+        - {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+  dc3build_drivers.yaml: |
+    arlas_url_search: {{ .Values.services.aproc.configuration.arlasUrlSearch }}
+    drivers:
+      {{- if .Values.services.aproc.configuration.extensions.dc3build.drivers.safe.enabled }}
+      -
+        name: safe
+        class_name: extensions.aproc.proc.dc3build.drivers.impl.safe
+        assets_dir: /tmp/aproc/safe
+        configuration:
+        priority: {{ .Values.services.aproc.configuration.extensions.dc3build.drivers.safe.priority }}
+      {{- end }}
+
+  download_drivers.yaml: |
+    arlas_url_search: {{ .Values.services.aproc.configuration.arlasUrlSearch }}
+    arlaseo_mapping_url: {{ .Values.services.airs.configuration.arlaseoMappingUrl }}
+    download_mapping_url: {{ .Values.services.aproc.configuration.extensions.download.downloadMappingUrl }}
+
+    clean_outbox_directory: {{ .Values.services.aproc.configuration.extensions.download.cleanOutboxDir }}
+    outbox_directory: {{ .Values.services.aproc.configuration.extensions.download.outboxDirectory }}
+    outbox_s3:
+      bucket: {{ .Values.services.aproc.configuration.extensions.download.outboxS3.bucket }}
+      access_key_id: {{ .Values.services.aproc.configuration.extensions.download.outboxS3.accessKeyId }}
+      secret_access_key: {{ .Values.services.aproc.configuration.extensions.download.outboxS3.secretAccessKey }}
+      asset_http_endpoint_url: {{ .Values.services.aproc.configuration.extensions.download.outboxS3.assetHttpEndpointUrl }}
+      endpoint_url: {{ .Values.services.aproc.configuration.extensions.download.outboxS3.endpointUrl }}
+
+    notification_admin_emails: {{ .Values.services.aproc.configuration.extensions.download.emails.message.admin.emails }}
+    # Usable variables in messages: {target_projection}, {target_format}, {arlas-user-email}, {item_id}, {asset_name}, {collection}, {target_directory}, {file_name}, {error}
+
+    email_subject_user: {{ .Values.services.aproc.configuration.extensions.download.emails.message.done.user.subject }}
+    email_content_user: {{ .Values.services.aproc.configuration.extensions.download.emails.message.done.user.content }}
+    
+    email_subject_admin: {{ .Values.services.aproc.configuration.extensions.download.emails.message.done.admin.subject }}
+    email_content_admin: {{ .Values.services.aproc.configuration.extensions.download.emails.message.done.admin.content }}
+
+    email_subject_error_download: {{ .Values.services.aproc.configuration.extensions.download.emails.message.error.subject }}
+    email_content_error_download: {{ .Values.services.aproc.configuration.extensions.download.emails.message.error.content }}
+
+    email_request_subject_user: {{ .Values.services.aproc.configuration.extensions.download.emails.message.request.user.subject }}
+    email_request_content_user: {{ .Values.services.aproc.configuration.extensions.download.emails.message.request.user.content }}
+    
+    email_request_subject_admin: {{ .Values.services.aproc.configuration.extensions.download.emails.message.request.admin.subject }}
+    email_request_content_admin: {{ .Values.services.aproc.configuration.extensions.download.emails.message.request.admin.content }}
+
+    email_path_prefix_add: {{ .Values.services.aproc.configuration.extensions.download.emails.message.path.prefix }}
+    email_path_to_windows: {{ .Values.services.aproc.configuration.extensions.download.emails.message.path.windows }}
+
+    smtp:
+      enabled: {{ .Values.smtp.enabled }}
+      host: {{ .Values.smtp.host }}
+      port: {{ .Values.smtp.port }}
+      login: {{ .Values.smtp.username }}
+      password: {{ .Values.smtp.password }}
+      from_addr: {{ .Values.smtp.from }}
+
+    index_for_download:
+      index_name: {{ .Values.services.aproc.configuration.extensions.download.index.name }}
+      endpoint_url: {{ .Values.elastic.endpoint }}
+      login: {{ .Values.elastic.login }}
+      pwd: {{ .Values.elastic.password }}
+
+    drivers:
+      {{- if .Values.services.aproc.configuration.extensions.download.drivers.copy.enabled }}
+      -
+        name: simple_copy
+        class_name: extensions.aproc.proc.download.drivers.impl.simple_copy
+        configuration:
+        assets_dir: /tmp/aproc/download
+        priority: {{ .Values.services.aproc.configuration.extensions.download.drivers.copy.priority }}
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.download.drivers.metFile.enabled }}
+      -
+        name: met_file
+        class_name: extensions.aproc.proc.download.drivers.impl.met_file
+        configuration:
+        assets_dir: /tmp/aproc/download
+        priority: {{ .Values.services.aproc.configuration.extensions.download.drivers.metFile.priority }}
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.download.drivers.imageFile.enabled }}
+      -
+        name: image_file
+        class_name: extensions.aproc.proc.download.drivers.impl.image_file
+        configuration:
+        assets_dir: /tmp/aproc/download
+        priority: {{ .Values.services.aproc.configuration.extensions.download.drivers.imageFile.priority }}
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.download.drivers.zarr.enabled }}
+      -
+        name: zarr
+        class_name: extensions.aproc.proc.download.drivers.impl.zarr
+        assets_dir: /tmp/aproc/download
+        configuration:
+          chunk_size: 1000
+          # input:
+          #   type: $APROC_INPUT_STORAGE_TYPE
+          #   bucket: $APROC_INPUT_STORAGE_BUCKET
+          #   api_key:
+          #     project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
+          #     private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
+          #     private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
+          #   headers:
+          #     X-API-Key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
+          #     Accept: "application/json, text/plain"
+          #     Connection: "keep-alive"
+          #     Sec-Fetch-Dest: "empty"
+          #     Content-Type: application/json;charset=utf-8
+          #   domain: $APROC_INPUT_STORAGE_DOMAIN
+          #   force_download: $APROC_INPUT_STORAGE_FORCE_DOWNLOAD
+        priority: {{ .Values.services.aproc.configuration.extensions.download.drivers.zarr.priority }}
+      {{- end }}
+  drivers.yaml: |
+    inputs_directory: {{ .Values.services.aproc.configuration.extensions.ingest.inputsDirectory }}
+
+    max_number_of_archive_for_ingest: {{ .Values.services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest }}
+    aproc_endpoint: {{ .Values.services.aproc.configuration.extensions.ingest.aprocEndpoint }}
+    resource_id_hash_starts_at: {{ .Values.services.aproc.configuration.extensions.ingest.resourceIdHashStartAt }}
+
+    drivers:
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.dimap.enabled }}
+      -
+        name: dimap
+        class_name: extensions.aproc.proc.ingest.drivers.impl.dimap
+        assets_dir: /tmp/aproc/dimap
+        configuration:
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.dimap.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.geoeyes.enabled }}
+      -
+        name: geoeye
+        class_name: extensions.aproc.proc.ingest.drivers.impl.geoeye
+        assets_dir: /tmp/aproc/geoeye
+        configuration:
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geoeyes.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.digitalglobe.enabled }}
+      -
+        name: digitalglobe
+        class_name: extensions.aproc.proc.ingest.drivers.impl.digitalglobe
+        assets_dir: /tmp/aproc/digitalglobe
+        configuration:
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.digitalglobe.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.enabled }}
+      -
+        name: ast_dem
+        class_name: extensions.aproc.proc.ingest.drivers.impl.ast_dem
+        assets_dir: /tmp/aproc/ast_dem
+        configuration:
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.rapideye.enabled }}
+      -
+        name: rapideye
+        class_name: extensions.aproc.proc.ingest.drivers.impl.rapideye
+        assets_dir: /tmp/aproc/rapideye
+        configuration:
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.rapideye.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.spot5.enabled }}
+      -
+        name: spot5
+        class_name: extensions.aproc.proc.ingest.drivers.impl.spot5
+        assets_dir: /tmp/aproc/spot5
+        configuration:
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.spot5.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.terrasarx.enabled }}
+      -
+        name: terrasarx
+        class_name: extensions.aproc.proc.ingest.drivers.impl.terrasarx
+        assets_dir: /tmp/aproc/terrasarx
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.terrasarx.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.enabled }}
+      -
+        name: cosmoskymed
+        class_name: extensions.aproc.proc.ingest.drivers.impl.cosmoskymed
+        assets_dir: /tmp/aproc/cosmoskymed
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.umbra.enabled }}
+      -
+        name: umbra
+        class_name: extensions.aproc.proc.ingest.drivers.impl.umbra
+        assets_dir: /tmp/aproc/umbra
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.enabled }}
+      -
+        name: bsg
+        class_name: extensions.aproc.proc.ingest.drivers.impl.bsg
+        assets_dir: /tmp/aproc/bsg
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.tiff.enabled }}
+      -
+        name: tiff
+        class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
+        assets_dir: /tmp/aproc/tiff
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.tiff.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.jpeg2000.enabled }}
+      -
+        name: jpeg2000
+        class_name: extensions.aproc.proc.ingest.drivers.impl.jpeg2000
+        assets_dir: /tmp/aproc/jpeg2000
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.jpeg2000.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.enabled }}
+      -
+        name: sentinel2
+        class_name: extensions.aproc.proc.ingest.drivers.impl.sentinel_2
+        assets_dir: /tmp/aproc/sentinel2
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.enabled }}
+      -
+        name: sentinel1
+        class_name: extensions.aproc.proc.ingest.drivers.impl.sentinel_1
+        assets_dir: /tmp/aproc/sentinel1
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.enabled }}
+      -
+        name: iceye
+        class_name: extensions.aproc.proc.ingest.drivers.impl.iceye
+        assets_dir: /tmp/aproc/iceye
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.enabled }}
+      -
+        name: radarsat2
+        class_name: extensions.aproc.proc.ingest.drivers.impl.radarsat_2
+        assets_dir: /tmp/aproc/radarsat2
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.enabled }}
+      -
+        name: skysat
+        class_name: extensions.aproc.proc.ingest.drivers.impl.skysat
+        assets_dir: /tmp/aproc/skysat
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.priority }}
+      {{- end }}
+
+
+  enrich_drivers.yaml: |
+    drivers:
+      {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.safe.enabled }}
+      -
+        name: safe
+        class_name: extensions.aproc.proc.enrich.drivers.impl.safe
+        assets_dir: /tmp/aproc/safe
+        priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.safe.priority }}
+      {{- end }}
+  fam.yaml: |
+    inputs_directory: {{ .Values.services.aproc.configuration.extensions.ingest.inputsDirectory }}
+    driver_configuration_file: conf/drivers.yaml

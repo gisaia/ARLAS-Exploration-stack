@@ -1,0 +1,21 @@
+{{- if .Values.deployment.arlas.services.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arlas-server-ingress
+  annotations:
+    {{ .Values.deployment.arlas.services.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.global.ingressClassName }}
+  rules:
+    - host: {{ .Values.global.dnsDomain }}
+      http:
+        paths:
+          - path: /arlas/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ (get .Values "arlas-services").services.server.serviceName }}
+                port:
+                  number: {{ (get .Values "arlas-services").services.servicePort }}
+{{- end }}

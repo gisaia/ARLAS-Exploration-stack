@@ -15,9 +15,24 @@ spec:
         app.kubernetes.io/component: {{ .Values.services.airs.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.services.podSecurityContext | nindent 8 }}
+
+      {{- with .Values.services.airs.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.services.airs.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
         - name: {{ .Values.services.airs.serviceName }}
           image: {{ .Values.services.airs.image }}
+          securityContext:
+            {{- toYaml .Values.services.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
@@ -43,10 +58,6 @@ spec:
           resources:
             {{- toYaml .Values.services.airs.resources | nindent 12 }}
           env:
-
-            - name: AIRS_COLLECTION_URL
-              value: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.6/collection.json
-
             # ENDPOINT CONFIGURATION              
             - name: AIRS_CORS_HEADERS
               value: {{ .Values.cors.allowedHeaders | quote }}
@@ -62,57 +73,41 @@ spec:
             - name: AIRS_PREFIX
               value: {{ .Values.services.airs.urlPrefix }}
 
-            # INDEX CONFIGURATION
-            - name: AIRS_INDEX_COLLECTION_PREFIX
-              value: "{{ .Values.organization }}@{{ .Values.airsIndexPrefix }}"
-
-            # INDEX MAPPING
-            - name: ARLASEO_MAPPING_URL
-              value: {{ .Values.arlasMappingUrl | quote }}
-
-            # ELASTICSEARCH CONFIGURATION
-            - name: AIRS_INDEX_ENDPOINT_URL
-              value: "https://{{ .Release.Name }}-elasticsearch:9200" # TO BE IMPROVED: remove the protocol
-            - name: ARLAS_ELASTIC_CLUSTER
-              value: {{ .Values.elastic.cluster }}
-            - name: ARLAS_ELASTIC_NODES
-              value: {{ .Release.Name }}-elasticsearch:9200
-            - name: AIRS_INDEX_LOGIN
-              value: {{ .Values.elastic.login }}
-            - name: AIRS_INDEX_PWD
-              value: {{ .Values.elastic.password }}
-
             # LOGGING
             - name: AIRS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
 
-            # OBJECT STORAGE
-            - name: AIRS_S3_ACCESS_KEY_ID
-              value: {{ .Values.s3.accessKeyId | quote }}
-            - name: AIRS_S3_SECRET_ACCESS_KEY
-              value: {{ .Values.s3.secret | quote }}
-            - name: AIRS_S3_ASSET_HTTP_ENDPOINT_URL
-              value: {{ .Values.s3.assetHttpEndpointUrlPattern | quote }}
-            - name: AIRS_S3_BUCKET
-              value: {{ .Values.s3.bucket | quote }}
-            - name: AIRS_S3_ENDPOINT_URL
-              value: {{ .Values.s3.endpoint | quote }}
-            - name: AIRS_S3_PLATFORM
-              value: {{ .Values.s3.platform | quote }}
-            - name: AIRS_S3_REGION
-              value: {{ .Values.s3.region | quote }}
-            - name: AIRS_S3_TIER
-              value: {{ .Values.s3.tier | quote }}
+            {{- with .Values.services.airs.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+
           volumeMounts:
             - name: airs-files
               mountPath: /app/conf/
               readOnly: true
+            - name: arlas-eo-mappings
+              mountPath: /app/mappings/
+              readOnly: true
+          {{- with .Values.services.airs.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.services.airs.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       volumes:
         - name: airs-files
           configMap:
             name: airs-files-configmap
+        - name: arlas-eo-mappings
+          configMap:
+            name: arlas-eo-mappings-configmap
+        {{- with .Values.services.airs.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.services.airs.nodeSelector }}

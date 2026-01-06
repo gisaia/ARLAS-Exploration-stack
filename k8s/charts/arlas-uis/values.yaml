@@ -8,16 +8,40 @@ defaultStorageClass: standard
 uis:
   servicePort: 8080
   serviceType: ClusterIP
+  podSecurityContext:
+    #fsGroup: 1000
+    #runAsNonRoot: true
+    #runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:27.1.0
+    image: gisaia/arlas-wui:27.1.4
+    # -- Extra environment variables for the arlas wui container
     urlPrefix: /wui
     tabName: ARLAS Exploration
+    basemapUrl: 
+    aboutAndTourConfigMapName: arlas-default-about-and-tour-configmap
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    #  - name: KEY
+    #    value: "value"
+    extraVolumeMounts:
+    #  - name: extra-assets-volume
+    #    mountPath: /usr/share/nginx/html/assets/logo-only.png
+    #    subPath: logo-only.png
+    extraVolumes:
+    #  - name: extra-assets-volume
+    #    configMap:
+    #      name: arlas-example-assets-configmap
 
   famWui:
     serviceName: arlas-fam-wui
-    image: gisaia/arlas-fam-wui:0.7.2
+    image: gisaia/arlas-fam-wui:0.10.4
+    # -- Extra environment variables for the arlas fam wui container
     urlPrefix: /fam-wui
     tabName: ARLAS FAM Wui
     famDefaultURL:
@@ -25,20 +49,40 @@ uis:
     catalog: main catalog
     archivePageSize: 10
     filePageSize: 50
- 
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
+
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:27.1.0
+    image: gisaia/arlas-wui-hub:27.1.2
     urlPrefix: /hub
     tabName: ARLAS Hub
+    aboutConfigMapName: arlas-hub-default-about-configmap
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
 
   builder: 
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:27.1.0
+    image: gisaia/arlas-wui-builder:27.1.2
     urlPrefix: /builder/
     tabName: ARLAS Studio
+    aboutConfigMapName: arlas-builder-default-about-configmap
     allowExternalNodeConfiguration: true
     advancedFeatures: false
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     # @ignored
     basemaps: '[
         {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"},
@@ -47,6 +91,11 @@ uis:
         {"name":"Light","url":"/wui/assets/basemap/styles/protomap-light.json","image":"/wui/assets/basemap/quicklook/light.png", "type": "protomap"},
         {"name":"White","url":"/wui/assets/basemap/styles/protomap-white.json","image":"/wui/assets/basemap/quicklook/white.png", "type": "protomap"}
         ]'
+  colors:
+    arlas:
+      bg: "#ff4081"
+    handle:
+      color: "#ff4081"
 
 services:
   server:

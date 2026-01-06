@@ -1,0 +1,268 @@
+apiVersion: v1
+data:
+  arlas_eo_download_mapping.json: |-
+    {
+        "mappings": {
+            "properties": {
+                "properties": {
+                    "properties": {
+                        "download_datetime": {
+                            "type": "date",
+                            "format": "epoch_second"
+                        },
+                        "id_from_source": {
+                            "type": "keyword",
+                            "copy_to": [
+                                "internal.fulltext",
+                                "internal.autocomplete"
+                            ]
+                        },
+                        "outcome": {
+                            "type": "keyword",
+                            "copy_to": [
+                                "internal.fulltext",
+                                "internal.autocomplete"
+                            ]
+                        },
+                        "reason": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "user": {
+                            "type": "keyword",
+                            "copy_to": [
+                                "internal.fulltext",
+                                "internal.autocomplete"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+  arlas_eo_mapping.json: "{\n    \"index_patterns\": [\n        \"arlaseo-*\"\n    ],\n
+    \   \"mappings\": {\n        \"properties\": {\n            \"internal\": {\n
+    \               \"properties\": {\n                    \"autocomplete\": {\n                        \"type\":
+    \"keyword\"\n                    },\n                    \"fulltext\": {\n                        \"type\":
+    \"text\",\n                        \"fielddata\": true\n                    }\n
+    \               }\n            },\n            \"collection\": {\n                \"type\":
+    \"keyword\",\n                \"copy_to\": [\n                    \"internal.fulltext\",\n
+    \                   \"internal.autocomplete\"\n                ]\n            },\n
+    \           \"catalog\": {\n                \"type\": \"keyword\",\n                \"copy_to\":
+    [\n                    \"internal.fulltext\",\n                    \"internal.autocomplete\"\n
+    \               ]\n            },\n            \"id\": {\n                \"type\":
+    \"keyword\",\n                \"copy_to\": [\n                    \"internal.fulltext\",\n
+    \                   \"internal.autocomplete\"\n                ]\n            },\n
+    \           \"geometry\": {\n                \"type\": \"geo_shape\"\n            },\n
+    \           \"bbox\": {\n                \"type\": \"float\"\n            },\n
+    \           \"centroid\": {\n                \"type\": \"geo_point\"\n            },\n
+    \           \"assets\": {\n                \"properties\": {}\n            },\n
+    \           \"properties\": {\n                \"properties\": {\n                    \"datetime\":
+    {\n                        \"type\": \"date\",\n                        \"format\":
+    \"epoch_second\"\n                    },\n                    \"start_datetime\":
+    {\n                        \"type\": \"date\",\n                        \"format\":
+    \"epoch_second\"\n                    },\n                    \"end_datetime\":
+    {\n                        \"type\": \"date\",\n                        \"format\":
+    \"epoch_second\"\n                    },\n                    \"programme\": {\n
+    \                       \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"secondary_id\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"keywords\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"annotations\":
+    {\n                        \"type\": \"text\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\"\n                        ]\n
+    \                   },\n                    \"constellation\": {\n                        \"type\":
+    \"keyword\",\n                        \"copy_to\": [\n                            \"internal.fulltext\",\n
+    \                           \"internal.autocomplete\"\n                        ]\n
+    \                   },\n                    \"satellite\": {\n                        \"type\":
+    \"keyword\",\n                        \"copy_to\": [\n                            \"internal.fulltext\",\n
+    \                           \"internal.autocomplete\"\n                        ]\n
+    \                   },\n                    \"platform\": {\n                        \"type\":
+    \"keyword\",\n                        \"copy_to\": [\n                            \"internal.fulltext\",\n
+    \                           \"internal.autocomplete\"\n                        ]\n
+    \                   },\n                    \"instrument\": {\n                        \"type\":
+    \"keyword\",\n                        \"copy_to\": [\n                            \"internal.fulltext\",\n
+    \                           \"internal.autocomplete\"\n                        ]\n
+    \                   },\n                    \"item_format\": {\n                        \"type\":
+    \"keyword\"\n                    },\n                    \"item_type\": {\n                        \"type\":
+    \"keyword\"\n                    },\n                    \"main_asset_format\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"main_asset_name\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"observation_type\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"sensor\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"sensor_mode\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"sensor_type\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"gsd\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"data_type\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"data_coverage\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"water_coverage\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"locations\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"create_datetime\":
+    {\n                        \"type\": \"date\",\n                        \"format\":
+    \"epoch_second\"\n                    },\n                    \"update_datetime\":
+    {\n                        \"type\": \"date\",\n                        \"format\":
+    \"epoch_second\"\n                    },\n                    \"acq__acquisition_orbit\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"acq__acquisition_mode\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"acq__acquisition_orbit_direction\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"acq__acquisition_type\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"acq__across_track\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"acq__along_track\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"acq__archiving_date\":
+    {\n                        \"type\": \"date\",\n                        \"format\":
+    \"epoch_second\"\n                    },\n                    \"acq__download_orbit\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"acq__request_id\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"acq__quality_average\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"acq__quality_computation\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"acq__receiving_station\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"acq__reception_date\":
+    {\n                        \"type\": \"date\",\n                        \"format\":
+    \"epoch_second\"\n                    },\n                    \"acq__spectral_mode\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"view__off_nadir\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"view__incidence_angle\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"view__azimuth\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"view__sun_azimuth\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"view__sun_elevation\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"storage__requester_pays\":
+    {\n                        \"type\": \"boolean\"\n                    },\n                    \"storage__tier\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"storage__platform\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"storage__region\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"eo__cloud_cover\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"eo__snow_cover\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"eo__bands\":
+    {\n                        \"properties\": {\n                            \"name\":
+    {\n                                \"type\": \"keyword\"\n                            },\n
+    \                           \"common_name\": {\n                                \"type\":
+    \"keyword\"\n                            },\n                            \"description\":
+    {\n                                \"type\": \"text\"\n                            },\n
+    \                           \"center_wavelength\": {\n                                \"type\":
+    \"float\"\n                            },\n                            \"full_width_half_max\":
+    {\n                                \"type\": \"float\"\n                            },\n
+    \                           \"solar_illumination\": {\n                                \"type\":
+    \"float\"\n                            },\n                            \"quality_indicators\":
+    {\n                                \"properties\": {\n                                    \"time_compacity\":
+    {\n                                        \"type\": \"float\"\n                                    },\n
+    \                                   \"spatial_coverage\": {\n                                        \"type\":
+    \"float\"\n                                    },\n                                    \"group_lightness\":
+    {\n                                        \"type\": \"float\"\n                                    },\n
+    \                                   \"time_regularity\": {\n                                        \"type\":
+    \"float\"\n                                    }\n                                }\n
+    \                           }\n                        }\n                    },\n
+    \                   \"processing__expression\": {\n                        \"type\":
+    \"keyword\"\n                    },\n                    \"processing__lineage\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"processing__level\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"processing__facility\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"processing__software\":
+    {\n                        \"type\": \"object\",\n                        \"enabled\":
+    false\n                    },\n                    \"dc3__quality_indicators\":
+    {\n                        \"properties\": {\n                            \"time_compacity\":
+    {\n                                \"type\": \"float\"\n                            },\n
+    \                           \"spatial_coverage\": {\n                                \"type\":
+    \"float\"\n                            },\n                            \"group_lightness\":
+    {\n                                \"type\": \"float\"\n                            },\n
+    \                           \"time_regularity\": {\n                                \"type\":
+    \"float\"\n                            }\n                        }\n                    },\n
+    \                   \"dc3__composition\": {\n                        \"type\":
+    \"object\",\n                        \"enabled\": false\n                    },\n
+    \                   \"dc3__number_of_chunks\": {\n                        \"type\":
+    \"integer\"\n                    },\n                    \"dc3__chunk_weight\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"dc3__fill_ratio\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"cube__dimensions\":
+    {\n                        \"type\": \"object\",\n                        \"enabled\":
+    false\n                    },\n                    \"cube__variables\": {\n                        \"type\":
+    \"object\",\n                        \"enabled\": false\n                    },\n
+    \                   \"sar__instrument_mode\": {\n                        \"type\":
+    \"keyword\"\n                    },\n                    \"sar__frequency_band\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"sar__center_frequency\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__polarizations\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"sar__product_type\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"sar__resolution_range\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__resolution_azimuth\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__pixel_spacing_range\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__pixel_spacing_azimuth\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__looks_range\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__looks_azimuth\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__looks_equivalent_number\":
+    {\n                        \"type\": \"float\"\n                    },\n                    \"sar__observation_direction\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"proj__epsg\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"proj__wkt2\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"proj__geometry\":
+    {\n                        \"type\": \"object\",\n                        \"enabled\":
+    false\n                    },\n                    \"proj__bbox\": {\n                        \"type\":
+    \"object\",\n                        \"enabled\": false\n                    },\n
+    \                   \"proj__centroid\": {\n                        \"type\": \"object\",\n
+    \                       \"enabled\": false\n                    },\n                    \"proj__shape\":
+    {\n                        \"type\": \"object\",\n                        \"enabled\":
+    false\n                    },\n                    \"proj__transform\": {\n                        \"type\":
+    \"object\",\n                        \"enabled\": false\n                    },\n
+    \                   \"generated__has_overview\": {\n                        \"type\":
+    \"boolean\"\n                    },\n                    \"generated__has_thumbnail\":
+    {\n                        \"type\": \"boolean\"\n                    },\n                    \"generated__has_metadata\":
+    {\n                        \"type\": \"boolean\"\n                    },\n                    \"generated__has_data\":
+    {\n                        \"type\": \"boolean\"\n                    },\n                    \"generated__has_cog\":
+    {\n                        \"type\": \"boolean\"\n                    },\n                    \"generated__has_all_bands_cog\":
+    {\n                        \"type\": \"boolean\"\n                    },                    \n
+    \                   \"generated__has_zarr\": {\n                        \"type\":
+    \"boolean\"\n                    },\n                    \"generated__asset_names\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"generated__asset_roles\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"generated__date_keywords\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"generated__day_of_week\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"generated__day_of_year\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"generated__hour_of_day\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"generated__minute_of_day\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"generated__month\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"generated__year\":
+    {\n                        \"type\": \"integer\"\n                    },\n                    \"generated__season\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"generated__tltrbrbl\":
+    {\n                        \"enabled\": false\n                    },\n                    \"generated__band_common_names\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"generated__band_names\":
+    {\n                        \"type\": \"keyword\",\n                        \"copy_to\":
+    [\n                            \"internal.fulltext\",\n                            \"internal.autocomplete\"\n
+    \                       ]\n                    },\n                    \"generated__geohash2\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"generated__geohash3\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"generated__geohash4\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"generated__geohash5\":
+    {\n                        \"type\": \"keyword\"\n                    }\n                }\n
+    \           }\n        }\n    }\n}\n"
+kind: ConfigMap
+metadata:
+  name: arlas-eo-mappings-configmap

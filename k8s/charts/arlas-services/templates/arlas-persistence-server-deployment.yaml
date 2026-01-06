@@ -20,9 +20,13 @@ spec:
         co.elastic.logs/enabled: {{ .Values.services.server.apm | quote }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.services.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Values.services.persistence.serviceName }}
           image: {{ .Values.services.persistence.image }}
+          securityContext:
+            {{- toYaml .Values.services.containerSecurityContext | nindent 12 }}
           resources:
             {{- toYaml .Values.services.persistence.resources | nindent 12 }}
           ports:
@@ -81,6 +85,10 @@ spec:
             {{- include "arlasServices.cacheEnv" . | nindent 12 }}
             {{- include "arlasServices.loggingEnv" . | nindent 12 }}
             {{- include "arlasServices.elasticEnv" . | nindent 12 }}
+
+            {{- with .Values.services.persistence.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
 
           volumeMounts:
           {{- include "arlasServices.mountCertificate" . }}

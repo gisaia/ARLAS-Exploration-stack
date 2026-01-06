@@ -4,16 +4,30 @@
 dnsDomain: localhost
 protocol: http
 
+initBuckets: false
 services: 
   serviceType: ClusterIP
   servicePort: 8000
+  podSecurityContext:
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.7.2
-    
+    image: gisaia/airs:0.10.4
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers: []
+    extraEnv: []
+    extraVolumeMounts: []
+    extraVolumes: []
     urlPrefix: /airs
     serviceBinding: 0.0.0.0
+    # -- Number of AIRS service replicas
     replicaCount: 1
+    # -- Resources configuration for AIRS service
     resources:
       requests:
         cpu: 0.1
@@ -21,16 +35,58 @@ services:
       limits:
         cpu: 0.5
         memory: 2Gi
+    # -- Node selector for AIRS service pods
     nodeSelector: {}
+    # -- Tolerations for AIRS service pods
     tolerations: []
+    # -- Affinity for AIRS service pods
     affinity: {}
+
+    configuration:
+      # -- Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs
+      indexCollectionPrefix: org.com@airs
+      s3:
+        # -- S3 bucket name for storing and accessing the STAC collections, items and managed assets
+        bucket: airs-storage
+        # -- S3 access key id
+        accessKeyId: airs
+        # -- S3 secret access key
+        secretAccessKey: airssecret
+        # -- S3 internal endpoint URL, e.g. http://minio:9000
+        endpointUrl: http://arlas-stack-minio:9000
+        # -- List of writable paths in the S3 bucket
+        writablePaths:
+          - /
+
+        # -- Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item
+        assetHttpEndpointUrl: https://arlas-stack-minio:9000/{}/{}
+        # -- S3 platform type. This value is provided in the item properties of the STAC item
+        platform: MINIO
+        # -- S3 bucket's region. This value is provided in the item properties of the STAC item
+        region: 
+        # -- S3 bucket's tier. This value is provided in the item properties of the STAC item
+        tier: Standard
+
+      # -- ARLAS-EO mapping and collection URLs used for initializing new indices of new collections
+      arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
+      # -- ARLAS-EO collection URL used for initializing new collections.
+      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.0.0/collection.json      
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.7.2
+    image: gisaia/fam:0.10.4
+    # -- Extra environment variables for the fam container
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /fam
     serviceBinding: 0.0.0.0
+    # -- Number of FAM service replicas
     replicaCount: 1
+    # -- Resources configuration for FAM service
     resources:
       requests:
         cpu: 0.1
@@ -38,16 +94,28 @@ services:
       limits:
         cpu: 0.5
         memory: 256Mi
+    # -- Node selector for FAM service pods
     nodeSelector: {}
+    # -- Tolerations for FAM service pods
     tolerations: []
+    # -- Affinity for FAM service pods
     affinity: {}
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.7.2
+    image: gisaia/agate:0.10.4
+    # -- Extra environment variables for the agate container
+    imagePullSecrets: []
+    extraContainers: []
+    extraInitContainers:
+    extraEnv:
+    extraVolumeMounts:
+    extraVolumes:
     urlPrefix: /agate
     serviceBinding: 0.0.0.0
+    # -- Number of AGATE service replicas
     replicaCount: 1
+    # -- Resources configuration for AGATE service
     resources:
       requests:
         cpu: 0.1
@@ -55,21 +123,210 @@ services:
       limits:
         cpu: 0.5
         memory: 256Mi
+    # -- Node selector for AGATE service pods
     nodeSelector: {}
+    # -- Tolerations for AGATE service pods
     tolerations: []
+    # -- Affinity for AGATE service pods
     affinity: {}
-    openIdProvider: https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
-    verifyJwt: true
-    verifySsl: true
-    audience: arlas-backend
-    
+    configuration:
+      # -- ARLAS endpoint used by AGATE to check whether an item is accessible or not
+      arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
+      # -- Number of worker processes for AGATE
+      nbWorkers: 4
+      # -- HTTP header containing the original request URL
+      urlHeader: x-forwarded-uri
+      # -- URBAC HTTP header containing the method of the original request
+      methodHeader: x-forwarded-method
+      urbac:
+        # -- URBAC HTTP header containing the JWT token of the original request
+        jwtHeader: authorization
+        # -- Keys endpoint
+        jwks_uri: https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs
+        # -- Whether to verify the JWT signature or not
+        verifyJwt: true
+        # -- Whether to verify the SSL certificate of the OpenID Provider or not
+        verifySsl: true
+        # -- Expected audience in the JWT token
+        jwtAudience: arlas-backend
+      # -- Roles used by URBAC. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml
+      roles: 
+        group/public:
+          description:
+          - "Public group"
+          permissions:
+          # ARLAS IAM session management
+          - r:session:DELETE
+          - r:permissions:GET
+          - r:organisations:GET,POST
+          - r:organisations/check:GET
+          - r:users/.*:GET,PUT,DELETE
+
+        role/arlas/user:
+          description:
+          - "Viewing data in ARLAS"
+          permissions:
+      # ARLAS explore
+          - h:arlas-organization:${org}
+          - h:arlas-workspace:${ws}
+          - r:explore/.*:GET,POST
+          - r:collections/.*:GET
+          - r:explore/_list:GET
+          - r:explore/ogc/opensearch/.*:GET
+          - r:ogc/.*:GET
+          - r:stac:GET
+          - r:openapi.json:GET
+          - r:stac/.*:GET,POST
+      # ARLAS persistence
+          - r:persist/resource/.*:GET
+          - r:persist/groups/.*:GET
+          - r:persist/resources/.*:GET
+      # ARLAS permissions
+          - r:authorize/resources:GET
+
+        role/arlas/tagger:
+          description:
+          - "Tagging data in ARLAS"
+          permissions:
+          - r:write/.*:POST
+          - r:status/.*:GET
+
+        role/arlas/downloader:
+          description:
+          - "Download data from ARLAS"
+          permissions:
+          - r:/aproc/processes/download:GET
+          - r:/aproc/processes/download/execution:POST
+          - r:/aproc/jobs/.*:GET,DELETE
+
+        role/arlas/datasets:
+          description:
+          - "Managing data (ingest, update and enrich) in ARLAS"
+          permissions:
+          - r:datasets/.*:GET,PUT,POST,DELETE
+          - r:/aproc/processes/ingest:GET
+          - r:/aproc/processes/ingest/execution:POST
+          - r:/aproc/processes/enrich:GET
+          - r:/aproc/processes/enrich/execution:POST
+          - r:/aproc/processes/directory_ingest:GET
+          - r:/aproc/processes/directory_ingest/execution:POST
+          - r:/aproc/processes/dc3build:GET
+          - r:/aproc/processes/dc3build/execution:POST
+          - r:/fam/.*:GET,POST
+          - r:/aproc/jobs/.*:GET,DELETE
+          - r:/aproc/jobs:GET
+          - r:/airs/collections/.*:GET,POST,PUT,DELETE
+
+        role/arlas/builder:
+          description:
+          - "Building dashboards in ARLAS"
+          permissions:
+          - r:collections:GET
+          - r:collections/.*:PATCH,PUT,DELETE
+          - r:collections/_export:GET
+          - r:collections/_import:POST
+          - r:persist/resource/.*:PUT,POST,DELETE
+
+        role/arlas/owner:
+          description:
+          - "Managing users and permissions of ARLAS"
+          permissions:
+          - r:permissions:GET
+          - r:collections:GET
+          - r:organisations:GET,POST
+          - r:organisations/.*:GET,POST,PUT,DELETE
+          - r:users/.*:GET,PUT,DELETE
+          - r:session:DELETE
+
+      # M2M role
+        role/m2m/importer:
+          description:
+          - "M2M account for importing collections"
+          permissions:
+          - r:collections:GET
+          - r:collections/.*:PATCH,PUT,DELETE
+          - r:collections/_import:POST
+          - r:organisations/.*:GET
+          - r:persist/resource/.*:POST,PUT
+
+      # IAM super admin role
+        role/iam/admin:
+          description:
+          - "IAM admin"
+          permissions:
+          - r:organisations:GET,POST
+          - r:organisations/.*:GET,POST,DELETE
+          - r:users/.*:GET,PUT,DELETE
+          - r:session:DELETE
+          - r:permissions:GET
+
+      services:
+        airs-storage:
+          # -- Name of the header containing the JWT token
+          jwt_name: authorization
+          # -- Locations where to find the JWT token for storage access
+          jwt_location:
+            - headers
+          # -- Patterns for private assets
+          private:
+            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
+              part: path
+            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
+              part: path
+          # -- Patterns for private assets
+          public:
+            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
+              part: path
+        # -- Configuration for accessing private COG assets
+        cog:
+          # -- Name of the header containing the JWT token for COG access
+          jwt_name: authorization
+          # -- Locations where to find the JWT token for COG access
+          jwt_location:
+            - headers
+            - query_params
+          # -- Patterns for private COG assets
+          private:
+            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
+              part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
+        cog_preview:
+          # -- Name of the header containing the JWT token for COG preview access
+          jwt_name: authorization
+          # -- Locations where to find the JWT token for COG preview access
+          jwt_location:
+            - headers
+            - query_params
+          # -- Patterns for public COG preview access
+          public:
+            - pattern: (/cog/preview)(.*)
+              part: path
+        cog_statistics:
+          # -- Name of the header containing the JWT token for COG statistics access
+          jwt_name: authorization
+          # -- Locations where to find the JWT token for COG statistics access
+          jwt_location:
+            - headers
+            - query_params
+          # -- Patterns for public COG statistics access
+          public:
+            - pattern: (/cog/statistics)(.*)
+              part: path
+
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.7.2
+      image: gisaia/aproc-service:0.10.4
+      imagePullSecrets: []
+      extraContainers: []
+      extraInitContainers:
+      extraEnv:
+      extraVolumeMounts:
+      extraVolumes:
       urlPrefix: /aproc
       serviceBinding: 0.0.0.0
+      # -- Number of APROC service replicas
       replicaCount: 1
+      # -- Resources configuration for APROC service
       resources:
         requests:
           cpu: 0.1
@@ -77,14 +334,24 @@ services:
         limits:
           cpu: 0.5
           memory: 256Mi
+      # -- Node selector for APROC service pods
       nodeSelector: {}
+      # -- Tolerations for APROC service pods
       tolerations: []
+      # -- Affinity for APROC service pods
       affinity: {}
-
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.7.2
+      image: gisaia/aproc-proc:0.10.4
+      imagePullSecrets: []
+      extraContainers: []
+      extraInitContainers:
+      extraEnv:
+      extraVolumeMounts:
+      extraVolumes:
+      # -- Number of APROC worker replicas
       replicaCount: 1
+      # -- Resources configuration for APROC worker
       resources:
         requests:
           cpu: 0.5
@@ -92,16 +359,212 @@ services:
         limits:
           cpu: 2
           memory: 2Gi
+      # -- Node selector for APROC worker pods
       nodeSelector: {}
+      # -- Tolerations for APROC worker pods
       tolerations: []
+      # -- Affinity for APROC worker pods
       affinity: {}
 
+    configuration:
+      # -- Celery broker URL for APROC tasks
+      celeryBrokerUrl: pyamqp://guest:guest@rabbitmq:5672//
+      # -- Celery result backend URL for APROC tasks
 
-# -- Name of the organization using AIAS
-organization: org.com
+      # Example of a redis connection url without sentinel:
+      celeryResultBackend: redis://:somepassword@redis-master:6379/0
 
-# -- Prefix appended to elasticsearch indices containing AIRS collections. The final name is of the form: prefix@organization_indexname
-airsIndexPrefix: airs
+      # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
+      # celery_result_backend: sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
+      celeryResultBackendTransportOptions:
+      #   master_name: mymaster
+      #     sentinel_kwargs:
+      #       password: mypassword
+
+
+      # -- AIRS service endpoint URL accessed by APROC
+      airsEndpoint: http://airs-server:8000/arlas/airs
+      # -- ARLAS search URL used by APROC to check whether an item exists
+      arlasUrlSearch: http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}
+      extensions:
+        ingest:
+          # -- Whether the archive ingest extension is enabled or not
+          enabled: true
+          # -- Directory where archives to ingest are stored
+          inputsDirectory: /inputs
+          # -- Maximum number of archives that can be ingested in a single batch
+          maxNumberOfArchivesForIngest: 100000
+          # -- APROC endpoint URL accessed by the ingest extension
+          aprocEndpoint: http://aproc-service:8001
+          resourceIdHashStartAt: 1
+          drivers:
+            dimap:
+              enabled: true
+              priority: 1
+            geoeyes:
+              enabled: true
+              priority: 2
+            digitalglobe:
+              enabled: true
+              priority: 3
+            astDem:
+              enabled: true
+              priority: 4
+            rapideye:
+              enabled: true
+              priority: 5
+            spot5:
+              enabled: true
+              priority: 6
+            terrasarx:
+              enabled: true
+              priority: 7
+            cosmoskymed:
+              enabled: true
+              priority: 8
+            umbra:
+              enabled: true
+              priority: 9
+            bsg:
+              enabled: true
+              priority: 10
+            sentinel2:
+              enabled: true
+              priority: 11
+            sentinel1:
+              enabled: true
+              priority: 12
+            iceye:
+              enabled: true
+              priority: 13
+            radarsat2:
+              enabled: true
+              priority: 14
+            skysat:
+              enabled: true
+              priority: 15
+            tiff:
+              enabled: true
+              priority: 100
+            jpeg2000:
+              enabled: true
+              priority: 101
+
+        directoryIngest:
+          # -- Whether the directory ingest extension is enabled or not
+          enabled: true
+        enrich:
+          # -- Whether the enrich extension is enabled or not
+          enabled: true
+          drivers:
+            safe:
+              enabled: true
+              priority: 1
+        dc3build:
+          # -- Whether the DC3 build extension is enabled or not
+          enabled: true
+          drivers:
+            safe:
+              enabled: true
+              priority: 1
+        download:
+          # -- Whether the download extension is enabled or not
+          enabled: true
+          drivers:
+            # -- drivers used for building the downloads. This list should remain as is unless you have custom download drivers
+            copy:
+              enabled: true
+              priority: 4
+            metFile:
+              enabled: true
+              priority: 2
+            imageFile:
+              enabled: true
+              priority: 3
+            zarr:
+              enabled: false
+              priority: 1
+
+          # -- Downloads mapping configuration for indexing the download requests
+          downloadMappingUrl: /app/mappings/arlas_eo_download_mapping.json
+          # -- should directory where download are temporally built before copy are cleaned
+          cleanOutboxDir: true
+          # -- where downloads are placed
+          outboxDirectory: /tmp/downloads
+          # -- S3 configuration for uploading the built downloads
+          outboxS3:
+            # -- S3 endpoint URL for uploading the built downloads
+            endpointUrl: http://arlas-stack-minio:9000
+            # -- S3 bucket name for uploading the built downloads
+            bucket: downloads
+            # -- S3 access key id for uploading the built downloads
+            accessKeyId: airs
+            # -- S3 secret access key for uploading the built downloads
+            secretAccessKey: airssecret
+            # -- Public URL Pattern to access the built downloads over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object
+            assetHttpEndpointUrl: http://arlas-stack-minio:9000/{}/{}
+          index:
+            # -- Elasticsearch index name for the download requests
+            name: aproc_downloads
+          emails:
+            message: 
+              path:
+                # -- prefix to put in front of the path for emails
+                prefix: "file:/"
+                # -- change to windows path
+                windows: False
+              admin: 
+              # -- admin emails that will receive the download notifications, other than the user himself
+                emails: "admin@the.boss,someone.else@the.boss"
+              done: 
+                # -- Message templates for download done notifications to users
+                user: 
+                  content: "ARLAS Services - Dear {arlas-user-email}. <br>Your download of {collection}/{item_id} is available for projection {target_projection} ({target_format}). <br>ARLAS Services."
+                  subject: "ARLAS Services - Your download of {collection}/{item_id} is available."
+                # -- Message templates for download done notifications to admins
+                admin: 
+                  content: "The download of {collection}/{item_id} for {arlas-user-email} is available in {target_directory} ({file_name}) for projection {target_projection} ({target_format}). <br>ARLAS Services."
+                  subject: "The download of {collection}/{item_id} for {arlas-user-email} is available."
+              request: 
+                # -- Message templates for download request notifications to users
+                user: 
+                  content: "ARLAS Services - Dear {arlas-user-email}. <br>Your download request for {collection}/{item_id} with projection {target_projection} ({target_format}) will shortly be taken into account. <br>ARLAS Services."
+                  subject: "ARLAS Services - Thank you for your download request (({collection}/{item_id})."
+                # -- Message templates for download request notifications to admins
+                admin: 
+                  content: "ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id} for projection {target_projection} ({target_format}). <br>ARLAS Services."
+                  subject: "ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id}."
+              # -- Message templates for download error notifications to users and admins
+              error:
+                content: "ARLAS Services - The download of {collection}/{item_id} failed ({error})."
+                subject: "ARLAS Services - ERROR - The download of {collection}/{item_id} failed."
+
+      accessManager:
+        # -- Temporary directory used by the access manager
+        tmpDir: /tmp/
+        # -- Configuration of the storages used by the access manager to provide access to various storage backends
+        storages:
+          -
+            type: file
+            writable_paths:
+              - /tmp
+              - /outbox
+            readable_paths:
+              - /inputs
+          -
+            type: s3
+            bucket: archives
+            endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
+            readable_paths:
+              - /inputs
+          -
+            type: s3
+            bucket: downloads
+            endpoint: "http://minio:9000"
+            readable_paths:
+              - "/"
+            writable_paths:
+              - "/"
 
 cors:
   # cors.allowedOrigins -- CORS Allowed Origins
@@ -124,103 +587,26 @@ logger:
   loggingConsoleLevel: INFO
 
 elastic:
+  # -- Elasticsearch endpoint URL for AIRS and APROC services
+  endpoint: https://elasticsearch:9200
+  # -- Elasticsearch cluster name
   cluster: elastic
+  # -- Elasticsearch login
   login: elastic
+  # -- Elasticsearch password
   password: elastic
 
-# -- Configuration of the s3 used for storing and accessing the STAC collections, items and managed assets
-s3:
-  # -- s3 key
-  accessKeyId: airs
-  # -- s3 secret
-  secret: airssecret
-  # -- s3 endpoint
-  endpoint: http://arlas-stack-minio:9000
-  # -- asset_http_endpoint_url_pattern must look like https://storage.googleapis.com/{}/{} where first {} is the bucket, second {} is the path to the object  
-  assetHttpEndpointUrlPattern: "http://arlas-stack-minio:9000/{}/{}"
-  # -- s3 bucket name for storing the STAC collections, items and managed assets
-  bucket: airs-storage
-  # -- Platform type. This value is provided in the item properties
-  platform: MINIO
-  # -- Region. This value is provided in the item properties
-  region: Standard
-  # -- Tier. This value is provided in the item properties
-  tier: Standard
-
-# -- This elasticsearch mapping is used during the initialization of the index of a newly created collection
-arlasMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v0.0.9/mapping.json
-
-# -- ARLAS URL Search for AGATE to check whether an item is accessible or not
-arlasSearchUrl: "http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"
-
-download:
-  # -- Name of the download index that will contain the download requests
-  downloadReportIndex: aproc_downloads
-  # -- Where download are temporally built before copy
-  tmpFolder: /tmp/
-  s3:
-    # -- where downloads are uploaded once ready
-    endpoint: http://arlas-stack-minio:9000
-    # -- bucket that will contain the downloads
-    bucket: downloads
-    key: airs
-    secret: airssecret
-    # -- where downloads are uploaded once ready, first {} is the bucket, second {} is the path to the object
-    http: http://arlas-stack-minio:9000/{}/{}
-  cleanAfterUpload: True
-  message: 
-    path:
-      # -- prefix to put in front of the path for emails
-      prefix: "file:/"
-      # -- change to windows path
-      windows: False
-    admin: 
-    # -- admin emails that will receive the download notifications, other than the user himself
-      emails: "admin@the.boss,someone.else@the.boss"
-    done: 
-      user: 
-        content: "ARLAS Services - Dear {arlas-user-email}. <br>Your download of {collection}/{item_id} is available for projection {target_projection} ({target_format}). <br>ARLAS Services."
-        subject: "ARLAS Services - Your download of {collection}/{item_id} is available."
-      admin: 
-        content: "The download of {collection}/{item_id} for {arlas-user-email} is available in {target_directory} ({file_name}) for projection {target_projection} ({target_format}). <br>ARLAS Services."
-        subject: "The download of {collection}/{item_id} for {arlas-user-email} is available."
-    request: 
-      user: 
-        content: "ARLAS Services - Dear {arlas-user-email}. <br>Your download request for {collection}/{item_id} with projection {target_projection} ({target_format}) will shortly be taken into account. <br>ARLAS Services."
-        subject: "ARLAS Services - Thank you for your download request (({collection}/{item_id})."
-      admin: 
-        content: "ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id} for projection {target_projection} ({target_format}). <br>ARLAS Services."
-        subject: "ARLAS Services - {arlas-user-email} requested the download of {collection}/{item_id}."
-    error:
-      content: "ARLAS Services - The download of {collection}/{item_id} failed ({error})."
-      subject: "ARLAS Services - ERROR - The download of {collection}/{item_id} failed."
-
-ingest:
-  # -- Folder used by FAM and APROC for ingestion  
-  folder: https://storage.googleapis.com/gisaia-public/OPENDATA/eo
-
-timeLimit: 1200
-softTimeLimit: 1190
-
-rabbitmq:
-  host: rabbitmq
-  port: 5672
-  login: guest
-  password: guest
-
-redis: 
-  host: redis-master
-  port: 6379
-  password: somepassword
-  username: default
-  db: 0
 
 smtp: 
-  enabled: False
+  # -- Whether SMTP email sending is enabled or not
+  enabled: false
+  # -- SMTP server host
   host: "tobechanged"
+  # -- SMTP server port
   port: 25
+  # -- SMTP username
   username: "tobechanged"
+  # -- SMTP password
   password: "tobechanged"
+  # -- SMTP sender email address
   from: "tobechanged"
-
-resourceIdHashStartAt: 0

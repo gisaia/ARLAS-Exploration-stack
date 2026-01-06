@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agate-files-configmap
+data:
+  agate.yaml: |
+    arlas_url_search: {{ .Values.services.agate.configuration.arlasUrlSearch  }}
+    agate_prefix: {{ .Values.services.agate.urlPrefix  }}
+    host: {{ .Values.services.agate.serviceBinding }}
+    port: {{ .Values.services.servicePort }}
+    nb_workers: {{ .Values.services.agate.configuration.nbWorkers }}
+    url_header: {{ .Values.services.agate.configuration.urlHeader }}
+
+    headers_for_arlas:
+      - authorization
+      - arlas-org-filter
+
+    services:
+      {{ .Values.services.agate.configuration.services | toYaml | nindent 6 }}
+
+    method_header: {{ .Values.services.agate.configuration.methodHeader }}
+    urbac:
+      role_file: conf/roles.yaml
+      jwt_header: {{ .Values.services.agate.configuration.urbac.jwtHeader }}
+      jwks_uri: {{ .Values.services.agate.configuration.urbac.jwks_uri }}
+      verify_jwt: {{ .Values.services.agate.configuration.urbac.verifyJwt }}
+      verify_ssl: {{ .Values.services.agate.configuration.urbac.verifySsl }}
+      jwt_audience: {{ .Values.services.agate.configuration.urbac.jwtAudience  }}
+  roles.yaml: |
+    technicalRoles:
+      {{- if .Values.services.agate.configuration.roles }}
+      {{ .Values.services.agate.configuration.roles | toYaml | nindent 6 }}
+      {{- end }}

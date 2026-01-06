@@ -33,7 +33,7 @@
 - name: ARLAS_ELASTIC_CLUSTER
   value: {{ .Values.elastic.cluster| quote }}
 - name: ARLAS_ELASTIC_NODES
-  value: "{{ .Release.Name }}-elasticsearch:9200"
+  value: {{ .Values.elastic.nodes| quote  }}
 - name: ARLAS_ELASTIC_CREDENTIALS
   value: "{{ .Values.elastic.login}}:{{ .Values.elastic.password}}"
 - name: ARLAS_ELASTIC_SKIP_MASTER

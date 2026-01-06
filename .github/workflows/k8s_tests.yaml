@@ -28,6 +28,3 @@ jobs:
         
       - name: wait arlas running
         run: ./k8s/scripts/wait_until_running.sh        
-
-      - name: copy files
-        run: ./k8s/scripts/copy_files.sh

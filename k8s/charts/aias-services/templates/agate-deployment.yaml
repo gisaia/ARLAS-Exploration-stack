@@ -15,9 +15,24 @@ spec:
         app.kubernetes.io/component: {{ .Values.services.agate.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.services.podSecurityContext | nindent 8 }}
+
+      {{- with .Values.services.agate.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.services.agate.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
         - name: {{ .Values.services.agate.serviceName }}
           image: {{ .Values.services.agate.image }}
+          securityContext:
+            {{- toYaml .Values.services.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
@@ -43,24 +58,6 @@ spec:
           resources:
             {{- toYaml .Values.services.agate.resources | nindent 12 }}
           env:
-            # AGATE CONFIGURATION
-            - name: ARLAS_URL_SEARCH
-              value: {{ .Values.arlasSearchUrl | quote }}
-            - name: AGATE_URL_HEADER
-              value: x-forwarded-uri
-            - name: AGATE_METHOD_HEADER
-              value: x-forwarded-method
-            - name: AGATE_JWT_HEADER
-              value: authorization
-            - name: OPEN_ID_PROVIDER
-              value: {{ .Values.services.agate.openIdProvider | quote }}
-            - name: VERIFY_JWT
-              value: {{ .Values.services.agate.verifyJwt | quote }}
-            - name: VERIFY_SSL
-              value: {{ .Values.services.agate.verifySsl | quote }}
-            - name: JWT_AUDIENCE
-              value: {{ .Values.services.agate.audience | quote }}
-
             # ENDPOINT CONFIGURATION              
             - name: AGATE_CORS_HEADERS
               value: {{ .Values.cors.allowedHeaders | quote }}
@@ -71,22 +68,33 @@ spec:
             - name: AGATE_HOST
               value: {{ .Values.cors.allowedHosts | squote }}
 
-            - name: AGATE_PORT
-              value: {{ .Values.services.servicePort | squote }}
-            - name: AGATE_PREFIX
-              value: {{ .Values.services.agate.urlPrefix }}
-
             # LOGGING
             - name: AGATE_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
+
+            {{- with .Values.services.agate.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+
           volumeMounts:
             - name: agate-files
               mountPath: /app/conf/
               readOnly: true
+          {{- with .Values.services.agate.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.services.agate.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       volumes:
         - name: agate-files
           configMap:
             name: agate-files-configmap
+        {{- with .Values.services.agate.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.services.agate.nodeSelector }}

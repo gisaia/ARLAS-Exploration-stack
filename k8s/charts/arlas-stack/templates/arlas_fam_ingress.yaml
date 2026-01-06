@@ -1,0 +1,28 @@
+{{- if .Values.deployment.aias.services.fam.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arlas-fam-ingress
+  annotations:
+    {{ .Values.deployment.aias.services.fam.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.global.ingressClassName }}
+  rules:
+    - host: {{ .Values.global.dnsDomain }}
+      http:
+        paths:
+          - path: /fam/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ (get .Values "aias-services").services.fam.serviceName }}
+                port:
+                  number: {{ (get .Values "aias-services").services.servicePort }}
+          - path: /fam/files
+            pathType: Exact
+            backend:
+              service:
+                name: {{ (get .Values "aias-services").services.fam.serviceName }}
+                port:
+                  number: {{ (get .Values "aias-services").services.servicePort }}
+{{- end }}

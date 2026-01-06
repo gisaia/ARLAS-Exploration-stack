@@ -1,12 +1,13 @@
+{{- if .Values.deployment.elasticsearch.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: elasticsearch-ingress
-  namespace: arlas
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: 100240m
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     blackbox.monitoring/enabled: "true"
 spec:
   ingressClassName: {{ .Values.global.ingressClassName }}
@@ -21,4 +22,4 @@ spec:
                   number: 9200
             path: /
             pathType: ImplementationSpecific
- 
+ {{- end }}

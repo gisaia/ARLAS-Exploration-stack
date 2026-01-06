@@ -6,7 +6,6 @@
 - [arlas-builder](#service-arlas-builder)
 - [arlas-hub](#service-arlas-hub)
 - [arlas-wui](#service-arlas-wui)
-- [protomaps](#service-protomaps)
 - [apisix](#service-apisix)
 ## File dc/ref-dc-elastic.yaml
 ### Service elasticsearch
@@ -150,7 +149,7 @@ List of volumes:
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.1.0` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.1.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -191,7 +190,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.1.0` in `conf/v
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.1.0` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.1.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -228,7 +227,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.1.0` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.0` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.4` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -276,19 +275,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.0` in `conf/versions.env`
 
 List of volumes:
 
-- `${PWD}/conf/protomaps/styles:/usr/share/nginx/html/assets/basemap/styles`
-- `${PWD}/conf/protomaps/glyphs:/usr/share/nginx/html/assets/basemap/glyphs`
-- `${PWD}/conf/protomaps/quicklook:/usr/share/nginx/html/assets/basemap/quicklook`
-- `${PWD}/conf/protomaps/world.pmtiles:/usr/share/nginx/html/assets/basemap/world.pmtiles`
 - `${PWD}/conf/wui/custom-style.css:/usr/share/nginx/html/assets/styles/custom-style.css`
-## File dc/ref-dc-protomaps.yaml
-### Service protomaps
-Image: `PROTOMAP_VERSION` with `protomaps/go-pmtiles:v1.28.0` in `conf/versions.env`
-
-
-List of volumes:
-
-- `${PWD}/conf/protomaps/world.pmtiles:/protomaps/basemaps/world.pmtiles:ro`
 ## File dc/ref-dc-apisix.yaml
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.

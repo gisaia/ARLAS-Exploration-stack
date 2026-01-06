@@ -23,7 +23,6 @@ The simple deployment has:
 - [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
 - [arlas-server](https://github.com/gisaia/ARLAS-server)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
-- [protomaps](https://protomaps.com/)
 
 
 ### IAM deployment
@@ -41,7 +40,6 @@ The IAM deployment has:
 - [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
 - [arlas-server](https://github.com/gisaia/ARLAS-server)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
-- [protomaps](https://protomaps.com/)
 
 **Start**
 
@@ -99,7 +97,6 @@ The Keycloak deployment has:
 - [arlas-permissions-server](https://github.com/gisaia/ARLAS-permissions)
 - [arlas-server](https://github.com/gisaia/ARLAS-server)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
-- [protomaps](https://protomaps.com/)
 
 **Start**
 
@@ -172,7 +169,6 @@ The AIAS (ARLAS Item and Asset Services) deployment has:
 - [aproc-service](https://github.com/gisaia/aias)
 - [aproc-proc](https://github.com/gisaia/aias)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
-- [protomaps](https://protomaps.com/)
 - [minio](https://min.io)
 - [redis](https://redis.io)
 - [rabbitmq](https://www.rabbitmq.com)
@@ -239,7 +235,6 @@ The AIASKC (ARLAS Item and Asset Services with Keycloak) deployment has:
 - [aproc-service](https://github.com/gisaia/aias)
 - [aproc-proc](https://github.com/gisaia/aias)
 - [elasticsearch](https://github.com/elastic/elasticsearch)
-- [protomaps](https://protomaps.com/)
 - [minio](https://min.io)
 - [redis](https://redis.io)
 - [rabbitmq](https://www.rabbitmq.com)

@@ -1,0 +1,32 @@
+{{- if eq .Values.uis.builder.aboutConfigMapName "arlas-builder-default-about-configmap" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arlas-builder-default-about-configmap
+data:
+  about_en.md: "# ARLAS Builder, powered by Gisaïa <br>\n__ARLAS Builder__ allows to build dashboards
+    for __ARLAS Exploration__ in order to explore and analyze vast amount of geo-spatial
+    data.\n\n\nVisit http://arlas.io for more information or contact us at contact@gisaia.com.
+    \ \nReport any issue to support@gisaia.com or on the [GitHub project](https://github.com/gisaia/ARLAS-wui-builder).\n\nThe
+    ARLAS solution relies on:\n- Dropwizard\n- Maven\n- Elasticsearch\n- Angular\n-
+    D3js\n- Node\n- NPM\n- Maplibre\n\nPowered by __Gisaïa__"
+  about_fr.md: |-
+    # ARLAS Builder, powered by Gisaïa<br>
+    __ARLAS Builder__ permet de construire des tableaux de bords (dashboards) pour __ARLAS Exploration__ afin d'explorer et d'analyser de grands volumes de données géo-spatiales.
+
+
+    Visitez http://arlas.io pour plus d'informations et contactez nous par mail à l'adresse contact@gisaia.com.
+    Vous pouvez rapporter tous problèmes à l'adresse support@gisaia.com ou sur le [projet GitHub](https://github.com/gisaia/ARLAS-wui-builder).
+
+    La solution ARLAS est basée sur:
+    - Dropwizard
+    - Maven
+    - Elasticsearch
+    - Angular
+    - D3js
+    - Node
+    - NPM
+    - Maplibre
+
+    Powered by __Gisaïa__
+{{- end }}

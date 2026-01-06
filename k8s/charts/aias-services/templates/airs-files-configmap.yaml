@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: airs-files-configmap
+data:
+  airs.yaml: |
+    index:
+      endpoint_url: {{ .Values.elastic.endpoint }}
+      collection_prefix: {{ .Values.services.airs.configuration.indexCollectionPrefix }}
+      login: {{ .Values.elastic.login }}
+      pwd: {{ .Values.elastic.password }}
+    s3:
+      bucket: {{ .Values.services.airs.configuration.s3.bucket }}
+      access_key_id: {{ .Values.services.airs.configuration.s3.accessKeyId }}
+      secret_access_key: {{ .Values.services.airs.configuration.s3.secretAccessKey }}
+      region: {{ .Values.services.airs.configuration.s3.region }}
+      tier: {{ .Values.services.airs.configuration.s3.tier }}
+      platform: {{ .Values.services.airs.configuration.s3.platform }}
+      writable_paths:
+        {{ .Values.services.airs.configuration.s3.writablePaths | toYaml | nindent 8 }}
+
+    # asset_http_endpoint_url must look like https://storage.googleapis.com/{}/{}
+    # first element is the bucket, second is the path to the object
+      asset_http_endpoint_url: {{ .Values.services.airs.configuration.s3.assetHttpEndpointUrl }}
+
+      endpoint_url: {{ .Values.services.airs.configuration.s3.endpointUrl }}
+
+    arlaseo_mapping_url: {{ .Values.services.airs.configuration.arlaseoMappingUrl }}
+    arlaseo_collection_url: {{ .Values.services.airs.configuration.arlaseoCollectionUrl }}

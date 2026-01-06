@@ -18,21 +18,45 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.wui.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.uis.podSecurityContext | nindent 8 }}
+      {{- with .Values.uis.wui.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.uis.wui.extraInitContainers }}
+        {{ .Values.uis.wui.extraInitContainers | toYaml | nindent 12 }}
+        {{- end }}
+        {{- if .Values.uis.wui.basemapUrl }}
+        - name: download-file
+          image: curlimages/curl:latest
+          command: ["sh", "-c"]
+          args:
+            - '[ ! -f "/usr/share/nginx/html/assets/basemap/data/world.pmtiles" ] && (echo "Downloading basemap from ${BASEMAP_URL} ..." && curl -L -o /usr/share/nginx/html/assets/basemap/data/world.pmtiles  ${BASEMAP_URL} && ls -hl /usr/share/nginx/html/assets/basemap/data/world.pmtiles ) || echo "Basemap already exists, skipping download."'
+          env:
+            - name: BASEMAP_URL
+              value: {{ .Values.uis.wui.basemapUrl | quote }}
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html/assets/basemap/data"
+              name: basemap-volume
+        {{- end }}
+
       containers:
         - name: {{ .Values.uis.wui.serviceName }}
           image: {{ .Values.uis.wui.image }}
+          securityContext:
+            {{- toYaml .Values.uis.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.uis.servicePort }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.uis.wui.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.uis.wui.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           resources:
@@ -74,18 +98,60 @@ spec:
               value: {{ .Values.histogramsMaxBucket | quote }}
             - name: ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS
               value: {{ .Values.histogramsExportNbBuckets | quote }}
-
+          {{- with .Values.uis.wui.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
           {{- range $configurationName, $configurationInfo := .Values.configuration }}
             - name: {{ (index $.Values.configuration $configurationName).environmentVariable }}
               value: file://{{ (index $.Values.configuration $configurationName).mountPath }}
           {{- end }}
+
           volumeMounts:
-            - mountPath: "/usr/share/nginx/html/assets/basemap"
+            {{- if .Values.uis.wui.basemapUrl }}
+            - mountPath: "/usr/share/nginx/html/assets/basemap/data"
               name: basemap-volume
+            {{- end }}            
+            - mountPath: "/usr/share/nginx/html/assets/styles/custom-style.css"
+              name: custom-style-volume
+              subPath: custom-style.css
+
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_en.md"
+              subPath: about_en.md
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_fr.md"
+              subPath: about_fr.md
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/tour/tour_en.json"
+              subPath: tour_en.json
+            - name: arlas-about-and-tour-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/tour/tour_fr.json"
+              subPath: tour_fr.json
+
+         {{- with .Values.uis.wui.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.uis.wui.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       volumes:
+        {{- if .Values.uis.wui.basemapUrl }}
         - name: basemap-volume
           persistentVolumeClaim:
             claimName: basemap-pvc
+        {{- end }}
+        - name: custom-style-volume
+          configMap:
+            name: arlas-custom-style
+        - name: arlas-about-and-tour-configmap-volume
+          configMap:
+            name: {{ .Values.uis.wui.aboutAndTourConfigMapName }}
+
+        {{- with .Values.uis.wui.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}

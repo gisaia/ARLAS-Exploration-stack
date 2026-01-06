@@ -18,27 +18,37 @@ spec:
         app.kubernetes.io/component: {{ .Values.uis.hub.serviceName }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.uis.podSecurityContext | nindent 8 }}
+      {{- with .Values.uis.hub.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.uis.hub.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Values.uis.hub.serviceName }}
           image: {{ .Values.uis.hub.image }}
+          securityContext:
+            {{- toYaml .Values.uis.containerSecurityContext | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.uis.servicePort }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.uis.hub.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.uis.hub.urlPrefix }}
               port: http
             initialDelaySeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-
             - name: ARLAS_AUTHENT_FORCE_CONNECT
               value: {{ .Values.authent.forceConnect | quote  }}
             - name: ARLAS_AUTHENT_REDIRECT_URI
@@ -54,6 +64,35 @@ spec:
             {{- include "arlasWebUserInterface.linksEnv" . | nindent 12 }}
 
             {{- include "arlasWebUserInterface.servicesEnv" . | nindent 12 }}
+
+          {{- with .Values.uis.hub.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+
+          volumeMounts:
+            - name: arlas-hub-about-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_en.md"
+              subPath: about_en.md
+            - name: arlas-hub-about-configmap-volume
+              mountPath: "/usr/share/nginx/html/assets/about/about_fr.md"
+              subPath: about_fr.md
+
+          {{- with .Values.uis.hub.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.uis.hub.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      volumes:
+        - name: arlas-hub-about-configmap-volume
+          configMap:
+            name: {{ .Values.uis.hub.aboutConfigMapName }}
+
+      {{- with .Values.uis.hub.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
       # NODE SELECTION      
       {{- with .Values.nodeSelector }}
