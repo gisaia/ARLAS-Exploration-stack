@@ -9,6 +9,7 @@ on:
       - 'start.sh'
       - 'stop.sh'
       - '.github/workflows/dc_tests.yaml'
+
   workflow_dispatch:
     inputs:
       stack:
@@ -40,6 +41,8 @@ jobs:
       run: ./scripts/init_arlas_cli_confs.sh
     - name: Init stack with data
       run: ./scripts/init_stack_with_data.sh local
+    - name: Show logs
+      run: scripts/show_logs.sh
     - name: Stop stack
       run: ./stop.sh
 
@@ -58,6 +61,8 @@ jobs:
       run: pip3.10 install pytest==8.3.4
     - name: Launch tests
       run: pytest -s scripts/pytest/test_iam.py
+    - name: Show logs
+      run: scripts/show_logs.sh iam
     - name: Stop stack
       run: ./stop.sh
 
@@ -71,7 +76,7 @@ jobs:
     - name: Start aias stack
       run: ./start.sh aias
     - name: Show logs
-      run: scripts/show_logs.sh
+      run: scripts/show_logs.sh aias
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh aias
     - name: Stop stack
@@ -87,7 +92,7 @@ jobs:
     - name: Start kc stack
       run: ./start.sh kc
     - name: Show logs
-      run: scripts/show_logs.sh
+      run: scripts/show_logs.sh kc
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh kc
     - name: Stop stack
@@ -103,7 +108,7 @@ jobs:
     - name: Start aiaskc stack
       run: ./start.sh aiaskc
     - name: Show logs
-      run: scripts/show_logs.sh
+      run: scripts/show_logs.sh aiaskc
     - name: Run endpoints tests
       run: ./scripts/test_endpoints.sh aiaskc
     - name: Stop stack
