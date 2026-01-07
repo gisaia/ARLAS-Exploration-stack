@@ -443,6 +443,12 @@ services:
             skysat:
               enabled: true
               priority: 15
+            axelspace:
+              enabled: true
+              priority: 16
+            geosat:
+              enabled: true
+              priority: 17
             tiff:
               enabled: true
               priority: 100

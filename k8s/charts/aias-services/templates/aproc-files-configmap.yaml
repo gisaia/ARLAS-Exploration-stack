@@ -345,6 +345,25 @@ data:
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.priority }}
       {{- end }}
 
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.enabled }}
+      -
+        name: axelspace
+        class_name: extensions.aproc.proc.ingest.drivers.impl.axelspace
+        assets_dir: /tmp/aproc/axelspace
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.geosat.enabled }}
+      -
+        name: geosat
+        class_name: extensions.aproc.proc.ingest.drivers.impl.geosat
+        assets_dir: /tmp/aproc/geosat
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geosat.priority }}
+      {{- end }}
 
   enrich_drivers.yaml: |
     drivers:
