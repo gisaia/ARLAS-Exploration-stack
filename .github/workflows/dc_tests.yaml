@@ -8,9 +8,25 @@ on:
       - 'scripts/**'
       - 'start.sh'
       - 'stop.sh'
+      - '.github/workflows/dc_tests.yaml'
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'Stack to test (simple, iam, aias, kc, aiaskc)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - simple
+          - iam
+          - aias
+          - kc
+          - aiaskc
 
 jobs:
   simple-stack:
+    if: github.event.inputs.stack == 'all' || github.event.inputs.stack == 'simple' || github.event_name == 'pull_request   '
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
@@ -28,6 +44,7 @@ jobs:
       run: ./stop.sh
 
   iam-stack:
+    if: github.event.inputs.stack == 'all' || github.event.inputs.stack == 'iam' || github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
@@ -45,6 +62,7 @@ jobs:
       run: ./stop.sh
 
   aias-stack:
+    if: github.event.inputs.stack == 'all' || github.event.inputs.stack == 'aias' || github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
@@ -60,6 +78,7 @@ jobs:
       run: ./stop.sh
 
   kc-stack:
+    if: github.event.inputs.stack == 'all' || github.event.inputs.stack == 'kc' || github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
@@ -75,6 +94,7 @@ jobs:
       run: ./stop.sh
 
   aiaskc-stack:
+    if: github.event.inputs.stack == 'all' || github.event.inputs.stack == 'aiaskc' || github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4

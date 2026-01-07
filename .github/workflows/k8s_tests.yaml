@@ -6,8 +6,19 @@ on:
       - 'conf/aias/**'
       - .github/workflows/k8s_tests.yaml
 
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'Launch CI for stack on k8s'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+
 jobs:
   aias-on-k8s-cluster:
+    if: github.event.inputs.stack == 'all' || github.event_name == 'pull_request'
     runs-on: runner-8core-32gb
     steps:
       - name: Create k8s Kind Cluster
