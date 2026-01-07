@@ -132,6 +132,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.aprocEndpoint | string | `"http://aproc-service:8001"` | APROC endpoint URL accessed by the ingest extension |
 | services.aproc.configuration.extensions.ingest.drivers.astDem.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.astDem.priority | int | `4` |  |
+| services.aproc.configuration.extensions.ingest.drivers.axelspace.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.axelspace.priority | int | `16` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.priority | int | `10` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.enabled | bool | `true` |  |
@@ -142,6 +144,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.dimap.priority | int | `1` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeyes.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeyes.priority | int | `2` |  |
+| services.aproc.configuration.extensions.ingest.drivers.geosat.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.geosat.priority | int | `17` |  |
 | services.aproc.configuration.extensions.ingest.drivers.iceye.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.iceye.priority | int | `13` |  |
 | services.aproc.configuration.extensions.ingest.drivers.jpeg2000.enabled | bool | `true` |  |

@@ -632,7 +632,7 @@ Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.10.6` in `conf/versions.env`
 | `AGATE_URL_HEADER_PREFIX` | `AIRS_S3_BUCKET` | `` |  | `airs-storage` in `conf/aias.env` |
 | `VERIFY_JWT` | `VERIFY_JWT` | `true` |  | `true` in `conf/arlas_keycloak.env` |
 | `VERIFY_SSL` | `VERIFY_SSL` | `true` |  | `false` in `conf/arlas_keycloak.env` |
-| `OPEN_ID_PROVIDER` | `OPEN_ID_PROVIDER` | `https://keycloak:9443/auth/realms/arlas/.well-known/openid-configuration` |   | `https://keycloak:9443/auth/realms/arlas/.well-know ...` in `conf/arlas_keycloak.env` |
+| `JWKS_URI` | `JWKS_URI` | `` |   | `https://${ARLAS_HOST}:9443/auth/realms/arlas/proto ...` in `conf/arlas_keycloak.env` |
 
 List of volumes:
 
