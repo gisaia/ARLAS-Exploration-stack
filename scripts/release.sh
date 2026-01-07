@@ -27,5 +27,6 @@ git add docs/docs/
 git commit -m "Update docker compose services documentation"
 git tag -a ${VERSION} -m "ARLAS Exploration stack ${VERSION}"
 git push origin --tags
+git push origin
 
 send_chat_message "Release of ARLAS Exploration Stack, version ${VERSION}"
