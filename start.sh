@@ -56,7 +56,6 @@ then
     ENV_FILES=${ENV_FILES}" conf/aias.env conf/minio.env"
 
     . conf/versions.env
-    curl https://raw.githubusercontent.com/gisaia/ARLAS-server/refs/heads/master/arlas-commons/src/main/resources/roles.yaml -o conf/aias/roles.yaml
 
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.template.yaml
