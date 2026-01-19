@@ -115,7 +115,7 @@ A Helm Chart to deploy ARLAS Server
 | subServices.cswActivated | string | `"\"false\""` | Whether CSW Service is activated or not |
 | subServices.inspireActivated | string | `"\"false\""` | Whether INSPIRE Service is activated or not |
 | subServices.rasterTileActivated | string | `"\"false\""` | Whether Raster Tile Service is activated or not |
-| subServices.wfsActivated | string | `"\"false\""` | Whether WFS Service is activated or not |
+| subServices.wfsActivated | string | `"\"true\""` | Whether WFS Service is activated or not |
 | swaggerResource | string | `"io.arlas.server.rest,io.arlas.server.stac"` | The java package to process for extracting the APIs displayed in Swagger |
 
 ----------------------------------------------

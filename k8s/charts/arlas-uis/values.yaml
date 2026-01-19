@@ -9,9 +9,9 @@ uis:
   servicePort: 8080
   serviceType: ClusterIP
   podSecurityContext:
-    #fsGroup: 1000
-    #runAsNonRoot: true
-    #runAsUser: 1000
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
   containerSecurityContext:
     allowPrivilegeEscalation: false
 
@@ -58,7 +58,7 @@ uis:
 
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:27.1.2
+    image: gisaia/arlas-wui-hub:27.1.3
     urlPrefix: /hub
     tabName: ARLAS Hub
     aboutConfigMapName: arlas-hub-default-about-configmap
@@ -71,7 +71,7 @@ uis:
 
   builder: 
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:27.1.2
+    image: gisaia/arlas-wui-builder:27.1.3
     urlPrefix: /builder/
     tabName: ARLAS Studio
     aboutConfigMapName: arlas-builder-default-about-configmap
@@ -115,15 +115,16 @@ services:
 links: '
         [
             {
-                "name":"Hub",
+                "name":"Dashboards",
                 "url":"/hub/",
                 "icon":"hub",
-                "check_url": "/persist/healthcheck"
+                "check_url": "/arlas/collections",
+                "check_url_response_type": "text"
             },
             {
-                "name": "Import",
-                "icon": "folder",
+                "name": "Archives",
                 "url": "/fam-wui/",
+                "icon": "collections",
                 "check_url": "/fam/healthcheck",
                 "check_url_response_type": "text"
             }

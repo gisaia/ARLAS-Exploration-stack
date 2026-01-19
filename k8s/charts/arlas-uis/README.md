@@ -40,7 +40,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | histogramsExportNbBuckets | int | `1000` | Maximum number of buckets for the histogram export |
 | histogramsMaxBucket | int | `200` | Maximum number of buckets for the histogram graph |
 | hitsExporterVersion | float | `2.2` | Version number of the ARLAS Hits Exporter to use |
-| links | string | `" [ { \"name\":\"Hub\", \"url\":\"/hub/\", \"icon\":\"hub\", \"check_url\": \"/persist/healthcheck\" }, { \"name\": \"Import\", \"icon\": \"folder\", \"url\": \"/fam-wui/\", \"check_url\": \"/fam/healthcheck\", \"check_url_response_type\": \"text\" } ]"` | List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes. |
+| links | string | `" [ { \"name\":\"Dashboards\", \"url\":\"/hub/\", \"icon\":\"hub\", \"check_url\": \"/arlas/collections\", \"check_url_response_type\": \"text\" }, { \"name\": \"Archives\", \"url\": \"/fam-wui/\", \"icon\": \"collections\", \"check_url\": \"/fam/healthcheck\", \"check_url_response_type\": \"text\" } ]"` | List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes. |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
 | nodeSelector | object | `{}` | Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector |
@@ -67,7 +67,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.extraInitContainers | string | `nil` |  |
 | uis.builder.extraVolumeMounts | string | `nil` |  |
 | uis.builder.extraVolumes | string | `nil` |  |
-| uis.builder.image | string | `"gisaia/arlas-wui-builder:27.1.2"` |  |
+| uis.builder.image | string | `"gisaia/arlas-wui-builder:27.1.3"` |  |
 | uis.builder.imagePullSecrets | list | `[]` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
@@ -96,12 +96,14 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.hub.extraInitContainers | string | `nil` |  |
 | uis.hub.extraVolumeMounts | string | `nil` |  |
 | uis.hub.extraVolumes | string | `nil` |  |
-| uis.hub.image | string | `"gisaia/arlas-wui-hub:27.1.2"` |  |
+| uis.hub.image | string | `"gisaia/arlas-wui-hub:27.1.3"` |  |
 | uis.hub.imagePullSecrets | list | `[]` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
 | uis.hub.urlPrefix | string | `"/hub"` |  |
-| uis.podSecurityContext | string | `nil` |  |
+| uis.podSecurityContext.fsGroup | int | `1000` |  |
+| uis.podSecurityContext.runAsNonRoot | bool | `true` |  |
+| uis.podSecurityContext.runAsUser | int | `1000` |  |
 | uis.servicePort | int | `8080` |  |
 | uis.serviceType | string | `"ClusterIP"` |  |
 | uis.wui.aboutAndTourConfigMapName | string | `"arlas-default-about-and-tour-configmap"` |  |

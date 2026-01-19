@@ -131,8 +131,8 @@ deployment:
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"
             nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
       titiler:
-        serviceName: arlas-stack-minio
-        port: 9000
+        serviceName: arlas-stack-titiler
+        port: 8000
         ingress:
           enabled: true
           annotations:

@@ -63,7 +63,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.tolerations | list | `[]` | Tolerations for AGATE service pods |
 | services.agate.urlPrefix | string | `"/agate"` |  |
 | services.airs.affinity | object | `{}` | Affinity for AIRS service pods |
-| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.0.0/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
+| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.1.0/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
 | services.airs.configuration.arlaseoMappingUrl | string | `"/app/mappings/arlas_eo_mapping.json"` | ARLAS-EO mapping and collection URLs used for initializing new indices of new collections |
 | services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
 | services.airs.configuration.s3.accessKeyId | string | `"airs"` | S3 access key id |
@@ -126,8 +126,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.download.outboxS3.bucket | string | `"downloads"` | S3 bucket name for uploading the built downloads |
 | services.aproc.configuration.extensions.download.outboxS3.endpointUrl | string | `"http://arlas-stack-minio:9000"` | S3 endpoint URL for uploading the built downloads |
 | services.aproc.configuration.extensions.download.outboxS3.secretAccessKey | string | `"airssecret"` | S3 secret access key for uploading the built downloads |
-| services.aproc.configuration.extensions.enrich.drivers.safe.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.enrich.drivers.safe.priority | int | `1` |  |
+| services.aproc.configuration.extensions.enrich.drivers.s2_cog.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.enrich.drivers.s2_cog.priority | int | `1` |  |
 | services.aproc.configuration.extensions.enrich.enabled | bool | `true` | Whether the enrich extension is enabled or not |
 | services.aproc.configuration.extensions.ingest.aprocEndpoint | string | `"http://aproc-service:8001"` | APROC endpoint URL accessed by the ingest extension |
 | services.aproc.configuration.extensions.ingest.drivers.astDem.enabled | bool | `true` |  |

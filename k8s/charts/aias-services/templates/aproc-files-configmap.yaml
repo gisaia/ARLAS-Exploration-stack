@@ -367,12 +367,12 @@ data:
 
   enrich_drivers.yaml: |
     drivers:
-      {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.safe.enabled }}
+      {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.s2_cog.enabled }}
       -
-        name: safe
-        class_name: extensions.aproc.proc.enrich.drivers.impl.safe
-        assets_dir: /tmp/aproc/safe
-        priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.safe.priority }}
+        name: s2_cog
+        class_name: extensions.aproc.proc.enrich.drivers.impl.s2_cog
+        assets_dir: /tmp/aproc/s2_cog
+        priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.s2_cog.priority }}
       {{- end }}
   fam.yaml: |
     inputs_directory: {{ .Values.services.aproc.configuration.extensions.ingest.inputsDirectory }}
