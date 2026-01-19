@@ -171,4 +171,4 @@ subServices:
   # -- Whether CSW Service is activated or not
   cswActivated: '"false"'
   # -- Whether WFS Service is activated or not
-  wfsActivated: '"true"'
+  wfsActivated: '"false"'
