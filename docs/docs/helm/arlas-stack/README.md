@@ -67,8 +67,8 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` |  |
 | deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` |  |
 | deployment.aias.services.titiler.ingress.enabled | bool | `true` |  |
-| deployment.aias.services.titiler.port | int | `9000` |  |
-| deployment.aias.services.titiler.serviceName | string | `"arlas-stack-minio"` |  |
+| deployment.aias.services.titiler.port | int | `8000` |  |
+| deployment.aias.services.titiler.serviceName | string | `"arlas-stack-titiler"` |  |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
 | deployment.aias.uis.ingress.enabled | bool | `true` |  |

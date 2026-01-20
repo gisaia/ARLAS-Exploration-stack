@@ -45,13 +45,22 @@ data:
             }
         }
     }
-  arlas_eo_mapping.json: "{\n    \"index_patterns\": [\n        \"arlaseo-*\"\n    ],\n
-    \   \"mappings\": {\n        \"properties\": {\n            \"internal\": {\n
-    \               \"properties\": {\n                    \"autocomplete\": {\n                        \"type\":
-    \"keyword\"\n                    },\n                    \"fulltext\": {\n                        \"type\":
-    \"text\",\n                        \"fielddata\": true\n                    }\n
-    \               }\n            },\n            \"collection\": {\n                \"type\":
-    \"keyword\",\n                \"copy_to\": [\n                    \"internal.fulltext\",\n
+  arlas_eo_mapping.json: "{\n    \"mappings\": {\n        \"dynamic_templates\": [\n
+    \       {\n            \"assets_airs_managed\": {\n            \"path_match\":
+    \"assets.*.airs:managed\",\n            \"mapping\": {\n                \"type\":
+    \"boolean\"\n            }\n            }\n        },\n        {\n            \"assets_roles\":
+    {\n            \"path_match\": \"assets.*.roles\",\n            \"mapping\": {\n
+    \               \"type\": \"keyword\"\n            }\n            }\n        },\n
+    \       {\n            \"assets_name\": {\n            \"path_match\": \"assets.*.name\",\n
+    \           \"mapping\": {\n                \"type\": \"keyword\"\n            }\n
+    \           }\n        },\n        {\n          \"disable_all_else\": {\n            \"path_match\":
+    \"assets.*.*\",\n            \"mapping\": {\n              \"index\": false\n
+    \           }\n          }\n        }\n        ],\n        \"properties\": {\n
+    \           \"internal\": {\n                \"properties\": {\n                    \"autocomplete\":
+    {\n                        \"type\": \"keyword\"\n                    },\n                    \"fulltext\":
+    {\n                        \"type\": \"text\",\n                        \"fielddata\":
+    true\n                    }\n                }\n            },\n            \"collection\":
+    {\n                \"type\": \"keyword\",\n                \"copy_to\": [\n                    \"internal.fulltext\",\n
     \                   \"internal.autocomplete\"\n                ]\n            },\n
     \           \"catalog\": {\n                \"type\": \"keyword\",\n                \"copy_to\":
     [\n                    \"internal.fulltext\",\n                    \"internal.autocomplete\"\n
@@ -61,7 +70,6 @@ data:
     \           \"geometry\": {\n                \"type\": \"geo_shape\"\n            },\n
     \           \"bbox\": {\n                \"type\": \"float\"\n            },\n
     \           \"centroid\": {\n                \"type\": \"geo_point\"\n            },\n
-    \           \"assets\": {\n                \"properties\": {}\n            },\n
     \           \"properties\": {\n                \"properties\": {\n                    \"datetime\":
     {\n                        \"type\": \"date\",\n                        \"format\":
     \"epoch_second\"\n                    },\n                    \"start_datetime\":

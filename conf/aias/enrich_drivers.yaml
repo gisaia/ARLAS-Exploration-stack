@@ -1,8 +1,8 @@
 drivers:
   -
     name: safe
-    class_name: extensions.aproc.proc.enrich.drivers.impl.safe
-    assets_dir: /tmp/aproc/safe
+    class_name: extensions.aproc.proc.enrich.drivers.impl.s2_cog
+    assets_dir: /tmp/aproc/s2_cog
     configuration:
       input:
         type: $APROC_INPUT_STORAGE_TYPE

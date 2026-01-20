@@ -17,7 +17,7 @@ then
     ./scripts/generate_apisix_conf.sh
 fi
 
-if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
+if [ ! -f conf/server.key ]
 then
     ./scripts/create_certificate.sh
 fi
@@ -25,7 +25,6 @@ fi
 if [ "$1" = "iam" ] || [ "$1" = "aias" ]
 then
     echo "CONFIGURE STACK WITH IAM"
-    ./scripts/create_certificate.sh
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-iam-wui.yaml -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-iam-server.yaml -f dc/ref-dc-postgres.yaml"
     COMPOSE_SERVICES=${COMPOSE_SERVICES}" arlas-iam-server arlas-wui-iam db"
     ENV_FILES=${ENV_FILES}" conf/arlas_iam.env conf/postgres.env"

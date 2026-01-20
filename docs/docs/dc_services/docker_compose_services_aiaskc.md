@@ -422,6 +422,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.10.6` in `conf/versi
 | `APROC_DOWNLOAD_REQUEST_CONTENT_ADMIN` | `APROC_DOWNLOAD_REQUEST_CONTENT_ADMIN` | `` |  | `"\"ARLAS Services: {arlas-user-email} requested th ...` in `conf/aias.env` |
 | `APROC_EMAIL_PATH_PREFIX_ADD` | `APROC_EMAIL_PATH_PREFIX_ADD` | `` |  | `"/tmp/"` in `conf/aias.env` |
 | `APROC_PATH_TO_WINDOWS` | `APROC_PATH_TO_WINDOWS` | `` |  | `false` in `conf/aias.env` |
+| `QUEUE_NAMES` | `QUEUE_NAMES` | `` |  | `small_task_queue,medium_task_queue,large_task_queu ...` in `conf/aias.env` |
 | `ARLAS_URL_SEARCH` | `ARLAS_URL_SEARCH` | `` |  | `"http://arlas-server:9999/arlas/explore/{collectio ...` in `conf/aias.env` |
 | `AIRS_INDEX_COLLECTION_PREFIX` | `AIRS_INDEX_COLLECTION_PREFIX` | `` |  | `org.com@airs` in `conf/aias.env` |
 | `APROC_INDEX_ENDPOINT_URL` | `AIRS_INDEX_ENDPOINT_URL` | `` |  | `https://elasticsearch:9200` in `conf/aias.env` |
