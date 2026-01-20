@@ -5,6 +5,7 @@ conf/apisix/apisix.yaml
 conf/server.crt
 conf/server.key
 conf/server.csr
+conf/truststore.p12
 conf/arlas-ks.jks
 conf/apisix/apisix.yaml
 conf/apisix/apisix.template.yaml

@@ -38,6 +38,8 @@ services:
       - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}
     expose:
       - "9998"
+    volumes:
+      - ${PWD}/conf/truststore.p12:/opt/app/truststore.p12:ro
     networks:
       - arlas-net
     healthcheck:
