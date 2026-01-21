@@ -139,6 +139,15 @@
       nodes:
         "airs-server:8000": 1
   -
+    uri: /airs/collections
+    upstream:
+      nodes:
+        "airs-server:8000": 1
+    plugins:
+      forward-auth:
+        uri: http://arlas-iam-server:9998/arlas_iam_server/auth
+        request_headers: ["Authorization", "arlas-org-filter"]
+  -
     uri: /airs/collections/*
     upstream:
       nodes:

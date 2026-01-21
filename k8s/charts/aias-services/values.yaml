@@ -216,6 +216,7 @@ services:
           - r:/fam/.*:GET,POST
           - r:/aproc/jobs/.*:GET,DELETE
           - r:/aproc/jobs:GET
+          - r:/airs/collections:GET
           - r:/airs/collections/.*:GET,POST,PUT,DELETE
 
         role/arlas/builder:

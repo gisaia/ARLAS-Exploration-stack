@@ -11,7 +11,7 @@ spec:
     - host: {{ .Values.global.dnsDomain }}
       http:
         paths:
-          - path: /airs/collections/
+          - path: /airs/collections
             pathType: Prefix
             backend:
               service:
