@@ -123,6 +123,15 @@ drivers:
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 17
+
+  -
+    name: wyvern
+    class_name: extensions.aproc.proc.ingest.drivers.impl.wyvern
+    assets_dir: /tmp/aproc/wyvern
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 18
+
   -
     name: tiff
     class_name: extensions.aproc.proc.ingest.drivers.impl.tiff

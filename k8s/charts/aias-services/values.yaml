@@ -16,7 +16,7 @@ services:
     allowPrivilegeEscalation: false
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.10.6
+    image: gisaia/airs:0.11.2
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers: []
@@ -75,7 +75,7 @@ services:
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.10.6
+    image: gisaia/fam:0.11.2
     # -- Extra environment variables for the fam container
     imagePullSecrets: []
     extraContainers: []
@@ -104,7 +104,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.10.6
+    image: gisaia/agate:0.11.2
     # -- Extra environment variables for the agate container
     imagePullSecrets: []
     extraContainers: []
@@ -317,7 +317,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.10.6
+      image: gisaia/aproc-service:0.11.2
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -344,7 +344,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.10.6
+      image: gisaia/aproc-proc:0.11.2
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -451,6 +451,9 @@ services:
             geosat:
               enabled: true
               priority: 17
+            wyvern:
+              enabled: true
+              priority: 18
             tiff:
               enabled: true
               priority: 100

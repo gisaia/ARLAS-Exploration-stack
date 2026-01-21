@@ -365,6 +365,17 @@ data:
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geosat.priority }}
       {{- end }}
 
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.wyvern.enabled }}
+      -
+        name: wyvern
+        class_name: extensions.aproc.proc.ingest.drivers.impl.wyvern
+        assets_dir: /tmp/aproc/wyvern
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.wyvern.priority }}
+      {{- end }}
+
+
   enrich_drivers.yaml: |
     drivers:
       {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.s2_cog.enabled }}

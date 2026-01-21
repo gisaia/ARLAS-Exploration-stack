@@ -53,7 +53,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.extraInitContainers | string | `nil` |  |
 | services.agate.extraVolumeMounts | string | `nil` |  |
 | services.agate.extraVolumes | string | `nil` |  |
-| services.agate.image | string | `"gisaia/agate:0.10.6"` |  |
+| services.agate.image | string | `"gisaia/agate:0.11.2"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
@@ -80,7 +80,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.extraInitContainers | list | `[]` |  |
 | services.airs.extraVolumeMounts | list | `[]` |  |
 | services.airs.extraVolumes | list | `[]` |  |
-| services.airs.image | string | `"gisaia/airs:0.10.6"` |  |
+| services.airs.image | string | `"gisaia/airs:0.11.2"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
@@ -168,6 +168,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.tiff.priority | int | `100` |  |
 | services.aproc.configuration.extensions.ingest.drivers.umbra.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.umbra.priority | int | `9` |  |
+| services.aproc.configuration.extensions.ingest.drivers.wyvern.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.wyvern.priority | int | `18` |  |
 | services.aproc.configuration.extensions.ingest.enabled | bool | `true` | Whether the archive ingest extension is enabled or not |
 | services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"/inputs"` | Directory where archives to ingest are stored |
 | services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest | int | `100000` | Maximum number of archives that can be ingested in a single batch |
@@ -178,7 +180,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.extraInitContainers | string | `nil` |  |
 | services.aproc.service.extraVolumeMounts | string | `nil` |  |
 | services.aproc.service.extraVolumes | string | `nil` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.10.6"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.11.2"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
@@ -193,7 +195,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
 | services.aproc.worker.extraVolumeMounts | string | `nil` |  |
 | services.aproc.worker.extraVolumes | string | `nil` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.10.6"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.11.2"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
@@ -207,7 +209,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.extraInitContainers | string | `nil` |  |
 | services.fam.extraVolumeMounts | string | `nil` |  |
 | services.fam.extraVolumes | string | `nil` |  |
-| services.fam.image | string | `"gisaia/fam:0.10.6"` |  |
+| services.fam.image | string | `"gisaia/fam:0.11.2"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
