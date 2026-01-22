@@ -96,7 +96,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.extraInitContainers | string | `nil` |  |
 | services.server.extraVolumeMounts | string | `nil` |  |
 | services.server.extraVolumes | string | `nil` |  |
-| services.server.image | string | `"gisaia/arlas-server:27.1.0"` |  |
+| services.server.image | string | `"gisaia/arlas-server:27.2.0"` |  |
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
