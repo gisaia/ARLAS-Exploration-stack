@@ -16,7 +16,7 @@ services:
     allowPrivilegeEscalation: false
   server: 
     serviceName: arlas-server
-    image: gisaia/arlas-server:27.1.0
+    image: gisaia/arlas-server:27.2.0
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
