@@ -302,6 +302,7 @@ data:
         assets_dir: /tmp/aproc/sentinel2
         configuration:
           tmp_directory: /tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.build_overview_when_remote }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.priority }}
       {{- end }}
 
@@ -373,6 +374,16 @@ data:
         configuration:
           tmp_directory: $TMP_FOLDER|/tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.wyvern.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.landsat.enabled }}
+      -
+        name: landsat
+        class_name: extensions.aproc.proc.ingest.drivers.impl.landsat
+        assets_dir: /tmp/aproc/landsat
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.landsat.priority }}
       {{- end }}
 
 

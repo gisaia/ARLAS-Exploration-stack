@@ -132,6 +132,13 @@ drivers:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 18
 
+  - name: landsat
+    class_name: extensions.aproc.proc.ingest.drivers.impl.landsat
+    assets_dir: /tmp/aproc/landsat
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 19
+    
   -
     name: tiff
     class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
