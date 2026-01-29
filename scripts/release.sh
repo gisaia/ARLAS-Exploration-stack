@@ -66,7 +66,6 @@ git checkout k8s/charts/arlas-stack/Chart.yaml
 git checkout gh-pages
 mv charts/*tgz .
 helm repo index . --url https://gisaia.github.io/ARLAS-exploration-stack
-exit 0
 git add *.tgz index.yaml
 git commit -m "Update helm charts for version ${VERSION}"
 git push origin gh-pages
