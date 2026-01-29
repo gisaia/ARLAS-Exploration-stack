@@ -1,14 +1,8 @@
 # titiler
 
-![Version: 1.2.7](https://img.shields.io/badge/Version-1.2.7-informational?style=flat-square) ![AppVersion: 0.22.4](https://img.shields.io/badge/AppVersion-0.22.4-informational?style=flat-square)
+![Version: 27.60.0](https://img.shields.io/badge/Version-27.60.0-informational?style=flat-square) ![AppVersion: 0.22.4](https://img.shields.io/badge/AppVersion-0.22.4-informational?style=flat-square)
 
 A dynamic Web Map tile server
-
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| emmanuelmathot |  | <https://github.com/emmanuelmathot> |
 
 ## Values
 
