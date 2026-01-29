@@ -55,19 +55,23 @@ echo " - ARLAS WUI version : ${WUI_VERSION}" >> docs/docs/version.md
 echo " - AIAS version : ${AIAS_VERSION}" >> docs/docs/version.md
 echo " - TiTiler version : ${TITILER_VERSION}" >> docs/docs/version.md
 
+sed -i 's|file://\.\./|https://gisaia.github.io/ARLAS-Exploration-stack/|g' k8s/charts/arlas-stack/Chart.yaml
 helm package k8s/charts/aias-services/ --destination charts/
 helm package k8s/charts/arlas-services/ --destination charts/
 helm package k8s/charts/arlas-uis/ --destination charts/
 helm package k8s/charts/titiler/ --destination charts/
 helm package k8s/charts/arlas-stack/ --destination charts/
+git checkout k8s/charts/arlas-stack/Chart.yaml
 
 git checkout gh-pages
 mv charts/*tgz .
 helm repo index . --url https://gisaia.github.io/ARLAS-exploration-stack
+exit 0
 git add *.tgz index.yaml
 git commit -m "Update helm charts for version ${VERSION}"
 git push origin gh-pages
 git checkout -
+git checkout k8s/charts/arlas-stack/Chart.yaml
 
 exit 0
 
