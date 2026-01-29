@@ -70,7 +70,6 @@ git add *.tgz index.yaml
 git commit -m "Update helm charts for version ${VERSION}"
 git push origin gh-pages
 git checkout -
-git checkout k8s/charts/arlas-stack/Chart.yaml
 
 exit 0
 
