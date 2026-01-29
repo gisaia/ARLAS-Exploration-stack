@@ -1,0 +1,90 @@
+apiVersion: v1
+entries:
+  aias-services:
+  - apiVersion: v2
+    appVersion: 0.12.0
+    created: "2026-01-29T16:35:08.348275226+01:00"
+    description: A Helm Chart to deploy ARLAS AIAS Services
+    digest: 630ac295055f429d76665447154e67a2b29b6a0163defb1e741c33093f3d3f38
+    name: aias-services
+    urls:
+    - aias-services-27.60.0.tgz
+    version: 27.60.0
+  arlas-aias:
+  - apiVersion: v2
+    appVersion: 27.60.0
+    created: "2026-01-29T16:35:08.384779084+01:00"
+    dependencies:
+    - condition: deployment.arlas.services.enabled
+      name: arlas-services
+      repository: file://../arlas-services
+      version: 27.60.0
+    - condition: deployment.aias.enabled
+      name: aias-services
+      repository: file://../aias-services
+      version: 27.60.0
+    - condition: deployment.arlas.uis.enabled
+      name: arlas-uis
+      repository: file://../arlas-uis
+      version: 27.60.0
+    - condition: deployment.titiler.enabled
+      name: titiler
+      repository: file://../titiler
+      version: 27.60.0
+    - condition: deployment.elasticsearch.enabled
+      name: elasticsearch
+      repository: https://charts.bitnami.com/bitnami
+      version: 22.0.4
+    - condition: deployment.minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 14.10.5
+    - condition: deployment.rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.0.11
+    - condition: deployment.redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 21.2.13
+    - condition: deployment.keycloak.enabled
+      name: keycloak
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.0.1
+    description: A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
+    digest: 76db7a166ad8e41749209f545cbc3328beaa3fbe921c0f0a8eb879fe0e24d6ba
+    name: arlas-aias
+    urls:
+    - arlas-aias-27.60.0.tgz
+    version: 27.60.0
+  arlas-services:
+  - apiVersion: v2
+    appVersion: 27.2.0
+    created: "2026-01-29T16:35:08.385350326+01:00"
+    description: A Helm Chart to deploy ARLAS Server
+    digest: 1a7e084b7c9760b3f89f295798df111f8dca20d7e38dbe42b39c16d0972df48f
+    name: arlas-services
+    urls:
+    - arlas-services-27.60.0.tgz
+    version: 27.60.0
+  arlas-uis:
+  - apiVersion: v2
+    appVersion: 27.1.4
+    created: "2026-01-29T16:35:08.386134134+01:00"
+    description: A Helm Chart to deploy ARLAS User Interfaces
+    digest: 08a12c3342ce3b510d6fa11a5b241c988d67d7d25ebcb982c4c5aa5abc68df39
+    name: arlas-uis
+    urls:
+    - arlas-uis-27.60.0.tgz
+    version: 27.60.0
+  titiler:
+  - apiVersion: v2
+    appVersion: 0.22.4
+    created: "2026-01-29T16:35:08.386331077+01:00"
+    description: A dynamic Web Map tile server
+    digest: e3230060165efdf9933c5034f61b84408f259532716c87563a74e5e02f579ea5
+    name: titiler
+    urls:
+    - titiler-27.60.0.tgz
+    version: 27.60.0
+generated: "2026-01-29T16:35:08.343335759+01:00"
