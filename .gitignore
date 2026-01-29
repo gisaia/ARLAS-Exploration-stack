@@ -18,7 +18,7 @@ docker-compose-config.yaml
 tmp/
 docker-compose.env
 target
-charts/
+/charts/
 
 __pycache__/
 *.py[cod]
