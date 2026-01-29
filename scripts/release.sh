@@ -45,9 +45,6 @@ yq eval '( .dependencies[] | select(.name == "arlas-services").version ) = "'${V
 yq eval '( .dependencies[] | select(.name == "arlas-uis").version ) = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 yq eval '( .dependencies[] | select(.name == "titiler").version ) = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 
-# Generate the md documentation
-./mkDocs.sh
-# Tag the version
 echo "ARLAS Exploration Stack version ${VERSION}:" > docs/docs/version.md
 echo " " >> docs/docs/version.md
 echo " - ARLAS Server version : ${ARLAS_VERSION}" >> docs/docs/version.md
@@ -72,6 +69,10 @@ git push origin gh-pages
 git checkout -
 
 exit 0
+
+# Generate the md documentation
+./mkDocs.sh
+# Tag the version
 
 git add docs/docs/
 git commit -m "Update docker compose services documentation"
