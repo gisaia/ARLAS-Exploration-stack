@@ -16,6 +16,7 @@ send_chat_message(){
     fi
 }
 
+# Extract current versions from the images: they define the appVersions in the charts
 AIAS_VERSION=`yq '.services.airs.image' k8s/charts/aias-services/values.yaml | cut -d":" -f2`
 ARLAS_VERSION=`yq '.services.server.image' k8s/charts/arlas-services/values.yaml | cut -d":" -f2`
 WUI_VERSION=`yq '.uis.wui.image' k8s/charts/arlas-uis/values.yaml | cut -d":" -f2`
@@ -34,12 +35,14 @@ yq eval '.version = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 yq eval '.version = "'${VERSION}'"' -i k8s/charts/arlas-uis/Chart.yaml
 yq eval '.version = "'${VERSION}'"' -i k8s/charts/titiler/Chart.yaml
 
+# Update the appVersion in the chart files
 yq eval '.appVersion = "'${AIAS_VERSION}'"' -i k8s/charts/aias-services/Chart.yaml
 yq eval '.appVersion = "'${ARLAS_VERSION}'"' -i k8s/charts/arlas-services/Chart.yaml
 yq eval '.appVersion = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 yq eval '.appVersion = "'${WUI_VERSION}'"' -i k8s/charts/arlas-uis/Chart.yaml
 yq eval '.appVersion = "'${TITILER_VERSION}'"' -i k8s/charts/titiler/Chart.yaml
 
+# Update dependencies versions in the arlas-stack chart: all the same current version
 yq eval '( .dependencies[] | select(.name == "aias-services").version ) = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 yq eval '( .dependencies[] | select(.name == "arlas-services").version ) = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 yq eval '( .dependencies[] | select(.name == "arlas-uis").version ) = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
@@ -52,7 +55,9 @@ git add k8s/charts/titiler/Chart.yaml
 git add k8s/charts/arlas-stack/Chart.yaml
 git commit -m "Update helm charts for version ${VERSION}"
 
+# Set the correct chart repository path for dependencies (not relative path)
 sed -i 's|file://\.\./|https://gisaia.github.io/ARLAS-Exploration-stack/|g' k8s/charts/arlas-stack/Chart.yaml
+# Package the charts
 helm package k8s/charts/aias-services/ --destination charts/
 helm package k8s/charts/arlas-services/ --destination charts/
 helm package k8s/charts/arlas-uis/ --destination charts/
@@ -60,6 +65,7 @@ helm package k8s/charts/titiler/ --destination charts/
 helm package k8s/charts/arlas-stack/ --destination charts/
 git checkout k8s/charts/arlas-stack/Chart.yaml
 
+# Publish the charts to the gh-pages branch
 git checkout gh-pages
 mv charts/*tgz .
 helm repo index . --url https://gisaia.github.io/ARLAS-Exploration-stack
@@ -67,8 +73,6 @@ git add *.tgz index.yaml
 git commit -m "Update helm charts for version ${VERSION}"
 git push origin gh-pages
 git checkout -
-
-exit 0
 
 # Generate the md documentation
 ./mkDocs.sh
