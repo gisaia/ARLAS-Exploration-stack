@@ -2,8 +2,10 @@
 
 # -- DNS domain hosting ARLAS
 dnsDomain: localhost
+# -- HTTP protocol used to access AIAS services
 protocol: http
 
+# -- Whether to initialize the S3 buckets used by AIRS service at startup or not
 initBuckets: false
 services: 
   serviceType: ClusterIP
@@ -150,8 +152,8 @@ services:
         verifySsl: true
         # -- Expected audience in the JWT token
         jwtAudience: arlas-backend
-      # -- Roles used by URBAC. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml
       roles: 
+        # -- Public role. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml
         group/public:
           description:
           - "Public group"
@@ -163,6 +165,7 @@ services:
           - r:organisations/check:GET
           - r:users/.*:GET,PUT,DELETE
 
+        # -- ARLAS User role
         role/arlas/user:
           description:
           - "Viewing data in ARLAS"
@@ -185,6 +188,7 @@ services:
       # ARLAS permissions
           - r:authorize/resources:GET
 
+        # -- ARLAS Tagger role
         role/arlas/tagger:
           description:
           - "Tagging data in ARLAS"
@@ -192,6 +196,7 @@ services:
           - r:write/.*:POST
           - r:status/.*:GET
 
+        # -- ARLAS Downloader role
         role/arlas/downloader:
           description:
           - "Download data from ARLAS"
@@ -200,6 +205,7 @@ services:
           - r:/aproc/processes/download/execution:POST
           - r:/aproc/jobs/.*:GET,DELETE
 
+        # -- ARLAS Datasets role
         role/arlas/datasets:
           description:
           - "Managing data (ingest, update and enrich) in ARLAS"
@@ -219,6 +225,7 @@ services:
           - r:/airs/collections:GET
           - r:/airs/collections/.*:GET,POST,PUT,DELETE
 
+        # -- ARLAS Builder role
         role/arlas/builder:
           description:
           - "Building dashboards in ARLAS"
@@ -229,6 +236,7 @@ services:
           - r:collections/_import:POST
           - r:persist/resource/.*:PUT,POST,DELETE
 
+        # -- ARLAS Owner role
         role/arlas/owner:
           description:
           - "Managing users and permissions of ARLAS"
@@ -240,7 +248,7 @@ services:
           - r:users/.*:GET,PUT,DELETE
           - r:session:DELETE
 
-      # M2M role
+        # M2M account for importing collections
         role/m2m/importer:
           description:
           - "M2M account for importing collections"
@@ -251,7 +259,7 @@ services:
           - r:organisations/.*:GET
           - r:persist/resource/.*:POST,PUT
 
-      # IAM super admin role
+        # -- IAM Admin role
         role/iam/admin:
           description:
           - "IAM admin"

@@ -1,6 +1,13 @@
 
 # ARLAS Exploration Stack with Kubernetes
 
+
+This documentation is for running ARLAS Exploration stack from the https://github.com/gisaia/ARLAS-Exploration-stack project. You can also run it by using directly the chart:
+```shell
+helm repo add arlas https://gisaia.github.io/ARLAS-Exploration-stack/
+helm search repo arlas
+```
+
 ## Prerequisites
 
 - git
