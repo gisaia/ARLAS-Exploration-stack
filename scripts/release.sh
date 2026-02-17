@@ -1,6 +1,19 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
+check_command(){
+    COMMAND_NAME=$1
+    if ! command -v $COMMAND_NAME >/dev/null 2>&1; then
+        echo "Error: '$COMMAND_NAME' is not installed. Please install it first."
+        exit 1
+    fi
+}
+
+check_command "yq"
+check_command "git"
+check_command "helm"
+
+
 [ -z "$1" ] && echo "Please provide the version" && exit 1;
 VERSION=$1.0
 
