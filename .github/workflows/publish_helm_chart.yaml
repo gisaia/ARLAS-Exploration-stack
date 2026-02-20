@@ -1,0 +1,68 @@
+name: Release Helm Charts
+
+concurrency: release-helm
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'charts/**'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: 'src'
+          ref: 'develop'
+          fetch-depth: 0
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: 'dest'
+          ref: 'gh-pages'
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+
+      - name: Update New Files and push to develop branch
+        shell: bash
+        working-directory: src
+        run: |
+          sed -i 's|file://\.\./|https://gisaia.github.io/ARLAS-Exploration-stack/|g' k8s/charts/arlas-stack/Chart.yaml
+          helm package k8s/charts/aias-services/ --destination charts/
+          helm package k8s/charts/arlas-services/ --destination charts/
+          helm package k8s/charts/arlas-uis/ --destination charts/
+          helm package k8s/charts/titiler/ --destination charts/
+          helm package k8s/charts/arlas-stack/ --destination charts/
+          helm repo index ./charts --merge ../dest/index.yaml --url https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm
+          git checkout k8s/charts/arlas-stack/Chart.yaml
+          mkdir -p ../dest/helm
+          echo "Copying files..."
+          shopt -s extglob
+          
+          echo "n" | cp -pr ./charts/!(index.yaml) ../dest/helm/
+          echo "n" | cp -pr ./charts/index.yaml ../dest/
+          echo "y" | rm -rf ./charts/*
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Updated from ref: $GITHUB_SHA"
+          git push
+
+      - name: Push New Files
+        shell: bash
+        working-directory: dest
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add $(git ls-files -o --exclude-standard)
+          git add index.yaml
+          git commit -m "Updated from ref: $GITHUB_SHA"
+          git push

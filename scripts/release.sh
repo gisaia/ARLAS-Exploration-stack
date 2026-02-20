@@ -68,25 +68,6 @@ git add k8s/charts/titiler/Chart.yaml
 git add k8s/charts/arlas-stack/Chart.yaml
 git commit -m "Update helm charts for version ${VERSION}"
 
-# Set the correct chart repository path for dependencies (not relative path)
-sed -i 's|file://\.\./|https://gisaia.github.io/ARLAS-Exploration-stack/|g' k8s/charts/arlas-stack/Chart.yaml
-# Package the charts
-helm package k8s/charts/aias-services/ --destination charts/
-helm package k8s/charts/arlas-services/ --destination charts/
-helm package k8s/charts/arlas-uis/ --destination charts/
-helm package k8s/charts/titiler/ --destination charts/
-helm package k8s/charts/arlas-stack/ --destination charts/
-git checkout k8s/charts/arlas-stack/Chart.yaml
-
-# Publish the charts to the gh-pages branch
-git checkout gh-pages
-mv charts/*tgz .
-helm repo index . --url https://gisaia.github.io/ARLAS-Exploration-stack
-git add *.tgz index.yaml
-git commit -m "Update helm charts for version ${VERSION}"
-git push origin gh-pages
-git checkout -
-
 # Generate the md documentation
 ./mkDocs.sh
 
