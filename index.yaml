@@ -12,9 +12,9 @@ entries:
     version: 27.64.0
   - apiVersion: v2
     appVersion: 0.12.0
-    created: "2026-02-20T09:54:04.318632895Z"
+    created: "2026-02-20T10:14:09.53829444Z"
     description: A Helm Chart to deploy ARLAS AIAS Services
-    digest: 9b610f70703d924f07dd82ef67ad0259734379cca94485baf37864d2224427ff
+    digest: d33a99407286d81f40257faeebd289a5c5cb469d86592cebea37d8a1b15a633f
     name: aias-services
     urls:
     - https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm/aias-services-27.63.0.tgz
@@ -95,7 +95,7 @@ entries:
     version: 27.64.0
   - apiVersion: v2
     appVersion: 27.63.0
-    created: "2026-02-20T09:54:04.355584156Z"
+    created: "2026-02-20T10:14:09.574082815Z"
     dependencies:
     - condition: deployment.arlas.services.enabled
       name: arlas-services
@@ -134,7 +134,7 @@ entries:
       repository: https://charts.bitnami.com/bitnami
       version: 20.0.1
     description: A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
-    digest: 2f748077de4434201b9a874dd7d206a5c4d76e97b2120d905949a115d1233531
+    digest: c7e1673ac65bdaeee9e302e4927eb637b2e232d7c1f375aba402825790986635
     name: arlas-aias
     urls:
     - https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm/arlas-aias-27.63.0.tgz
@@ -289,9 +289,9 @@ entries:
     version: 27.64.0
   - apiVersion: v2
     appVersion: 27.2.0
-    created: "2026-02-20T09:54:04.356254992Z"
+    created: "2026-02-20T10:14:09.574802466Z"
     description: A Helm Chart to deploy ARLAS Server
-    digest: 35f9d2ca5cf4a3a27b506d40b379948d5708c02d13148d1933b5a4d6a0a95411
+    digest: 0dce8b819eb49dcb9a91bdc9ed02a467ad2cfb270475c35459c786393a2018eb
     name: arlas-services
     urls:
     - https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm/arlas-services-27.63.0.tgz
@@ -335,9 +335,9 @@ entries:
     version: 27.64.0
   - apiVersion: v2
     appVersion: 27.1.4
-    created: "2026-02-20T09:54:04.357107137Z"
+    created: "2026-02-20T10:14:09.575596455Z"
     description: A Helm Chart to deploy ARLAS User Interfaces
-    digest: 3dee74cf9e4d6a55bb6754a8ba5261cb23bd10770d03fed860ebe0d35264a943
+    digest: af238486ac139bb7752c77d3bce0955709a639296156884a3df341585e2df5d2
     name: arlas-uis
     urls:
     - https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm/arlas-uis-27.63.0.tgz
@@ -381,9 +381,9 @@ entries:
     version: 27.64.0
   - apiVersion: v2
     appVersion: 0.22.4
-    created: "2026-02-20T09:54:04.357460108Z"
+    created: "2026-02-20T10:14:09.575941738Z"
     description: A dynamic Web Map tile server
-    digest: 27da2bc21fccebe632a4bd742fe3dc443d00b3b01e690dde8e2563751b24459d
+    digest: 0b888df0e8567884380c872d467ce40cc0c799d9845526895181857585b819e1
     name: titiler
     urls:
     - https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm/titiler-27.63.0.tgz
@@ -415,4 +415,4 @@ entries:
     urls:
     - https://gisaia.github.io/ARLAS-Exploration-stack/titiler-27.60.0.tgz
     version: 27.60.0
-generated: "2026-02-20T09:54:04.3166212Z"
+generated: "2026-02-20T10:14:09.536324741Z"
