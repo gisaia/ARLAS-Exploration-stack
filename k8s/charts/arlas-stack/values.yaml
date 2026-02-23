@@ -11,9 +11,6 @@ global:
   # -- __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment
   keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
 
-  # -- __MUST BE CONFIGURED:__ The access to the openid-configuration
-  openIdProvider: &arlasAppOpenIdProvider https://keycloak.arlas.k8s/auth/realms/arlas/.well-known/openid-configuration
-
   # -- __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment
   protocol: &arlasAppProtocol https
 
@@ -300,11 +297,12 @@ aias-services:
         # -- Headers used by the ingress controller to pass the original method information to Agate
         methodHeader: x-original-method
         urbac:
-          openIdProvider: *arlasAppOpenIdProvider
           # -- Name of the token audience
           jwtAudience: arlas-backend
           # -- __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified
           verifySsl: false
+          # -- __MUST BE CONFIGURED:__ Change to the URI of the JWKS endpoint of your deployment.
+          jwks_uri: https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs
         # -- If a prefix is added to the arlas deployment, then you must add it to the path permissions below (change "myprefix" with your own prefix and uncomment).
         #roles: 
           # role/arlas/downloader:

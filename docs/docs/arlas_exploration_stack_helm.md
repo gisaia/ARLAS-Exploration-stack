@@ -64,7 +64,6 @@ global:
   elasticDnsDomain: &arlasAppElasticDnsDomain elastic.mydomain.k8s
   minioDnsDomain: &arlasAppMinioDnsDomain minio.mydomain.k8s
   keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.mydomain.k8s
-  openIdProvider: &arlasAppOpenIdProvider https://keycloak.mydomain.k8s/auth/realms/arlas/.well-known/openid-configuration
 ```
 
 IMPORTANT: the passwords must be configured before the first install of the chart!
