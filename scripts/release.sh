@@ -61,13 +61,6 @@ yq eval '( .dependencies[] | select(.name == "arlas-services").version ) = "'${V
 yq eval '( .dependencies[] | select(.name == "arlas-uis").version ) = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 yq eval '( .dependencies[] | select(.name == "titiler").version ) = "'${VERSION}'"' -i k8s/charts/arlas-stack/Chart.yaml
 
-git add k8s/charts/aias-services/Chart.yaml
-git add k8s/charts/arlas-services/Chart.yaml
-git add k8s/charts/arlas-uis/Chart.yaml
-git add k8s/charts/titiler/Chart.yaml
-git add k8s/charts/arlas-stack/Chart.yaml
-git commit -m "Update helm charts for version ${VERSION}"
-
 # Generate the md documentation
 ./mkDocs.sh
 
@@ -77,10 +70,22 @@ echo " - ARLAS Server version : ${ARLAS_VERSION}" >> docs/docs/version.md
 echo " - ARLAS WUI version : ${WUI_VERSION}" >> docs/docs/version.md
 echo " - AIAS version : ${AIAS_VERSION}" >> docs/docs/version.md
 echo " - TiTiler version : ${TITILER_VERSION}" >> docs/docs/version.md
+git add docs/docs/
+
+git add k8s/charts/aias-services/Chart.yaml
+git add k8s/charts/arlas-services/Chart.yaml
+git add k8s/charts/arlas-uis/Chart.yaml
+git add k8s/charts/titiler/Chart.yaml
+git add k8s/charts/arlas-stack/Chart.yaml
+
+git add k8s/charts/aias-services/README.md
+git add k8s/charts/arlas-services/README.md
+git add k8s/charts/arlas-stack/README.md
+git add k8s/charts/arlas-uis/README.md
+git add k8s/charts/titiler/README.md
 
 # Tag the version
 
-git add docs/docs/
 git commit -m "Update docker compose services documentation"
 git tag -a ${VERSION} -m "ARLAS Exploration stack ${VERSION}"
 git push origin --tags
