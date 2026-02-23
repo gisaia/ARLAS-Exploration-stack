@@ -1,4 +1,4 @@
-ARLAS Exploration Stack version 27.54.0:
+ARLAS Exploration Stack version 27.55.0:
  
  - ARLAS Server version : 27.2.0
  - ARLAS WUI version : 27.1.4
