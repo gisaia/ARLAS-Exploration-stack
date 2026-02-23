@@ -30,9 +30,6 @@ jobs:
 
       - name: Install yq
         run: sudo snap install yq
-
-      - name: Configure dns naming
-        run: ./k8s/scripts/configure_for_tests.sh 
         
       - name: deploy arlas
         run: ./k8s/scripts/start.sh 
