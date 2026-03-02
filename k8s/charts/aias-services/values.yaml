@@ -466,6 +466,9 @@ services:
             landsat:
               enabled: true
               priority: 19
+            satellogic:
+              enabled: true
+              priority: 20
             tiff:
               enabled: true
               priority: 100
