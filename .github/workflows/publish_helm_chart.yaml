@@ -35,24 +35,20 @@ jobs:
         shell: bash
         working-directory: src
         run: |
-          # 1. Update Chart.yaml: Replace local file references (file://) with the official Helm repo URL
-          # This ensures the chart is portable and points to hosted dependencies once published.
-          sed -i 's|file://\.\./.*|https://gisaia.github.io/ARLAS-Exploration-stack/"|g' k8s/charts/arlas-stack/Chart.yaml
-          
-          # 2. Initialize a temporary directory for the generated packages (.tgz)
+          # 1. Initialize a temporary directory for the generated packages (.tgz)
           mkdir -p ./charts/
           
-          # 3. Package individual sub-charts into the temporary charts directory
+          # 2. Package individual sub-charts into the temporary charts directory
           helm package k8s/charts/aias-services/ --destination charts/
           helm package k8s/charts/arlas-services/ --destination charts/
           helm package k8s/charts/arlas-uis/ --destination charts/
           helm package k8s/charts/titiler/ --destination charts/
           
-          # 4. Add external dependencies (e.g., Bitnami) required by the main stack
+          # 3. Add external dependencies (e.g., Bitnami) required by the main stack
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
 
-          # 5. Inject the newly created packages into the main stack's charts folder
+          # 4. Inject the newly created packages into the main stack's charts folder
           # This prepares the environment for the final parent chart build.
           mkdir -p k8s/charts/arlas-stack/charts/
           cp charts/arlas-services-*.tgz k8s/charts/arlas-stack/charts/
@@ -60,17 +56,26 @@ jobs:
           cp charts/arlas-uis-*.tgz k8s/charts/arlas-stack/charts/
           cp charts/titiler-*.tgz k8s/charts/arlas-stack/charts/
 
-          # 6. Finalize and package the parent chart (Arlas-Stack)
+          # 5. Finalize the parent chart (Arlas-Stack)
           helm dependency update k8s/charts/arlas-stack/
+
+          # Remove lock file of arlas-stack (refers to local files)
+          rm k8s/charts/arlas-stack/Chart.lock
+
+          # 6. Update Chart.yaml: Replace local file references (file://) with the official Helm repo URL
+          # This ensures the chart is portable and points to hosted dependencies once published.
+          sed -i 's|file://\.\./.*|https://gisaia.github.io/ARLAS-Exploration-stack/"|g' k8s/charts/arlas-stack/Chart.yaml
+
+          # 7. Package the parent chart (Arlas-Stack)
           helm package k8s/charts/arlas-stack/ --destination charts/
           
-          # 7. Update the Helm repository index by merging with the existing index.yaml
+          # 8. Update the Helm repository index by merging with the existing index.yaml
           helm repo index ./charts --merge ../dest/index.yaml --url https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm
           
-          # 8. Revert: Undo the 'sed' modification to keep the source branch clean
+          # 9. Revert: Undo the 'sed' modification to keep the source branch clean
           git checkout k8s/charts/arlas-stack/Chart.yaml
           
-          # 9. Deployment: Move files to the destination directory for gh-pages
+          # 10. Deployment: Move files to the destination directory for gh-pages
           mkdir -p ../dest/helm
           echo "Copying files..."
           shopt -s extglob
