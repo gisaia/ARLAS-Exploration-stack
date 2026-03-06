@@ -287,7 +287,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.5` in `conf/versions.env`
 List of volumes:
 
 - `${PWD}/conf/wui/custom-style.css:/usr/share/nginx/html/assets/styles/custom-style.css`
-- `${PWD}/conf/wui/custom:/usr/share/nginx/html/assets/i18n/custom:ro`
+- `${PWD}/conf/wui/custom/:/usr/share/nginx/html/assets/i18n/custom/:ro`
 ## File dc/ref-dc-apisix.yaml
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.
