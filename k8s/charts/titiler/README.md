@@ -1,6 +1,6 @@
 # titiler
 
-![Version: 27.56.0](https://img.shields.io/badge/Version-27.56.0-informational?style=flat-square) ![AppVersion: 0.22.4](https://img.shields.io/badge/AppVersion-0.22.4-informational?style=flat-square)
+![Version: 27.57.0](https://img.shields.io/badge/Version-27.57.0-informational?style=flat-square) ![AppVersion: 0.22.4](https://img.shields.io/badge/AppVersion-0.22.4-informational?style=flat-square)
 
 A dynamic Web Map tile server
 
