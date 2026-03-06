@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: arlas-wui-custom-i18n
+data:
+    custom.en.json: |
+        {
+            "Welcome to ARLAS-Exploration": "Welcome to my ARLAS-Exploration"
+        }
+    custom.es.json: |
+        {
+            "Welcome to ARLAS-Exploration": "Bienvenidos a mi ARLAS-Exploration"
+        }
+    custom.fr.json: |
+        {
+            "Welcome to ARLAS-Exploration": "Bienvenue dans mon ARLAS-Exploration"
+        }

@@ -248,7 +248,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.1.3` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.4` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.5` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -297,6 +297,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.1.4` in `conf/versions.env`
 List of volumes:
 
 - `${PWD}/conf/wui/custom-style.css:/usr/share/nginx/html/assets/styles/custom-style.css`
+- `${PWD}/conf/wui/custom:/usr/share/nginx/html/assets/i18n/custom:ro`
 ## File dc/ref-dc-apisix.yaml
 ### Service apisix
 Description: APISIX is ARLAS Stack gateway. It handles all the incoming trafic.

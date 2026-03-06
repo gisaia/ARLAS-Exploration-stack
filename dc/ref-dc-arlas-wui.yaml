@@ -58,6 +58,7 @@ services:
       - arlas-net
     volumes:
       - ${PWD}/conf/wui/custom-style.css:/usr/share/nginx/html/assets/styles/custom-style.css
+      - ${PWD}/conf/wui/custom:/usr/share/nginx/html/assets/i18n/custom:ro
     logging:
       driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
       options:
