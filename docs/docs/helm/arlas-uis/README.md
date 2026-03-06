@@ -113,7 +113,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.wui.extraInitContainers | string | `nil` |  |
 | uis.wui.extraVolumeMounts | string | `nil` |  |
 | uis.wui.extraVolumes | string | `nil` |  |
-| uis.wui.image | string | `"gisaia/arlas-wui:27.1.4"` |  |
+| uis.wui.image | string | `"gisaia/arlas-wui:27.1.5"` |  |
 | uis.wui.imagePullSecrets | list | `[]` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |

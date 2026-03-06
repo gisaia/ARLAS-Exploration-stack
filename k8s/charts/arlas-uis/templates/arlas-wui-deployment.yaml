@@ -111,6 +111,10 @@ spec:
             - mountPath: "/usr/share/nginx/html/assets/basemap/data"
               name: basemap-volume
             {{- end }}            
+            {{- if .Values.uis.wui.customi18nConfigMap }}
+            - mountPath: "/usr/share/nginx/html/assets/i18n/custom"
+              name: custom-i18n-volume
+            {{- end }}            
             - mountPath: "/usr/share/nginx/html/assets/styles/custom-style.css"
               name: custom-style-volume
               subPath: custom-style.css
@@ -142,6 +146,11 @@ spec:
           persistentVolumeClaim:
             claimName: basemap-pvc
         {{- end }}
+        {{- if .Values.uis.wui.customi18nConfigMap }}
+        - name: custom-i18n-volume
+          configMap:
+            name: {{ .Values.uis.wui.customi18nConfigMap }}
+        {{- end }}            
         - name: custom-style-volume
           configMap:
             name: arlas-custom-style

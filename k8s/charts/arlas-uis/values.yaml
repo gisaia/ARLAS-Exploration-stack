@@ -17,7 +17,7 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:27.1.4
+    image: gisaia/arlas-wui:27.1.5
     # -- Extra environment variables for the arlas wui container
     urlPrefix: /wui
     tabName: ARLAS Exploration
