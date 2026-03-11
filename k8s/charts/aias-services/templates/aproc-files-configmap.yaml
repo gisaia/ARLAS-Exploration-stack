@@ -265,6 +265,17 @@ data:
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra.priority }}
       {{- end }}
 
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.enabled }}
+      -
+        name: umbra_stac
+        class_name: extensions.aproc.proc.ingest.drivers.impl.umbra_stac
+        assets_dir: /tmp/aproc/umbra_stac
+        configuration:
+          tmp_directory: /tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.build_overview_when_remote }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.priority }}
+      {{- end }}
+
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.enabled }}
       -
         name: bsg
@@ -273,6 +284,16 @@ data:
         configuration:
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.enabled }}
+      -
+        name: satellogic
+        class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
+        assets_dir: /tmp/aproc/satellogic
+        configuration:
+          tmp_directory: /tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.priority }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.tiff.enabled }}
