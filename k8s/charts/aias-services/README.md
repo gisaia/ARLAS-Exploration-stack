@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 27.58.0](https://img.shields.io/badge/Version-27.58.0-informational?style=flat-square) ![AppVersion: 0.13.1](https://img.shields.io/badge/AppVersion-0.13.1-informational?style=flat-square)
+![Version: 27.70.0](https://img.shields.io/badge/Version-27.70.0-informational?style=flat-square) ![AppVersion: 0.14.1](https://img.shields.io/badge/AppVersion-0.14.1-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
@@ -143,12 +143,19 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.enrich.drivers.s2_cog.priority | int | `1` |  |
 | services.aproc.configuration.extensions.enrich.enabled | bool | `true` | Whether the enrich extension is enabled or not |
 | services.aproc.configuration.extensions.ingest.aprocEndpoint | string | `"http://aproc-service:8001"` | APROC endpoint URL accessed by the ingest extension |
+| services.aproc.configuration.extensions.ingest.drivers.astDem.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.astDem.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.astDem.priority | int | `4` |  |
+| services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.priority | int | `16` |  |
+| services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.priority | int | `10` |  |
+| services.aproc.configuration.extensions.ingest.drivers.capella.build_overview_when_local | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.capella.build_overview_when_remote | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.capella.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.capella.priority | int | `21` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.priority | int | `8` |  |
 | services.aproc.configuration.extensions.ingest.drivers.digitalglobe.enabled | bool | `true` |  |
@@ -180,12 +187,17 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.skysat.priority | int | `15` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.priority | int | `6` |  |
+| services.aproc.configuration.extensions.ingest.drivers.superview.build_overview_when_local | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.superview.build_overview_when_remote | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.superview.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.superview.priority | int | `22` |  |
 | services.aproc.configuration.extensions.ingest.drivers.terrasarx.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.terrasarx.priority | int | `7` |  |
 | services.aproc.configuration.extensions.ingest.drivers.tiff.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.tiff.priority | int | `100` |  |
 | services.aproc.configuration.extensions.ingest.drivers.umbra.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.umbra.priority | int | `9` |  |
+| services.aproc.configuration.extensions.ingest.drivers.umbra_stac.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.umbra_stac.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.umbra_stac.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.umbra_stac.priority | int | `9` |  |
