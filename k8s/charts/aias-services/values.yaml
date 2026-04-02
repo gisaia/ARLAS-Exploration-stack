@@ -18,7 +18,7 @@ services:
     allowPrivilegeEscalation: false
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.13.1
+    image: gisaia/airs:0.14.1
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers: []
@@ -71,13 +71,13 @@ services:
 
       # -- ARLAS-EO mapping and collection URLs used for initializing new indices of new collections
       arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
-      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.1.0/mapping.json
+      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.2.0/mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
-      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.1.0/collection.json      
+      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.2.0/collection.json      
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.13.1
+    image: gisaia/fam:0.14.1
     # -- Extra environment variables for the fam container
     imagePullSecrets: []
     extraContainers: []
@@ -106,7 +106,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.13.1
+    image: gisaia/agate:0.14.1
     # -- Extra environment variables for the agate container
     imagePullSecrets: []
     extraContainers: []
@@ -325,7 +325,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.13.1
+      image: gisaia/aproc-service:0.14.1
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -352,7 +352,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.13.1
+      image: gisaia/aproc-proc:0.14.1
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -420,6 +420,7 @@ services:
             astDem:
               enabled: true
               priority: 4
+              build_overview_when_local: true
             rapideye:
               enabled: true
               priority: 5
@@ -439,9 +440,11 @@ services:
               enabled: true
               priority: 9
               build_overview_when_remote: true
+              build_overview_when_local: true
             bsg:
               enabled: true
               priority: 10
+              build_overview_when_local: true
             sentinel2:
               enabled: true
               priority: 11
@@ -461,6 +464,7 @@ services:
             axelspace:
               enabled: true
               priority: 16
+              build_overview_when_local: true
             geosat:
               enabled: true
               priority: 17
@@ -473,6 +477,16 @@ services:
             satellogic:
               enabled: true
               priority: 20
+            capella:
+              enabled: true
+              priority: 21
+              build_overview_when_local: true
+              build_overview_when_remote: true
+            superview:
+              enabled: true
+              priority: 22
+              build_overview_when_local: true
+              build_overview_when_remote: true
             tiff:
               enabled: true
               priority: 100

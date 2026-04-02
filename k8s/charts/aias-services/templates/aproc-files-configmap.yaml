@@ -214,6 +214,7 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.ast_dem
         assets_dir: /tmp/aproc/ast_dem
         configuration:
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.priority }}
       {{- end }}
 
@@ -272,6 +273,7 @@ data:
         assets_dir: /tmp/aproc/umbra_stac
         configuration:
           tmp_directory: /tmp
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.build_overview_when_local }}
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.build_overview_when_remote }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.priority }}
       {{- end }}
@@ -283,6 +285,7 @@ data:
         assets_dir: /tmp/aproc/bsg
         configuration:
           tmp_directory: /tmp
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.priority }}
       {{- end }}
 
@@ -324,6 +327,7 @@ data:
         configuration:
           tmp_directory: /tmp
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.priority }}
       {{- end }}
 
@@ -374,6 +378,7 @@ data:
         assets_dir: /tmp/aproc/axelspace
         configuration:
           tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.priority }}
       {{- end }}
 
@@ -405,6 +410,40 @@ data:
         configuration:
           tmp_directory: $TMP_FOLDER|/tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.landsat.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.enabled }}
+      -
+        name: satellogic
+        class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
+        assets_dir: /tmp/aproc/satellogic
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.capella.enabled }}
+      -
+        name: capella
+        class_name: extensions.aproc.proc.ingest.drivers.impl.capella
+        assets_dir: /tmp/aproc/capella
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.capella.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.capella.build_overview_when_local }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.capella.priority }}
+      {{- end }}
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.superview.enabled }}
+      -
+        name: superview
+        class_name: extensions.aproc.proc.ingest.drivers.impl.superview
+        assets_dir: /tmp/aproc/superview
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.superview.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.superview.build_overview_when_local }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.superview.priority }}
       {{- end }}
 
 

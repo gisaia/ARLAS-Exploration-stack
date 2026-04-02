@@ -70,6 +70,14 @@ drivers:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 10
   -
+    name: umbra_stac
+    class_name: extensions.aproc.proc.ingest.drivers.impl.umbra_stac
+    assets_dir: /tmp/aproc/umbra_stac
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+    priority: 10
+  -
     name: bsg
     class_name: extensions.aproc.proc.ingest.drivers.impl.bsg
     assets_dir: /tmp/aproc/bsg
@@ -90,6 +98,7 @@ drivers:
     assets_dir: /tmp/aproc/sentinel2
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
     priority: 13
 
   -
@@ -138,7 +147,32 @@ drivers:
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 19
-    
+
+  - name: satellogic
+    class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
+    assets_dir: /tmp/aproc/satellogic
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+    priority: 20
+
+  - name: capella
+    class_name: extensions.aproc.proc.ingest.drivers.impl.capella
+    assets_dir: /tmp/aproc/capella
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 21
+
+  - name: superview
+    class_name: extensions.aproc.proc.ingest.drivers.impl.superview
+    assets_dir: /tmp/aproc/superview
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 22
+
   -
     name: tiff
     class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
@@ -154,4 +188,3 @@ drivers:
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 101
-    
