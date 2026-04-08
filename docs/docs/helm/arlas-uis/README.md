@@ -85,7 +85,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.extraVolumes | string | `nil` |  |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.14.1"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.15.0"` |  |
 | uis.famWui.imagePullSecrets | list | `[]` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
