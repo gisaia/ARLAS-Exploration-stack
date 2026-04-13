@@ -5,23 +5,20 @@ concurrency: release-helm
 on:
   workflow_dispatch:
   push:
-    branches:
-      - develop
-    paths:
-      - 'charts/**'
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Source (Tag)
         uses: actions/checkout@v4
         with:
           path: 'src'
-          ref: 'develop'
           fetch-depth: 0
 
-      - name: Checkout
+      - name: Checkout Helm Repo (gh-pages)
         uses: actions/checkout@v4
         with:
           path: 'dest'
@@ -71,22 +68,15 @@ jobs:
           
           # 8. Update the Helm repository index by merging with the existing index.yaml
           helm repo index ./charts --merge ../dest/index.yaml --url https://raw.githubusercontent.com/gisaia/ARLAS-Exploration-stack/gh-pages/helm
-          
-          # 9. Revert: Undo the 'sed' modification to keep the source branch clean
-          git checkout k8s/charts/arlas-stack/Chart.yaml
-          
-          # 10. Deployment: Move files to the destination directory for gh-pages
+
+          # 9. Deployment: Move files to the destination directory for gh-pages
           mkdir -p ../dest/helm
-          echo "Copying files..."
           shopt -s extglob
           # Copy all packages except the index.yaml into the /helm subdirectory
-          echo "n" | cp -pr ./charts/!(index.yaml) ../dest/helm/
+          cp -pr ./charts/!(index.yaml) ../dest/helm/
           # Copy the updated index.yaml to the destination root
-          echo "n" | cp -pr ./charts/index.yaml ../dest/
+          cp -pr ./charts/index.yaml ../dest/
           
-          # Final cleanup of the temporary charts folder
-          echo "y" | rm -rf ./charts/*
-
       - name: Push New Files
         shell: bash
         working-directory: dest
@@ -97,7 +87,6 @@ jobs:
           # Stage new untracked files only (the .tgz packages) 
           # 'ls-files -o' lists other (untracked) files, excluding those ignored by .gitignore.
           git add $(git ls-files -o --exclude-standard)
-          
           git add index.yaml
-          git commit -m "Updated from ref: $GITHUB_SHA"
+          git commit -m "Release Helm Charts from tag: ${{ github.ref_name }}"
           git push
