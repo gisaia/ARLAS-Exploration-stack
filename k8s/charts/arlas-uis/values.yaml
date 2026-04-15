@@ -17,7 +17,7 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:27.1.5
+    image: gisaia/arlas-wui:27.1.6
     # -- Extra environment variables for the arlas wui container
     urlPrefix: /wui
     tabName: ARLAS Exploration
@@ -40,7 +40,7 @@ uis:
 
   famWui:
     serviceName: arlas-fam-wui
-    image: gisaia/arlas-fam-wui:0.15.0
+    image: gisaia/arlas-fam-wui:0.15.1
     # -- Extra environment variables for the arlas fam wui container
     urlPrefix: /fam-wui
     tabName: ARLAS FAM Wui
@@ -58,7 +58,7 @@ uis:
 
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:27.1.3
+    image: gisaia/arlas-wui-hub:27.1.4
     urlPrefix: /hub
     tabName: ARLAS Hub
     aboutConfigMapName: arlas-hub-default-about-configmap
@@ -71,7 +71,7 @@ uis:
 
   builder: 
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:27.1.3
+    image: gisaia/arlas-wui-builder:27.1.4
     urlPrefix: /builder/
     tabName: ARLAS Studio
     aboutConfigMapName: arlas-builder-default-about-configmap

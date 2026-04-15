@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
+echo "Wait 30 seconds before testing the services ..."
+sleep 30
+echo "launching the tests."
 
 test_status (){
     verb=$1

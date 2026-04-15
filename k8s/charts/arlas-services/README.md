@@ -53,7 +53,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.extraInitContainers | string | `nil` |  |
 | services.permissions.extraVolumeMounts | string | `nil` |  |
 | services.permissions.extraVolumes | string | `nil` |  |
-| services.permissions.image | string | `"gisaia/arlas-permissions-server:27.0.1"` |  |
+| services.permissions.image | string | `"gisaia/arlas-permissions-server:27.1.4"` |  |
 | services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
@@ -73,7 +73,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.extraInitContainers | string | `nil` |  |
 | services.persistence.extraVolumeMounts | string | `nil` |  |
 | services.persistence.extraVolumes | string | `nil` |  |
-| services.persistence.image | string | `"gisaia/arlas-persistence-server:27.0.1"` |  |
+| services.persistence.image | string | `"gisaia/arlas-persistence-server:27.1.3"` |  |
 | services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
@@ -96,7 +96,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.extraInitContainers | string | `nil` |  |
 | services.server.extraVolumeMounts | string | `nil` |  |
 | services.server.extraVolumes | string | `nil` |  |
-| services.server.image | string | `"gisaia/arlas-server:27.2.0"` |  |
+| services.server.image | string | `"gisaia/arlas-server:27.3.9"` |  |
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |

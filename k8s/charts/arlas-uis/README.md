@@ -67,7 +67,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.extraInitContainers | string | `nil` |  |
 | uis.builder.extraVolumeMounts | string | `nil` |  |
 | uis.builder.extraVolumes | string | `nil` |  |
-| uis.builder.image | string | `"gisaia/arlas-wui-builder:27.1.3"` |  |
+| uis.builder.image | string | `"gisaia/arlas-wui-builder:27.1.4"` |  |
 | uis.builder.imagePullSecrets | list | `[]` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
@@ -85,7 +85,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.extraVolumes | string | `nil` |  |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.15.0"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.15.1"` |  |
 | uis.famWui.imagePullSecrets | list | `[]` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
@@ -96,7 +96,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.hub.extraInitContainers | string | `nil` |  |
 | uis.hub.extraVolumeMounts | string | `nil` |  |
 | uis.hub.extraVolumes | string | `nil` |  |
-| uis.hub.image | string | `"gisaia/arlas-wui-hub:27.1.3"` |  |
+| uis.hub.image | string | `"gisaia/arlas-wui-hub:27.1.4"` |  |
 | uis.hub.imagePullSecrets | list | `[]` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
@@ -113,7 +113,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.wui.extraInitContainers | string | `nil` |  |
 | uis.wui.extraVolumeMounts | string | `nil` |  |
 | uis.wui.extraVolumes | string | `nil` |  |
-| uis.wui.image | string | `"gisaia/arlas-wui:27.1.5"` |  |
+| uis.wui.image | string | `"gisaia/arlas-wui:27.1.6"` |  |
 | uis.wui.imagePullSecrets | list | `[]` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |
