@@ -42,7 +42,7 @@ services:
       options:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
     healthcheck:
-      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9996/admin/healthcheck"]
+      test: ["CMD","java","HttpHealthcheck","http://localhost:9996/admin/healthcheck"]
       interval: 20s
       timeout: 20s
       retries: 20
