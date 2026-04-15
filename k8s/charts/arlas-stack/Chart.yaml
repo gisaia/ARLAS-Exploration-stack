@@ -1,27 +1,27 @@
 apiVersion: v2
 name: arlas-aias
 description: A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
-version: 27.71.0
-appVersion: 27.71.0
+version: 27.72.0
+appVersion: 27.72.0
 dependencies:
   # ARLAS BACKEND DEPENDENCIES
   - name: arlas-services
-    version: 27.71.0
+    version: 27.72.0
     repository: "file://../arlas-services"
     condition: deployment.arlas.services.enabled
   - name: aias-services
-    version: 27.71.0
+    version: 27.72.0
     repository: "file://../aias-services"
     condition: deployment.aias.enabled
   # ARLAS FRONTEND DEPENDENCIES
   - name: arlas-uis
-    version: 27.71.0
+    version: 27.72.0
     repository: "file://../arlas-uis"
     condition: deployment.arlas.uis.enabled
   # THIRD PARTY LOCAL DEPENDENCIES
   - name: titiler
     repository: "file://../titiler"
-    version: 27.71.0
+    version: 27.72.0
     condition: deployment.titiler.enabled
   # THIRD PARTY REMOTE DEPENDENCIES
   - name: elasticsearch
