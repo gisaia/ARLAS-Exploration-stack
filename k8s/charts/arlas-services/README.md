@@ -34,6 +34,7 @@ A Helm Chart to deploy ARLAS Server
 | keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` |  |
 | keycloak.url | string | `"http://172.18.0.2/auth"` |  |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
+| logger.loggingFile | string | `"/tmp/arlas.log"` | Default logging file |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
@@ -53,7 +54,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.extraInitContainers | string | `nil` |  |
 | services.permissions.extraVolumeMounts | string | `nil` |  |
 | services.permissions.extraVolumes | string | `nil` |  |
-| services.permissions.image | string | `"gisaia/arlas-permissions-server:27.1.4"` |  |
+| services.permissions.image | string | `"gisaia/arlas-permissions-server:28.0.0-rc3"` |  |
 | services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
@@ -73,7 +74,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.extraInitContainers | string | `nil` |  |
 | services.persistence.extraVolumeMounts | string | `nil` |  |
 | services.persistence.extraVolumes | string | `nil` |  |
-| services.persistence.image | string | `"gisaia/arlas-persistence-server:27.1.3"` |  |
+| services.persistence.image | string | `"gisaia/arlas-persistence-server:28.0.0-rc3"` |  |
 | services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
@@ -86,9 +87,9 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.serviceName | string | `"arlas-persistence-server"` |  |
 | services.persistence.tolerations | list | `[]` |  |
 | services.persistence.urlPrefix | string | `"/persist"` |  |
-| services.podSecurityContext.fsGroup | int | `1000` |  |
+| services.podSecurityContext.fsGroup | int | `65532` |  |
 | services.podSecurityContext.runAsNonRoot | bool | `true` |  |
-| services.podSecurityContext.runAsUser | int | `1000` |  |
+| services.podSecurityContext.runAsUser | int | `65532` |  |
 | services.server.affinity | object | `{}` |  |
 | services.server.apm | bool | `false` |  |
 | services.server.extraContainers | list | `[]` |  |
@@ -96,7 +97,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.extraInitContainers | string | `nil` |  |
 | services.server.extraVolumeMounts | string | `nil` |  |
 | services.server.extraVolumes | string | `nil` |  |
-| services.server.image | string | `"gisaia/arlas-server:27.3.9"` |  |
+| services.server.image | string | `"gisaia/arlas-server:28.0.0-rc3"` |  |
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |

@@ -471,6 +471,18 @@ titiler:
     limits:
       cpu: 4
       memory: 4Gi
+  podSecurityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
 
 elasticsearch:
   image:

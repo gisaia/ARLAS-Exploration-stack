@@ -1,6 +1,7 @@
 ## Services:
 - [elasticsearch](#service-elasticsearch)
 - [arlas-server](#service-arlas-server)
+- [init-arlas-persistence-server-volume](#service-init-arlas-persistence-server-volume)
 - [arlas-persistence-server](#service-arlas-persistence-server)
 - [arlas-permissions-server](#service-arlas-permissions-server)
 - [arlas-iam-server](#service-arlas-iam-server)
@@ -43,7 +44,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:27.3.9` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:28.0.0-rc3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -80,10 +81,17 @@ List of volumes:
 
 - `${PWD}/conf/arlas-ks.jks:/opt/app/arlas-ks.jks`
 ## File dc/ref-dc-arlas-persistence-server.yaml
+### Service init-arlas-persistence-server-volume
+Image: `alpine`
+
+
+List of volumes:
+
+- `${ARLAS_PERSISTENCE_STORAGE}:/data`
 ### Service arlas-persistence-server
 Description: ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
 
-Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:27.1.3` in `conf/versions.env`
+Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:28.0.0-rc3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -125,7 +133,7 @@ List of volumes:
 ### Service arlas-permissions-server
 Description: ARLAS Permissions is a service for listing user's permissions
 
-Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:27.1.4` in `conf/versions.env`
+Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:28.0.0-rc3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -161,7 +169,7 @@ List of volumes:
 ### Service arlas-iam-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
 
-Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:27.0.2` in `conf/versions.env`
+Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:28.0.0-rc2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -201,7 +209,7 @@ List of volumes:
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.1.1` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:28.0.0-rc.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -218,7 +226,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:27.1.1` in `conf/versi
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.2.0-rc.1` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:28.0.0-rc.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -252,6 +260,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.2.0-rc.1` in `c
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_URL` | `ARLAS_WUI_URL` | `/wui/` |  | `https://${ARLAS_HOST}/wui/` in `conf/arlas_iam.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_BUILDER_LINKS` | `` |  | `'` in `conf/arlas.env` |
+| `ARLAS_TERRAIN` | `ARLAS_TERRAIN` | `` |  | `'{` in `conf/arlas.env` |
 | `ARLAS_ENABLE_ADVANCED_FEATURES` | `ARLAS_ENABLE_ADVANCED_FEATURES` | `false` |  |  |
 | `ARLAS_SERVER_URL` | `ARLAS_SERVER_URL` | `/arlas` |  | `/arlas` in `conf/arlas.env` |
 
@@ -259,7 +268,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:27.2.0-rc.1` in `c
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.2.0-rc.1` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:28.0.0-rc.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -296,7 +305,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:27.2.0-rc.1` in `conf/vers
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:27.2.0-rc.1` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:28.0.0-rc.3` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -387,7 +396,7 @@ List of volumes:
 ### Service airs-server
 Description: AIRS Server is ARLAS Item registration service. It exposes a STAC-T interface for registering item and assets in ARLAS, such as Earth Observation products.
 
-Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.15.1` in `conf/versions.env`
+Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:0.15.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -430,7 +439,7 @@ List of volumes:
 ### Service aproc-proc
 Description: ARLAS PROC is a worker, based on celery. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.15.1` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:0.15.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -499,7 +508,7 @@ List of volumes:
 ### Service aproc-service
 Description: ARLAS PROC is the OGC API Processes service. Used for ingesting and downloading EO products.
 
-Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.15.1` in `conf/versions.env`
+Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:0.15.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -565,7 +574,7 @@ List of volumes:
 ### Service arlas-fam-wui
 Description: ARLAS FAM is the ARLAS File and Archive Management interface. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.15.1` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.15.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -608,7 +617,7 @@ Image: `ARLAS_VERSION_FAM_WUI` with `gisaia/arlas-fam-wui:0.15.1` in `conf/versi
 ### Service fam-service
 Description: ARLAS FAM is the ARLAS File and Archive Management service. It allows exploration and registration of archives found in a directory.
 
-Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.15.1` in `conf/versions.env`
+Image: `ARLAS_VERSION_FAM` with `gisaia/fam:0.15.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -659,7 +668,7 @@ List of volumes:
 ### Service agate
 Description: AGATE is a forward authorization service for accessing resources such as images
 
-Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.15.1` in `conf/versions.env`
+Image: `ARLAS_VERSION_AGATE` with `gisaia/agate:0.15.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |

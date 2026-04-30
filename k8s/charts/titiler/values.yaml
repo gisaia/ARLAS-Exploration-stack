@@ -3,7 +3,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/developmentseed/titiler
-  tag: 0.22.4
+  tag: ""
   pullPolicy: IfNotPresent
   command: "uvicorn"
   args:
@@ -13,7 +13,7 @@ image:
     - "--port"
     - "8000"
     - "--workers"
-    - "8"
+    - "4"
 
 nameOverride: ""
 fullnameOverride: ""

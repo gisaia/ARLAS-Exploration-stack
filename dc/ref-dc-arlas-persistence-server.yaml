@@ -1,6 +1,15 @@
 services:
+  init-arlas-persistence-server-volume:
+    image: alpine
+    command: sh -c "chown -R 65532:65532 /data && tail -f /dev/null"
+    volumes:
+      - ${ARLAS_PERSISTENCE_STORAGE}:/data
+
   arlas-persistence-server: # ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
     image: ${ARLAS_PERSISTENCE_VERSION}
+    user: 65532:65532
+    depends_on:
+      - init-arlas-persistence-server-volume
     platform: linux/x86_64
     container_name: arlas-persistence-server
     restart: ${ARLAS_PERSISTENCE_RESTART_STRATEGY:-always}
