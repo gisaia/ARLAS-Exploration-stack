@@ -136,12 +136,26 @@ Four services are exposed with an ingress:
 - `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
 - `minio`, which serves as the object store, default DNS is `minio.arlas.k8s`
 
-In a test environment, you will need to link the ingress external IP with the domain names of the services. You can for instance add them in /etc/hosts:
+In a Linux test environment, you will need to link the ingress external IP with the domain names of the services. You can for instance add them in /etc/hosts:
 
 ```
 172.18.0.10	keycloak.arlas.k8s
 172.18.0.10	elastic.arlas.k8s
 172.18.0.10	site.arlas.k8s
+172.18.0.10	minio.arlas.k8s
+```
+
+In a MacOs test environment keep local host and we will use port forwarding to access applications :
+
+```
+127.0.0.1	keycloak.arlas.k8s
+127.0.0.1	elastic.arlas.k8s
+127.0.0.1	site.arlas.k8s
+127.0.0.1	minio.arlas.k8s
+```
+and run 
+```shell
+sudo kubectl port-forward -n default service/ingress-nginx-controller 80:80 443:443
 ```
 
 The arlas-ingress IP is obtained with:
