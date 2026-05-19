@@ -299,27 +299,10 @@ services:
           private:
             - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
               part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
-        cog_preview:
-          # -- Name of the header containing the JWT token for COG preview access
-          jwt_name: authorization
-          # -- Locations where to find the JWT token for COG preview access
-          jwt_location:
-            - headers
-            - query_params
-          # -- Patterns for public COG preview access
-          public:
-            - pattern: (/cog/preview)(.*)
-              part: path
-        cog_statistics:
-          # -- Name of the header containing the JWT token for COG statistics access
-          jwt_name: authorization
-          # -- Locations where to find the JWT token for COG statistics access
-          jwt_location:
-            - headers
-            - query_params
+        titiler_public:
           # -- Patterns for public COG statistics access
           public:
-            - pattern: (/cog/statistics)(.*)
+            - pattern: (/colorMaps/)(.*)
               part: path
 
   aproc:

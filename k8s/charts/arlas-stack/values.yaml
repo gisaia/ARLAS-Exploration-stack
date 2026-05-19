@@ -160,11 +160,18 @@ deployment:
         ingress:
           # -- Should the chart deploy titiler ingress
           enabled: true
-          annotations:
-            # -- Annotations for Titiler ingress
-            nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"
-            # -- Annotations for Titiler ingress
-            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+          private:
+            annotations:
+              # -- Annotations for Titiler ingress
+              nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"
+              # -- Annotations for Titiler ingress
+              nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
+          public:
+            annotations:
+              # -- Annotations for Titiler ingress
+              nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/titiler_public"
+              # -- Annotations for Titiler ingress
+              nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
 
   elasticsearch:
     # -- Should the chart deploy elasticsearch
@@ -607,7 +614,7 @@ minio:
     rootUser: *arlasAppMinioLogin
     rootPassword: *arlasAppMinioPassword
   # @ignored  
-  resourcesPreset: medium
+  resourcesPreset: large
   # @ignored  
   console:
     image:
