@@ -43,7 +43,7 @@ services:
     networks:
       - arlas-net
     healthcheck:
-      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9998/admin/healthcheck"]
+      test: ["CMD","java","HttpHealthcheck","http://localhost:9998/admin/healthcheck"]
       interval: 10s
       timeout: 10s
       retries: 10
