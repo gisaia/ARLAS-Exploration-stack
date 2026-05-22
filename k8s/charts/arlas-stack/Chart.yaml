@@ -42,5 +42,5 @@ dependencies:
     condition: deployment.redis.enabled
   - name: keycloak
     repository: https://charts.bitnami.com/bitnami
-    version: 20.0.1
+    version: 25.2.0
     condition: deployment.keycloak.enabled

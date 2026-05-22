@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 27.72.0](https://img.shields.io/badge/Version-27.72.0-informational?style=flat-square) ![AppVersion: 0.15.2](https://img.shields.io/badge/AppVersion-0.15.2-informational?style=flat-square)
+![Version: 27.72.0](https://img.shields.io/badge/Version-27.72.0-informational?style=flat-square) ![AppVersion: 0.15.3](https://img.shields.io/badge/AppVersion-0.15.3-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
@@ -49,12 +49,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.configuration.services.cog.jwt_location | list | `["headers","query_params"]` | Locations where to find the JWT token for COG access |
 | services.agate.configuration.services.cog.jwt_name | string | `"authorization"` | Name of the header containing the JWT token for COG access |
 | services.agate.configuration.services.cog.private | list | `[{"part":"query.url.url.path","pattern":"(/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)"}]` | Patterns for private COG assets |
-| services.agate.configuration.services.cog_preview.jwt_location | list | `["headers","query_params"]` | Locations where to find the JWT token for COG preview access |
-| services.agate.configuration.services.cog_preview.jwt_name | string | `"authorization"` | Name of the header containing the JWT token for COG preview access |
-| services.agate.configuration.services.cog_preview.public | list | `[{"part":"path","pattern":"(/cog/preview)(.*)"}]` | Patterns for public COG preview access |
-| services.agate.configuration.services.cog_statistics.jwt_location | list | `["headers","query_params"]` | Locations where to find the JWT token for COG statistics access |
-| services.agate.configuration.services.cog_statistics.jwt_name | string | `"authorization"` | Name of the header containing the JWT token for COG statistics access |
-| services.agate.configuration.services.cog_statistics.public | list | `[{"part":"path","pattern":"(/cog/statistics)(.*)"}]` | Patterns for public COG statistics access |
+| services.agate.configuration.services.titiler_public.public | list | `[{"part":"path","pattern":"(/colorMaps/)(.*)"}]` | Patterns for public COG statistics access |
 | services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs"` | Keys endpoint |
 | services.agate.configuration.urbac.jwtAudience | string | `"arlas-backend"` | Expected audience in the JWT token |
 | services.agate.configuration.urbac.jwtHeader | string | `"authorization"` | URBAC HTTP header containing the JWT token of the original request |
@@ -66,7 +61,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.extraInitContainers | string | `nil` |  |
 | services.agate.extraVolumeMounts | string | `nil` |  |
 | services.agate.extraVolumes | string | `nil` |  |
-| services.agate.image | string | `"gisaia/agate:0.15.2"` |  |
+| services.agate.image | string | `"gisaia/agate:0.15.3"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
@@ -93,7 +88,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.extraInitContainers | list | `[]` |  |
 | services.airs.extraVolumeMounts | list | `[]` |  |
 | services.airs.extraVolumes | list | `[]` |  |
-| services.airs.image | string | `"gisaia/airs:0.15.2"` |  |
+| services.airs.image | string | `"gisaia/airs:0.15.3"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
@@ -213,7 +208,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.extraInitContainers | string | `nil` |  |
 | services.aproc.service.extraVolumeMounts | string | `nil` |  |
 | services.aproc.service.extraVolumes | string | `nil` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.15.2"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.15.3"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
@@ -228,7 +223,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
 | services.aproc.worker.extraVolumeMounts | string | `nil` |  |
 | services.aproc.worker.extraVolumes | string | `nil` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.15.2"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.15.3"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
@@ -242,7 +237,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.extraInitContainers | string | `nil` |  |
 | services.fam.extraVolumeMounts | string | `nil` |  |
 | services.fam.extraVolumes | string | `nil` |  |
-| services.fam.image | string | `"gisaia/fam:0.15.2"` |  |
+| services.fam.image | string | `"gisaia/fam:0.15.3"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |

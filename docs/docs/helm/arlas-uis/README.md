@@ -67,7 +67,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.extraInitContainers | string | `nil` |  |
 | uis.builder.extraVolumeMounts | string | `nil` |  |
 | uis.builder.extraVolumes | string | `nil` |  |
-| uis.builder.image | string | `"gisaia/arlas-wui-builder:28.0.0-rc.3"` |  |
+| uis.builder.image | string | `"gisaia/arlas-wui-builder:28.0.0"` |  |
 | uis.builder.imagePullSecrets | list | `[]` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
@@ -86,7 +86,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.extraVolumes | string | `nil` |  |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.15.2"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.15.3"` |  |
 | uis.famWui.imagePullSecrets | list | `[]` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
@@ -97,7 +97,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.hub.extraInitContainers | string | `nil` |  |
 | uis.hub.extraVolumeMounts | string | `nil` |  |
 | uis.hub.extraVolumes | string | `nil` |  |
-| uis.hub.image | string | `"gisaia/arlas-wui-hub:28.0.0-rc.3"` |  |
+| uis.hub.image | string | `"gisaia/arlas-wui-hub:28.0.0"` |  |
 | uis.hub.imagePullSecrets | list | `[]` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
@@ -114,7 +114,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.wui.extraInitContainers | string | `nil` |  |
 | uis.wui.extraVolumeMounts | string | `nil` |  |
 | uis.wui.extraVolumes | string | `nil` |  |
-| uis.wui.image | string | `"gisaia/arlas-wui:27.2.0-rc.3"` |  |
+| uis.wui.image | string | `"gisaia/arlas-wui:28.0.0"` |  |
 | uis.wui.imagePullSecrets | list | `[]` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |

@@ -13,7 +13,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | file://../arlas-uis | arlas-uis | 27.72.0 |
 | file://../titiler | titiler | 27.72.0 |
 | https://charts.bitnami.com/bitnami | elasticsearch | 22.0.4 |
-| https://charts.bitnami.com/bitnami | keycloak | 20.0.1 |
+| https://charts.bitnami.com/bitnami | keycloak | 25.2.0 |
 | https://charts.bitnami.com/bitnami | minio | 14.10.5 |
 | https://charts.bitnami.com/bitnami | rabbitmq | 16.0.11 |
 | https://charts.bitnami.com/bitnami | redis | 21.2.13 |
@@ -72,7 +72,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | arlas-services.logger.loggingLevel | string | `"INFO"` | Logging level |
 | arlas-services.protocol | string | `"https"` | Do not change: value defined in global section |
 | arlas-services.services.mountCertificate | bool | `true` | __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc. |
-| arlas-uis.authent.issuer | string | `"https://keycloak.arlas.k8s/auth/realms/arlas"` | Do not change: value defined in global section |
+| arlas-uis.authent.issuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | Do not change: value defined in global section |
 | arlas-uis.authent.logoutUrl | string | `nil` | Do not change: value defined in global section |
 | arlas-uis.basemap | object | `{"storageSize":"50Mi"}` | __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap |
 | arlas-uis.defaultStorageClass | string | `"standard-retain"` | Do not change: value defined in global section |
@@ -100,9 +100,11 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.aias.services.minio.ingress.enabled | bool | `true` | Should the chart deploy minio ingress |
 | deployment.aias.services.minio.port | int | `9000` | Minio service port for AIAS |
 | deployment.aias.services.minio.serviceName | string | `"arlas-stack-minio"` | Minio service configuration for AIAS |
-| deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
-| deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.ingress.enabled | bool | `true` | Should the chart deploy titiler ingress |
+| deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
+| deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` | Annotations for Titiler ingress |
+| deployment.aias.services.titiler.ingress.public.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
+| deployment.aias.services.titiler.ingress.public.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/titiler_public"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.port | int | `8000` | Titiler service port for AIAS |
 | deployment.aias.services.titiler.serviceName | string | `"arlas-stack-titiler"` | Titiler service configuration for AIAS |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
@@ -126,7 +128,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
 | elasticsearch.image.repository | string | `"bitnamilegacy/elasticsearch"` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
-| global.authIssuer | string | `"https://keycloak.arlas.k8s/auth/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
+| global.authIssuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
 | global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
 | global.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
 | global.defaultStorageClass | string | `"standard-retain"` | __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy. |
@@ -136,7 +138,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.elasticPassword | string | `"secret4elastic"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.ingressClassName | string | `"nginx"` | __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used. |
 | global.keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` | __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm  |
-| global.keycloak.url | string | `"https://keycloak.arlas.k8s/auth"` | __MUST BE CONFIGURED:__ Keycloak URL |
+| global.keycloak.url | string | `"https://keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ Keycloak URL |
 | global.keycloakDnsDomain | string | `"keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment |
 | global.keycloakLogin | string | `"admin"` | Keycloak admin login for keycloak deployment (for test only) |
 | global.keycloakPassword | string | `"secret4keycloak"` | __MUST BE CONFIGURED:__ Keycloak admin password  |
@@ -150,7 +152,10 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.rabbitMQLogin | string | `"admin"` | RabbitMQ Login |
 | global.rabbitMQPassword | string | `"secret4rabbitmq"` | __MUST BE CONFIGURED:__ RabbitMQ Password |
 | global.redisPassword | string | `"secret4redis"` | __MUST BE CONFIGURED:__ redis Password |
+| keycloak.httpsEnabled | bool | `true` |  |
+| keycloak.httpsPort | int | `8443` |  |
 | keycloak.image.repository | string | `"bitnamilegacy/keycloak"` | Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead. |
+| keycloak.proxyHeaders | string | `"xforwarded"` |  |
 | minio.image.repository | string | `"bitnamilegacy/minio"` | Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead. |
 | rabbitmq.image.repository | string | `"bitnamilegacy/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
 | redis.image.repository | string | `"bitnamilegacy/redis"` | Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead. |

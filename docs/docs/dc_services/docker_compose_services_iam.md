@@ -35,7 +35,7 @@ List of volumes:
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:28.0.0-rc3` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -82,7 +82,7 @@ List of volumes:
 ### Service arlas-persistence-server
 Description: ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
 
-Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:28.0.0-rc3` in `conf/versions.env`
+Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -124,7 +124,7 @@ List of volumes:
 ### Service arlas-permissions-server
 Description: ARLAS Permissions is a service for listing user's permissions
 
-Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:28.0.0-rc3` in `conf/versions.env`
+Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -160,7 +160,7 @@ List of volumes:
 ### Service arlas-iam-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
 
-Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:28.0.0-rc2` in `conf/versions.env`
+Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:28.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -170,6 +170,7 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:28.0.0-rc2` in `
 | `ARLAS_AUTH_INIT_PASSWORD` | `ARLAS_AUTH_INIT_PASSWORD` | `` |  | `admin` in `conf/arlas_iam.env` |
 | `ARLAS_CACHE_TIMEOUT` | `ARLAS_CACHE_TIMEOUT` | `5` |  |  |
 | `ARLAS_IAM_CACHE_FACTORY_CLASS` | `ARLAS_IAM_CACHE_FACTORY_CLASS` | `io.arlas.commons.cache.NoCacheFactory` |  |  |
+| `ARLAS_IAM_HIBERNATE_HBM2DDL` | `ARLAS_IAM_HIBERNATE_HBM2DDL` | `create-only` |  | `create-only` in `conf/arlas_iam.env` |
 | `ARLAS_IAM_HIBERNATE_PASSWORD` | `POSTGRES_PASSWORD` | `` |  | `not_a_secret` in `conf/postgres.env` |
 | `ARLAS_IAM_HIBERNATE_URL` | `ARLAS_IAM_HIBERNATE_URL` | `jdbc:postgresql://db:5432/arlas` |  |  |
 | `ARLAS_IAM_HIBERNATE_USER` | `POSTGRES_USER` | `` |  | `pg-user` in `conf/postgres.env` |
@@ -187,7 +188,7 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:28.0.0-rc2` in `
 | `ARLAS_SMTP_RESET_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_SMTP_USERNAME` | `ARLAS_SMTP_USERNAME` | `` |  | empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_VERIFY_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
-| `JDK_JAVA_OPTIONS` | `ARLAS_IAM_JDK_JAVA_OPTIONS` | `` |  | `"-Djavax.net.ssl.trustStore=/opt/app/truststore.p1 ...` in `conf/arlas_iam.env` |
+| `JDK_JAVA_OPTIONS` | `ARLAS_IAM_JDK_JAVA_OPTIONS` | `` |  | `"-Xmx1g -XX:+ExitOnOutOfMemoryError -Djavax.net.ss ...` in `conf/arlas_iam.env` |
 | `ARLAS_AUTH_KEYCLOAK_REALM` | `ARLAS_AUTH_KEYCLOAK_REALM` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_SECRET` | `ARLAS_AUTH_KEYCLOAK_SECRET` | `` |  |  |
@@ -200,7 +201,7 @@ List of volumes:
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:28.0.0-rc.3` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -217,7 +218,7 @@ Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:28.0.0-rc.3` in `conf/
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:28.0.0-rc.3` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -259,7 +260,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:28.0.0-rc.3` in `c
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:28.0.0-rc.3` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -296,7 +297,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:28.0.0-rc.3` in `conf/vers
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:28.0.0-rc.3` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |

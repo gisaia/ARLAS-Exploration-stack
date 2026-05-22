@@ -24,10 +24,10 @@ global:
     # -- __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm 
     secret: &arlasAppKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
     # -- __MUST BE CONFIGURED:__ Keycloak URL
-    url: &arlasAppKeycloakUrl https://keycloak.arlas.k8s/auth
+    url: &arlasAppKeycloakUrl https://keycloak.arlas.k8s
 
   # -- __MUST BE CONFIGURED:__ The issuer's uri
-  authIssuer: &arlasAppAuthIssuer https://keycloak.arlas.k8s/auth/realms/arlas 
+  authIssuer: &arlasAppAuthIssuer https://keycloak.arlas.k8s/realms/arlas 
   # -- The logout URL to be used
   logoutUrl: &arlasAppLogoutUrl 
 
@@ -650,7 +650,9 @@ keycloak:
       value: "--import-realm"
 
   # @ignored  
-  httpRelativePath: /auth/
+  httpRelativePath: /
+  httpsEnabled: true
+  httpsPort: 8443
   # @ignored  
   resourcesPreset: medium
   # @ignored  
@@ -683,6 +685,9 @@ keycloak:
     servicePort: 8080
     annotations:
       # -- Default nginx ingress has default proxy buffers that are too small for keycloak headers.
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffering: "enabled"
       nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
       nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
 
@@ -695,6 +700,7 @@ keycloak:
     # end-of-block   
   # @ignored  
   proxy: edge
+  proxyHeaders: "xforwarded"
   # @ignored  
   postgresql:
     image:
