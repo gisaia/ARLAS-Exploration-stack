@@ -145,7 +145,7 @@ services:
         # -- URBAC HTTP header containing the JWT token of the original request
         jwtHeader: authorization
         # -- Keys endpoint
-        jwks_uri: https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs
+        jwks_uri: https://keycloak.arlas.k8s/realms/arlas/protocol/openid-connect/certs
         # -- Whether to verify the JWT signature or not
         verifyJwt: true
         # -- Whether to verify the SSL certificate of the OpenID Provider or not

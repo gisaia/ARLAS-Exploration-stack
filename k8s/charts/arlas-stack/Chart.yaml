@@ -25,6 +25,7 @@ dependencies:
     condition: deployment.titiler.enabled
   # THIRD PARTY REMOTE DEPENDENCIES
   - name: elasticsearch
+    alias: elasticsearch
     repository: https://charts.bitnami.com/bitnami
     version: 22.0.4
     condition: deployment.elasticsearch.enabled

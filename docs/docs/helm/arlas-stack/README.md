@@ -32,7 +32,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.protocol | string | `"https"` | __Do not change:__ value defined in global section |
 | aias-services.services.agate.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS search URL used by Agate to check whether an item exists |
 | aias-services.services.agate.configuration.methodHeader | string | `"x-original-method"` | Headers used by the ingress controller to pass the original method information to Agate |
-| aias-services.services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs"` | __MUST BE CONFIGURED:__ Change to the URI of the JWKS endpoint of your deployment. |
+| aias-services.services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/realms/arlas/protocol/openid-connect/certs"` | __MUST BE CONFIGURED:__ Change to the URI of the JWKS endpoint of your deployment. |
 | aias-services.services.agate.configuration.urbac.jwtAudience | string | `"arlas-backend"` | Name of the token audience |
 | aias-services.services.agate.configuration.urbac.verifySsl | bool | `false` | __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified |
 | aias-services.services.agate.configuration.urlHeader | string | `"x-auth-request-redirect"` | Headers used by the ingress controller to pass the original request information to Agate |

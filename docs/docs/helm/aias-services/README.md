@@ -50,7 +50,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.configuration.services.cog.jwt_name | string | `"authorization"` | Name of the header containing the JWT token for COG access |
 | services.agate.configuration.services.cog.private | list | `[{"part":"query.url.url.path","pattern":"(/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)"}]` | Patterns for private COG assets |
 | services.agate.configuration.services.titiler_public.public | list | `[{"part":"path","pattern":"(/colorMaps/)(.*)"}]` | Patterns for public COG statistics access |
-| services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs"` | Keys endpoint |
+| services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/realms/arlas/protocol/openid-connect/certs"` | Keys endpoint |
 | services.agate.configuration.urbac.jwtAudience | string | `"arlas-backend"` | Expected audience in the JWT token |
 | services.agate.configuration.urbac.jwtHeader | string | `"authorization"` | URBAC HTTP header containing the JWT token of the original request |
 | services.agate.configuration.urbac.verifyJwt | bool | `true` | Whether to verify the JWT signature or not |
