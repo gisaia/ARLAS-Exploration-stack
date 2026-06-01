@@ -8,6 +8,7 @@ services:
   servicePort: 8000
   serviceType: ClusterIP
   mountCertificate: false
+
   podSecurityContext:
     fsGroup: 65532
     runAsNonRoot: true
@@ -139,9 +140,6 @@ elastic:
   sniffing: false
   ssl:
     enabled: true
-  apm:
-    secret:
-    url:
   nodes: elasticsearch:9200
 
 persistence:
