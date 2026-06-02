@@ -51,6 +51,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4.1.4
+    - name: Set hostname
+      run: ./scripts/update_hostname.sh
     - name: Start iam stack
       run: ./start.sh iam
     - name: Run endpoints tests

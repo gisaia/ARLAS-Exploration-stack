@@ -29,3 +29,4 @@ openssl pkcs12 -export \
   -out conf/truststore.p12 \
   -name arlas-ks \
   -passout "pass:arlaspassword"
+chmod 755 conf/truststore.p12
