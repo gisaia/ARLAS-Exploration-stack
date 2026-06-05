@@ -16,8 +16,6 @@ spec:
       labels:
         {{- include "arlasServices.labels" . | nindent 8 }}
         app.kubernetes.io/component: {{ .Values.services.persistence.serviceName }}
-      annotations:
-        co.elastic.logs/enabled: {{ .Values.services.server.apm | quote }}
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -66,7 +64,7 @@ spec:
 
             # JVM CONFIG
             - name: JDK_JAVA_OPTIONS
-              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }} {{- if .Values.services.persistence.apm }}-javaagent:/opt/app/elastic-apm-agent.jar{{- end }}"
+              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }}"
 
             # ENDPOINT CONFIGURATION
             - name: ARLAS_PERSISTENCE_APP_PATH

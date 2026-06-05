@@ -91,6 +91,7 @@ def fixture_cli_confs():
 def fixture_init():
     USER_TO_UID.clear()
     for index in INDICES:
+        print(f"Init {index}")
         if index not in list(map(lambda arr: arr[0], Service.list_indices(USER_ADMIN))):
             mapping = make_mapping(
                 file="sample/sample.json",
@@ -104,6 +105,8 @@ def fixture_init():
                 index=index,
                 mapping=mapping)
             Service.index_hits(USER_ADMIN, index, "sample/sample.json")
+        else:
+            print(f"{index} already exists")
     os.system("docker exec db psql arlas -c \"" + SQL_INIT.replace(os.linesep, " ") + "\" > /dev/null")
     collections = Service.list_collections(USER_ADMIN)[1:]
     for collection in collections:

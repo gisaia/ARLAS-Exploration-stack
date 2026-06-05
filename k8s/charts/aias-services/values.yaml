@@ -18,7 +18,7 @@ services:
     allowPrivilegeEscalation: false
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.15.1
+    image: gisaia/airs:0.15.4
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers: []
@@ -77,7 +77,7 @@ services:
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.15.1
+    image: gisaia/fam:0.15.4
     # -- Extra environment variables for the fam container
     imagePullSecrets: []
     extraContainers: []
@@ -106,7 +106,7 @@ services:
 
   agate: 
     serviceName: arlas-agate
-    image: gisaia/agate:0.15.1
+    image: gisaia/agate:0.15.4
     # -- Extra environment variables for the agate container
     imagePullSecrets: []
     extraContainers: []
@@ -145,7 +145,7 @@ services:
         # -- URBAC HTTP header containing the JWT token of the original request
         jwtHeader: authorization
         # -- Keys endpoint
-        jwks_uri: https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs
+        jwks_uri: https://keycloak.arlas.k8s/realms/arlas/protocol/openid-connect/certs
         # -- Whether to verify the JWT signature or not
         verifyJwt: true
         # -- Whether to verify the SSL certificate of the OpenID Provider or not
@@ -299,33 +299,16 @@ services:
           private:
             - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
               part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
-        cog_preview:
-          # -- Name of the header containing the JWT token for COG preview access
-          jwt_name: authorization
-          # -- Locations where to find the JWT token for COG preview access
-          jwt_location:
-            - headers
-            - query_params
-          # -- Patterns for public COG preview access
-          public:
-            - pattern: (/cog/preview)(.*)
-              part: path
-        cog_statistics:
-          # -- Name of the header containing the JWT token for COG statistics access
-          jwt_name: authorization
-          # -- Locations where to find the JWT token for COG statistics access
-          jwt_location:
-            - headers
-            - query_params
+        titiler_public:
           # -- Patterns for public COG statistics access
           public:
-            - pattern: (/cog/statistics)(.*)
+            - pattern: (/colorMaps/)(.*)
               part: path
 
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.15.1
+      image: gisaia/aproc-service:0.15.4
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -352,7 +335,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.15.1
+      image: gisaia/aproc-proc:0.15.4
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:

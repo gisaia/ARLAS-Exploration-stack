@@ -1,6 +1,6 @@
-ARLAS Exploration Stack version 27.72.0:
+ARLAS Exploration Stack version 28.0.0.0:
  
- - ARLAS Server version : 27.3.9
- - ARLAS WUI version : 27.1.6
- - AIAS version : 0.15.1
- - TiTiler version : 0.22.4
+ - ARLAS Server version : 28.0.0-rc10
+ - ARLAS WUI version : 28.0.0
+ - AIAS version : 0.15.4
+ - TiTiler version : 

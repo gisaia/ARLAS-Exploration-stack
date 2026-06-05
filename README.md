@@ -32,3 +32,5 @@ Generate the chart docs:
 ```shell
 helm-docs -c k8s/charts -u 
 ```
+
+If the EO Mapping changes, run `k8s/scripts/create_configmaps_for_eo_mapping.sh` script in order to update the configmap.

@@ -1,6 +1,6 @@
 # arlas-aias
 
-![Version: 27.72.0](https://img.shields.io/badge/Version-27.72.0-informational?style=flat-square) ![AppVersion: 27.72.0](https://img.shields.io/badge/AppVersion-27.72.0-informational?style=flat-square)
+![Version: 28.0.0.0](https://img.shields.io/badge/Version-28.0.0.0-informational?style=flat-square) ![AppVersion: 28.0.0.0](https://img.shields.io/badge/AppVersion-28.0.0.0-informational?style=flat-square)
 
 A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
@@ -8,12 +8,12 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../aias-services | aias-services | 27.72.0 |
-| file://../arlas-services | arlas-services | 27.72.0 |
-| file://../arlas-uis | arlas-uis | 27.72.0 |
-| file://../titiler | titiler | 27.72.0 |
+| file://../aias-services | aias-services | 28.0.0.0 |
+| file://../arlas-services | arlas-services | 28.0.0.0 |
+| file://../arlas-uis | arlas-uis | 28.0.0.0 |
+| file://../titiler | titiler | 28.0.0.0 |
 | https://charts.bitnami.com/bitnami | elasticsearch | 22.0.4 |
-| https://charts.bitnami.com/bitnami | keycloak | 20.0.1 |
+| https://charts.bitnami.com/bitnami | keycloak | 25.2.0 |
 | https://charts.bitnami.com/bitnami | minio | 14.10.5 |
 | https://charts.bitnami.com/bitnami | rabbitmq | 16.0.11 |
 | https://charts.bitnami.com/bitnami | redis | 21.2.13 |
@@ -32,7 +32,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.protocol | string | `"https"` | __Do not change:__ value defined in global section |
 | aias-services.services.agate.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS search URL used by Agate to check whether an item exists |
 | aias-services.services.agate.configuration.methodHeader | string | `"x-original-method"` | Headers used by the ingress controller to pass the original method information to Agate |
-| aias-services.services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/auth/realms/arlas/protocol/openid-connect/certs"` | __MUST BE CONFIGURED:__ Change to the URI of the JWKS endpoint of your deployment. |
+| aias-services.services.agate.configuration.urbac.jwks_uri | string | `"https://keycloak.arlas.k8s/realms/arlas/protocol/openid-connect/certs"` | __MUST BE CONFIGURED:__ Change to the URI of the JWKS endpoint of your deployment. |
 | aias-services.services.agate.configuration.urbac.jwtAudience | string | `"arlas-backend"` | Name of the token audience |
 | aias-services.services.agate.configuration.urbac.verifySsl | bool | `false` | __MUST BE CONFIGURED:__ Change to true in production or if certificate can be verified |
 | aias-services.services.agate.configuration.urlHeader | string | `"x-auth-request-redirect"` | Headers used by the ingress controller to pass the original request information to Agate |
@@ -72,7 +72,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | arlas-services.logger.loggingLevel | string | `"INFO"` | Logging level |
 | arlas-services.protocol | string | `"https"` | Do not change: value defined in global section |
 | arlas-services.services.mountCertificate | bool | `true` | __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc. |
-| arlas-uis.authent.issuer | string | `"https://keycloak.arlas.k8s/auth/realms/arlas"` | Do not change: value defined in global section |
+| arlas-uis.authent.issuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | Do not change: value defined in global section |
 | arlas-uis.authent.logoutUrl | string | `nil` | Do not change: value defined in global section |
 | arlas-uis.basemap | object | `{"storageSize":"50Mi"}` | __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap |
 | arlas-uis.defaultStorageClass | string | `"standard-retain"` | Do not change: value defined in global section |
@@ -100,9 +100,11 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.aias.services.minio.ingress.enabled | bool | `true` | Should the chart deploy minio ingress |
 | deployment.aias.services.minio.port | int | `9000` | Minio service port for AIAS |
 | deployment.aias.services.minio.serviceName | string | `"arlas-stack-minio"` | Minio service configuration for AIAS |
-| deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
-| deployment.aias.services.titiler.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.ingress.enabled | bool | `true` | Should the chart deploy titiler ingress |
+| deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
+| deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` | Annotations for Titiler ingress |
+| deployment.aias.services.titiler.ingress.public.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
+| deployment.aias.services.titiler.ingress.public.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/titiler_public"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.port | int | `8000` | Titiler service port for AIAS |
 | deployment.aias.services.titiler.serviceName | string | `"arlas-stack-titiler"` | Titiler service configuration for AIAS |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
@@ -125,8 +127,28 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
+| elasticsearch.copyTlsCerts.image.repository | string | `"bitnamilegacy/os-shell"` |  |
 | elasticsearch.image.repository | string | `"bitnamilegacy/elasticsearch"` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
-| global.authIssuer | string | `"https://keycloak.arlas.k8s/auth/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
+| elasticsearch.kibana.elasticsearch.security.auth.createSystemUser | bool | `true` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.elasticsearchPasswordSecret | string | `"arlas-stack-elasticsearch"` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.enabled | bool | `true` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.kibanaPassword | string | `"secret4elastic"` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.kibanaUsername | string | `"elastic"` |  |
+| elasticsearch.kibana.elasticsearch.security.tls.enabled | bool | `true` |  |
+| elasticsearch.kibana.elasticsearch.security.tls.existingSecret | string | `"arlas-stack-elasticsearch-master-crt"` |  |
+| elasticsearch.kibana.elasticsearch.security.tls.usePemCerts | bool | `true` |  |
+| elasticsearch.kibana.image.repository | string | `"bitnamilegacy/kibana"` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
+| elasticsearch.kibana.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
+| elasticsearch.kibana.ingress.annotations."nginx.ingress.kubernetes.io/backend-protocol" | string | `"HTTP"` |  |
+| elasticsearch.kibana.ingress.enabled | bool | `true` |  |
+| elasticsearch.kibana.ingress.hostname | string | `"kibana.arlas.k8s"` |  |
+| elasticsearch.kibana.ingress.ingressClassName | string | `"nginx"` |  |
+| elasticsearch.kibana.ingress.tls | bool | `false` |  |
+| elasticsearch.kibana.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch.sysctl.image.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch.sysctlImage.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` |  |
+| global.authIssuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
 | global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
 | global.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
 | global.defaultStorageClass | string | `"standard-retain"` | __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy. |
@@ -134,12 +156,14 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.elasticDnsDomain | string | `"elastic.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment |
 | global.elasticLogin | string | `"elastic"` | Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.elasticPassword | string | `"secret4elastic"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch |
+| global.enableKibana | bool | `true` |  |
 | global.ingressClassName | string | `"nginx"` | __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used. |
 | global.keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` | __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm  |
-| global.keycloak.url | string | `"https://keycloak.arlas.k8s/auth"` | __MUST BE CONFIGURED:__ Keycloak URL |
+| global.keycloak.url | string | `"https://keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ Keycloak URL |
 | global.keycloakDnsDomain | string | `"keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment |
 | global.keycloakLogin | string | `"admin"` | Keycloak admin login for keycloak deployment (for test only) |
 | global.keycloakPassword | string | `"secret4keycloak"` | __MUST BE CONFIGURED:__ Keycloak admin password  |
+| global.kibanaDnsDomain | string | `"kibana.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing kibana for ARLAS deployment |
 | global.logoutUrl | string | `nil` | The logout URL to be used |
 | global.minioDnsDomain | string | `"minio.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment |
 | global.minioLogin | string | `"minioadmin"` | Minio login for minio itself and the services that are connecting to minio |
@@ -150,15 +174,26 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.rabbitMQLogin | string | `"admin"` | RabbitMQ Login |
 | global.rabbitMQPassword | string | `"secret4rabbitmq"` | __MUST BE CONFIGURED:__ RabbitMQ Password |
 | global.redisPassword | string | `"secret4redis"` | __MUST BE CONFIGURED:__ redis Password |
+| keycloak.httpsEnabled | bool | `true` |  |
+| keycloak.httpsPort | int | `8443` |  |
 | keycloak.image.repository | string | `"bitnamilegacy/keycloak"` | Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead. |
+| keycloak.proxyHeaders | string | `"xforwarded"` |  |
 | minio.image.repository | string | `"bitnamilegacy/minio"` | Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead. |
 | rabbitmq.image.repository | string | `"bitnamilegacy/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
 | redis.image.repository | string | `"bitnamilegacy/redis"` | Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead. |
+| titiler.podSecurityContext.fsGroup | int | `1001` |  |
+| titiler.podSecurityContext.runAsNonRoot | bool | `true` |  |
+| titiler.podSecurityContext.runAsUser | int | `1001` |  |
 | titiler.replicaCount | int | `1` |  |
 | titiler.resources.limits.cpu | int | `4` |  |
 | titiler.resources.limits.memory | string | `"4Gi"` |  |
 | titiler.resources.requests.cpu | float | `0.1` |  |
 | titiler.resources.requests.memory | string | `"1Gi"` |  |
+| titiler.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| titiler.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| titiler.securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| titiler.securityContext.runAsNonRoot | bool | `true` |  |
+| titiler.securityContext.runAsUser | int | `1001` |  |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

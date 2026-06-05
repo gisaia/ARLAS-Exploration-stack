@@ -1,8 +1,15 @@
 # titiler
 
-![Version: 27.72.0](https://img.shields.io/badge/Version-27.72.0-informational?style=flat-square) ![AppVersion: 0.22.4](https://img.shields.io/badge/AppVersion-0.22.4-informational?style=flat-square)
+![Version: 28.0.0.0](https://img.shields.io/badge/Version-28.0.0.0-informational?style=flat-square)
 
 A dynamic Web Map tile server
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| emmanuelmathot |  | <https://github.com/emmanuelmathot> |
+| ciaransweet |  | <https://github.com/ciaransweet> |
 
 ## Values
 
@@ -27,11 +34,11 @@ A dynamic Web Map tile server
 | image.args[3] | string | `"--port"` |  |
 | image.args[4] | string | `"8000"` |  |
 | image.args[5] | string | `"--workers"` |  |
-| image.args[6] | string | `"8"` |  |
+| image.args[6] | string | `"4"` |  |
 | image.command | string | `"uvicorn"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/developmentseed/titiler"` |  |
-| image.tag | string | `"0.22.4"` |  |
+| image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |

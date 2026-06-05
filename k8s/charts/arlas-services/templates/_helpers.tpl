@@ -15,6 +15,8 @@
   value: {{ .Values.logger.loggingConsoleLevel }}
 - name: ARLAS_LOGGING_FILE_LEVEL
   value: "OFF"
+- name: ARLAS_LOGGING_FILE
+  value: {{ .Values.logger.loggingFile | quote }}
 {{- end }}
 
 {{- define "arlasServices.cacheEnv" -}}

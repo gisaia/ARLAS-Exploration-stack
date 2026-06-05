@@ -73,6 +73,8 @@ spec:
               value: {{ .Values.uis.builder.allowExternalNodeConfiguration | quote }}
             - name: ARLAS_ENABLE_ADVANCED_FEATURES
               value: {{ .Values.uis.builder.advancedFeatures | default "false" | quote }}
+            - name: ARLAS_TERRAIN
+              value: {{ .Values.uis.builder.terrain | default "{}" | quote }}
 
             {{- with .Values.uis.builder.extraEnv }}
             {{ toYaml . | nindent 12 }}

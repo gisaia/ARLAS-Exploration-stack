@@ -14,6 +14,7 @@ services:
       - ARLAS_AUTH_INIT_PASSWORD="${ARLAS_AUTH_INIT_PASSWORD}"
       - ARLAS_CACHE_TIMEOUT="${ARLAS_CACHE_TIMEOUT:-5}"
       - ARLAS_IAM_CACHE_FACTORY_CLASS="${ARLAS_IAM_CACHE_FACTORY_CLASS:-io.arlas.commons.cache.NoCacheFactory}"
+      - ARLAS_IAM_HIBERNATE_HBM2DDL="${ARLAS_IAM_HIBERNATE_HBM2DDL:-create-only}"
       - ARLAS_IAM_HIBERNATE_PASSWORD="${POSTGRES_PASSWORD}"
       - ARLAS_IAM_HIBERNATE_URL="${ARLAS_IAM_HIBERNATE_URL:-jdbc:postgresql://db:5432/arlas}"
       - ARLAS_IAM_HIBERNATE_USER="${POSTGRES_USER}"
@@ -43,7 +44,7 @@ services:
     networks:
       - arlas-net
     healthcheck:
-      test: ["CMD","java","HttpHealthcheck.java","http://localhost:9998/admin/healthcheck"]
+      test: ["CMD","java","HttpHealthcheck","http://localhost:9998/admin/healthcheck"]
       interval: 10s
       timeout: 10s
       retries: 10

@@ -1,0 +1,21 @@
+{{- if .Values.deployment.aias.services.titiler.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arlas-titiler-ingress-private
+  annotations:
+    {{ .Values.deployment.aias.services.titiler.ingress.private.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.global.ingressClassName }}
+  rules:
+    - host: {{ .Values.global.dnsDomain }}
+      http:
+        paths:
+          - path: /cog/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.deployment.aias.services.titiler.serviceName }}
+                port:
+                  number: {{ .Values.deployment.aias.services.titiler.port }}
+{{- end }}
