@@ -169,7 +169,7 @@ List of volumes:
 ### Service arlas-iam-server
 Description: ARLAS IAM is the ARLAS Identity and Access Management service.
 
-Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:28.0.0` in `conf/versions.env`
+Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:28.0.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -210,7 +210,7 @@ List of volumes:
 ### Service arlas-wui-iam
 Description: ARLAS IAM is the ARLAS Identity and Access Management web interface.
 
-Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:28.0.2` in `conf/versions.env`
+Image: `ARLAS_WUI_IAM_VERSION` with `gisaia/arlas-wui-iam:28.0.0` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
