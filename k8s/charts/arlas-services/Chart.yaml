@@ -1,5 +1,5 @@
 apiVersion: v2
 name: arlas-services
 description: A Helm Chart to deploy ARLAS Server
-version: 28.0.0.0
+version: 28.0.0
 appVersion: 28.0.0-rc10

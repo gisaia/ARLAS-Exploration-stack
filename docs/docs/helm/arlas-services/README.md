@@ -1,6 +1,6 @@
 # arlas-services
 
-![Version: 28.0.0.0](https://img.shields.io/badge/Version-28.0.0.0-informational?style=flat-square) ![AppVersion: 28.0.0-rc10](https://img.shields.io/badge/AppVersion-28.0.0--rc10-informational?style=flat-square)
+![Version: 28.0.0](https://img.shields.io/badge/Version-28.0.0-informational?style=flat-square) ![AppVersion: 28.0.0-rc10](https://img.shields.io/badge/AppVersion-28.0.0--rc10-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS Server
 
