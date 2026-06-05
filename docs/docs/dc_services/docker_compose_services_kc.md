@@ -156,7 +156,7 @@ List of volumes:
 - `${PWD}/conf/arlas-ks.jks:/opt/app/arlas-ks.jks`
 ## File dc/ref-dc-keycloak.yaml
 ### Service keycloak
-Image: `KEYCLOAK_VERSION` with `quay.io/keycloak/keycloak:23.0` in `conf/versions.env`
+Image: `KEYCLOAK_VERSION` with `quay.io/keycloak/keycloak:26.2` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |

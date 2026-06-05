@@ -19,8 +19,6 @@ A Helm Chart to deploy ARLAS Server
 | cors.exposedHeaders | string | `"Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,WWW-Authenticate"` | CORS Exposed Headers |
 | defaultStorageClass | string | `"standard"` |  |
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
-| elastic.apm.secret | string | `nil` |  |
-| elastic.apm.url | string | `nil` |  |
 | elastic.cluster | string | `"elastic"` |  |
 | elastic.login | string | `"elastic"` |  |
 | elastic.nodes | string | `"elasticsearch:9200"` |  |

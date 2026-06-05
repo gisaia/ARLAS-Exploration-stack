@@ -127,7 +127,27 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
+| elasticsearch.copyTlsCerts.image.repository | string | `"bitnamilegacy/os-shell"` |  |
 | elasticsearch.image.repository | string | `"bitnamilegacy/elasticsearch"` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
+| elasticsearch.kibana.elasticsearch.security.auth.createSystemUser | bool | `true` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.elasticsearchPasswordSecret | string | `"arlas-stack-elasticsearch"` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.enabled | bool | `true` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.kibanaPassword | string | `"secret4elastic"` |  |
+| elasticsearch.kibana.elasticsearch.security.auth.kibanaUsername | string | `"elastic"` |  |
+| elasticsearch.kibana.elasticsearch.security.tls.enabled | bool | `true` |  |
+| elasticsearch.kibana.elasticsearch.security.tls.existingSecret | string | `"arlas-stack-elasticsearch-master-crt"` |  |
+| elasticsearch.kibana.elasticsearch.security.tls.usePemCerts | bool | `true` |  |
+| elasticsearch.kibana.image.repository | string | `"bitnamilegacy/kibana"` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
+| elasticsearch.kibana.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
+| elasticsearch.kibana.ingress.annotations."nginx.ingress.kubernetes.io/backend-protocol" | string | `"HTTP"` |  |
+| elasticsearch.kibana.ingress.enabled | bool | `true` |  |
+| elasticsearch.kibana.ingress.hostname | string | `"kibana.arlas.k8s"` |  |
+| elasticsearch.kibana.ingress.ingressClassName | string | `"nginx"` |  |
+| elasticsearch.kibana.ingress.tls | bool | `false` |  |
+| elasticsearch.kibana.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch.sysctl.image.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch.sysctlImage.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` |  |
 | global.authIssuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
 | global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
 | global.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
@@ -136,12 +156,14 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.elasticDnsDomain | string | `"elastic.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment |
 | global.elasticLogin | string | `"elastic"` | Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.elasticPassword | string | `"secret4elastic"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch |
+| global.enableKibana | bool | `true` |  |
 | global.ingressClassName | string | `"nginx"` | __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used. |
 | global.keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` | __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm  |
 | global.keycloak.url | string | `"https://keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ Keycloak URL |
 | global.keycloakDnsDomain | string | `"keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment |
 | global.keycloakLogin | string | `"admin"` | Keycloak admin login for keycloak deployment (for test only) |
 | global.keycloakPassword | string | `"secret4keycloak"` | __MUST BE CONFIGURED:__ Keycloak admin password  |
+| global.kibanaDnsDomain | string | `"kibana.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing kibana for ARLAS deployment |
 | global.logoutUrl | string | `nil` | The logout URL to be used |
 | global.minioDnsDomain | string | `"minio.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment |
 | global.minioLogin | string | `"minioadmin"` | Minio login for minio itself and the services that are connecting to minio |
