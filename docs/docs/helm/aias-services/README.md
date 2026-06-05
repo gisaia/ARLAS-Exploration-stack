@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 27.72.0](https://img.shields.io/badge/Version-27.72.0-informational?style=flat-square) ![AppVersion: 0.15.4](https://img.shields.io/badge/AppVersion-0.15.4-informational?style=flat-square)
+![Version: 28.0.0.0](https://img.shields.io/badge/Version-28.0.0.0-informational?style=flat-square) ![AppVersion: 0.15.4](https://img.shields.io/badge/AppVersion-0.15.4-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
