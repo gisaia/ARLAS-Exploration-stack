@@ -1,6 +1,6 @@
 # titiler
 
-![Version: 28.0.0](https://img.shields.io/badge/Version-28.0.0-informational?style=flat-square)
+![Version: 28.1.0](https://img.shields.io/badge/Version-28.1.0-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 A dynamic Web Map tile server
 
@@ -38,7 +38,7 @@ A dynamic Web Map tile server
 | image.command | string | `"uvicorn"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/developmentseed/titiler"` |  |
-| image.tag | string | `""` |  |
+| image.tag | string | `"latest"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |

@@ -1,6 +1,6 @@
 # arlas-uis
 
-![Version: 28.0.0](https://img.shields.io/badge/Version-28.0.0-informational?style=flat-square) ![AppVersion: 28.0.0](https://img.shields.io/badge/AppVersion-28.0.0-informational?style=flat-square)
+![Version: 28.1.0](https://img.shields.io/badge/Version-28.1.0-informational?style=flat-square) ![AppVersion: 28.0.2](https://img.shields.io/badge/AppVersion-28.0.2-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS User Interfaces
 
@@ -67,7 +67,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.extraInitContainers | string | `nil` |  |
 | uis.builder.extraVolumeMounts | string | `nil` |  |
 | uis.builder.extraVolumes | string | `nil` |  |
-| uis.builder.image | string | `"gisaia/arlas-wui-builder:28.0.2"` |  |
+| uis.builder.image | string | `"gisaia/arlas-wui-builder:28.0.0"` |  |
 | uis.builder.imagePullSecrets | list | `[]` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
