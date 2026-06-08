@@ -69,7 +69,6 @@ else
 fi
 
 helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml
-
-if [[ "$(sw_vers -productName)" == "macOS" ]]; then
+if [[ "$(uname)" == "Darwin" ]]; then
   k8s/scripts/patch_coredns.sh
 fi
