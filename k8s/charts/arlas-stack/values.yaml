@@ -474,6 +474,8 @@ aias-services:
 
 # TITILER
 titiler:
+  image:
+    tag: 0.22.4
   replicaCount: 1
   resources:
     requests:

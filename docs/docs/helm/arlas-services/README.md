@@ -1,6 +1,6 @@
 # arlas-services
 
-![Version: 28.0.0.0](https://img.shields.io/badge/Version-28.0.0.0-informational?style=flat-square) ![AppVersion: 28.0.0-rc10](https://img.shields.io/badge/AppVersion-28.0.0--rc10-informational?style=flat-square)
+![Version: 28.0.0](https://img.shields.io/badge/Version-28.0.0-informational?style=flat-square) ![AppVersion: 28.0.0](https://img.shields.io/badge/AppVersion-28.0.0-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS Server
 
@@ -52,7 +52,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.extraInitContainers | string | `nil` |  |
 | services.permissions.extraVolumeMounts | string | `nil` |  |
 | services.permissions.extraVolumes | string | `nil` |  |
-| services.permissions.image | string | `"gisaia/arlas-permissions-server:28.0.0-rc6"` |  |
+| services.permissions.image | string | `"gisaia/arlas-permissions-server:28.0.0"` |  |
 | services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
@@ -72,7 +72,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.extraInitContainers | string | `nil` |  |
 | services.persistence.extraVolumeMounts | string | `nil` |  |
 | services.persistence.extraVolumes | string | `nil` |  |
-| services.persistence.image | string | `"gisaia/arlas-persistence-server:28.0.0-rc5"` |  |
+| services.persistence.image | string | `"gisaia/arlas-persistence-server:28.0.0"` |  |
 | services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
@@ -95,7 +95,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.extraInitContainers | string | `nil` |  |
 | services.server.extraVolumeMounts | string | `nil` |  |
 | services.server.extraVolumes | string | `nil` |  |
-| services.server.image | string | `"gisaia/arlas-server:28.0.0-rc10"` |  |
+| services.server.image | string | `"gisaia/arlas-server:28.0.0"` |  |
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
