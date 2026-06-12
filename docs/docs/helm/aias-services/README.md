@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 28.2.0](https://img.shields.io/badge/Version-28.2.0-informational?style=flat-square) ![AppVersion: 0.15.4](https://img.shields.io/badge/AppVersion-0.15.4-informational?style=flat-square)
+![Version: 28.2.0](https://img.shields.io/badge/Version-28.2.0-informational?style=flat-square) ![AppVersion: 0.15.7](https://img.shields.io/badge/AppVersion-0.15.7-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
@@ -61,7 +61,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.extraInitContainers | string | `nil` |  |
 | services.agate.extraVolumeMounts | string | `nil` |  |
 | services.agate.extraVolumes | string | `nil` |  |
-| services.agate.image | string | `"gisaia/agate:0.15.4"` |  |
+| services.agate.image | string | `"gisaia/agate:0.15.7"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
@@ -88,7 +88,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.extraInitContainers | list | `[]` |  |
 | services.airs.extraVolumeMounts | list | `[]` |  |
 | services.airs.extraVolumes | list | `[]` |  |
-| services.airs.image | string | `"gisaia/airs:0.15.4"` |  |
+| services.airs.image | string | `"gisaia/airs:0.15.7"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
@@ -208,7 +208,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.extraInitContainers | string | `nil` |  |
 | services.aproc.service.extraVolumeMounts | string | `nil` |  |
 | services.aproc.service.extraVolumes | string | `nil` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.15.4"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.15.7"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
@@ -223,7 +223,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
 | services.aproc.worker.extraVolumeMounts | string | `nil` |  |
 | services.aproc.worker.extraVolumes | string | `nil` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.15.4"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.15.7"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
@@ -237,7 +237,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.extraInitContainers | string | `nil` |  |
 | services.fam.extraVolumeMounts | string | `nil` |  |
 | services.fam.extraVolumes | string | `nil` |  |
-| services.fam.image | string | `"gisaia/fam:0.15.4"` |  |
+| services.fam.image | string | `"gisaia/fam:0.15.7"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
