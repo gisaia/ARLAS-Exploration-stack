@@ -2,4 +2,4 @@ apiVersion: v2
 name: aias-services
 description: A Helm Chart to deploy ARLAS AIAS Services
 version: "28.4.0"
-appVersion: 0.15.8
+appVersion: 0.16.1
