@@ -173,6 +173,16 @@ drivers:
       build_overview_when_local: true
     priority: 22
 
+  - name: opencosmos
+    class_name: extensions.aproc.proc.ingest.drivers.impl.opencosmos
+    assets_dir: /tmp/aproc/opencosmos
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+      product_types: ["platero", "hammer"]
+    priority: 23
+
   -
     name: tiff
     class_name: extensions.aproc.proc.ingest.drivers.impl.tiff

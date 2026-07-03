@@ -58,7 +58,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.services.aproc.configuration.extensions.download.outboxS3.bucket | string | `"downloads"` | Bucket where downloads are stored |
 | aias-services.services.aproc.configuration.extensions.download.outboxS3.endpointUrl | string | `"http://arlas-stack-minio:9000"` | Minio endpoint |
 | aias-services.services.aproc.configuration.extensions.download.outboxS3.secretAccessKey | string | `"secret4minio"` | Do not change: value defined in global section |
-| aias-services.services.aproc.configuration.extensions.ingest.aprocEndpoint | string | `"http://aproc-service:8001"` | APROC endpoint URL accessed by ingest processes |
+| aias-services.services.aproc.configuration.extensions.ingest.aprocEndpoint | string | `"http://aproc-service:8000"` | APROC endpoint URL accessed by ingest processes |
 | aias-services.services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"https://storage.googleapis.com/gisaia-public/test-aias"` | Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo inputsDirectory: http://arlas-stack-minio:9000/inputs |
 | aias-services.services.aproc.service.serviceName | string | `"aproc-service"` | APROC service name |
 | aias-services.services.aproc.worker | object | `{"affinity":{},"nodeSelector":{},"replicaCount":1,"resources":{"limits":{"cpu":2,"memory":"10Gi"}},"tolerations":[]}` | APROC worker configuration |

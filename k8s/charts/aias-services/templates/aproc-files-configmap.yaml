@@ -446,6 +446,22 @@ data:
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.superview.priority }}
       {{- end }}
 
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.opencosmos.enabled }}
+      -
+        name: opencosmos
+        class_name: extensions.aproc.proc.ingest.drivers.impl.opencosmos
+        assets_dir: /tmp/aproc/opencosmos
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.opencosmos.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.opencosmos.build_overview_when_local }}
+          product_types: 
+            {{- range .Values.services.aproc.configuration.extensions.ingest.drivers.opencosmos.product_types }}
+            - {{ . }}
+            {{- end }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.opencosmos.priority }}
+      {{- end }}
+
 
   enrich_drivers.yaml: |
     drivers:

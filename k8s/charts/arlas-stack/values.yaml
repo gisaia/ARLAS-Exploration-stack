@@ -395,7 +395,7 @@ aias-services:
             #inputsDirectory: http://arlas-stack-minio:9000/inputs
             inputsDirectory: https://storage.googleapis.com/gisaia-public/test-aias
             # -- APROC endpoint URL accessed by ingest processes
-            aprocEndpoint: http://aproc-service:8001
+            aprocEndpoint: http://aproc-service:8000
         accessManager:
           # -- Temporary directory used by the access manager
           tmpDir: /tmp/
