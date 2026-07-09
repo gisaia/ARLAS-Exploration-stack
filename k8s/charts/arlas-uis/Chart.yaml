@@ -1,5 +1,5 @@
 apiVersion: v2
 name: arlas-uis
 description: A Helm Chart to deploy ARLAS User Interfaces
-version: 28.5.0
+version: 28.6.0
 appVersion: 28.0.3

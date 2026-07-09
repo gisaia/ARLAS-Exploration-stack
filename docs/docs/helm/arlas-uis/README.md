@@ -1,6 +1,6 @@
 # arlas-uis
 
-![Version: 28.5.0](https://img.shields.io/badge/Version-28.5.0-informational?style=flat-square) ![AppVersion: 28.0.3](https://img.shields.io/badge/AppVersion-28.0.3-informational?style=flat-square)
+![Version: 28.6.0](https://img.shields.io/badge/Version-28.6.0-informational?style=flat-square) ![AppVersion: 28.0.3](https://img.shields.io/badge/AppVersion-28.0.3-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS User Interfaces
 
@@ -86,7 +86,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.extraVolumes | string | `nil` |  |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.16.1"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.16.2"` |  |
 | uis.famWui.imagePullSecrets | list | `[]` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
