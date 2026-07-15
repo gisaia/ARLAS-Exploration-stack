@@ -25,9 +25,15 @@ dependencies:
     condition: deployment.titiler.enabled
   # THIRD PARTY REMOTE DEPENDENCIES
   - name: elasticsearch
+    alias: elasticsearch-logs
     repository: https://charts.bitnami.com/bitnami
     version: 22.0.4
-    condition: deployment.elasticsearch.enabled
+    condition: deployment.elasticsearch.logs.enabled
+  - name: elasticsearch
+    alias: elasticsearch-app
+    repository: https://charts.bitnami.com/bitnami
+    version: 22.0.4
+    condition: deployment.elasticsearch.app.enabled
   - name: minio
     repository: https://charts.bitnami.com/bitnami
     version: 14.10.5
