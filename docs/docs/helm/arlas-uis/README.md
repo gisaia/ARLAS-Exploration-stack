@@ -1,6 +1,6 @@
 # arlas-uis
 
-![Version: 28.6.0](https://img.shields.io/badge/Version-28.6.0-informational?style=flat-square) ![AppVersion: 28.0.3](https://img.shields.io/badge/AppVersion-28.0.3-informational?style=flat-square)
+![Version: 28.7.0](https://img.shields.io/badge/Version-28.7.0-informational?style=flat-square) ![AppVersion: 28.0.3](https://img.shields.io/badge/AppVersion-28.0.3-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS User Interfaces
 
