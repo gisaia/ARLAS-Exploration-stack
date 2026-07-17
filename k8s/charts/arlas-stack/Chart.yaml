@@ -50,3 +50,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 25.2.0
     condition: deployment.keycloak.enabled
+  - name: apm-server
+    repository: "https://helm.elastic.co"
+    version: 8.5.1
+    condition: deployment.apmServer.enabled

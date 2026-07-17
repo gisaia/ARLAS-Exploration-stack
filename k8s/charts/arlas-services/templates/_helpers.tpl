@@ -46,6 +46,18 @@
   value: {{ .Values.elastic.ssl.enabled | quote }}
 {{- end }}
 
+{{- define "arlasServices.otel" -}}
+# OTEL CONFIGURATION
+- name: OTEL_EXPORTER_OTLP_ENDPOINT
+  value: {{ .Values.otel.endpoint }}
+- name: OTEL_EXPORTER_OTLP_PROTOCOL
+  value: {{ .Values.otel.protocol }}
+- name: OTEL_RESOURCE_ATTRIBUTES
+  value: {{ .Values.otel.attributes }}
+- name: OTEL_INSTRUMENTATION_HTTP_SERVER_REQUEST_IGNORED_USERAGENTS
+  value: {{ .Values.otel.ignoredUserAgents }}
+{{- end }}
+
 {{- define "arlasServices.keycloakEnv" -}}
 {{- if .Values.keycloak.enabled }}
   # -- ARLAS Policy Enforcer

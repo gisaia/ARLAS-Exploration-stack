@@ -21,7 +21,8 @@ services:
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -46,7 +47,8 @@ services:
     image: gisaia/arlas-permissions-server:28.0.0
     replicaCount: 1
     jvmXmx: 512m
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -72,8 +74,8 @@ services:
     image: gisaia/arlas-persistence-server:28.0.0
     replicaCount: 1
     jvmXmx: 512m
-    # -- Whether ES APM should be activated or not
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -141,6 +143,12 @@ elastic:
   ssl:
     enabled: true
   nodes: elasticsearch:9200
+
+otel:
+  endpoint: http://arlas-stack-apm-server:8200
+  protocol: http/protobuf
+  attributes: "deployment.environment={{ .Values.dnsDomain }}"
+  ignoredUserAgents: "GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"
 
 persistence:
   # -- Storage engine to use: either `file` or `hibernate`

@@ -23,10 +23,11 @@ git clone git@github.com:gisaia/ARLAS-Exploration-stack.git
 cd ARLAS-Exploration-stack
 ```
 
-The third party helm charts are provided by bitnami. Its repository must be registered:
+The third party helm charts are provided by bitnami and elastic. Its repositories must be registered:
 
 ```shell
 helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add elastic https://helm.elastic.co
 ```
 
 __Important__: Bitnami charts are not supported anymore by bitnamy. The charts are used for development purpose only. You must deploy your own third party service charts.
