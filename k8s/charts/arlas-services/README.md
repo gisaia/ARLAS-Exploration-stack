@@ -34,6 +34,10 @@ A Helm Chart to deploy ARLAS Server
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingFile | string | `"/tmp/arlas.log"` | Default logging file |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
+| otel.attributes | string | `"deployment.environment={{ .Values.dnsDomain }}"` |  |
+| otel.endpoint | string | `"http://arlas-stack-apm-server:8200"` |  |
+| otel.ignoredUserAgents | string | `"GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"` |  |
+| otel.protocol | string | `"http/protobuf"` |  |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
 | persistence.hibernate.dialect | string | `"org.hibernate.dialect.PostgreSQLDialect"` | SQL Dialect |
@@ -46,7 +50,6 @@ A Helm Chart to deploy ARLAS Server
 | services.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | services.mountCertificate | bool | `false` |  |
 | services.permissions.affinity | object | `{}` |  |
-| services.permissions.apm | bool | `false` |  |
 | services.permissions.extraContainers | list | `[]` |  |
 | services.permissions.extraEnv | string | `nil` |  |
 | services.permissions.extraInitContainers | string | `nil` |  |
@@ -56,6 +59,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
+| services.permissions.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.permissions.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.permissions.replicaCount | int | `1` |  |
 | services.permissions.resources.limits.cpu | float | `0.5` |  |
@@ -66,7 +70,6 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.tolerations | list | `[]` |  |
 | services.permissions.urlPrefix | string | `"/permissions"` |  |
 | services.persistence.affinity | object | `{}` |  |
-| services.persistence.apm | bool | `false` | Whether ES APM should be activated or not |
 | services.persistence.extraContainers | list | `[]` |  |
 | services.persistence.extraEnv | string | `nil` |  |
 | services.persistence.extraInitContainers | string | `nil` |  |
@@ -76,6 +79,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
+| services.persistence.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.persistence.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.persistence.replicaCount | int | `1` |  |
 | services.persistence.resources.limits.cpu | float | `0.5` |  |
@@ -89,7 +93,6 @@ A Helm Chart to deploy ARLAS Server
 | services.podSecurityContext.runAsNonRoot | bool | `true` |  |
 | services.podSecurityContext.runAsUser | int | `65532` |  |
 | services.server.affinity | object | `{}` |  |
-| services.server.apm | bool | `false` |  |
 | services.server.extraContainers | list | `[]` |  |
 | services.server.extraEnv | string | `nil` |  |
 | services.server.extraInitContainers | string | `nil` |  |
@@ -99,6 +102,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
+| services.server.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.server.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.server.replicaCount | int | `1` |  |
 | services.server.resources.limits.cpu | int | `1` |  |

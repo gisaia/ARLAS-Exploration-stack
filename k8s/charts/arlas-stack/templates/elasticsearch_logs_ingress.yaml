@@ -1,8 +1,8 @@
-{{- if .Values.deployment.elasticsearch.app.ingress.enabled }}
+{{- if .Values.deployment.elasticsearch.logs.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: elasticsearch-ingress
+  name: elasticsearch-ingress-logs
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: 100240m
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
@@ -12,12 +12,12 @@ metadata:
 spec:
   ingressClassName: {{ .Values.global.ingressClassName }}
   rules:
-    - host: {{ .Values.global.elasticDnsDomain }}
+    - host: {{ .Values.global.elasticLogsDnsDomain }}
       http:
         paths:
           - backend:
               service:
-                name: arlas-stack-elasticsearch
+                name: arlas-stack-elasticsearch-logs
                 port:
                   number: 9200
             path: /
