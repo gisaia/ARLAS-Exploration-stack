@@ -11,7 +11,7 @@ check_command(){
 
 check_command "yq"
 check_command "git"
-check_command "helm"
+check_command "helm-docs"
 
 
 [ -z "$1" ] && echo "Please provide the version" && exit 1;
