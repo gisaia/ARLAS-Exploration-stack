@@ -1,0 +1,21 @@
+{{- if and .Values.deployment.aias.services.titiler.gateway.enabled .Values.global.gateway.enabled }}
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: titiler-public-ext-auth
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: arlas-titiler-public-route
+  extAuth:
+    headersToExtAuth:
+      {{- toYaml .Values.global.gateway.extAuth.headersToExtAuth | nindent 6 }}
+    http:
+      backendRefs:
+        - name: {{ (get .Values "aias-services").services.agate.serviceName }}
+          port: {{ (get .Values "aias-services").services.servicePort }}
+      pathOverride: /agate/authorization/titiler_public
+      headersToBackend:
+        {{- toYaml .Values.global.gateway.extAuth.headersToBackend | nindent 8 }}
+{{- end }}

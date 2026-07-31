@@ -1,0 +1,22 @@
+{{- if .Values.global.gateway.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ .Values.global.gateway.name }}
+spec:
+  gatewayClassName: {{ .Values.global.gateway.name }}
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname:  "*.{{ .Values.global.domain }}"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            group: ""
+            name: {{ .Values.global.gateway.tls.secretName }}
+      allowedRoutes:
+        namespaces:
+          from: Same
+{{- end }}
