@@ -38,6 +38,14 @@ k8s/scripts/install_metallb.sh
 k8s/scripts/install_nginx_ingress_controller.sh
 ```
 
+If you want to use the Gateway Controller, you can install:
+
+```shell
+k8s/scripts/install_metallb.sh
+k8s/scripts/install_envoy_gateway_controller.sh
+```
+You have to choose between Ingress and Gateway.
+
 ## Configuring the ARLAS stack
 
 ### Directory structure
@@ -99,7 +107,7 @@ To start, run:
 This script:
 
 - creates the configmaps for the AIAS configuration files
-- create a secret and configmap for keycloak certificate if the certificate exists (e.g. created with `./scripts/create_certificate.sh keycloak.arlas.k8s`)
+- create a secret and configmap for arlas domain certificate if the certificate exists (e.g. created with `./scripts/create_certificate.sh`)
 - update and build the sub charts
 - install or upgrade the arlas-stack chart
 
@@ -129,7 +137,8 @@ Before re-starting the ARLAS stack, please make sure that the persistence volume
 
 ### Services, DNS and Certificates
 
-Four services are exposed with an ingress:
+The services can be exposed either with ingresses or with gateway routes.
+Four services are exposed:
 
 - `keycloak`, default DNS is `keycloak.arlas.k8s`
 - `elasticsearch`, default DNS is `elastic.arlas.k8s`
@@ -145,6 +154,16 @@ In a Linux test environment, you will need to link the ingress external IP with 
 172.18.0.10	minio.arlas.k8s
 ```
 
+The arlas-ingress IP is obtained with:
+```shell
+kubectl get svc ingress-nginx-controller  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
+
+The arlas-gateway IP is obtained with:
+```shell
+kubectl get gateway arlas-gateway -n arlas -o jsonpath='{.status.addresses[0].value}'
+```
+
 In a MacOs test environment keep local host and we will use port forwarding to access applications :
 
 ```
@@ -153,15 +172,16 @@ In a MacOs test environment keep local host and we will use port forwarding to a
 127.0.0.1	site.arlas.k8s
 127.0.0.1	minio.arlas.k8s
 ```
-and run 
+and if you use ingress run 
 ```shell
 sudo kubectl port-forward -n default service/ingress-nginx-controller 80:80 443:443
 ```
-
-The arlas-ingress IP is obtained with:
+if you use gateway run 
 ```shell
-kubectl get svc ingress-nginx-controller  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+sudo kubectl port-forward  $(kubectl get svc -l gateway.envoyproxy.io/owning-gateway-name -o name | head -1) 443:443
 ```
+
+
 
 ## Configuring `arlas_cli` for the keycloak test realm
 

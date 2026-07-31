@@ -1,4 +1,7 @@
 global: 
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing the service with gateway
+  domain: arlas.k8s
+
   # -- __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment
   dnsDomain: &arlasAppDnsDomain site.arlas.k8s
 
@@ -20,6 +23,22 @@ global:
 
   # -- __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used.
   ingressClassName: &arlasAppIngressClassName nginx
+
+  gateway:
+    enabled: true
+    name: arlas-gateway
+    # -- __MUST BE CONFIGURED:__ The default gateway class. By default, the `gateway.envoyproxy.io/gatewayclass-controller` controler is used.
+    controllerName: gateway.envoyproxy.io/gatewayclass-controller
+    tls:
+      secretName: arlas-tls 
+    extAuth:
+      headersToExtAuth:
+        - authorization
+        - x-auth-request-redirect
+        - x-original-method
+      headersToBackend:
+        - Authorization
+        - arlas-org-filter
 
   # -- __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy.
   defaultStorageClass: &arlasAppDefaultStorageClass standard-retain
@@ -78,6 +97,8 @@ deployment:
   arlas:
     uis:
       enabled: true
+      gateway:
+          enabled: true
       ingress:
         enabled: true
         annotations:
@@ -93,9 +114,11 @@ deployment:
     services:
       # -- Should the chart deploy arlas-services
       enabled: true
+      gateway:
+          enabled: true
       ingress:
         # -- Should the chart deploy arlas-services ingress
-        enabled: true
+        enabled: false
         # -- Annotations for arlas-services ingress
         annotations:
 
@@ -103,9 +126,11 @@ deployment:
     # -- Should the chart deploy aias-services
     enabled: true
     uis:
+      gateway:
+          enabled: true
       ingress:
         # -- Should the chart deploy aias-uis ingress
-        enabled: true
+        enabled: false
         annotations:
           #-- Annotation for AIAS UI ingress
           nginx.ingress.kubernetes.io/use-regex: "true"
@@ -114,9 +139,11 @@ deployment:
 
     services:
       airs:
+        gateway:
+          enabled: true
         ingress:
           # -- Should the chart deploy airs ingress
-          enabled: true
+          enabled: false
           annotations:
             # -- Annotations for AIRS ingress
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
@@ -126,18 +153,22 @@ deployment:
             nginx.ingress.kubernetes.io/proxy-buffering: "off"
 
       aproc:
+        gateway:
+          enabled: true
         ingress:
           # -- Should the chart deploy aproc ingress
-          enabled: true
+          enabled: false
           annotations:
             # -- Annotations for APROC ingress
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
             # -- Annotations for APROC ingress
             nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
       fam:
+        gateway:
+          enabled: true
         ingress:
           # -- Should the chart deploy fam ingress
-          enabled: true
+          enabled: false
           annotations:
             # -- Annotations for FAM ingress
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
@@ -148,9 +179,11 @@ deployment:
         serviceName: arlas-stack-minio
         # -- Minio service port for AIAS
         port: 9000
+        gateway:
+          enabled: true
         ingress:
           # -- Should the chart deploy minio ingress
-          enabled: true
+          enabled: false
           annotations:
             # -- Annotations for Minio ingress
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"
@@ -161,9 +194,11 @@ deployment:
         serviceName: arlas-stack-titiler
         # -- Titiler service port for AIAS
         port: 8000
+        gateway:
+          enabled: true
         ingress:
           # -- Should the chart deploy titiler ingress
-          enabled: true
+          enabled: false
           private:
             annotations:
               # -- Annotations for Titiler ingress
@@ -178,17 +213,27 @@ deployment:
               nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
 
   elasticsearch:
+    gateway:
+      enabled: true
     # -- Should the chart deploy elasticsearch
     enabled: true
     ingress:
       # -- Should the chart deploy elasticsearch ingress
+      enabled: false
+  kibana:
+    gateway:
       enabled: true
+    ingress:
+      # -- Should the chart deploy kibana ingress
+      enabled: &arlasAppEnableIngressKibana false 
   minio:
+    gateway:
+      enabled: true
     # -- Should the chart deploy minio
     enabled: true
     ingress:
       # -- Should the chart deploy minio ingress
-      enabled: true
+      enabled: false
   rabbitmq:
     # -- Should the chart deploy rabbitmq
     enabled: true
@@ -198,6 +243,8 @@ deployment:
   keycloak: 
     # -- __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs.
     enabled: true
+    gateway:
+      enabled: true
   titiler:
     # -- Should the chart deploy titiler
     enabled: true
@@ -232,7 +279,7 @@ arlas-services:
     # -- __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc.
     mountCertificate: true
     # server:
-      # -- __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is flase, comment otherwise
+      # -- __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is false, comment otherwise
       #  trustStoreOptions:
 
 arlas-uis:
@@ -574,7 +621,7 @@ elasticsearch:
           # As the certs are auto-generated, they are pemCerts so set to true
           usePemCerts: true
     ingress:
-      enabled: *arlasAppEnableKibana
+      enabled: *arlasAppEnableIngressKibana
       hostname: *arlasAppKibanaDnsDomain
       ingressClassName: *arlasAppIngressClassName
       tls: false
@@ -723,7 +770,7 @@ keycloak:
   # @ignored  
   ingress:
     ingressClassName: *arlasAppIngressClassName 
-    enabled: true
+    enabled: false
     hostname: *arlasAppKeycloakDnsDomain
     tls: true
     path: "/"

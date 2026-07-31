@@ -1,0 +1,27 @@
+{{- if and .Values.deployment.aias.services.aproc.gateway.enabled .Values.global.gateway.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: arlas-aproc-route
+spec:
+  parentRefs:
+    - name: {{ .Values.global.gateway.name }}
+      sectionName: https
+  hostnames:
+    - {{ .Values.global.dnsDomain | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /aproc/processes
+      backendRefs:
+        - name: {{ (get .Values "aias-services").services.aproc.service.serviceName }}
+          port: {{ (get .Values "aias-services").services.servicePort }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /aproc/jobs
+      backendRefs:
+        - name: {{ (get .Values "aias-services").services.aproc.service.serviceName }}
+          port: {{ (get .Values "aias-services").services.servicePort }}
+{{- end }}

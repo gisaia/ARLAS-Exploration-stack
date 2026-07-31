@@ -1,0 +1,33 @@
+{{- if and .Values.deployment.elasticsearch.gateway.enabled  .Values.global.gateway.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: elasticsearch-backend-tls
+  namespace: arlas
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: arlas-stack-elasticsearch
+  validation:
+    hostname: arlas-stack-elasticsearch.arlas.svc.cluster.local
+    caCertificateRefs:
+      - group: ""
+        kind: Secret
+        name: arlas-stack-elasticsearch-master-crt
+
+---
+
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: elasticsearch-body-limit
+  namespace: arlas
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: elasticsearch-route
+  requestBuffer:
+    limit: 104857600
+{{- end }}
