@@ -34,6 +34,44 @@ else
     fi
 fi
 
+GATEWAY_PARAMS="\
+global.gateway.enabled=true,\
+deployment.arlas.uis.gateway.enabled=true,\
+deployment.arlas.services.gateway.enabled=true,\
+deployment.aias.uis.gateway.enabled=true,\
+deployment.aias.services.airs.gateway.enabled=true,\
+deployment.aias.services.aproc.gateway.enabled=true,\
+deployment.aias.services.fam.gateway.enabled=true,\
+deployment.aias.services.minio.gateway.enabled=true,\
+deployment.aias.services.titiler.gateway.enabled=true,\
+deployment.elasticsearch.gateway.enabled=true,\
+deployment.kibana.gateway.enabled=true,\
+deployment.minio.gateway.enabled=true,\
+deployment.keycloak.gateway.enabled=true"
+
+INGRESS_PARAMS="\
+deployment.arlas.uis.ingress.enabled=true,\
+deployment.arlas.services.ingress.enabled=true,\
+deployment.aias.services.airs.ingress.enabled=true,\
+deployment.aias.services.aproc.ingress.enabled=true,\
+deployment.aias.services.fam.ingress.enabled=true,\
+deployment.aias.services.minio.ingress.enabled=true,\
+deployment.aias.services.titiler.ingress.enabled=true,\
+deployment.elasticsearch.ingress.enabled=true,\
+deployment.kibana.ingress.enabled=true,\
+deployment.ingress.gateway.enabled=true,\
+elasticsearch.kibana.ingress.enabled=true,\
+keycloak.ingress.enabled=true"
+
+
+if [[ " $@ " =~ " gateway " ]]; then
+  echo "Use GATEWAY, disable INGRESS"
+  INGRESS_PARAMS=$(echo "$INGRESS_PARAMS" | sed 's/=true/=false/g')  
+else
+  echo "Use INGRESS, disable GATEWAY"
+  GATEWAY_PARAMS=$(echo "$GATEWAY_PARAMS" | sed 's/=true/=false/g')
+fi
+
 
 kubectl create namespace arlas --dry-run=client -o yaml | kubectl apply -f -
 
@@ -68,7 +106,7 @@ else
   echo "No certificate (conf/arlas-ks.jks) found."
 fi
 
-helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml
+helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml --set $INGRESS_PARAMS --set $GATEWAY_PARAMS
 
 if [[ "$(uname)" == "Darwin" ]]; then
   k8s/scripts/patch_coredns.sh
