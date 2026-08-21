@@ -791,7 +791,7 @@ keycloak:
     extraTls:
       - hosts: 
         - *arlasAppKeycloakDnsDomain
-        secretName: keycloak-tls
+        secretName: arlas-tls
     # end-of-block   
   # @ignored  
   proxy: edge
