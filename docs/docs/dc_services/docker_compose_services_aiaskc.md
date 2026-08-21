@@ -329,8 +329,8 @@ List of volumes:
 
 - `${KEYCLOAK_CONF_DIRECTORY}/keycloak.realm.json:/opt/keycloak/data/import/realm.json:ro`
 - `${PWD}/conf/arlas-ks.jks:/opt/keycloak/conf/keycloak.jks:ro`
-- `${PWD}/conf/server.crt:/opt/keycloak/conf/server.crt:ro`
-- `${PWD}/conf/server.key:/opt/keycloak/conf/server.key:ro`
+- `${PWD}/conf/server-ks.crt:/opt/keycloak/conf/server.crt:ro`
+- `${PWD}/conf/server-ks.key:/opt/keycloak/conf/server.key:ro`
 ## File dc/ref-dc-postgres.yaml
 ### Service db
 Image: `POSTGRES_VERSION` with `postgres:16.8` in `conf/versions.env`

@@ -19,6 +19,6 @@ services:
     volumes:
       - ${PGADMIN_DATA_DIR}:/var/lib/pgadmin
     # TODO : can we set :ro on the certs:
-      - ${PGADMIN_CERTS_DIRECTORY:-/tmp/pgadmin/certs}/server.cert:/certs/server.cert
-      - ${PGADMIN_CERTS_DIRECTORY:-/tmp/pgadmin/certs}/server.key:/certs/server.key
+      - ${PGADMIN_CERTS_DIRECTORY:-/tmp/pgadmin/certs}/server-ks.crt:/certs/server.crt
+      - ${PGADMIN_CERTS_DIRECTORY:-/tmp/pgadmin/certs}/server-ks.key:/certs/server.key
       - ${PGADMIN_CONF_DIRECTORY:-/tmp/pgadmin/certs}:/pgadmin4
