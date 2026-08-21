@@ -1,0 +1,10 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: order-proxy-config
+spec:
+  provider:
+    type: Kubernetes
+  filterOrder:
+    - name: envoy.filters.http.jwt_authn
+      before: envoy.filters.http.ext_authz

@@ -8,6 +8,11 @@ spec:
     group: gateway.networking.k8s.io
     kind: HTTPRoute
     name: arlas-fam-route
+  jwt:
+    providers:
+      - name: keycloak
+        remoteJWKS:
+          uri: http://arlas-stack-keycloak.arlas.svc.cluster.local:8080/realms/arlas/protocol/openid-connect/certs
   extAuth:
     headersToExtAuth:
       {{- toYaml .Values.global.gateway.extAuth.headersToExtAuth | nindent 6 }}
