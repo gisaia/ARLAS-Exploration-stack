@@ -1,28 +1,4 @@
   -
-    uri: /cog/preview*
-    upstream:
-      nodes:
-        "titiler:8000": 1
-    plugins:
-      proxy-rewrite:
-        regex_uri: ["/(.*)", "/$1"]
-      forward-auth:
-        uri: http://agate:8004/agate/authorization/cog_preview
-        request_headers: ["Authorization", "arlas-org-filter"]
-        keepalive: false
-  -
-    uri: /cog/statistics*
-    upstream:
-      nodes:
-        "titiler:8000": 1
-    plugins:
-      proxy-rewrite:
-        regex_uri: ["/(.*)", "/$1"]
-      forward-auth:
-        uri: http://agate:8004/agate/authorization/cog_statistics
-        request_headers: ["Authorization", "arlas-org-filter"]
-        keepalive: false
-  -
     uri: /cog/*
     upstream:
       nodes:
