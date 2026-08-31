@@ -57,7 +57,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --allow-delete  \
     --auth-grant-type password \
     --auth-client-id arlas-front \
-    --auth-token-url https://${ARLAS_HOST}:9443/realms/arlas/protocol/openid-connect/token \
+    --auth-token-url https://${ARLAS_HOST}:9443/auth/realms/arlas/protocol/openid-connect/token \
     --auth-headers "Content-Type:application/x-www-form-urlencoded" \
     --auth-login user_basic \
     --auth-password secret \
@@ -77,7 +77,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --allow-delete  \
     --auth-grant-type password \
     --auth-client-id arlas-front \
-    --auth-token-url https://${ARLAS_HOST}:9443/realms/arlas/protocol/openid-connect/token \
+    --auth-token-url https://${ARLAS_HOST}:9443/auth/realms/arlas/protocol/openid-connect/token \
     --auth-headers "Content-Type:application/x-www-form-urlencoded" \
     --auth-login user_builder \
     --auth-password secret \
@@ -96,7 +96,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --allow-delete  \
     --auth-grant-type password \
     --auth-client-id arlas-front \
-    --auth-token-url https://${ARLAS_HOST}:9443/realms/arlas/protocol/openid-connect/token \
+    --auth-token-url https://${ARLAS_HOST}:9443/auth/realms/arlas/protocol/openid-connect/token \
     --auth-headers "Content-Type:application/x-www-form-urlencoded" \
     --auth-login user_all_roles \
     --auth-password secret \
