@@ -1,4 +1,4 @@
-inputs_directory: $INGESTED_FOLDER|/inputs
+inputs_directory: $INGESTED_FOLDER|https://storage.googleapis.com/gisaia-public/test-aias
 
 max_number_of_archive_for_ingest: 1000000
 aproc_endpoint: $APROC_ENDPOINT_FROM_APROC|http://localhost:8001
@@ -10,152 +10,279 @@ drivers:
     class_name: extensions.aproc.proc.ingest.drivers.impl.dimap
     assets_dir: /tmp/aproc/dimap
     configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 1
+    enrichments: []
+    # overview cog generation is disabled because the archive format is not supported by the cog drivers
   -
     name: geoeye
     class_name: extensions.aproc.proc.ingest.drivers.impl.geoeye
     assets_dir: /tmp/aproc/geoeye
     configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 2
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: digitalglobe
     class_name: extensions.aproc.proc.ingest.drivers.impl.digitalglobe
     assets_dir: /tmp/aproc/digitalglobe
     configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 3
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: ast_dem
     class_name: extensions.aproc.proc.ingest.drivers.impl.ast_dem
     assets_dir: /tmp/aproc/ast_dem
     configuration:
+      build_overview_when_local: true
+      build_overview_when_remote: true
     priority: 4
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: rapideye
     class_name: extensions.aproc.proc.ingest.drivers.impl.rapideye
     assets_dir: /tmp/aproc/rapideye
     configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 5
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: spot5
     class_name: extensions.aproc.proc.ingest.drivers.impl.spot5
     assets_dir: /tmp/aproc/spot5
     configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 6
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: terrasarx
     class_name: extensions.aproc.proc.ingest.drivers.impl.terrasarx
     assets_dir: /tmp/aproc/terrasarx
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
+      tmp_directory: /tmp
     priority: 7
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: cosmoskymed
     class_name: extensions.aproc.proc.ingest.drivers.impl.cosmoskymed
     assets_dir: /tmp/aproc/cosmoskymed
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+      tmp_directory: /tmp
     priority: 8
-  -
-    name: sentinel1
-    class_name: extensions.aproc.proc.ingest.drivers.impl.sentinel_1
-    assets_dir: /tmp/aproc/sentinel1
-    configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
-    priority: 9
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: umbra
     class_name: extensions.aproc.proc.ingest.drivers.impl.umbra
     assets_dir: /tmp/aproc/umbra
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
-    priority: 10
+      build_overview_when_remote: true
+      build_overview_when_local: true
+      tmp_directory: /tmp
+    priority: 9
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: umbra_stac
     class_name: extensions.aproc.proc.ingest.drivers.impl.umbra_stac
     assets_dir: /tmp/aproc/umbra_stac
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
+      tmp_directory: /tmp
+      build_overview_when_local: true
       build_overview_when_remote: true
-    priority: 10
+    priority: 9
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: bsg
     class_name: extensions.aproc.proc.ingest.drivers.impl.bsg
     assets_dir: /tmp/aproc/bsg
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
-    priority: 11
+      tmp_directory: /tmp
+      build_overview_when_local: true
+      build_overview_when_remote: true
+    priority: 10
+    enrichments:
+    
+      - OVERVIEW_COG
   -
-    name: iceye
-    class_name: extensions.aproc.proc.ingest.drivers.impl.iceye
-    assets_dir: /tmp/aproc/iceye
+    name: satellogic
+    class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
+    assets_dir: /tmp/aproc/satellogic
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
-    priority: 12
-
+      tmp_directory: /tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 20
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: tiff
+    class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
+    assets_dir: /tmp/aproc/tiff
+    configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
+      tmp_directory: /tmp
+    priority: 100
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: jpeg2000
+    class_name: extensions.aproc.proc.ingest.drivers.impl.jpeg2000
+    assets_dir: /tmp/aproc/jpeg2000
+    configuration:
+      tmp_directory: /tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 101
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: sentinel2
     class_name: extensions.aproc.proc.ingest.drivers.impl.sentinel_2
     assets_dir: /tmp/aproc/sentinel2
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
+      tmp_directory: /tmp
       build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 11
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: sentinel1
+    class_name: extensions.aproc.proc.ingest.drivers.impl.sentinel_1
+    assets_dir: /tmp/aproc/sentinel1
+    configuration:
+      tmp_directory: /tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 12
+    enrichments: []
+    # overview cog generation is disabled because the archive format is not supported by the cog drivers
+  -
+    name: iceye
+    class_name: extensions.aproc.proc.ingest.drivers.impl.iceye
+    assets_dir: /tmp/aproc/iceye
+    configuration:
+      tmp_directory: /tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 13
-
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: radarsat2
     class_name: extensions.aproc.proc.ingest.drivers.impl.radarsat_2
-    assets_dir: /tmp/aproc/radarsat_2
+    assets_dir: /tmp/aproc/radarsat2
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+      tmp_directory: /tmp
     priority: 14
-
+    enrichments: []
+    # overview cog generation is disabled because the archive format is not supported by the cog drivers
   -
     name: skysat
     class_name: extensions.aproc.proc.ingest.drivers.impl.skysat
     assets_dir: /tmp/aproc/skysat
     configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+      tmp_directory: /tmp
     priority: 15
-
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: axelspace
     class_name: extensions.aproc.proc.ingest.drivers.impl.axelspace
     assets_dir: /tmp/aproc/axelspace
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_local: true
+      build_overview_when_remote: true
     priority: 16
-
+    enrichments: []
+    # overview cog generation is disabled because the archive format is not supported by the cog drivers (no data asset)
   -
     name: geosat
     class_name: extensions.aproc.proc.ingest.drivers.impl.geosat
     assets_dir: /tmp/aproc/geosat
     configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 17
-
+    enrichments:
+    
+      - OVERVIEW_COG
   -
     name: wyvern
     class_name: extensions.aproc.proc.ingest.drivers.impl.wyvern
     assets_dir: /tmp/aproc/wyvern
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 18
-
-  - name: landsat
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: landsat
     class_name: extensions.aproc.proc.ingest.drivers.impl.landsat
     assets_dir: /tmp/aproc/landsat
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
     priority: 19
-
-  - name: satellogic
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: satellogic
     class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
     assets_dir: /tmp/aproc/satellogic
     configuration:
+      build_overview_when_remote: true
+      build_overview_when_local: true
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 20
-
-  - name: capella
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: capella
     class_name: extensions.aproc.proc.ingest.drivers.impl.capella
     assets_dir: /tmp/aproc/capella
     configuration:
@@ -163,8 +290,11 @@ drivers:
       build_overview_when_remote: true
       build_overview_when_local: true
     priority: 21
-
-  - name: superview
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: superview
     class_name: extensions.aproc.proc.ingest.drivers.impl.superview
     assets_dir: /tmp/aproc/superview
     configuration:
@@ -172,29 +302,21 @@ drivers:
       build_overview_when_remote: true
       build_overview_when_local: true
     priority: 22
-
-  - name: opencosmos
+    enrichments:
+    
+      - OVERVIEW_COG
+  -
+    name: opencosmos
     class_name: extensions.aproc.proc.ingest.drivers.impl.opencosmos
     assets_dir: /tmp/aproc/opencosmos
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
       build_overview_when_remote: true
       build_overview_when_local: true
-      product_types: ["platero", "hammer"]
+      product_types:
+        - platero
+        - hammer
     priority: 23
-
-  -
-    name: tiff
-    class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
-    assets_dir: /tmp/aproc/tiff
-    configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
-    priority: 100
-
-  -
-    name: jpeg2000
-    class_name: extensions.aproc.proc.ingest.drivers.impl.jpeg2000
-    assets_dir: /tmp/aproc/jpeg2000
-    configuration:
-      tmp_directory: $TMP_FOLDER|/tmp
-    priority: 101
+    enrichments:
+    
+      - OVERVIEW_COG

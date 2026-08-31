@@ -1,6 +1,6 @@
 arlas_url_search: $ARLAS_URL_SEARCH
-arlaseo_mapping_url: $ARLASEO_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.3.0/mapping.json"
-download_mapping_url: $DOWNLOAD_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.3.0/downloads_mapping.json"
+arlaseo_mapping_url: $ARLASEO_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.0/conf/mapping.json"
+download_mapping_url: $DOWNLOAD_MAPPING_URL|"https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.0/conf/downloads_mapping.json"
 
 clean_outbox_directory: $CLEAN_DOWNLOAD_OUTBOX_DIR|True
 outbox_directory: $APROC_DOWNLOAD_OUTBOX_DIR
@@ -17,8 +17,10 @@ notification_admin_emails: $APROC_DOWNLOAD_ADMIN_EMAILS
 
 email_subject_user: $APROC_DOWNLOAD_SUBJECT_USER
 email_content_user: $APROC_DOWNLOAD_CONTENT_USER
+
 email_subject_error_download: $APROC_DOWNLOAD_SUBJECT_ERROR
 email_content_error_download: $APROC_DOWNLOAD_CONTENT_ERROR
+
 email_subject_admin: $APROC_DOWNLOAD_SUBJECT_ADMIN
 email_content_admin: $APROC_DOWNLOAD_CONTENT_ADMIN
 
@@ -38,8 +40,8 @@ smtp:
   from_addr: $ARLAS_SMTP_FROM
 
 index_for_download:
-  endpoint_url: $APROC_INDEX_ENDPOINT_URL|https://localhost:9200
   index_name: $APROC_INDEX_NAME|aproc_downloads
+  endpoint_url: $APROC_INDEX_ENDPOINT_URL|https://localhost:9200
   login: $APROC_INDEX_LOGIN
   pwd: $APROC_INDEX_PWD
 
