@@ -1,22 +1,41 @@
 drivers:
   -
-    name: safe
+    name: s2_cog
     class_name: extensions.aproc.proc.enrich.drivers.impl.s2_cog
     assets_dir: /tmp/aproc/s2_cog
-    configuration:
-      input:
-        type: $APROC_INPUT_STORAGE_TYPE
-        bucket: $APROC_INPUT_STORAGE_BUCKET
-        api_key:
-          project_id: $APROC_INPUT_STORAGE_API_KEY_PROJECT
-          private_key_id: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY_ID
-          private_key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
-        headers:
-          X-API-Key: $APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY
-          Accept: "application/json, text/plain"
-          Connection: "keep-alive"
-          Sec-Fetch-Dest: "empty"
-          Content-Type: application/json;charset=utf-8
-        domain: $APROC_INPUT_STORAGE_DOMAIN
-        force_download: $APROC_INPUT_STORAGE_FORCE_DOWNLOAD
     priority: 1
+    configuration:
+      
+      all_bands_cog_max_width_or_height: 10000
+      cog_max_width_or_height: -1
+      cog_overview_max_width_or_height: 2000
+  -
+    name: landsat_cog
+    class_name: extensions.aproc.proc.enrich.drivers.impl.landsat_cog
+    assets_dir: /tmp/aproc/landsat_cog
+    priority: 2
+    configuration:
+      
+      all_bands_cog_max_width_or_height: 10000
+      cog_max_width_or_height: -1
+      cog_overview_max_width_or_height: 2000
+  -
+    name: geotiff_cog
+    class_name: extensions.aproc.proc.enrich.drivers.impl.geotiff_cog
+    assets_dir: /tmp/aproc/geotiff_cog
+    priority: 3
+    configuration:
+      
+      all_bands_cog_max_width_or_height: 10000
+      cog_max_width_or_height: -1
+      cog_overview_max_width_or_height: 2000
+  -
+    name: csk_h5_cog
+    class_name: extensions.aproc.proc.enrich.drivers.impl.csk_h5_cog
+    assets_dir: /tmp/aproc/csk_h5_cog
+    priority: 4
+    configuration:
+      
+      all_bands_cog_max_width_or_height: 10000
+      cog_max_width_or_height: -1
+      cog_overview_max_width_or_height: 2000

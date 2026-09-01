@@ -80,7 +80,7 @@ access_manager:
       bucket: gisaia-public
       endpoint: "https://storage.googleapis.com"
       readable_paths:
-        - /OPENDATA      
+        - /      
     -
       type: s3
       bucket: downloads

@@ -83,7 +83,81 @@ data:
           },
           "assets": {
             "type": "object",
-            "enabled": false
+            "dynamic": false,
+            "properties": {
+              "metadata": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "archive": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "data": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "overview": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "thumbnail": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "airs_item": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "overview_cog": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "cog": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              },
+              "all_bands_cog": {
+                "properties": {
+                  "name": { "type": "keyword" },
+                  "asset_format": { "type": "keyword" },
+                  "type": { "type": "keyword" },
+                  "roles": { "type": "keyword" }
+                }
+              }
+            }
           },
           "properties": {
             "properties": {

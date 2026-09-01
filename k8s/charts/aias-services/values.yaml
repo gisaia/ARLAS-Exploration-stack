@@ -18,7 +18,7 @@ services:
     allowPrivilegeEscalation: false
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.16.3
+    image: gisaia/airs:0.18.1
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers: []
@@ -71,13 +71,13 @@ services:
 
       # -- ARLAS-EO mapping and collection URLs used for initializing new indices of new collections
       arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
-      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.3.0/mapping.json
+      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.1/conf/mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
-      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.3.0/collection.json
+      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.1/conf/collection.json
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.16.3
+    image: gisaia/fam:0.18.1
     # -- Extra environment variables for the fam container
     imagePullSecrets: []
     extraContainers: []
@@ -106,7 +106,7 @@ services:
 
   agate:
     serviceName: arlas-agate
-    image: gisaia/agate:0.16.3
+    image: gisaia/agate:0.18.1
     # -- Extra environment variables for the agate container
     imagePullSecrets: []
     extraContainers: []
@@ -308,7 +308,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.16.3
+      image: gisaia/aproc-service:0.18.1
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -335,7 +335,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.16.3
+      image: gisaia/aproc-proc:0.18.1
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -390,76 +390,115 @@ services:
           # -- APROC endpoint URL accessed by the ingest extension
           aprocEndpoint: http://aproc-service:8000
           resourceIdHashStartAt: 1
+          enrichments:
+            - OVERVIEW_COG
           drivers:
             dimap:
               enabled: true
               priority: 1
-            geoeyes:
+              build_overview_when_local: true
+              build_overview_when_remote: true
+            geoeye:
               enabled: true
               priority: 2
+              build_overview_when_local: true
+              build_overview_when_remote: true
             digitalglobe:
               enabled: true
               priority: 3
+              build_overview_when_local: true
+              build_overview_when_remote: true
             astDem:
               enabled: true
               priority: 4
               build_overview_when_local: true
+              build_overview_when_remote: true
+              overview_stretch: true
             rapideye:
               enabled: true
               priority: 5
+              build_overview_when_local: true
+              build_overview_when_remote: true
             spot5:
               enabled: true
               priority: 6
+              build_overview_when_local: true
+              build_overview_when_remote: true
             terrasarx:
               enabled: true
               priority: 7
+              build_overview_when_local: true
+              build_overview_when_remote: true
             cosmoskymed:
               enabled: true
               priority: 8
+              build_overview_when_local: true
+              build_overview_when_remote: true
             umbra:
               enabled: true
               priority: 9
+              build_overview_when_local: true
+              build_overview_when_remote: true
             umbra_stac:
               enabled: true
               priority: 9
-              build_overview_when_remote: true
               build_overview_when_local: true
+              build_overview_when_remote: true
             bsg:
               enabled: true
               priority: 10
               build_overview_when_local: true
+              build_overview_when_remote: true
             sentinel2:
               enabled: true
               priority: 11
+              build_overview_when_local: true
               build_overview_when_remote: true
             sentinel1:
               enabled: true
               priority: 12
+              build_overview_when_local: true
+              build_overview_when_remote: true
             iceye:
               enabled: true
               priority: 13
+              build_overview_when_local: true
+              build_overview_when_remote: true
             radarsat2:
               enabled: true
               priority: 14
+              build_overview_when_local: true
+              build_overview_when_remote: true
             skysat:
               enabled: true
               priority: 15
+              build_overview_when_local: true
+              build_overview_when_remote: true
             axelspace:
               enabled: true
               priority: 16
               build_overview_when_local: true
+              build_overview_when_remote: true
             geosat:
               enabled: true
               priority: 17
+              build_overview_when_local: true
+              build_overview_when_remote: true
             wyvern:
               enabled: true
               priority: 18
+              build_overview_when_local: true
+              build_overview_when_remote: true
             landsat:
               enabled: true
               priority: 19
+              build_overview_when_local: true
+              build_overview_when_remote: true
             satellogic:
               enabled: true
               priority: 20
+              build_overview_when_local: true
+              build_overview_when_remote: true
             capella:
               enabled: true
               priority: 21
@@ -481,9 +520,13 @@ services:
             tiff:
               enabled: true
               priority: 100
+              build_overview_when_local: true
+              build_overview_when_remote: true
             jpeg2000:
               enabled: true
               priority: 101
+              build_overview_when_local: true
+              build_overview_when_remote: true
 
         directoryIngest:
           # -- Whether the directory ingest extension is enabled or not
@@ -495,6 +538,31 @@ services:
             s2_cog:
               enabled: true
               priority: 1
+              configuration:
+                cog_max_width_or_height: -1
+                cog_overview_max_width_or_height: 2000
+                all_bands_cog_max_width_or_height: 10000
+            landsat_cog:
+              enabled: true
+              priority: 2
+              configuration:
+                cog_max_width_or_height: -1
+                cog_overview_max_width_or_height: 2000
+                all_bands_cog_max_width_or_height: 10000
+            geotiff_cog:
+              enabled: true
+              priority: 3
+              configuration:
+                cog_max_width_or_height: -1
+                cog_overview_max_width_or_height: 2000
+                all_bands_cog_max_width_or_height: 10000
+            csk_h5_cog:
+              enabled: true
+              priority: 4
+              configuration:
+                cog_max_width_or_height: -1
+                cog_overview_max_width_or_height: 2000
+                all_bands_cog_max_width_or_height: 10000
         dc3build:
           # -- Whether the DC3 build extension is enabled or not
           enabled: true

@@ -9,47 +9,33 @@ headers_for_arlas:
   - arlas-org-filter
 
 services:
+
   airs-storage:
-    jwt_name: authorization
     jwt_location:
-      - headers
+    - headers
+    jwt_name: authorization
     private:
-      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
-        part: path
-      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
-        part: path
+    - part: path
+      pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
+    - part: path
+      pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
     public:
-      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
-        part: path
-  cog_preview:
-    jwt_name: authorization
-    jwt_location:
-      - headers
-      - query_params
-    public:
-      - pattern: (/cog/preview)(.*)
-        part: path
-  cog_statistics:
-    jwt_name: authorization
-    jwt_location:
-      - headers
-      - query_params
-    public:
-      - pattern: (/cog/statistics)(.*)
-        part: path
+    - part: path
+      pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
   cog:
-    jwt_name: authorization
     jwt_location:
-      - headers
-      - query_params
+    - headers
+    - query_params
+    jwt_name: authorization
     private:
-      - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
-        part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
+    - part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
+      pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
+
+method_header: $AGATE_METHOD_HEADER|x-forwarded-method
 urbac:
   role_file: conf/roles.yaml
   jwt_header: $AGATE_JWT_HEADER|authorization
-  method_header: $AGATE_METHOD_HEADER|x-forwarded-method
+  jwks_uri: $JWKS_URI  
   verify_jwt: $VERIFY_JWT|true
   verify_ssl: $VERIFY_SSL|true
   jwt_audience: $JWT_AUDIENCE|arlas-backend
-  jwks_uri: $JWKS_URI
