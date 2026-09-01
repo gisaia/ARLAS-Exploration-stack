@@ -24,7 +24,6 @@ drivers:
       build_overview_when_local: true
     priority: 2
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: digitalglobe
@@ -35,7 +34,6 @@ drivers:
       build_overview_when_local: true
     priority: 3
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: ast_dem
@@ -46,7 +44,6 @@ drivers:
       build_overview_when_remote: true
     priority: 4
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: rapideye
@@ -57,7 +54,6 @@ drivers:
       build_overview_when_local: true
     priority: 5
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: spot5
@@ -68,7 +64,6 @@ drivers:
       build_overview_when_local: true
     priority: 6
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: terrasarx
@@ -78,7 +73,6 @@ drivers:
       tmp_directory: /tmp
     priority: 7
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: cosmoskymed
@@ -89,8 +83,7 @@ drivers:
       build_overview_when_local: true
       tmp_directory: /tmp
     priority: 8
-    enrichments:
-    
+    enrichments:    
       - OVERVIEW_COG
   -
     name: umbra
@@ -102,7 +95,6 @@ drivers:
       tmp_directory: /tmp
     priority: 9
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: umbra_stac
@@ -114,7 +106,6 @@ drivers:
       build_overview_when_remote: true
     priority: 9
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: bsg
@@ -126,7 +117,6 @@ drivers:
       build_overview_when_remote: true
     priority: 10
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: satellogic
@@ -138,7 +128,6 @@ drivers:
       build_overview_when_local: true
     priority: 20
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: tiff
@@ -150,7 +139,6 @@ drivers:
       tmp_directory: /tmp
     priority: 100
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: jpeg2000
@@ -162,7 +150,6 @@ drivers:
       build_overview_when_local: true
     priority: 101
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: sentinel2
@@ -174,7 +161,6 @@ drivers:
       build_overview_when_local: true
     priority: 11
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: sentinel1
@@ -220,7 +206,6 @@ drivers:
       tmp_directory: /tmp
     priority: 15
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: axelspace
@@ -243,7 +228,6 @@ drivers:
       tmp_directory: $TMP_FOLDER|/tmp
     priority: 17
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: wyvern
@@ -255,7 +239,6 @@ drivers:
       build_overview_when_local: true
     priority: 18
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: landsat
@@ -267,19 +250,6 @@ drivers:
       build_overview_when_local: true
     priority: 19
     enrichments:
-    
-      - OVERVIEW_COG
-  -
-    name: satellogic
-    class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
-    assets_dir: /tmp/aproc/satellogic
-    configuration:
-      build_overview_when_remote: true
-      build_overview_when_local: true
-      tmp_directory: $TMP_FOLDER|/tmp
-    priority: 20
-    enrichments:
-    
       - OVERVIEW_COG
   -
     name: capella
@@ -291,7 +261,6 @@ drivers:
       build_overview_when_local: true
     priority: 21
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: superview
@@ -303,7 +272,6 @@ drivers:
       build_overview_when_local: true
     priority: 22
     enrichments:
-    
       - OVERVIEW_COG
   -
     name: opencosmos
@@ -318,5 +286,4 @@ drivers:
         - hammer
     priority: 23
     enrichments:
-    
       - OVERVIEW_COG

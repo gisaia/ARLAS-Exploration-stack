@@ -496,20 +496,6 @@ data:
         {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
-      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.enabled }}
-      -
-        name: satellogic
-        class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
-        assets_dir: /tmp/aproc/satellogic
-        configuration:
-          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_remote }}
-          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_local }}
-          tmp_directory: $TMP_FOLDER|/tmp
-        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.priority }}
-        enrichments:
-        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
-      {{- end }}
-
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.capella.enabled }}
       -
         name: capella
