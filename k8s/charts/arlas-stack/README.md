@@ -1,6 +1,6 @@
 # arlas-aias
 
-![Version: 28.7.0](https://img.shields.io/badge/Version-28.7.0-informational?style=flat-square) ![AppVersion: 28.7.0](https://img.shields.io/badge/AppVersion-28.7.0-informational?style=flat-square)
+![Version: 28.8.0](https://img.shields.io/badge/Version-28.8.0-informational?style=flat-square) ![AppVersion: 28.8.0](https://img.shields.io/badge/AppVersion-28.8.0-informational?style=flat-square)
 
 A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
@@ -8,10 +8,10 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../aias-services | aias-services | 28.7.0 |
-| file://../arlas-services | arlas-services | 28.7.0 |
-| file://../arlas-uis | arlas-uis | 28.7.0 |
-| file://../titiler | titiler | 28.7.0 |
+| file://../aias-services | aias-services | 28.8.0 |
+| file://../arlas-services | arlas-services | 28.8.0 |
+| file://../arlas-uis | arlas-uis | 28.8.0 |
+| file://../titiler | titiler | 28.8.0 |
 | https://charts.bitnami.com/bitnami | elasticsearch | 22.0.4 |
 | https://charts.bitnami.com/bitnami | keycloak | 25.2.0 |
 | https://charts.bitnami.com/bitnami | minio | 14.10.5 |
