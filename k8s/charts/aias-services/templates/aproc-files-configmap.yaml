@@ -6,8 +6,8 @@ data:
   aproc.yaml: |
     celery_broker_url: {{ .Values.services.aproc.configuration.celeryBrokerUrl }}
     celery_result_backend: {{ .Values.services.aproc.configuration.celeryResultBackend }}
-    celery_result_backend_transport_options:
     {{- if .Values.services.aproc.configuration.celeryResultBackendTransportOptions }}
+    celery_result_backend_transport_options:
     {{- toYaml .Values.services.aproc.configuration.celeryResultBackendTransportOptions | nindent 6 }}
     {{- end }}
 
@@ -187,16 +187,24 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.dimap
         assets_dir: /tmp/aproc/dimap
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.dimap.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.dimap.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.dimap.priority }}
+        enrichments: []
+        # overview cog generation is disabled because the archive format is not supported by the cog drivers
       {{- end }}
 
-      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.geoeyes.enabled }}
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.geoeye.enabled }}
       -
         name: geoeye
         class_name: extensions.aproc.proc.ingest.drivers.impl.geoeye
         assets_dir: /tmp/aproc/geoeye
         configuration:
-        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geoeyes.priority }}
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geoeye.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geoeye.build_overview_when_local }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geoeye.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.digitalglobe.enabled }}
@@ -205,7 +213,11 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.digitalglobe
         assets_dir: /tmp/aproc/digitalglobe
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.digitalglobe.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.digitalglobe.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.digitalglobe.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.enabled }}
@@ -215,7 +227,11 @@ data:
         assets_dir: /tmp/aproc/ast_dem
         configuration:
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.build_overview_when_local }}
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.build_overview_when_remote }}
+          overview_stretch: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.overview_stretch }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.astDem.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.rapideye.enabled }}
@@ -224,7 +240,11 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.rapideye
         assets_dir: /tmp/aproc/rapideye
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.rapideye.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.rapideye.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.rapideye.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.spot5.enabled }}
@@ -233,7 +253,11 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.spot5
         assets_dir: /tmp/aproc/spot5
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.spot5.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.spot5.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.spot5.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.terrasarx.enabled }}
@@ -244,6 +268,8 @@ data:
         configuration:
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.terrasarx.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.enabled }}
@@ -252,8 +278,12 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.cosmoskymed
         assets_dir: /tmp/aproc/cosmoskymed
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_local }}
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.umbra.enabled }}
@@ -262,8 +292,12 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.umbra
         assets_dir: /tmp/aproc/umbra
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra.build_overview_when_local }}
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.enabled }}
@@ -276,6 +310,8 @@ data:
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.build_overview_when_local }}
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.build_overview_when_remote }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.umbra_stac.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.enabled }}
@@ -286,7 +322,10 @@ data:
         configuration:
           tmp_directory: /tmp
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_local }}
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_remote }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.bsg.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.enabled }}
@@ -296,7 +335,11 @@ data:
         assets_dir: /tmp/aproc/satellogic
         configuration:
           tmp_directory: /tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.tiff.enabled }}
@@ -305,8 +348,12 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.tiff
         assets_dir: /tmp/aproc/tiff
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.tiff.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.tiff.build_overview_when_local }}
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.tiff.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.jpeg2000.enabled }}
@@ -316,7 +363,11 @@ data:
         assets_dir: /tmp/aproc/jpeg2000
         configuration:
           tmp_directory: /tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.jpeg2000.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.jpeg2000.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.jpeg2000.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.enabled }}
@@ -329,6 +380,8 @@ data:
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.build_overview_when_remote }}
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel2.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.enabled }}
@@ -338,7 +391,11 @@ data:
         assets_dir: /tmp/aproc/sentinel1
         configuration:
           tmp_directory: /tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.sentinel1.priority }}
+        enrichments: []
+        # overview cog generation is disabled because the archive format is not supported by the cog drivers
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.enabled }}
@@ -348,7 +405,11 @@ data:
         assets_dir: /tmp/aproc/iceye
         configuration:
           tmp_directory: /tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.iceye.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.enabled }}
@@ -357,8 +418,12 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.radarsat_2
         assets_dir: /tmp/aproc/radarsat2
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.build_overview_when_local }}
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.radarsat2.priority }}
+        enrichments: []
+        # overview cog generation is disabled because the archive format is not supported by the cog drivers
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.enabled }}
@@ -367,8 +432,12 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.skysat
         assets_dir: /tmp/aproc/skysat
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.build_overview_when_local }}
           tmp_directory: /tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.skysat.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.enabled }}
@@ -379,7 +448,10 @@ data:
         configuration:
           tmp_directory: $TMP_FOLDER|/tmp
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_local }}
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_remote }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.priority }}
+        enrichments: []
+        # overview cog generation is disabled because the archive format is not supported by the cog drivers (no data asset)
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.geosat.enabled }}
@@ -388,8 +460,12 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.geosat
         assets_dir: /tmp/aproc/geosat
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geosat.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geosat.build_overview_when_local }}
           tmp_directory: $TMP_FOLDER|/tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.geosat.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.wyvern.enabled }}
@@ -399,7 +475,11 @@ data:
         assets_dir: /tmp/aproc/wyvern
         configuration:
           tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.wyvern.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.wyvern.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.wyvern.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.landsat.enabled }}
@@ -409,7 +489,11 @@ data:
         assets_dir: /tmp/aproc/landsat
         configuration:
           tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.landsat.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.landsat.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.landsat.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.enabled }}
@@ -418,8 +502,12 @@ data:
         class_name: extensions.aproc.proc.ingest.drivers.impl.satellogic
         assets_dir: /tmp/aproc/satellogic
         configuration:
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_local }}
           tmp_directory: $TMP_FOLDER|/tmp
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.satellogic.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.capella.enabled }}
@@ -432,6 +520,8 @@ data:
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.capella.build_overview_when_remote }}
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.capella.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.capella.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.superview.enabled }}
@@ -444,6 +534,8 @@ data:
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.superview.build_overview_when_remote }}
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.superview.build_overview_when_local }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.superview.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
       {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.opencosmos.enabled }}
@@ -460,6 +552,8 @@ data:
             - {{ . }}
             {{- end }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.opencosmos.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
 
@@ -471,6 +565,35 @@ data:
         class_name: extensions.aproc.proc.enrich.drivers.impl.s2_cog
         assets_dir: /tmp/aproc/s2_cog
         priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.s2_cog.priority }}
+        configuration:
+          {{ .Values.services.aproc.configuration.extensions.enrich.drivers.s2_cog.configuration | toYaml | nindent 10 }}
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.landsat_cog.enabled }}
+      -
+        name: landsat_cog
+        class_name: extensions.aproc.proc.enrich.drivers.impl.landsat_cog
+        assets_dir: /tmp/aproc/landsat_cog
+        priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.landsat_cog.priority }}
+        configuration:
+          {{ .Values.services.aproc.configuration.extensions.enrich.drivers.landsat_cog.configuration | toYaml | nindent 10 }}
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.enabled }}
+      -
+        name: geotiff_cog
+        class_name: extensions.aproc.proc.enrich.drivers.impl.geotiff_cog
+        assets_dir: /tmp/aproc/geotiff_cog
+        priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.priority }}
+        configuration:
+          {{ .Values.services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration | toYaml | nindent 10 }}
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.enabled }}
+      -
+        name: csk_h5_cog
+        class_name: extensions.aproc.proc.enrich.drivers.impl.csk_h5_cog
+        assets_dir: /tmp/aproc/csk_h5_cog
+        priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.priority }}
+        configuration:
+          {{ .Values.services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.configuration | toYaml | nindent 10 }}
       {{- end }}
   fam.yaml: |
     inputs_directory: {{ .Values.services.aproc.configuration.extensions.ingest.inputsDirectory }}

@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 28.7.0](https://img.shields.io/badge/Version-28.7.0-informational?style=flat-square) ![AppVersion: 0.16.3](https://img.shields.io/badge/AppVersion-0.16.3-informational?style=flat-square)
+![Version: 28.7.0](https://img.shields.io/badge/Version-28.7.0-informational?style=flat-square) ![AppVersion: 0.18.1](https://img.shields.io/badge/AppVersion-0.18.1-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
@@ -61,7 +61,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.extraInitContainers | string | `nil` |  |
 | services.agate.extraVolumeMounts | string | `nil` |  |
 | services.agate.extraVolumes | string | `nil` |  |
-| services.agate.image | string | `"gisaia/agate:0.16.3"` |  |
+| services.agate.image | string | `"gisaia/agate:0.18.1"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
@@ -71,7 +71,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.tolerations | list | `[]` | Tolerations for AGATE service pods |
 | services.agate.urlPrefix | string | `"/agate"` |  |
 | services.airs.affinity | object | `{}` | Affinity for AIRS service pods |
-| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/ARLAS-EO/v1.3.0/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
+| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.1/conf/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
 | services.airs.configuration.arlaseoMappingUrl | string | `"/app/mappings/arlas_eo_mapping.json"` | ARLAS-EO mapping and collection URLs used for initializing new indices of new collections |
 | services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
 | services.airs.configuration.s3.accessKeyId | string | `"airs"` | S3 access key id |
@@ -88,7 +88,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.extraInitContainers | list | `[]` |  |
 | services.airs.extraVolumeMounts | list | `[]` |  |
 | services.airs.extraVolumes | list | `[]` |  |
-| services.airs.image | string | `"gisaia/airs:0.16.3"` |  |
+| services.airs.image | string | `"gisaia/airs:0.18.1"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
@@ -214,7 +214,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.extraInitContainers | string | `nil` |  |
 | services.aproc.service.extraVolumeMounts | string | `nil` |  |
 | services.aproc.service.extraVolumes | string | `nil` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.16.3"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.18.1"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
@@ -229,7 +229,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
 | services.aproc.worker.extraVolumeMounts | string | `nil` |  |
 | services.aproc.worker.extraVolumes | string | `nil` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.16.3"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.18.1"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
@@ -243,7 +243,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.extraInitContainers | string | `nil` |  |
 | services.fam.extraVolumeMounts | string | `nil` |  |
 | services.fam.extraVolumes | string | `nil` |  |
-| services.fam.image | string | `"gisaia/fam:0.16.3"` |  |
+| services.fam.image | string | `"gisaia/fam:0.18.1"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |

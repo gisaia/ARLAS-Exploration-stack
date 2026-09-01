@@ -395,7 +395,10 @@ aias-services:
             #inputsDirectory: http://arlas-stack-minio:9000/inputs
             inputsDirectory: https://storage.googleapis.com/gisaia-public/test-aias
             # -- APROC endpoint URL accessed by ingest processes
-            aprocEndpoint: http://aproc-service:8000
+            aprocEndpoint: http://aproc-service:8000/aproc
+            # -- List of enrichments to be applied to all ingest drivers (e.g. OVERVIEW_COG, COG). If you want to apply different enrichments for each driver, you can configure them in the driver configuration below. If you don't want to apply any enrichment, set this value to an empty list.
+            enrichments: []
+
         accessManager:
           # -- Temporary directory used by the access manager
           tmpDir: /tmp/
