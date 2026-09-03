@@ -17,7 +17,7 @@ services:
     allowPrivilegeEscalation: false
   server: 
     serviceName: arlas-server
-    image: gisaia/arlas-server:28.0.0
+    image: gisaia/arlas-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
@@ -43,7 +43,7 @@ services:
 
   permissions:
     serviceName: arlas-permissions-server
-    image: gisaia/arlas-permissions-server:28.0.0
+    image: gisaia/arlas-permissions-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
     apm: false
@@ -69,7 +69,7 @@ services:
 
   persistence: 
     serviceName: arlas-persistence-server
-    image: gisaia/arlas-persistence-server:28.0.0
+    image: gisaia/arlas-persistence-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
     # -- Whether ES APM should be activated or not
