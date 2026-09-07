@@ -57,6 +57,7 @@ env:
   GDAL_HTTP_MULTIPLEX: "YES"
   GDAL_HTTP_VERSION: 2
   PYTHONWARNINGS: "ignore"
+  TITILER_API_DEBUG: "TRUE"
 
 resources:
   requests:
