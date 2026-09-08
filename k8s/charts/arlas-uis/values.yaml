@@ -17,7 +17,7 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:29.0.0-rc.7
+    image: gisaia/arlas-wui:29.0.0-rc.8
     # -- Extra environment variables for the arlas wui container
     urlPrefix: /wui
     tabName: ARLAS Exploration
@@ -72,7 +72,7 @@ uis:
 
   builder:
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:29.0.0-rc.5
+    image: gisaia/arlas-wui-builder:29.0.0-rc.6
     urlPrefix: /builder/
     tabName: ARLAS Studio
     aboutConfigMapName: arlas-builder-default-about-configmap
