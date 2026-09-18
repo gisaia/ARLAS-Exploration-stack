@@ -18,7 +18,7 @@ services:
     allowPrivilegeEscalation: false
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.18.1
+    image: gisaia/airs:0.19.0
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers: []
@@ -71,13 +71,13 @@ services:
 
       # -- ARLAS-EO mapping and collection URLs used for initializing new indices of new collections
       arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
-      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.1/conf/mapping.json
+      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
-      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.1/conf/collection.json
+      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.18.1
+    image: gisaia/fam:0.19.0
     # -- Extra environment variables for the fam container
     imagePullSecrets: []
     extraContainers: []
@@ -106,7 +106,7 @@ services:
 
   agate:
     serviceName: arlas-agate
-    image: gisaia/agate:0.18.1
+    image: gisaia/agate:0.19.0
     # -- Extra environment variables for the agate container
     imagePullSecrets: []
     extraContainers: []
@@ -308,7 +308,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.18.1
+      image: gisaia/aproc-service:0.19.0
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -335,7 +335,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.18.1
+      image: gisaia/aproc-proc:0.19.0
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -403,6 +403,7 @@ services:
               priority: 2
               build_overview_when_local: true
               build_overview_when_remote: true
+              overview_stretch: true
             digitalglobe:
               enabled: true
               priority: 3
@@ -434,6 +435,8 @@ services:
               priority: 8
               build_overview_when_local: true
               build_overview_when_remote: true
+              overview_warp_options:
+                dstSRS: EPSG:4326
             umbra:
               enabled: true
               priority: 9
@@ -479,6 +482,8 @@ services:
               priority: 16
               build_overview_when_local: true
               build_overview_when_remote: true
+              overview_warp_options:
+                dstSRS: EPSG:4326
             geosat:
               enabled: true
               priority: 17
@@ -549,20 +554,28 @@ services:
                 cog_max_width_or_height: -1
                 cog_overview_max_width_or_height: 2000
                 all_bands_cog_max_width_or_height: 10000
-            geotiff_cog:
+            csk_h5_cog:
               enabled: true
               priority: 3
               configuration:
                 cog_max_width_or_height: -1
                 cog_overview_max_width_or_height: 2000
                 all_bands_cog_max_width_or_height: 10000
-            csk_h5_cog:
+            geotiff_cog:
               enabled: true
               priority: 4
               configuration:
                 cog_max_width_or_height: -1
                 cog_overview_max_width_or_height: 2000
                 all_bands_cog_max_width_or_height: 10000
+            jpeg2000:
+              enabled: true
+              priority: 5
+              configuration:
+                cog_max_width_or_height: -1
+                cog_overview_max_width_or_height: 2000
+                all_bands_cog_max_width_or_height: 10000
+                
         dc3build:
           # -- Whether the DC3 build extension is enabled or not
           enabled: true

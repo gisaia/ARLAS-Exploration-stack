@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 28.8.0](https://img.shields.io/badge/Version-28.8.0-informational?style=flat-square) ![AppVersion: 0.18.1](https://img.shields.io/badge/AppVersion-0.18.1-informational?style=flat-square)
+![Version: 28.8.0](https://img.shields.io/badge/Version-28.8.0-informational?style=flat-square) ![AppVersion: 0.19.0](https://img.shields.io/badge/AppVersion-0.19.0-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
@@ -61,7 +61,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.extraInitContainers | string | `nil` |  |
 | services.agate.extraVolumeMounts | string | `nil` |  |
 | services.agate.extraVolumes | string | `nil` |  |
-| services.agate.image | string | `"gisaia/agate:0.18.1"` |  |
+| services.agate.image | string | `"gisaia/agate:0.19.0"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
@@ -71,7 +71,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.tolerations | list | `[]` | Tolerations for AGATE service pods |
 | services.agate.urlPrefix | string | `"/agate"` |  |
 | services.airs.affinity | object | `{}` | Affinity for AIRS service pods |
-| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.18.1/conf/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
+| services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
 | services.airs.configuration.arlaseoMappingUrl | string | `"/app/mappings/arlas_eo_mapping.json"` | ARLAS-EO mapping and collection URLs used for initializing new indices of new collections |
 | services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
 | services.airs.configuration.s3.accessKeyId | string | `"airs"` | S3 access key id |
@@ -88,7 +88,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.extraInitContainers | list | `[]` |  |
 | services.airs.extraVolumeMounts | list | `[]` |  |
 | services.airs.extraVolumes | list | `[]` |  |
-| services.airs.image | string | `"gisaia/airs:0.18.1"` |  |
+| services.airs.image | string | `"gisaia/airs:0.19.0"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
@@ -138,12 +138,17 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.configuration.cog_max_width_or_height | int | `-1` |  |
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.configuration.cog_overview_max_width_or_height | int | `2000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.priority | int | `4` |  |
+| services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.priority | int | `3` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration.all_bands_cog_max_width_or_height | int | `10000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration.cog_max_width_or_height | int | `-1` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration.cog_overview_max_width_or_height | int | `2000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.priority | int | `3` |  |
+| services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.priority | int | `4` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.configuration.all_bands_cog_max_width_or_height | int | `10000` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.configuration.cog_max_width_or_height | int | `-1` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.configuration.cog_overview_max_width_or_height | int | `2000` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.priority | int | `5` |  |
 | services.aproc.configuration.extensions.enrich.drivers.landsat_cog.configuration.all_bands_cog_max_width_or_height | int | `10000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.landsat_cog.configuration.cog_max_width_or_height | int | `-1` |  |
 | services.aproc.configuration.extensions.enrich.drivers.landsat_cog.configuration.cog_overview_max_width_or_height | int | `2000` |  |
@@ -164,6 +169,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.axelspace.overview_warp_options.dstSRS | string | `"EPSG:4326"` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.priority | int | `16` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_remote | bool | `true` |  |
@@ -176,6 +182,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.overview_warp_options.dstSRS | string | `"EPSG:4326"` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.priority | int | `8` |  |
 | services.aproc.configuration.extensions.ingest.drivers.digitalglobe.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.digitalglobe.build_overview_when_remote | bool | `true` |  |
@@ -188,6 +195,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.geoeye.overview_stretch | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.priority | int | `2` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geosat.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geosat.build_overview_when_remote | bool | `true` |  |
@@ -274,7 +282,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.extraInitContainers | string | `nil` |  |
 | services.aproc.service.extraVolumeMounts | string | `nil` |  |
 | services.aproc.service.extraVolumes | string | `nil` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.18.1"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.19.0"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
@@ -289,7 +297,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
 | services.aproc.worker.extraVolumeMounts | string | `nil` |  |
 | services.aproc.worker.extraVolumes | string | `nil` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.18.1"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.19.0"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
@@ -303,7 +311,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.extraInitContainers | string | `nil` |  |
 | services.fam.extraVolumeMounts | string | `nil` |  |
 | services.fam.extraVolumes | string | `nil` |  |
-| services.fam.image | string | `"gisaia/fam:0.18.1"` |  |
+| services.fam.image | string | `"gisaia/fam:0.19.0"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
