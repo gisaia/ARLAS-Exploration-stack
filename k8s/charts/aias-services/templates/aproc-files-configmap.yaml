@@ -281,6 +281,8 @@ data:
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_remote }}
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_local }}
           tmp_directory: /tmp
+          overview_warp_options: 
+            {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.overview_warp_options | toYaml | nindent 12 }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.priority }}
         enrichments:
         {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
@@ -449,6 +451,8 @@ data:
           tmp_directory: $TMP_FOLDER|/tmp
           build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_local }}
           build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_remote }}
+          overview_warp_options: 
+            {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.overview_warp_options | toYaml | nindent 12 }}
         priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.axelspace.priority }}
         enrichments: []
         # overview cog generation is disabled because the archive format is not supported by the cog drivers (no data asset)
@@ -571,6 +575,15 @@ data:
         priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.priority }}
         configuration:
           {{ .Values.services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration | toYaml | nindent 10 }}
+      {{- end }}
+      {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.jpeg2000.enabled }}
+      -
+        name: jpeg2000
+        class_name: extensions.aproc.proc.enrich.drivers.impl.jpeg2000_cog
+        assets_dir: /tmp/aproc/jpeg2000
+        priority: {{ .Values.services.aproc.configuration.extensions.enrich.drivers.jpeg2000.priority }}
+        configuration:
+          {{ .Values.services.aproc.configuration.extensions.enrich.drivers.jpeg2000.configuration | toYaml | nindent 10 }}
       {{- end }}
       {{- if .Values.services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.enabled }}
       -
