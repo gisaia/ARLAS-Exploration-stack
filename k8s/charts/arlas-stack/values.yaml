@@ -259,10 +259,19 @@ arlas-uis:
     colors:
       arlas:
         # -- Primary color for ARLAS UI
-        bg: "#182e6f"
+        bg: "#265b87"
       handle:
         # -- Primary color for ARLAS handle
-        color: "#182e6f"
+        color: "#384875"
+    drawTheme:
+      active:
+        color: "#fbb03b"
+        opacity: "0.8"
+        dash: [1,2]
+      inactive:
+        color: "#3bb2d0"
+        opacity: "0.1"
+        dash: [1]
 
     wui:
       # -- Configuration for the ARLAS Web User Interface (WUI) translation with a custom configmap. If you want to add custom translations, create a configmap with the same structure as the one in k8s/charts/arlas-stack/templates/arlas_i18n_custom_configmap.yaml file and set the name of this configmap here. If you don't want to add custom translations, set this value to null or empty string and do not create the configmap. Keys can be found in the ARLAS WUI codebase, in the i18n folder: https://github.com/gisaia/ARLAS-wui/tree/develop/src/assets/i18n.

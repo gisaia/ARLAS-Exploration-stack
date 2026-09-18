@@ -5,6 +5,115 @@ arlas-timeline .arlas-time--tools .arlas-date-picker-input-to {
   background-color: #ff4081;
 }
 
+:root .dark-theme {
+  --mat-sys-primary: #2F6BFF;
+  --mat-sys-on-primary: white;
+  --mat-sys-inverse-primary: #2f5ab4;
+  --mat-sys-secondary: #E33E6B;
+  --mat-sys-on-secondary: white;
+  --mat-sys-inverse-secondary: #96435c;
+  --mat-sys-error: #f44336;
+  --mat-sys-on-error: white;
+  --mat-sys-inverse-error: #e53935;
+  --mat-sys-shadow: black;
+  --mat-sys-surface: #0E1525;
+  --mat-sys-on-surface: #F1F5F9;
+  --mat-sys-surface-variant: #1E293B;
+  --mat-sys-on-surface-variant: #F1F5F9;
+  --mat-sys-background: #0B0F19;
+  --mat-sys-inverse-surface: white;
+  --mat-sys-inverse-on-surface: rgba(0, 0, 0, .87);
+  --mat-sys-outline: rgba(255, 255, 255, .12);
+  --mat-sys-outline-variant: #293F70;
+  --mat-sys-error-container: #b71c1c;
+  --mat-sys-on-background: #F1F5F9;
+  --mat-sys-on-error-container: #ffebee;
+  --mat-sys-on-primary-container: #eef0ff;
+  --mat-sys-on-primary-fixed: white;
+  --mat-sys-on-primary-fixed-variant: white;
+  --mat-sys-on-secondary-container: #ffecef;
+  --mat-sys-on-secondary-fixed: white;
+  --mat-sys-on-secondary-fixed-variant: white;
+  --mat-sys-on-tertiary: white;
+  --mat-sys-on-tertiary-container: #ffecef;
+  --mat-sys-on-tertiary-fixed: white;
+  --mat-sys-on-tertiary-fixed-variant: white;
+  --mat-sys-primary-container: #001946;
+  --mat-sys-primary-fixed: #2F6BFF;
+  --mat-sys-primary-fixed-dim: #2F6BFF;
+  --mat-sys-scrim: black;
+  --mat-sys-secondary-container: #3f001a;
+  --mat-sys-secondary-fixed: #E33E6B;
+  --mat-sys-secondary-fixed-dim: #E33E6B;
+  --mat-sys-surface-bright: #424242;
+  --mat-sys-surface-container: #131B2E;
+  --mat-sys-surface-container-high: #1E293B;
+  --mat-sys-surface-container-highest: #424242;
+  --mat-sys-surface-container-low: #10182B;
+  --mat-sys-surface-container-lowest: #424242;
+  --mat-sys-surface-dim: #424242;
+  --mat-sys-surface-tint: #424242;
+  --mat-sys-tertiary: #E33E6B;
+  --mat-sys-tertiary-container: #3f001a;
+  --mat-sys-tertiary-fixed: #E33E6B;
+  --mat-sys-tertiary-fixed-dim: #E33E6B;
+}
+
+:root {
+  --mat-sys-primary: #2196f3;
+  --mat-sys-on-primary: white;
+  --mat-sys-inverse-primary: #64b5f6;
+  --mat-sys-secondary: #ff4081;
+  --mat-sys-on-secondary: white;
+  --mat-sys-inverse-secondary: #f06292;
+  --mat-sys-error: #f44336;
+  --mat-sys-on-error: white;
+  --mat-sys-inverse-error: #e57373;
+  --mat-sys-shadow: black;
+  --mat-sys-surface: white;
+  --mat-sys-on-surface: rgba(0, 0, 0, .87);
+  --mat-sys-surface-variant: #f6f6f6;
+  --mat-sys-on-surface-variant: rgba(0, 0, 0, .54);
+  --mat-sys-background: #fafafa;
+  --mat-sys-inverse-surface: #424242;
+  --mat-sys-inverse-on-surface: white;
+  --mat-sys-outline: rgba(0, 0, 0, .12);
+  --mat-sys-outline-variant: rgba(0, 0, 0, .38);
+  --mat-sys-error-container: #ffebee;
+  --mat-sys-on-background: rgba(0, 0, 0, .87);
+  --mat-sys-on-error-container: #d32f2f;
+  --mat-sys-on-primary-container: #1976d2;
+  --mat-sys-on-primary-fixed: white;
+  --mat-sys-on-primary-fixed-variant: white;
+  --mat-sys-on-secondary-container: #c2185b;
+  --mat-sys-on-secondary-fixed: white;
+  --mat-sys-on-secondary-fixed-variant: white;
+  --mat-sys-on-tertiary: white;
+  --mat-sys-on-tertiary-container: #c2185b;
+  --mat-sys-on-tertiary-fixed: white;
+  --mat-sys-on-tertiary-fixed-variant: white;
+  --mat-sys-primary-container: #e3f2fd;
+  --mat-sys-primary-fixed: #2196f3;
+  --mat-sys-primary-fixed-dim: #2196f3;
+  --mat-sys-scrim: black;
+  --mat-sys-secondary-container: #fce4ec;
+  --mat-sys-secondary-fixed: #ff4081;
+  --mat-sys-secondary-fixed-dim: #ff4081;
+  --mat-sys-surface-bright: white;
+  --mat-sys-surface-container: white;
+  --mat-sys-surface-container-high: white;
+  --mat-sys-surface-container-highest: white;
+  --mat-sys-surface-container-low: white;
+  --mat-sys-surface-container-lowest: white;
+  --mat-sys-surface-dim: white;
+  --mat-sys-surface-tint: white;
+  --mat-sys-tertiary: #ff4081;
+  --mat-sys-tertiary-container: #fce4ec;
+  --mat-sys-tertiary-fixed: #ff4081;
+  --mat-sys-tertiary-fixed-dim: #ff4081;
+}
+
+
 
 
 /* Slider toggle */

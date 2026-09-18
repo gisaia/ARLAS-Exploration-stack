@@ -138,12 +138,17 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.configuration.cog_max_width_or_height | int | `-1` |  |
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.configuration.cog_overview_max_width_or_height | int | `2000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.priority | int | `4` |  |
+| services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.priority | int | `3` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration.all_bands_cog_max_width_or_height | int | `10000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration.cog_max_width_or_height | int | `-1` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.configuration.cog_overview_max_width_or_height | int | `2000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.priority | int | `3` |  |
+| services.aproc.configuration.extensions.enrich.drivers.geotiff_cog.priority | int | `4` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.configuration.all_bands_cog_max_width_or_height | int | `10000` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.configuration.cog_max_width_or_height | int | `-1` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.configuration.cog_overview_max_width_or_height | int | `2000` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.enrich.drivers.jpeg2000.priority | int | `5` |  |
 | services.aproc.configuration.extensions.enrich.drivers.landsat_cog.configuration.all_bands_cog_max_width_or_height | int | `10000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.landsat_cog.configuration.cog_max_width_or_height | int | `-1` |  |
 | services.aproc.configuration.extensions.enrich.drivers.landsat_cog.configuration.cog_overview_max_width_or_height | int | `2000` |  |
@@ -164,6 +169,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.axelspace.overview_warp_options.dstSRS | string | `"EPSG:4326"` |  |
 | services.aproc.configuration.extensions.ingest.drivers.axelspace.priority | int | `16` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.bsg.build_overview_when_remote | bool | `true` |  |
@@ -176,6 +182,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.overview_warp_options.dstSRS | string | `"EPSG:4326"` |  |
 | services.aproc.configuration.extensions.ingest.drivers.cosmoskymed.priority | int | `8` |  |
 | services.aproc.configuration.extensions.ingest.drivers.digitalglobe.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.digitalglobe.build_overview_when_remote | bool | `true` |  |
@@ -188,6 +195,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.geoeye.overview_stretch | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geoeye.priority | int | `2` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geosat.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.geosat.build_overview_when_remote | bool | `true` |  |
