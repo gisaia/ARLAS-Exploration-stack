@@ -77,13 +77,13 @@ spec:
 
             {{- include "arlasWebUserInterface.actionsEnv" . | nindent 12 }}
 
+            {{- include "arlasWebUserInterface.lookandfeelEnv" . | nindent 12 }}
+
             # ENDPOINT CONFIGURATION
             - name: ARLAS_WUI_BASE_HREF
               value: {{ .Values.uis.wui.urlPrefix }}
 
             # USER INTERFACE CONFIGURATION
-            - name: ARLAS_DARK_THEME_ENABLED
-              value: "true"
             - name: ARLAS_WHITELISTED_URLS
               value: {{ .Values.uis.wui.whitelistedUrls | quote }}
             - name: ARLAS_STATIC_LINKS

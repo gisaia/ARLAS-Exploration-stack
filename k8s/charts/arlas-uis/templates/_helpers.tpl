@@ -7,6 +7,24 @@
 {{- end }}
 
 
+{{- define "arlasWebUserInterface.lookandfeelEnv" -}}
+- name: ARLAS_DARK_THEME_ENABLED
+  value: "true"
+- name: ARLAS_DRAW_ACTIVE_COLOR
+  value: {{ .Values.uis.drawTheme.active.color | quote }}
+- name: ARLAS_DRAW_ACTIVE_OPACITY
+  value: {{ .Values.uis.drawTheme.active.opacity | quote }}
+- name: ARLAS_DRAW_ACTIVE_DASHES
+  value: {{ .Values.uis.drawTheme.active.dash | quote }}
+- name: ARLAS_DRAW_INACTIVE_COLOR
+  value: {{ .Values.uis.drawTheme.inactive.color | quote }}
+- name: ARLAS_DRAW_INACTIVE_OPACITY
+  value: {{ .Values.uis.drawTheme.inactive.opacity | quote }}
+- name: ARLAS_DRAW_INACTIVE_DASHES
+  value: {{ .Values.uis.drawTheme.inactive.dash | quote }}
+{{- end }}
+
+
 {{- define "arlasWebUserInterface.auth2Env" -}}
 # AUTHENTICATION
 - name: ARLAS_USE_AUTHENT

@@ -67,7 +67,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.extraInitContainers | string | `nil` |  |
 | uis.builder.extraVolumeMounts | string | `nil` |  |
 | uis.builder.extraVolumes | string | `nil` |  |
-| uis.builder.image | string | `"gisaia/arlas-wui-builder:28.0.1"` |  |
+| uis.builder.image | string | `"gisaia/arlas-wui-builder:29.0.0-rc.6"` |  |
 | uis.builder.imagePullSecrets | list | `[]` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
@@ -76,6 +76,13 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.colors.arlas.bg | string | `"#ff4081"` |  |
 | uis.colors.handle.color | string | `"#ff4081"` |  |
 | uis.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| uis.drawTheme.active.color | string | `"#fbb03b"` |  |
+| uis.drawTheme.active.dash[0] | int | `1` |  |
+| uis.drawTheme.active.opacity | string | `"0.1"` |  |
+| uis.drawTheme.inactive.color | string | `"#3bb2d0"` |  |
+| uis.drawTheme.inactive.dash[0] | int | `2` |  |
+| uis.drawTheme.inactive.dash[1] | int | `1` |  |
+| uis.drawTheme.inactive.opacity | string | `"0.1"` |  |
 | uis.famWui.archivePageSize | int | `10` |  |
 | uis.famWui.catalog | string | `"main catalog"` |  |
 | uis.famWui.collectionName | string | `"main"` |  |
@@ -97,7 +104,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.hub.extraInitContainers | string | `nil` |  |
 | uis.hub.extraVolumeMounts | string | `nil` |  |
 | uis.hub.extraVolumes | string | `nil` |  |
-| uis.hub.image | string | `"gisaia/arlas-wui-hub:28.0.2"` |  |
+| uis.hub.image | string | `"gisaia/arlas-wui-hub:29.0.0-rc.8"` |  |
 | uis.hub.imagePullSecrets | list | `[]` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
@@ -114,7 +121,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.wui.extraInitContainers | string | `nil` |  |
 | uis.wui.extraVolumeMounts | string | `nil` |  |
 | uis.wui.extraVolumes | string | `nil` |  |
-| uis.wui.image | string | `"gisaia/arlas-wui:28.0.3"` |  |
+| uis.wui.image | string | `"gisaia/arlas-wui:29.0.0-rc.9"` |  |
 | uis.wui.imagePullSecrets | list | `[]` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |
