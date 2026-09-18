@@ -106,7 +106,7 @@ services:
 
   agate:
     serviceName: arlas-agate
-    image: gisaia/agate:0.18.1
+    image: gisaia/agate:0.18.2
     # -- Extra environment variables for the agate container
     imagePullSecrets: []
     extraContainers: []

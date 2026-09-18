@@ -8,6 +8,10 @@ spec:
     group: gateway.networking.k8s.io
     kind: HTTPRoute
     name: arlas-aproc-route
+  jwt:
+    providers:
+{{ include "arlas.jwtProvider.keycloak" . | nindent 4 }}
+
   extAuth:
     headersToExtAuth:
       {{- toYaml .Values.global.gateway.extAuth.headersToExtAuth | nindent 6 }}
