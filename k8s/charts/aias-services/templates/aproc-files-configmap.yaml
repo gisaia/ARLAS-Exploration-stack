@@ -9,8 +9,9 @@ data:
     {{- if .Values.services.aproc.configuration.celeryResultBackendTransportOptions }}
     celery_result_backend_transport_options:
     {{- toYaml .Values.services.aproc.configuration.celeryResultBackendTransportOptions | nindent 6 }}
+    {{- else }}
+    celery_result_backend_transport_options: {}
     {{- end }}
-
 
     airs_endpoint: {{ .Values.services.aproc.configuration.airsEndpoint }}
     processes:

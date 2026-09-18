@@ -28,8 +28,8 @@ services:
     volumes:
       - ${KEYCLOAK_CONF_DIRECTORY}/keycloak.realm.json:/opt/keycloak/data/import/realm.json:ro
       - ${PWD}/conf/arlas-ks.jks:/opt/keycloak/conf/keycloak.jks:ro
-      - ${PWD}/conf/server.crt:/opt/keycloak/conf/server.crt:ro
-      - ${PWD}/conf/server.key:/opt/keycloak/conf/server.key:ro
+      - ${PWD}/conf/server-ks.crt:/opt/keycloak/conf/server.crt:ro
+      - ${PWD}/conf/server-ks.key:/opt/keycloak/conf/server.key:ro
     healthcheck:
       test: ["CMD-SHELL", "echo > /dev/tcp/localhost/8080"]
       interval: 20s

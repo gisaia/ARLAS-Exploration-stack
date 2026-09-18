@@ -17,7 +17,7 @@ then
     ./scripts/generate_apisix_conf.sh
 fi
 
-if [ ! -f conf/server.key ]
+if [ ! -f conf/server-ks.key ]
 then
     ./scripts/create_certificate.sh
 fi

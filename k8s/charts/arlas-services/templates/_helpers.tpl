@@ -85,7 +85,7 @@
 
 {{- define "arlasServices.mountCertificate" -}}
 {{- if .Values.services.mountCertificate }}
-            - name: keycloak-certificate-configmap
+            - name: arlas-certificate-configmap
               mountPath: /opt/app/store/
               readOnly: true
 {{- end }}
@@ -93,8 +93,8 @@
 
 {{- define "arlasServices.volumeCertificate" -}}
 {{- if .Values.services.mountCertificate }}
-        - name: keycloak-certificate-configmap
+        - name: arlas-certificate-configmap
           configMap:
-            name: keycloak-certificate-configmap
+            name: arlas-certificate-configmap
 {{- end }}
 {{- end }}

@@ -1,0 +1,20 @@
+{{- if and .Values.deployment.keycloak.gateway.enabled  .Values.global.gateway.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: keycloak-route
+spec:
+  parentRefs:
+    - name: {{ .Values.global.gateway.name }}
+      sectionName: https
+  hostnames:
+    - {{ .Values.global.keycloakDnsDomain | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: arlas-stack-keycloak
+          port: 8080
+{{- end }}

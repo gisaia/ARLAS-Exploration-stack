@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
 
-if [ ! -f conf/server.crt ] || [ ! -f conf/server.key ]
+if [ ! -f conf/server-ks.crt ] || [ ! -f conf/server-ks.key ]
 then
     echo "no certificates"
 else
-    export SSL_CERT=`cat conf/server.crt | sed 's/^/      /'`
-    export SSL_KEY=`cat conf/server.key | sed 's/^/      /'`
+    export SSL_CERT=`cat conf/server-ks.crt | sed 's/^/      /'`
+    export SSL_KEY=`cat conf/server-ks.key | sed 's/^/      /'`
 fi
 
 
