@@ -72,7 +72,7 @@ global:
   postgresql:
     auth:
       # -- __MUST BE CONFIGURED:__ postgres password for keycloak
-      password: secret4postgres
+      password: &arlasAppPostgresPassword secret4postgres
 
 deployment: 
   arlas:
@@ -678,92 +678,170 @@ minio:
       repository: bitnamilegacy/minio-object-browser
 
 
+# -- Keycloak (Operator-managed) configuration.
 keycloak:
+  # -- Number of Keycloak replicas.
+  instances: 1
   image:
-    # -- Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead.
-    repository: bitnamilegacy/keycloak
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  realm:
-    configmap:
+    # -- Keycloak image repository. Keycloak is deployed for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead.
+    repository: quay.io/keycloak/keycloak
+    # -- Keycloak image tag. Should match the version of the Keycloak Operator installed in the cluster.
+    tag: "26.7.4"
+  db:
+    postgresql:
+      # -- Deploy a development PostgreSQL instance with the chart. Set to false to use an external PostgreSQL server (then adjust `host`, `port` and `name`).
       enabled: true
-  # @ignored  
-  extraVolumes:
-    - name: realm-config
-      configMap:
-        name: keycloak-realm-configmap
-  # @ignored  
-  extraVolumeMounts:
-    - name: realm-config
-      mountPath: /opt/bitnami/keycloak/data/import
-      
-  # @ignored  
-  extraEnvVars:
-    - name: KEYCLOAK_EXTRA_ARGS
-      value: "--import-realm"
+      image:
+        # -- PostgreSQL image repository.
+        repository: postgres
+        # -- PostgreSQL image tag.
+        tag: "16"
+        # -- PostgreSQL image pull policy.
+        pullPolicy: Always
+      # -- Image pull secrets for the PostgreSQL image.
+      imagePullSecrets: []
+      # -- Number of PostgreSQL replicas. Keep it at 1: this is a single-instance development database, not a replicated cluster.
+      replicas: 1
+      # -- Name of the PostgreSQL database created for Keycloak.
+      database: keycloak
+      # -- Username used by Keycloak to connect to the PostgreSQL database.
+      username: keycloak
+      # -- Password used by Keycloak to connect to the PostgreSQL database.
+      password: *arlasAppPostgresPassword
+      # -- Pod-level security context applied to the PostgreSQL StatefulSet.
+      podSecurityContext:
+        fsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
+      # -- Container-level security context applied to the PostgreSQL container.
+      containerSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        allowPrivilegeEscalation: false
+      # -- Extra environment variables to add to the PostgreSQL container.
+      extraEnv: []
+      # -- Extra volumes to add to the PostgreSQL Pod.
+      extraVolumes: []
+      # -- Extra volume mounts to add to the PostgreSQL container.
+      extraVolumeMounts: []
+      # -- Extra containers configuration to add to the PostgreSQL Pod.
+      extraContainers: []
+      # -- Init containers to add to the PostgreSQL Pod.
+      initContainers: []
+      # -- Node selector for the PostgreSQL Pod.
+      nodeSelector: {}
+      # -- Tolerations for the PostgreSQL Pod.
+      tolerations: []
+      # -- Affinity rules for the PostgreSQL Pod.
+      affinity: {}
+      # -- Resource requests and limits for the PostgreSQL container.
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: "1"
+          memory: 1Gi
+      persistence:
+        # -- Enable persistent storage for PostgreSQL data using a PersistentVolumeClaim. Set to false to use an ephemeral `emptyDir` (data lost on Pod restart, suitable for disposable/CI use only).
+        enabled: true
+        # -- Storage class used for the PostgreSQL PersistentVolumeClaim. Set to `"-"` to disable dynamic provisioning, or leave empty to use the cluster's default storage class.
+        storageClass: *arlasAppDefaultStorageClass
+        # -- Access modes for the PostgreSQL PersistentVolumeClaim.
+        accessModes: ["ReadWriteOnce"]
+        # -- Size of the PostgreSQL PersistentVolumeClaim.
+        size: 1Gi
+        # -- Annotations to add to the PostgreSQL PersistentVolumeClaim.
+        annotations: {}
+      service:
+        # -- Name of the Kubernetes Service exposing PostgreSQL.
+        serviceName: keycloak-postgres
+        # -- Type of the Kubernetes Service exposing PostgreSQL.
+        type: ClusterIP
+        # -- Port on which the PostgreSQL Service listens.
+        port: 5432
 
-  # @ignored  
-  httpRelativePath: /
-  httpsEnabled: true
-  httpsPort: 8443
-  # @ignored  
-  resourcesPreset: medium
-  # @ignored  
-  readinessProbe:
-    initialDelaySeconds: 300
-    timeoutSeconds: 60
-  # @ignored  
-  startupProbe:
-    initialDelaySeconds: 300
-    timeoutSeconds: 60
-  # @ignored  
-  auth:
-    adminUser: *arlasAppKeycloakLogin
-    adminPassword: *arlasAppKeycloakPassword
-  # @ignored  
-  service:
-    type: ClusterIP
-    http:
+    # -- Database vendor used by Keycloak (`db.vendor` field of the Keycloak custom resource).
+    kind: postgres
+    # -- Hostname of the PostgreSQL server used by Keycloak (Service name when the chart deploys its own dev PostgreSQL).
+    host: keycloak-postgres
+    # -- Port of the PostgreSQL server.
+    port: 5432
+    # -- Name of the PostgreSQL database.
+    name: keycloak
+    # -- Name of the Secret containing the database credentials.
+    secretName: keycloak-db
+    # -- Key of the Secret containing the database username.
+    userNamekey: username
+    # -- Key of the Secret containing the database password.
+    passwordKey: password
+  realm:
+    import:
+      # -- Import the realm defined in arlas-stack/conf/keycloak.realm.json
       enabled: true
-    ports:
-      http: 8080
-      https: 8443
-  # @ignored  
-  ingress:
-    ingressClassName: *arlasAppIngressClassName 
+  # -- Relative path under which Keycloak is served (`http-relative-path` option).
+  httpRelativePath: /
+  http:
+    # -- Enable the HTTP listener of Keycloak. Needed when TLS is terminated by the ingress.
     enabled: true
+    # -- HTTP port of Keycloak.
+    port: 8080
+  https:
+    # -- Enable the HTTPS listener of Keycloak.
+    enabled: true
+    # -- HTTPS port of Keycloak.
+    port: 8443
+    # -- Name of the TLS secret used by Keycloak for HTTPS.
+    secretName: keycloak-tls
+  resources:
+    requests:
+      # -- CPU requested for the Keycloak container.
+      cpu: 250m
+      # -- Memory requested for the Keycloak container.
+      memory: 512Mi
+    limits:
+      # -- CPU limit for the Keycloak container.
+      cpu: "1"
+      # -- Memory limit for the Keycloak container.
+      memory: 1Gi
+  probes:
+    readiness:
+      # -- Interval in seconds between two readiness probes.
+      periodSeconds: 15
+      # -- Number of consecutive failed readiness probes before the pod is marked as not ready.
+      failureThreshold: 30
+    startup:
+      # -- Interval in seconds between two startup probes.
+      periodSeconds: 2
+      # -- Number of consecutive failed startup probes before the container is restarted. Together with `periodSeconds`, it defines the maximum startup time (here 2s x 600 = 20 min).
+      failureThreshold: 600
+  auth:
+    # -- Login of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret.
+    adminUser: *arlasAppKeycloakLogin
+    # -- Password of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret. Only taken into account at the first startup, on an empty database.
+    # @default -- `arlasAppKeycloakPassword` (YAML anchor)
+    adminPassword: *arlasAppKeycloakPassword
+  ingress:
+    # -- Ingress class name used for the Keycloak ingress.
+    ingressClassName: *arlasAppIngressClassName
+    # -- Create an ingress for Keycloak.
+    enabled: true
+    # -- Public DNS hostname of Keycloak. Also used as Keycloak `hostname` (strict mode).
     hostname: *arlasAppKeycloakDnsDomain
-    tls: true
+    tls:
+      # -- Name of the TLS secret used by the ingress.
+      secretName: keycloak-tls
+    # -- Path of the ingress rule.
     path: "/"
+    # -- Port of the Keycloak service targeted by the ingress.
     servicePort: 8080
+    # -- Annotations of the Keycloak ingress. The default nginx ingress has proxy buffers that are too small for Keycloak headers, hence the buffer settings.
     annotations:
-      # -- Default nginx ingress has default proxy buffers that are too small for keycloak headers.
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-buffering: "enabled"
       nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
       nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
-
-    # -- __MUST BE CONFIGURED:__ Enable extraTls bloc if you provide the certificate in the keycloak-tls secret, comment the block below otherwise. If the block is enabled, then set arlas-services.services.mountCertificate must be true, false otherwise (so that the certificate is mounted on the pods).
-    # start-of-block   
-    extraTls:
-      - hosts: 
-        - *arlasAppKeycloakDnsDomain
-        secretName: keycloak-tls
-    # end-of-block   
-  # @ignored  
-  proxy: edge
+  # -- How Keycloak reads the proxy headers (`proxy-headers` option). Accepted values: `forwarded` or `xforwarded`.
   proxyHeaders: "xforwarded"
-  # @ignored  
-  postgresql:
-    image:
-      repository: bitnamilegacy/postgresql
-    global:
-      security:
-        allowInsecureImages: true
-  
-
