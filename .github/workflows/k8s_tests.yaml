@@ -32,9 +32,13 @@ jobs:
         run: ./k8s/scripts/install_metallb.sh
       - name: Install Ingress controller
         run: ./k8s/scripts/install_nginx_ingress_controller.sh
+      - name: Install operators
+        run: ./k8s/scripts/install_operators.sh keycloak@26.7.4
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
       - name: deploy arlas
+        env:
+          FIX_CORE_DNS: true
         run: ./k8s/scripts/start.sh 
       - name: wait arlas running
         run: ./k8s/scripts/wait_until_running.sh        
