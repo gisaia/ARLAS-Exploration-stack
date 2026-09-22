@@ -1,0 +1,21 @@
+{{- if and .Values.deployment.elasticsearch.ingress.enabled .Values.deployment.elasticsearch.enabled  }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: elasticsearch-ingress
+  annotations:
+    {{ .Values.elasticsearch.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.elasticsearch.ingress.ingressClassName }}
+  rules:
+    - host: {{ .Values.elasticsearch.ingress.hostname }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ .Values.elasticsearch.clusterName | default "arlas-elasticsearch" }}-es-http
+                port:
+                  number: 9200
+            path: /
+            pathType: ImplementationSpecific
+ {{- end }}
