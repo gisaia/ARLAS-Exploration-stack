@@ -1,0 +1,55 @@
+{{- if .Values.deployment.elasticsearch.enabled }}
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: {{ .Values.elasticsearch.clusterName | default "arlas-elasticsearch" }}
+spec:
+  image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
+  version: {{ .Values.elasticsearch.image.tag }}
+  auth:
+    fileRealm:
+      - secretName: {{ .Values.elasticsearch.clusterName | default "arlas-elasticsearch" }}-user
+  nodeSets:
+    {{- range .Values.elasticsearch.nodeSets }}
+    - name: {{ .name }}
+      count: {{ .count }}
+      config:
+        node.roles: {{ .roles | toYaml | nindent 10 }}
+        node.store.allow_mmap: {{ .allowMmap | default false }}
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            storageClassName: {{ .storageClassName | default $.Values.global.defaultStorageClass }}
+            resources:
+              requests:
+                storage: {{ .storageSize | default "3Gi" }}
+      podTemplate:
+        spec:
+          {{- if .nodeSelector }}
+          nodeSelector:
+            {{- toYaml .nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if .tolerations }}
+          tolerations:
+            {{- toYaml .tolerations | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  cpu: {{ .resources.requests.cpu | quote }}
+                  memory: {{ .resources.requests.memory | quote }}
+                limits:
+                  cpu: {{ .resources.limits.cpu | quote }}
+                  memory: {{ .resources.limits.memory | quote }}
+    {{- end }}
+  http:
+    service:
+      spec:
+        type: {{ .Values.elasticsearch.service.type | default "ClusterIP" }}
+    tls:
+      selfSignedCertificate:
+        disabled: {{ .Values.elasticsearch.tls.selfSignedDisabled | default false }}
+{{- end }}
