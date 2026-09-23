@@ -58,7 +58,7 @@ global:
   # -- __MUST BE CONFIGURED:__ RabbitMQ Password
   rabbitMQPassword: &arlasAppRabbitMQPassword secret4rabbitmq
   # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
-  celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//
+  celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-rabbitmq:5672//
 
   # -- __MUST BE CONFIGURED:__ redis Password
   redisPassword: &arlasAppRedisPassword secret4redis
@@ -610,29 +610,33 @@ kibana:
 rabbitmq:
   image:
     # -- Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead.
-    repository: bitnamilegacy/rabbitmq
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-  # @ignored  
+    repository: docker.io/library/rabbitmq
+    # -- Image tag for the RabbitMQ container.
+    tag: 4.3.6
   resources:
     limits:
+      # -- Memory limit allocated to the RabbitMQ container.
       memory: 2Gi
     requests:
+      # -- Memory request allocated to the RabbitMQ container.
       memory: 1Gi
-
-  # @ignored  
   auth:
+    # -- Username for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator.
     username: *arlasAppRabbitMQLogin
+    # -- Password for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator.
     password: *arlasAppRabbitMQPassword
-  # @ignored  
   persistence:
+    # -- Storage class used for the RabbitMQ persistent volume claim.
     storageClass: *arlasAppDefaultStorageClass
-  # @ignored  
+    # -- Size of the persistent volume claim used to store RabbitMQ data.
+    storage: 2Gi
   persistentVolumeClaimRetentionPolicy:
+    # -- Enable a custom PVC retention policy on the RabbitMQ StatefulSet.
     enabled: true
+    # -- Policy applied to the PVC when the RabbitmqCluster (or its StatefulSet) is deleted. Allowed values: Retain | Delete.
+    whenDeleted: Retain
+    # -- Policy applied to the PVC when the StatefulSet is scaled down (replica count reduced). Allowed values: Retain | Delete.
+    whenScaled: Retain
 
 redis:
   image:

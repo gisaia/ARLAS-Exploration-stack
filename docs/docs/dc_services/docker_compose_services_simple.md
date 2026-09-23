@@ -1,12 +1,20 @@
 ## Services:
-- [arlas-server](#service-arlas-server)
-- [init-arlas-persistence-server-volume](#service-init-arlas-persistence-server-volume)
-- [arlas-persistence-server](#service-arlas-persistence-server)
-- [arlas-permissions-server](#service-arlas-permissions-server)
-- [arlas-builder](#service-arlas-builder)
-- [arlas-hub](#service-arlas-hub)
-- [arlas-wui](#service-arlas-wui)
-- [apisix](#service-apisix)
+- [Services:](#services)
+- [File dc/ref-dc-arlas-server.yaml](#file-dcref-dc-arlas-serveryaml)
+  - [Service arlas-server](#service-arlas-server)
+- [File dc/ref-dc-arlas-persistence-server.yaml](#file-dcref-dc-arlas-persistence-serveryaml)
+  - [Service init-arlas-persistence-server-volume](#service-init-arlas-persistence-server-volume)
+  - [Service arlas-persistence-server](#service-arlas-persistence-server)
+- [File dc/ref-dc-arlas-permissions-server.yaml](#file-dcref-dc-arlas-permissions-serveryaml)
+  - [Service arlas-permissions-server](#service-arlas-permissions-server)
+- [File dc/ref-dc-arlas-builder.yaml](#file-dcref-dc-arlas-builderyaml)
+  - [Service arlas-builder](#service-arlas-builder)
+- [File dc/ref-dc-arlas-hub.yaml](#file-dcref-dc-arlas-hubyaml)
+  - [Service arlas-hub](#service-arlas-hub)
+- [File dc/ref-dc-arlas-wui.yaml](#file-dcref-dc-arlas-wuiyaml)
+  - [Service arlas-wui](#service-arlas-wui)
+- [File dc/ref-dc-apisix.yaml](#file-dcref-dc-apisixyaml)
+  - [Service apisix](#service-apisix)
 ## File dc/ref-dc-arlas-server.yaml
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
@@ -249,7 +257,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:29.0.0-rc.9` in `conf/versions
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  |  |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_PROCESS_URL` | `` |  | `/aproc/processes/download/execution` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/download` in `conf/arlas.env` |

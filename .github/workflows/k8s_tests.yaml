@@ -33,7 +33,7 @@ jobs:
       - name: Install Ingress controller
         run: ./k8s/scripts/install_nginx_ingress_controller.sh
       - name: Install operators
-        run: ./k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0
+        run: ./k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
       - name: deploy arlas

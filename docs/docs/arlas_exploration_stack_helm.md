@@ -40,9 +40,9 @@ k8s/scripts/install_metallb.sh
 k8s/scripts/install_nginx_ingress_controller.sh
 ```
 
-__Note for test/dev environment__:  If your KIND cluster does not have operators like keycloak or elasticsearch, you can install them:
+__Note for test/dev environment__:  If your KIND cluster does not have operators like keycloak or elasticsearch or rabbitmq, you can install them:
 ```shell
-k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0
+k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
 ```
 
 
