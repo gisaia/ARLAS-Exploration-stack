@@ -72,6 +72,14 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | arlas-services.logger.loggingLevel | string | `"INFO"` | Logging level |
 | arlas-services.protocol | string | `"https"` | Do not change: value defined in global section |
 | arlas-services.services.mountCertificate | bool | `true` | __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc. |
+| arlas-services.services.server.autoscaling.behavior | string | `nil` | Custom behavior for autoscaling, keep nothing for default behavior |
+| arlas-services.services.server.autoscaling.customMetrics | string | `nil` | Custom metrics for autoscaling, keep nothing for default metrics |
+| arlas-services.services.server.autoscaling.enabled | bool | `false` | Enable if you want arlas server to autoscale on CPU and memory |
+| arlas-services.services.server.autoscaling.maxReplicas | int | `4` | Maximum replicas for autoscaling |
+| arlas-services.services.server.autoscaling.minReplicas | int | `1` | Minimum replicas for autoscaling  |
+| arlas-services.services.server.autoscaling.targetCPUUtilizationPercentage | int | `70` | Target CPU utilization percentage for autoscaling |
+| arlas-services.services.server.autoscaling.targetMemoryUtilizationPercentage | int | `70` | Target Memory utilization percentage for autoscaling |
+| arlas-services.services.server.resources | object | `{"limits":{"cpu":1,"memory":"1000Mi"},"requests":{"cpu":0.8,"memory":"1000Mi"}}` | __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is flase, comment otherwise  trustStoreOptions: |
 | arlas-uis.authent.issuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | Do not change: value defined in global section |
 | arlas-uis.authent.logoutUrl | string | `nil` | Do not change: value defined in global section |
 | arlas-uis.basemap | object | `{"storageSize":"50Mi"}` | __MUST BE CONFIGURED:__ Set to 120 Gi if you copy the full basemap |

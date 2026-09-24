@@ -90,6 +90,13 @@ A Helm Chart to deploy ARLAS Server
 | services.podSecurityContext.runAsUser | int | `65532` |  |
 | services.server.affinity | object | `{}` |  |
 | services.server.apm | bool | `false` |  |
+| services.server.autoscaling.behavior | string | `nil` |  |
+| services.server.autoscaling.customMetrics | string | `nil` |  |
+| services.server.autoscaling.enabled | bool | `false` |  |
+| services.server.autoscaling.maxReplicas | int | `4` |  |
+| services.server.autoscaling.minReplicas | int | `2` |  |
+| services.server.autoscaling.targetCPUUtilizationPercentage | int | `70` |  |
+| services.server.autoscaling.targetMemoryUtilizationPercentage | int | `70` |  |
 | services.server.extraContainers | list | `[]` |  |
 | services.server.extraEnv | string | `nil` |  |
 | services.server.extraInitContainers | string | `nil` |  |
@@ -103,8 +110,8 @@ A Helm Chart to deploy ARLAS Server
 | services.server.replicaCount | int | `1` |  |
 | services.server.resources.limits.cpu | int | `1` |  |
 | services.server.resources.limits.memory | string | `"1000Mi"` |  |
-| services.server.resources.requests.cpu | float | `0.1` |  |
-| services.server.resources.requests.memory | string | `"256Mi"` |  |
+| services.server.resources.requests.cpu | float | `0.8` |  |
+| services.server.resources.requests.memory | string | `"1000Mi"` |  |
 | services.server.serviceName | string | `"arlas-server"` |  |
 | services.server.tolerations | list | `[]` |  |
 | services.server.trustStoreOptions | string | `"-Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword"` |  |
