@@ -16,7 +16,8 @@ helm search repo arlas
 - helm
 - load balancer for kubernetes
 - kubernetes operators for keycloak 
-  
+- metrics server if autoscaling is enabled
+
 Get the project by cloning the [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack) project.
 
 ```shell
@@ -32,16 +33,27 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 __Important__: Bitnami charts are not supported anymore by bitnamy. The charts are used for development purpose only. You must deploy your own third party service charts.
 
-__Note for test/dev environment__: If your cluster does not have an ingress controller, you can install `metallb` and `nginx_ingress_controller`:
+__Note for test/dev environment__: If your KIND cluster does not have an ingress controller, you can install `metallb` and `nginx_ingress_controller`:
 
 ```shell
 k8s/scripts/install_metallb.sh
 k8s/scripts/install_nginx_ingress_controller.sh
 ```
-__Note for test/dev environment__:  If your KIND cluster does not have keycloak, elasticsearch or ... operators, you can install them:
+
+__Note for test/dev environment__:  If your KIND cluster does not have operators like keycloak or elasticsearch, you can install them:
 ```shell
-k8s/scripts/install_operators.sh keycloak@26.7.4 ...
+k8s/scripts/install_operators.sh keycloak@26.7.4
 ```
+
+
+__Note for test/dev environment__: If your KIND cluster does not have a metric controller and you want to use autoscaling on arlas server, you can install one like this:
+
+```shell
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl patch -n kube-system deployment metrics-server --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+```
+
+
 ## Configuring the ARLAS stack
 
 ### Directory structure

@@ -231,9 +231,32 @@ arlas-services:
   services:
     # -- __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc.
     mountCertificate: true
-    # server:
+    server:
       # -- __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is flase, comment otherwise
       #  trustStoreOptions:
+
+      resources:
+        requests:   # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+          cpu: 0.8
+          memory: 1000Mi 
+        limits:
+          cpu: 1
+          memory: 1000Mi
+      autoscaling:
+        # -- Enable if you want arlas server to autoscale on CPU and memory
+        enabled: False
+        # -- Minimum replicas for autoscaling 
+        minReplicas: 1
+        # -- Maximum replicas for autoscaling
+        maxReplicas: 4
+        # -- Target CPU utilization percentage for autoscaling
+        targetCPUUtilizationPercentage: 70
+        # -- Target Memory utilization percentage for autoscaling
+        targetMemoryUtilizationPercentage: 70
+        # -- Custom metrics for autoscaling, keep nothing for default metrics
+        customMetrics:
+        # -- Custom behavior for autoscaling, keep nothing for default behavior
+        behavior: 
 
 arlas-uis:
   # -- Do not change: value defined in global section

@@ -8,7 +8,7 @@ ENV_FILES="conf/versions.env conf/elastic.env conf/arlas.env conf/persistence-fi
 rm -rf conf/apisix/apisix.yaml
 touch conf/custom.env
 
-if [ -z "$1" ]
+if [[ -z "$1" ]]
 then
     echo "CONFIGURE SIMPLE ARLAS STACK"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix.yaml"
@@ -17,12 +17,12 @@ then
     ./scripts/generate_apisix_conf.sh
 fi
 
-if [ ! -f conf/server.key ]
+if [[ ! -f conf/server.key ]]
 then
     ./scripts/create_certificate.sh
 fi
 
-if [ "$1" = "iam" ] || [ "$1" = "aias" ]
+if [[ "$1" = "iam" ]] || [[ "$1" = "aias" ]]
 then
     echo "CONFIGURE STACK WITH IAM"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-iam-wui.yaml -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-iam-server.yaml -f dc/ref-dc-postgres.yaml"
@@ -32,11 +32,11 @@ then
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.template.yaml
 fi
 
-if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
+if [[ "$1" = "kc" ]] || [[ "$1" = "aiaskc" ]]
 then
     echo "CONFIGURE STACK WITH KEYCLOAK"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix-ssl.yaml -f dc/ref-dc-keycloak.yaml "
-    if [ "$2" = "nokc" ]
+    if [[ "$2" = "nokc" ]]
     then
         echo "WILL NOT START KEYCLOACK"
     else
@@ -46,7 +46,7 @@ then
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
 fi
 
-if [ "$1" = "aias" ] || [ "$1" = "aiaskc" ]
+if [[ "$1" = "aias" ]] || [[ "$1" = "aiaskc" ]]
 then
     echo "CONFIGURE STACK WITH AIAS"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix-ssl.yaml"
@@ -58,7 +58,7 @@ then
 
     cat conf/apisix/apisix_part_arlas_services.yaml > conf/apisix/apisix.template.yaml
     cat conf/apisix/apisix_part_iam_services.yaml >> conf/apisix/apisix.template.yaml
-    if [ "$1" = "aias" ]
+    if [[ "$1" = "aias" ]]
     then
         cat conf/apisix/apisix_part_aias_services_iam.yml >> conf/apisix/apisix.template.yaml
     else
@@ -94,7 +94,7 @@ then
 fi
 
 
-if [ "$1" = "iam" ] || [ "$1" = "kc" ] || [ "$1" = "aias" ] || [ "$1" = "aiaskc" ]
+if [[ "$1" = "iam" ]] || [[ "$1" = "kc" ]] || [[ "$1" = "aias" ]] || [[ "$1" = "aiaskc" ]]
 then
     echo "CONFIGURE STACK WITH SSL"
     cat conf/apisix/apisix_part_ssl.yaml >> conf/apisix/apisix.template.yaml
@@ -109,7 +109,7 @@ cat conf/custom.env >> docker-compose.env
 echo "INITIALISING ELASTICSEARCH"
 docker compose -p arlas-exploration-stack --env-file docker-compose.env -f dc/ref-dc-elastic-init.yaml  -f dc/ref-dc-volumes.yaml  -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
 
-if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
+if [[ "$1" = "kc" ]] || [[ "$1" = "aiaskc" ]]
 then
     echo "START KEYCLOAK"
     set +e # initial start can lead to temporally unhealthy keycloak
