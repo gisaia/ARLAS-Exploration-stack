@@ -123,17 +123,4 @@ fi
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES  || true
 echo "STACK STARTED"
 
-for SERVICE in $COMPOSE_SERVICES
-do
-    SERVICE_STATUS=$(docker inspect --format='{{json .State.Health.Status}}' $SERVICE)
-    echo "$SERVICE status: $SERVICE_STATUS"
-done
-
-for SERVICE in $COMPOSE_SERVICES
-do
-    SERVICE_STATUS=$(docker inspect --format='{{json .State.Health.Status}}' $SERVICE)
-    if [ "$SERVICE_STATUS" != "\"healthy\"" ]
-    then
-        docker logs $SERVICE 
-    fi
-done
+./scripts/status.sh
