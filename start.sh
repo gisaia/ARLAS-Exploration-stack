@@ -107,10 +107,7 @@ cat ${ENV_FILES} > docker-compose.env
 cat conf/custom.env >> docker-compose.env
 
 echo "INITIALISING ELASTICSEARCH"
-docker compose -p arlas-exploration-stack --env-file docker-compose.env -f dc/ref-dc-elastic-init.yaml -f dc/ref-dc-elastic-ssl.yaml -f dc/ref-dc-volumes.yaml  -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
-
-es_status=$(docker inspect --format='{{json .State.Health.Status}}' elasticsearch)
-echo "ELASTICSEARCH STATUS: $es_status"
+docker compose -p arlas-exploration-stack --env-file docker-compose.env -f dc/ref-dc-elastic-init.yaml  -f dc/ref-dc-volumes.yaml  -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
 
 if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
