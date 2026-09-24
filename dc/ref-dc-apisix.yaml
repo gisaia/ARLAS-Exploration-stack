@@ -19,3 +19,11 @@ services:
         tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
     extra_hosts:
       - ${ARLAS_HOST}:host-gateway
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/9090 && echo -e \"GET /v1/healthcheck HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n\" >&3 && cat <&3 | grep -q \"200 OK\"' || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

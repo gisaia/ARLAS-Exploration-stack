@@ -12,7 +12,6 @@ fi
 mkdir -p docs/docs/dc_services
 
 docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yaml > /dev/null && python3.10 scripts/generate_dc_doc.py \
-    dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
     dc/ref-dc-arlas-permissions-server.yaml \
@@ -31,7 +30,6 @@ docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yam
     " > docs/docs/dc_services/docker_compose_services_simple.md
 
 docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yaml > /dev/null && python3.10 scripts/generate_dc_doc.py \
-    dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
     dc/ref-dc-arlas-permissions-server.yaml \
@@ -55,7 +53,6 @@ docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yam
     " > docs/docs/dc_services/docker_compose_services_iam.md
 
 docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yaml > /dev/null && python3.10 scripts/generate_dc_doc.py \
-    dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
     dc/ref-dc-arlas-permissions-server.yaml \
@@ -76,7 +73,6 @@ docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yam
     " > docs/docs/dc_services/docker_compose_services_kc.md
 
 docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yaml > /dev/null && python3.10 scripts/generate_dc_doc.py \
-    dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
     dc/ref-dc-arlas-permissions-server.yaml \
@@ -113,7 +109,6 @@ docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yam
 
 
 docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yaml > /dev/null && python3.10 scripts/generate_dc_doc.py \
-    dc/ref-dc-elastic.yaml \
     dc/ref-dc-arlas-server.yaml \
     dc/ref-dc-arlas-persistence-server.yaml \
     dc/ref-dc-arlas-permissions-server.yaml \

@@ -1,5 +1,4 @@
 ## Services:
-- [elasticsearch](#service-elasticsearch)
 - [arlas-server](#service-arlas-server)
 - [init-arlas-persistence-server-volume](#service-init-arlas-persistence-server-volume)
 - [arlas-persistence-server](#service-arlas-persistence-server)
@@ -11,26 +10,6 @@
 - [arlas-wui](#service-arlas-wui)
 - [apisix](#service-apisix)
 - [db](#service-db)
-## File dc/ref-dc-elastic.yaml
-### Service elasticsearch
-Description: Elasticsearch is an indexing engine
-
-Image: `ELASTIC_VERSION` with `docker.elastic.co/elasticsearch/elasticsearch:8.9. ...` in `conf/versions.env`
-
-| Container variable | Value or environment variable | Default | Description | Env file setting |
-| --- | --- | --- | --- | --- |
-| `discovery.type` | `single-node` | `` |  |  |
-| `cluster.name` | `arlas-es-cluster` | `` |  |  |
-| `node.name` | `arlas-data-node-1` | `` |  |  |
-| `ES_JAVA_OPTS` | `ES_JAVA_OPTS` | `` |  | `"-Xms500m -Xmx500m"` in `conf/elastic.env` |
-| `xpack.security.enabled` | `false` | `` |  |  |
-| `xpack.security.http.ssl.enabled` | `false` | `` |  |  |
-| `xpack.security.transport.ssl.enabled` | `false` | `` |  |  |
-| `tracing.apm.enabled` | `false` | `` |  |  |
-
-List of volumes:
-
-- `${ELASTIC_STORAGE:-arlas-data-es}:/usr/share/elasticsearch/data`
 ## File dc/ref-dc-arlas-server.yaml
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
