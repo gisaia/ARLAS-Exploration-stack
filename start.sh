@@ -103,11 +103,14 @@ then
 fi
 
 
-echo "START STACK"
 cat ${ENV_FILES} > docker-compose.env
 cat conf/custom.env >> docker-compose.env
 
+echo "INITIALISING ELASTICSEARCH"
 docker compose -p arlas-exploration-stack --env-file docker-compose.env -f dc/ref-dc-elastic-init.yaml -f dc/ref-dc-elastic-ssl.yaml -f dc/ref-dc-volumes.yaml  -f dc/ref-dc-net.yaml up -d --wait --wait-timeout 300
+
+es_status=$(docker inspect --format='{{json .State.Health.Status}}' elasticsearch)
+echo "ELASTICSEARCH STATUS: $es_status"
 
 if [ "$1" = "kc" ] || [ "$1" = "aiaskc" ]
 then
@@ -118,4 +121,19 @@ then
 fi
 
 docker compose -p arlas-exploration-stack --env-file docker-compose.env $COMPOSE_FILES up -d --remove-orphans --wait --wait-timeout 300 $COMPOSE_SERVICES  || true
-echo "STACK UP & RUNNING"
+echo "STACK STARTED"
+
+for SERVICE in $COMPOSE_SERVICES
+do
+    SERVICE_STATUS=$(docker inspect --format='{{json .State.Health.Status}}' $SERVICE)
+    echo "$SERVICE status: $SERVICE_STATUS"
+done
+
+for SERVICE in $COMPOSE_SERVICES
+do
+    SERVICE_STATUS=$(docker inspect --format='{{json .State.Health.Status}}' $SERVICE)
+    if [ "$SERVICE_STATUS" != "\"healthy\"" ]
+    then
+        docker logs $SERVICE 
+    fi
+done
