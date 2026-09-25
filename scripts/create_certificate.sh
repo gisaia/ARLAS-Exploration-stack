@@ -25,18 +25,18 @@ else
     echo "CONFIGURE CERTIFICATE WITH ARLAS HOST=${ARLAS_HOST} FROM PARAMETER"
 fi
 
-docker run  -u "$(id -u):$(id -g)" -v `pwd`:/data alpine/openssl:3.5.8 genpkey -algorithm RSA -out /data/conf/server.key -pkeyopt rsa_keygen_bits:2048
+docker run  -u "$(id -u):$(id -g)" -v $(pwd):/data alpine/openssl:3.5.8 genpkey -algorithm RSA -out /data/conf/server.key -pkeyopt rsa_keygen_bits:2048
 check_exists conf/server.key
 
-docker run  -u "$(id -u):$(id -g)" -v `pwd`:/data alpine/openssl:3.5.8 req -new -x509 -key /data/conf/server.key -out /data/conf/server.crt \
+docker run  -u "$(id -u):$(id -g)" -v $(pwd):/data alpine/openssl:3.5.8 req -new -x509 -key /data/conf/server.key -out /data/conf/server.crt \
   -subj "/CN="${ARLAS_HOST} -days 365
 check_exists conf/server.crt
 
 chmod ag+r conf/server.key
-docker run  -u "$(id -u):$(id -g)" -v `pwd`:/data eclipse-temurin:17-jdk keytool -import -alias arlas-ks -file /data/conf/server.crt -keystore /data/conf/arlas-ks.jks -noprompt -storepass arlaspassword
+docker run  -u "$(id -u):$(id -g)" -v $(pwd):/data eclipse-temurin:17-jdk keytool -import -alias arlas-ks -file /data/conf/server.crt -keystore /data/conf/arlas-ks.jks -noprompt -storepass arlaspassword
 check_exists conf/arlas-ks.jks
 
-docker run  -u "$(id -u):$(id -g)" -v `pwd`:/data alpine/openssl:3.5.8 pkcs12 -export \
+docker run  -u "$(id -u):$(id -g)" -v $(pwd):/data alpine/openssl:3.5.8 pkcs12 -export \
   -inkey /data/conf/server.key \
   -in /data/conf/server.crt \
   -out /data/conf/truststore.p12 \
