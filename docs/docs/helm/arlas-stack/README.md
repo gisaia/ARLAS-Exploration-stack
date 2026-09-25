@@ -12,7 +12,6 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | file://../arlas-services | arlas-services | 28.9.0 |
 | file://../arlas-uis | arlas-uis | 28.9.0 |
 | file://../titiler | titiler | 28.9.0 |
-| https://charts.bitnami.com/bitnami | elasticsearch | 22.0.4 |
 | https://charts.bitnami.com/bitnami | minio | 14.10.5 |
 | https://charts.bitnami.com/bitnami | rabbitmq | 16.0.11 |
 | https://charts.bitnami.com/bitnami | redis | 21.2.13 |
@@ -22,8 +21,8 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | aias-services.dnsDomain | string | `"site.arlas.k8s"` | __Do not change:__ value defined in global section |
-| aias-services.elastic.endpoint | string | `"https://arlas-stack-elasticsearch:9200"` | Elasticsearch endpoint for aias-services |
-| aias-services.elastic.login | string | `"elastic"` | Do not change: value defined in global section |
+| aias-services.elastic.endpoint | string | `"https://arlas-elasticsearch-es-http:9200"` | Elasticsearch endpoint for aias-services |
+| aias-services.elastic.login | string | `"arlas-user"` | Do not change: value defined in global section |
 | aias-services.elastic.password | string | `"secret4elastic"` | Do not change: value defined in global section |
 | aias-services.initBuckets | bool | `true` | Init the AIAS minio buckets   |
 | aias-services.logger.loggingConsoleLevel | string | `"DEBUG"` | Console logging level for aias-services |
@@ -65,8 +64,8 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.services.fam.serviceName | string | `"arlas-fam"` | FAM service name |
 | arlas-services.defaultStorageClass | string | `"standard-retain"` | Do not change: value defined in global section |
 | arlas-services.dnsDomain | string | `"site.arlas.k8s"` | Do not change: value defined in global section |
-| arlas-services.elastic.login | string | `"elastic"` | Do not change: value defined in global section |
-| arlas-services.elastic.nodes | string | `"arlas-stack-elasticsearch:9200"` | Elasticsearch endpoint for arlas-services |
+| arlas-services.elastic.login | string | `"arlas-user"` | Do not change: value defined in global section |
+| arlas-services.elastic.nodes | string | `"arlas-elasticsearch-es-http:9200"` | Elasticsearch endpoint for arlas-services |
 | arlas-services.elastic.password | string | `"secret4elastic"` | Do not change: value defined in global section |
 | arlas-services.logger.loggingConsoleLevel | string | `"INFO"` | Console logging level |
 | arlas-services.logger.loggingLevel | string | `"INFO"` | Logging level |
@@ -142,34 +141,33 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
-| elasticsearch.copyTlsCerts.image.repository | string | `"bitnamilegacy/os-shell"` |  |
-| elasticsearch.image.repository | string | `"bitnamilegacy/elasticsearch"` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
-| elasticsearch.kibana.elasticsearch.security.auth.createSystemUser | bool | `true` |  |
-| elasticsearch.kibana.elasticsearch.security.auth.elasticsearchPasswordSecret | string | `"arlas-stack-elasticsearch"` |  |
-| elasticsearch.kibana.elasticsearch.security.auth.enabled | bool | `true` |  |
-| elasticsearch.kibana.elasticsearch.security.auth.kibanaPassword | string | `"secret4elastic"` |  |
-| elasticsearch.kibana.elasticsearch.security.auth.kibanaUsername | string | `"elastic"` |  |
-| elasticsearch.kibana.elasticsearch.security.tls.enabled | bool | `true` |  |
-| elasticsearch.kibana.elasticsearch.security.tls.existingSecret | string | `"arlas-stack-elasticsearch-master-crt"` |  |
-| elasticsearch.kibana.elasticsearch.security.tls.usePemCerts | bool | `true` |  |
-| elasticsearch.kibana.image.repository | string | `"bitnamilegacy/kibana"` | Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead. |
-| elasticsearch.kibana.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
-| elasticsearch.kibana.ingress.annotations."nginx.ingress.kubernetes.io/backend-protocol" | string | `"HTTP"` |  |
-| elasticsearch.kibana.ingress.enabled | bool | `true` |  |
-| elasticsearch.kibana.ingress.hostname | string | `"kibana.arlas.k8s"` |  |
-| elasticsearch.kibana.ingress.ingressClassName | string | `"nginx"` |  |
-| elasticsearch.kibana.ingress.tls | bool | `false` |  |
-| elasticsearch.kibana.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` |  |
-| elasticsearch.sysctl.image.repository | string | `"bitnamilegacy/os-shell"` |  |
-| elasticsearch.sysctlImage.repository | string | `"bitnamilegacy/os-shell"` |  |
-| elasticsearch.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` |  |
+| elasticsearch.clusterName | string | `"arlas-elasticsearch"` | Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets) |
+| elasticsearch.image.repository | string | `"docker.elastic.co/elasticsearch/elasticsearch"` | Elasticsearch container image repository (official Elastic image, required by the ECK operator) |
+| elasticsearch.image.tag | string | `"9.5.0"` | Elasticsearch version / image tag. Must match a version supported by the installed ECK operator |
+| elasticsearch.ingress.annotations | object | `{"blackbox.monitoring/enabled":"true","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-body-size":"100240m","nginx.ingress.kubernetes.io/ssl-passthrough":"true"}` | Additional annotations applied to the Elasticsearch Ingress (e.g. nginx-ingress TLS passthrough, body size limits, monitoring probes) |
+| elasticsearch.ingress.hostname | string | `"elastic.arlas.k8s"` | Public hostname used to expose Elasticsearch through the Ingress controller |
+| elasticsearch.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Elasticsearch Ingress |
+| elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":"4","memory":"4Gi"},"requests":{"cpu":"2","memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group (e.g. dedicated master/data/ingest tiers) |
+| elasticsearch.nodeSets[0].allowMmap | bool | `false` | Disable memory-mapped storage (node.store.allow_mmap). Set to false when the host does not allow raising vm.max_map_count |
+| elasticsearch.nodeSets[0].count | int | `1` | Number of Elasticsearch pods (replicas) in this nodeSet |
+| elasticsearch.nodeSets[0].name | string | `"default"` | Name of this nodeSet (used as a suffix for the generated StatefulSet; must remain stable, renaming it recreates the underlying StatefulSet and PVCs) |
+| elasticsearch.nodeSets[0].resources.limits.cpu | string | `"4"` | CPU limit for the Elasticsearch container |
+| elasticsearch.nodeSets[0].resources.limits.memory | string | `"4Gi"` | Memory limit for the Elasticsearch container |
+| elasticsearch.nodeSets[0].resources.requests.cpu | string | `"2"` | CPU request for the Elasticsearch container |
+| elasticsearch.nodeSets[0].resources.requests.memory | string | `"4Gi"` | Memory request for the Elasticsearch container |
+| elasticsearch.nodeSets[0].roles | list | `["master","data","ingest"]` | Elasticsearch node roles assigned to this nodeSet (e.g. master, data, ingest, data_hot, data_content...) |
+| elasticsearch.nodeSets[0].storageSize | string | `"3Gi"` | Size of the persistent volume claim requested for Elasticsearch data storage |
+| elasticsearch.service.type | string | `"ClusterIP"` | Kubernetes Service type used to expose the Elasticsearch HTTP endpoint internally |
+| elasticsearch.tls.selfSignedDisabled | bool | `false` | Whether to disable the self-signed certificate auto-generated by ECK for the HTTP layer. Keep false to retain TLS encryption by default |
+| elasticsearch.user.login | string | `"arlas-user"` | Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user |
+| elasticsearch.user.password | string | `"secret4elastic"` | Password of the custom Elasticsearch superuser account |
 | global.authIssuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
 | global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
 | global.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
 | global.defaultStorageClass | string | `"standard-retain"` | __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy. |
 | global.dnsDomain | string | `"site.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment |
 | global.elasticDnsDomain | string | `"elastic.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment |
-| global.elasticLogin | string | `"elastic"` | Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch |
+| global.elasticLogin | string | `"arlas-user"` | Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.elasticPassword | string | `"secret4elastic"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.enableKibana | bool | `true` |  |
 | global.ingressClassName | string | `"nginx"` | __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used. |
@@ -253,6 +251,13 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | keycloak.resources.limits.memory | string | `"1Gi"` | Memory limit for the Keycloak container. |
 | keycloak.resources.requests.cpu | string | `"250m"` | CPU requested for the Keycloak container. |
 | keycloak.resources.requests.memory | string | `"512Mi"` | Memory requested for the Keycloak container. |
+| kibana.image.repository | string | `"docker.elastic.co/kibana/kibana"` | Kibana container image repository (official Elastic image, required by the ECK operator) |
+| kibana.image.tag | string | `"9.5.0"` | Kibana version / image tag. Should match the Elasticsearch version to avoid compatibility issues |
+| kibana.ingress.annotations | object | `{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS"}` | Additional annotations applied to the Kibana Ingress |
+| kibana.ingress.enabled | bool | `true` | Enable the Kibana Ingress resource |
+| kibana.ingress.hostname | string | `"kibana.arlas.k8s"` | Public hostname used to expose Kibana through the Ingress controller |
+| kibana.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Kibana Ingress |
+| kibana.instances | int | `1` | Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource) |
 | minio.image.repository | string | `"bitnamilegacy/minio"` | Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead. |
 | rabbitmq.image.repository | string | `"bitnamilegacy/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
 | redis.image.repository | string | `"bitnamilegacy/redis"` | Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead. |
