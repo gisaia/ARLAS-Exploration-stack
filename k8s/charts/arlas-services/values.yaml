@@ -17,7 +17,7 @@ services:
     allowPrivilegeEscalation: false
   server: 
     serviceName: arlas-server
-    image: gisaia/arlas-server:28.0.0
+    image: gisaia/arlas-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
@@ -31,19 +31,26 @@ services:
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
-      requests:
-        cpu: 0.1
-        memory: 256Mi
+      requests:   # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+        cpu: 0.8
+        memory: 1000Mi 
       limits:
         cpu: 1
         memory: 1000Mi
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
+    autoscaling:
+      enabled: False
+      minReplicas: 1
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 70
+      customMetrics:
+      behavior: 
   permissions:
     serviceName: arlas-permissions-server
-    image: gisaia/arlas-permissions-server:28.0.0
+    image: gisaia/arlas-permissions-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
     apm: false
@@ -69,7 +76,7 @@ services:
 
   persistence: 
     serviceName: arlas-persistence-server
-    image: gisaia/arlas-persistence-server:28.0.0
+    image: gisaia/arlas-persistence-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
     # -- Whether ES APM should be activated or not

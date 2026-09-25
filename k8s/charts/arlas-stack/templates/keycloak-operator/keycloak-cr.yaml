@@ -1,0 +1,54 @@
+{{- if .Values.deployment.keycloak.enabled }}
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+spec:
+  instances: {{ .Values.keycloak.instances }}
+  image: "{{ .Values.keycloak.image.repository }}:{{ .Values.keycloak.image.tag }}"
+  #To make it work with postgres
+  startOptimized: false
+  bootstrapAdmin:
+    user:
+      secret: keycloak-bootstrap-admin
+  db:
+    vendor: {{ .Values.keycloak.db.kind | quote }}
+    host: {{ .Values.keycloak.db.host | quote }}
+    port: {{ .Values.keycloak.db.port }}
+    database: {{ .Values.keycloak.db.name | quote }}
+    usernameSecret:
+      name: {{ .Values.keycloak.db.secretName | quote }}
+      key: {{ .Values.keycloak.db.userNamekey | quote }}
+    passwordSecret:
+      name: {{ .Values.keycloak.db.secretName | quote }}
+      key: {{ .Values.keycloak.db.passwordKey | quote }}
+
+  http:
+    httpEnabled: {{ .Values.keycloak.http.enabled }}
+    httpPort: {{ .Values.keycloak.http.port }}
+    httpsPort: {{ .Values.keycloak.https.port }}
+    tlsSecret: {{ .Values.keycloak.https.secretName }}
+
+  hostname:
+    hostname: "https://{{ .Values.keycloak.ingress.hostname }}"
+    strict: true
+
+  proxy:
+    headers: {{ .Values.keycloak.proxyHeaders | quote }}
+  resources:
+    requests:
+      cpu: {{ .Values.keycloak.resources.requests.cpu | quote }}
+      memory: {{ .Values.keycloak.resources.requests.memory | quote }}
+    limits:
+      cpu: {{ .Values.keycloak.resources.limits.cpu | quote }}
+      memory: {{ .Values.keycloak.resources.limits.memory | quote }}
+  readinessProbe:
+    failureThreshold: {{ .Values.keycloak.probes.readiness.failureThreshold }}
+    periodSeconds: {{ .Values.keycloak.probes.readiness.periodSeconds }}
+  startupProbe:
+    failureThreshold: {{ .Values.keycloak.probes.startup.failureThreshold }}
+    periodSeconds: {{ .Values.keycloak.probes.startup.periodSeconds }}
+  additionalOptions:
+    - name: http-relative-path
+      value: {{ .Values.keycloak.httpRelativePath | quote }}
+{{- end }}

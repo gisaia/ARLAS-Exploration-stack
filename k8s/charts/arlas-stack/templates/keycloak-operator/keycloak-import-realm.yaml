@@ -1,0 +1,10 @@
+{{- if and .Values.keycloak.realm.import.enabled .Values.deployment.keycloak.enabled }}
+apiVersion: k8s.keycloak.org/v2beta1
+kind: KeycloakRealmImport
+metadata:
+  name: realm-kc
+spec:
+  keycloakCRName: keycloak
+  realm:
+    {{- .Files.Get "conf/keycloak.realm.json" | fromJson | toYaml | nindent 4 }}
+{{- end }}

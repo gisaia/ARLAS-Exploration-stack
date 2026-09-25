@@ -24,6 +24,7 @@ A dynamic Web Map tile server
 | env.GDAL_HTTP_VERSION | int | `2` |  |
 | env.GDAL_INGESTED_BYTES_AT_OPEN | int | `32768` |  |
 | env.PYTHONWARNINGS | string | `"ignore"` |  |
+| env.TITILER_API_DEBUG | string | `"TRUE"` |  |
 | env.VSI_CACHE | string | `"TRUE"` |  |
 | env.VSI_CACHE_SIZE | int | `5000000` |  |
 | extraHostPathMounts | list | `[]` |  |

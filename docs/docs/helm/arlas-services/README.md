@@ -52,7 +52,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.extraInitContainers | string | `nil` |  |
 | services.permissions.extraVolumeMounts | string | `nil` |  |
 | services.permissions.extraVolumes | string | `nil` |  |
-| services.permissions.image | string | `"gisaia/arlas-permissions-server:28.0.0"` |  |
+| services.permissions.image | string | `"gisaia/arlas-permissions-server:29.0.0-rc1"` |  |
 | services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
@@ -72,7 +72,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.extraInitContainers | string | `nil` |  |
 | services.persistence.extraVolumeMounts | string | `nil` |  |
 | services.persistence.extraVolumes | string | `nil` |  |
-| services.persistence.image | string | `"gisaia/arlas-persistence-server:28.0.0"` |  |
+| services.persistence.image | string | `"gisaia/arlas-persistence-server:29.0.0-rc1"` |  |
 | services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
@@ -90,12 +90,19 @@ A Helm Chart to deploy ARLAS Server
 | services.podSecurityContext.runAsUser | int | `65532` |  |
 | services.server.affinity | object | `{}` |  |
 | services.server.apm | bool | `false` |  |
+| services.server.autoscaling.behavior | string | `nil` |  |
+| services.server.autoscaling.customMetrics | string | `nil` |  |
+| services.server.autoscaling.enabled | bool | `false` |  |
+| services.server.autoscaling.maxReplicas | int | `4` |  |
+| services.server.autoscaling.minReplicas | int | `2` |  |
+| services.server.autoscaling.targetCPUUtilizationPercentage | int | `70` |  |
+| services.server.autoscaling.targetMemoryUtilizationPercentage | int | `70` |  |
 | services.server.extraContainers | list | `[]` |  |
 | services.server.extraEnv | string | `nil` |  |
 | services.server.extraInitContainers | string | `nil` |  |
 | services.server.extraVolumeMounts | string | `nil` |  |
 | services.server.extraVolumes | string | `nil` |  |
-| services.server.image | string | `"gisaia/arlas-server:28.0.0"` |  |
+| services.server.image | string | `"gisaia/arlas-server:29.0.0-rc1"` |  |
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
@@ -103,8 +110,8 @@ A Helm Chart to deploy ARLAS Server
 | services.server.replicaCount | int | `1` |  |
 | services.server.resources.limits.cpu | int | `1` |  |
 | services.server.resources.limits.memory | string | `"1000Mi"` |  |
-| services.server.resources.requests.cpu | float | `0.1` |  |
-| services.server.resources.requests.memory | string | `"256Mi"` |  |
+| services.server.resources.requests.cpu | float | `0.8` |  |
+| services.server.resources.requests.memory | string | `"1000Mi"` |  |
 | services.server.serviceName | string | `"arlas-server"` |  |
 | services.server.tolerations | list | `[]` |  |
 | services.server.trustStoreOptions | string | `"-Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword"` |  |

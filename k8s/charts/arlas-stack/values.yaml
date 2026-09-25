@@ -39,7 +39,7 @@ global:
   organization: &arlasAppOrganization org.com
 
   # -- Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch
-  elasticLogin: &arlasAppElasticLogin elastic
+  elasticLogin: &arlasAppElasticLogin arlas-user
   # -- __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
   elasticPassword: &arlasAppElasticPassword secret4elastic
 
@@ -58,21 +58,21 @@ global:
   # -- __MUST BE CONFIGURED:__ RabbitMQ Password
   rabbitMQPassword: &arlasAppRabbitMQPassword secret4rabbitmq
   # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
-  celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//
+  celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-rabbitmq:5672//
 
   # -- __MUST BE CONFIGURED:__ redis Password
   redisPassword: &arlasAppRedisPassword secret4redis
 
   # Example of a redis connection url without sentinel:
   # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
-  celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-stack-redis-master:6379/0
+  celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-redis-client:6379/0
   # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
   # celery_result_backend: &arlasAppCeleryResultBackend sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
   
   postgresql:
     auth:
       # -- __MUST BE CONFIGURED:__ postgres password for keycloak
-      password: secret4postgres
+      password: &arlasAppPostgresPassword secret4postgres
 
 deployment: 
   arlas:
@@ -216,7 +216,7 @@ arlas-services:
     # -- Do not change: value defined in global section
     password: *arlasAppElasticPassword
     # -- Elasticsearch endpoint for arlas-services
-    nodes: arlas-stack-elasticsearch:9200
+    nodes: arlas-elasticsearch-es-http:9200
   logger:
     # -- Logging level
     loggingLevel: INFO
@@ -231,9 +231,32 @@ arlas-services:
   services:
     # -- __MUST BE CONFIGURED:__ Set to true if you want the services to use the certificate contained in the k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml file and enable the keycloak.ingress.extraTls bloc. False otherwise and disable the keycloak.ingress.extraTls bloc.
     mountCertificate: true
-    # server:
+    server:
       # -- __MUST BE CONFIGURED:__ Set server.trustStoreOptions to nothing if mountCertificate is flase, comment otherwise
       #  trustStoreOptions:
+
+      resources:
+        requests:   # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+          cpu: 0.8
+          memory: 1000Mi 
+        limits:
+          cpu: 1
+          memory: 1000Mi
+      autoscaling:
+        # -- Enable if you want arlas server to autoscale on CPU and memory
+        enabled: False
+        # -- Minimum replicas for autoscaling 
+        minReplicas: 1
+        # -- Maximum replicas for autoscaling
+        maxReplicas: 4
+        # -- Target CPU utilization percentage for autoscaling
+        targetCPUUtilizationPercentage: 70
+        # -- Target Memory utilization percentage for autoscaling
+        targetMemoryUtilizationPercentage: 70
+        # -- Custom metrics for autoscaling, keep nothing for default metrics
+        customMetrics:
+        # -- Custom behavior for autoscaling, keep nothing for default behavior
+        behavior: 
 
 arlas-uis:
   # -- Do not change: value defined in global section
@@ -259,10 +282,19 @@ arlas-uis:
     colors:
       arlas:
         # -- Primary color for ARLAS UI
-        bg: "#182e6f"
+        bg: "#265b87"
       handle:
         # -- Primary color for ARLAS handle
-        color: "#182e6f"
+        color: "#384875"
+    drawTheme:
+      active:
+        color: "#fbb03b"
+        opacity: "0.8"
+        dash: [1,2]
+      inactive:
+        color: "#3bb2d0"
+        opacity: "0.1"
+        dash: [1]
 
     wui:
       # -- Configuration for the ARLAS Web User Interface (WUI) translation with a custom configmap. If you want to add custom translations, create a configmap with the same structure as the one in k8s/charts/arlas-stack/templates/arlas_i18n_custom_configmap.yaml file and set the name of this configmap here. If you don't want to add custom translations, set this value to null or empty string and do not create the configmap. Keys can be found in the ARLAS WUI codebase, in the i18n folder: https://github.com/gisaia/ARLAS-wui/tree/develop/src/assets/i18n.
@@ -467,7 +499,7 @@ aias-services:
     # -- Do not change: value defined in global section
     password: *arlasAppElasticPassword
     # -- Elasticsearch endpoint for aias-services
-    endpoint: https://arlas-stack-elasticsearch:9200
+    endpoint: https://arlas-elasticsearch-es-http:9200
 
   logger:
     # -- Logging level for aias-services
@@ -478,7 +510,7 @@ aias-services:
 # TITILER
 titiler:
   image:
-    tag: 0.22.4
+    tag: 2.2.1
   replicaCount: 1
   resources:
     requests:
@@ -501,149 +533,181 @@ titiler:
     runAsUser: 1001
 
 elasticsearch:
+  # -- Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets)
+  clusterName: arlas-elasticsearch
   image:
-    # -- Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead.
-    repository: bitnamilegacy/elasticsearch
-  volumePermissions:
-    image:
-      repository: bitnamilegacy/os-shell
-  sysctlImage:
-    repository: bitnamilegacy/os-shell
-  sysctl:
-    image:
-      repository: bitnamilegacy/os-shell
-  copyTlsCerts:
-    image:
-      repository: bitnamilegacy/os-shell
-
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-    kibanaEnabled: *arlasAppEnableKibana
-  # @ignored  
+    # -- Elasticsearch container image repository (official Elastic image, required by the ECK operator)
+    repository: docker.elastic.co/elasticsearch/elasticsearch
+    # -- Elasticsearch version / image tag. Must match a version supported by the installed ECK operator
+    tag: "9.5.0"
+  user:
+    # -- Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user
+    login: *arlasAppElasticLogin
+    # -- Password of the custom Elasticsearch superuser account
+    password: *arlasAppElasticPassword
+  # -- List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group (e.g. dedicated master/data/ingest tiers)
+  nodeSets:
+    - # -- Name of this nodeSet (used as a suffix for the generated StatefulSet; must remain stable, renaming it recreates the underlying StatefulSet and PVCs)
+      name: default
+      # -- Number of Elasticsearch pods (replicas) in this nodeSet
+      count: 1
+      # -- Elasticsearch node roles assigned to this nodeSet (e.g. master, data, ingest, data_hot, data_content...)
+      roles: ["master", "data", "ingest"]
+      # -- Disable memory-mapped storage (node.store.allow_mmap). Set to false when the host does not allow raising vm.max_map_count
+      allowMmap: false
+      # -- Size of the persistent volume claim requested for Elasticsearch data storage
+      storageSize: 3Gi
+      resources:
+        requests:
+          # -- CPU request for the Elasticsearch container
+          cpu: "2"
+          # -- Memory request for the Elasticsearch container
+          memory: 4Gi
+        limits:
+          # -- CPU limit for the Elasticsearch container
+          cpu: "4"
+          # -- Memory limit for the Elasticsearch container
+          memory: 4Gi
   service:
+    # -- Kubernetes Service type used to expose the Elasticsearch HTTP endpoint internally
     type: ClusterIP
-  # @ignored  
-  master:
-    resourcesPreset: large
-    masterOnly: false
-    replicaCount: 1
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-  # @ignored  
-  data:
-    replicaCount: 0 # 0 for a single node cluster
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-  # @ignored  
-  coordinating:
-    replicaCount: 0
-  # @ignored  
-  ingest:
-    replicaCount: 0
-  # @ignored  
-  security:
-    enabled: true
-  # @ignored  
-    elasticPassword: *arlasAppElasticPassword
-    tls:
-      restEncryption: true
-      # AutoGenerate TLS certs for elastic
-      autoGenerated: true
+  tls:
+    # -- Whether to disable the self-signed certificate auto-generated by ECK for the HTTP layer. Keep false to retain TLS encryption by default
+    selfSignedDisabled: false
+  ingress:
+    # -- Public hostname used to expose Elasticsearch through the Ingress controller
+    hostname: *arlasAppElasticDnsDomain
+    # -- IngressClass used to route traffic to the Elasticsearch Ingress
+    ingressClassName: *arlasAppIngressClassName
+    # -- Additional annotations applied to the Elasticsearch Ingress (e.g. nginx-ingress TLS passthrough, body size limits, monitoring probes)
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 100240m
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      blackbox.monitoring/enabled: "true"
 
-  kibana:
-    image:
-      # -- Elasticsearch for development and test only. For production, please refer to the elasticsearch documentation to deploy a production ready elasticsearch instance instead.
-      repository: bitnamilegacy/kibana
-    volumePermissions:
-      image:
-        repository: bitnamilegacy/os-shell
-
-    elasticsearch:
-      security:
-        auth:
-          enabled: true
-          createSystemUser: true
-          elasticsearchPasswordSecret: arlas-stack-elasticsearch
-          # default in the elasticsearch chart is elastic
-          kibanaUsername: elastic
-          kibanaPassword: *arlasAppElasticPassword
-        tls:
-          # Instruct kibana to connect to elastic over https
-          enabled: true
-          existingSecret: arlas-stack-elasticsearch-master-crt
-          # As the certs are auto-generated, they are pemCerts so set to true
-          usePemCerts: true
-    ingress:
-      enabled: *arlasAppEnableKibana
-      hostname: *arlasAppKibanaDnsDomain
-      ingressClassName: *arlasAppIngressClassName
-      tls: false
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+kibana:
+  # -- Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource)
+  instances: 1
+  image:
+    # -- Kibana container image repository (official Elastic image, required by the ECK operator)
+    repository: docker.elastic.co/kibana/kibana
+    # -- Kibana version / image tag. Should match the Elasticsearch version to avoid compatibility issues
+    tag: 9.5.0
+  ingress:
+    # -- Enable the Kibana Ingress resource
+    enabled: *arlasAppEnableKibana
+    # -- Public hostname used to expose Kibana through the Ingress controller
+    hostname: *arlasAppKibanaDnsDomain
+    # -- IngressClass used to route traffic to the Kibana Ingress
+    ingressClassName: *arlasAppIngressClassName
+    # -- Additional annotations applied to the Kibana Ingress
+    annotations:
+      kubernetes.io/ingress.class: *arlasAppIngressClassName
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
 rabbitmq:
   image:
     # -- Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead.
-    repository: bitnamilegacy/rabbitmq
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-  # @ignored  
+    repository: docker.io/library/rabbitmq
+    # -- Image tag for the RabbitMQ container.
+    tag: 4.3.6
   resources:
     limits:
+      # -- Memory limit allocated to the RabbitMQ container.
       memory: 2Gi
     requests:
+      # -- Memory request allocated to the RabbitMQ container.
       memory: 1Gi
-
-  # @ignored  
   auth:
+    # -- Username for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator.
     username: *arlasAppRabbitMQLogin
+    # -- Password for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator.
     password: *arlasAppRabbitMQPassword
-  # @ignored  
   persistence:
+    # -- Storage class used for the RabbitMQ persistent volume claim.
     storageClass: *arlasAppDefaultStorageClass
-  # @ignored  
+    # -- Size of the persistent volume claim used to store RabbitMQ data.
+    storage: 2Gi
   persistentVolumeClaimRetentionPolicy:
+    # -- Enable a custom PVC retention policy on the RabbitMQ StatefulSet.
     enabled: true
+    # -- Policy applied to the PVC when the RabbitmqCluster (or its StatefulSet) is deleted. Allowed values: Retain | Delete.
+    whenDeleted: Retain
+    # -- Policy applied to the PVC when the StatefulSet is scaled down (replica count reduced). Allowed values: Retain | Delete.
+    whenScaled: Retain
 
 redis:
   image:
-    # -- Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead.
-    repository: bitnamilegacy/redis
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  architecture: standalone
-  # @ignored  
-  auth:
-    password: *arlasAppRedisPassword
-  # @ignored  
-  commonConfiguration: |
-    loadmodule /opt/bitnami/redis/lib/redis/modules/redisbloom.so
-    loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
-    loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
-    loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
-  # @ignored  
-  master:
-    persistentVolumeClaimRetentionPolicy:
+    # -- Redis Stack image repository.
+    repository: redis/redis-stack-server
+    # -- Redis Stack image tag.
+    tag: "7.4.0-v3"
+    # -- Image pull policy.
+    pullPolicy: Always
+  # -- Secrets used to pull the Redis image from a private registry.
+  imagePullSecrets: []
+  # -- Number of Redis replicas (standalone use case: keep this at 1).
+  replicas: 1
+  # -- Password used to secure the Redis instance (mounted via a Kubernetes Secret).
+  password: *arlasAppRedisPassword
+  # -- Pod-level security context applied to the Redis pod.
+  podSecurityContext:
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+  # -- Container-level security context applied to the Redis container.
+  containerSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    allowPrivilegeEscalation: false
+  # -- Node selector for scheduling the Redis pod.
+  nodeSelector: {}
+  # -- Affinity rules for scheduling the Redis pod.
+  affinity: {}
+  # -- Tolerations for scheduling the Redis pod.
+  tolerations: []
+  # -- Additional init containers to run before the Redis container starts.
+  initContainers: []
+  # -- Additional environment variables to set on the Redis container.
+  extraEnv: []
+  # -- Additional volume mounts to add to the Redis container.
+  extraVolumeMounts: []
+  # -- Additional volumes to add to the pod.
+  extraVolumes: []
+  # -- Additional container config to run alongside Redis.
+  extraContainers: []
+  # -- Resource requests and limits for the Redis container.
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  persistence:
+    # -- Enable persistent storage for Redis data using a PVC (volumeClaimTemplate).
+    enabled: true
+    # -- Access modes for the persistent volume claim.
+    accessModes: ["ReadWriteOnce"]
+    # -- Size of the persistent volume claim.
+    size: 2Gi
+    # -- Storage class used for the persistent volume claim.
+    storageClass: *arlasAppDefaultStorageClass
+    # -- Annotations added to the persistent volume claim.
+    annotations: {}
+  service:
+    # -- Name of the headless Service used by the StatefulSet (required, provides stable pod DNS).
+    serviceName: arlas-redis
+    # -- Port exposed by the Redis service.
+    port: 6379
+    clientService:
+      # -- Enable a standard ClusterIP Service for application clients to connect to Redis.
       enabled: true
-    persistence:
-      storageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  replica:
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-    persistence:
-      storageClass: *arlasAppDefaultStorageClass
+      # -- Type of the client-facing Service.
+      type: ClusterIP
 
 minio:
   image:
@@ -669,92 +733,170 @@ minio:
       repository: bitnamilegacy/minio-object-browser
 
 
+# -- Keycloak (Operator-managed) configuration.
 keycloak:
+  # -- Number of Keycloak replicas.
+  instances: 1
   image:
-    # -- Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead.
-    repository: bitnamilegacy/keycloak
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  realm:
-    configmap:
+    # -- Keycloak image repository. Keycloak is deployed for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead.
+    repository: quay.io/keycloak/keycloak
+    # -- Keycloak image tag. Should match the version of the Keycloak Operator installed in the cluster.
+    tag: "26.7.4"
+  db:
+    postgresql:
+      # -- Deploy a development PostgreSQL instance with the chart. Set to false to use an external PostgreSQL server (then adjust `host`, `port` and `name`).
       enabled: true
-  # @ignored  
-  extraVolumes:
-    - name: realm-config
-      configMap:
-        name: keycloak-realm-configmap
-  # @ignored  
-  extraVolumeMounts:
-    - name: realm-config
-      mountPath: /opt/bitnami/keycloak/data/import
-      
-  # @ignored  
-  extraEnvVars:
-    - name: KEYCLOAK_EXTRA_ARGS
-      value: "--import-realm"
+      image:
+        # -- PostgreSQL image repository.
+        repository: postgres
+        # -- PostgreSQL image tag.
+        tag: "16"
+        # -- PostgreSQL image pull policy.
+        pullPolicy: Always
+      # -- Image pull secrets for the PostgreSQL image.
+      imagePullSecrets: []
+      # -- Number of PostgreSQL replicas. Keep it at 1: this is a single-instance development database, not a replicated cluster.
+      replicas: 1
+      # -- Name of the PostgreSQL database created for Keycloak.
+      database: keycloak
+      # -- Username used by Keycloak to connect to the PostgreSQL database.
+      username: keycloak
+      # -- Password used by Keycloak to connect to the PostgreSQL database.
+      password: *arlasAppPostgresPassword
+      # -- Pod-level security context applied to the PostgreSQL StatefulSet.
+      podSecurityContext:
+        fsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
+      # -- Container-level security context applied to the PostgreSQL container.
+      containerSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        allowPrivilegeEscalation: false
+      # -- Extra environment variables to add to the PostgreSQL container.
+      extraEnv: []
+      # -- Extra volumes to add to the PostgreSQL Pod.
+      extraVolumes: []
+      # -- Extra volume mounts to add to the PostgreSQL container.
+      extraVolumeMounts: []
+      # -- Extra containers configuration to add to the PostgreSQL Pod.
+      extraContainers: []
+      # -- Init containers to add to the PostgreSQL Pod.
+      initContainers: []
+      # -- Node selector for the PostgreSQL Pod.
+      nodeSelector: {}
+      # -- Tolerations for the PostgreSQL Pod.
+      tolerations: []
+      # -- Affinity rules for the PostgreSQL Pod.
+      affinity: {}
+      # -- Resource requests and limits for the PostgreSQL container.
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: "1"
+          memory: 1Gi
+      persistence:
+        # -- Enable persistent storage for PostgreSQL data using a PersistentVolumeClaim. Set to false to use an ephemeral `emptyDir` (data lost on Pod restart, suitable for disposable/CI use only).
+        enabled: true
+        # -- Storage class used for the PostgreSQL PersistentVolumeClaim. Set to `"-"` to disable dynamic provisioning, or leave empty to use the cluster's default storage class.
+        storageClass: *arlasAppDefaultStorageClass
+        # -- Access modes for the PostgreSQL PersistentVolumeClaim.
+        accessModes: ["ReadWriteOnce"]
+        # -- Size of the PostgreSQL PersistentVolumeClaim.
+        size: 1Gi
+        # -- Annotations to add to the PostgreSQL PersistentVolumeClaim.
+        annotations: {}
+      service:
+        # -- Name of the Kubernetes Service exposing PostgreSQL.
+        serviceName: keycloak-postgres
+        # -- Type of the Kubernetes Service exposing PostgreSQL.
+        type: ClusterIP
+        # -- Port on which the PostgreSQL Service listens.
+        port: 5432
 
-  # @ignored  
-  httpRelativePath: /
-  httpsEnabled: true
-  httpsPort: 8443
-  # @ignored  
-  resourcesPreset: medium
-  # @ignored  
-  readinessProbe:
-    initialDelaySeconds: 300
-    timeoutSeconds: 60
-  # @ignored  
-  startupProbe:
-    initialDelaySeconds: 300
-    timeoutSeconds: 60
-  # @ignored  
-  auth:
-    adminUser: *arlasAppKeycloakLogin
-    adminPassword: *arlasAppKeycloakPassword
-  # @ignored  
-  service:
-    type: ClusterIP
-    http:
+    # -- Database vendor used by Keycloak (`db.vendor` field of the Keycloak custom resource).
+    kind: postgres
+    # -- Hostname of the PostgreSQL server used by Keycloak (Service name when the chart deploys its own dev PostgreSQL).
+    host: keycloak-postgres
+    # -- Port of the PostgreSQL server.
+    port: 5432
+    # -- Name of the PostgreSQL database.
+    name: keycloak
+    # -- Name of the Secret containing the database credentials.
+    secretName: keycloak-db
+    # -- Key of the Secret containing the database username.
+    userNamekey: username
+    # -- Key of the Secret containing the database password.
+    passwordKey: password
+  realm:
+    import:
+      # -- Import the realm defined in arlas-stack/conf/keycloak.realm.json
       enabled: true
-    ports:
-      http: 8080
-      https: 8443
-  # @ignored  
-  ingress:
-    ingressClassName: *arlasAppIngressClassName 
+  # -- Relative path under which Keycloak is served (`http-relative-path` option).
+  httpRelativePath: /
+  http:
+    # -- Enable the HTTP listener of Keycloak. Needed when TLS is terminated by the ingress.
     enabled: true
+    # -- HTTP port of Keycloak.
+    port: 8080
+  https:
+    # -- Enable the HTTPS listener of Keycloak.
+    enabled: true
+    # -- HTTPS port of Keycloak.
+    port: 8443
+    # -- Name of the TLS secret used by Keycloak for HTTPS.
+    secretName: keycloak-tls
+  resources:
+    requests:
+      # -- CPU requested for the Keycloak container.
+      cpu: 250m
+      # -- Memory requested for the Keycloak container.
+      memory: 512Mi
+    limits:
+      # -- CPU limit for the Keycloak container.
+      cpu: "1"
+      # -- Memory limit for the Keycloak container.
+      memory: 1Gi
+  probes:
+    readiness:
+      # -- Interval in seconds between two readiness probes.
+      periodSeconds: 15
+      # -- Number of consecutive failed readiness probes before the pod is marked as not ready.
+      failureThreshold: 30
+    startup:
+      # -- Interval in seconds between two startup probes.
+      periodSeconds: 2
+      # -- Number of consecutive failed startup probes before the container is restarted. Together with `periodSeconds`, it defines the maximum startup time (here 2s x 600 = 20 min).
+      failureThreshold: 600
+  auth:
+    # -- Login of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret.
+    adminUser: *arlasAppKeycloakLogin
+    # -- Password of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret. Only taken into account at the first startup, on an empty database.
+    # @default -- `arlasAppKeycloakPassword` (YAML anchor)
+    adminPassword: *arlasAppKeycloakPassword
+  ingress:
+    # -- Ingress class name used for the Keycloak ingress.
+    ingressClassName: *arlasAppIngressClassName
+    # -- Create an ingress for Keycloak.
+    enabled: true
+    # -- Public DNS hostname of Keycloak. Also used as Keycloak `hostname` (strict mode).
     hostname: *arlasAppKeycloakDnsDomain
-    tls: true
+    tls:
+      # -- Name of the TLS secret used by the ingress.
+      secretName: keycloak-tls
+    # -- Path of the ingress rule.
     path: "/"
+    # -- Port of the Keycloak service targeted by the ingress.
     servicePort: 8080
+    # -- Annotations of the Keycloak ingress. The default nginx ingress has proxy buffers that are too small for Keycloak headers, hence the buffer settings.
     annotations:
-      # -- Default nginx ingress has default proxy buffers that are too small for keycloak headers.
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-buffering: "enabled"
       nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
       nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
-
-    # -- __MUST BE CONFIGURED:__ Enable extraTls bloc if you provide the certificate in the keycloak-tls secret, comment the block below otherwise. If the block is enabled, then set arlas-services.services.mountCertificate must be true, false otherwise (so that the certificate is mounted on the pods).
-    # start-of-block   
-    extraTls:
-      - hosts: 
-        - *arlasAppKeycloakDnsDomain
-        secretName: keycloak-tls
-    # end-of-block   
-  # @ignored  
-  proxy: edge
+  # -- How Keycloak reads the proxy headers (`proxy-headers` option). Accepted values: `forwarded` or `xforwarded`.
   proxyHeaders: "xforwarded"
-  # @ignored  
-  postgresql:
-    image:
-      repository: bitnamilegacy/postgresql
-    global:
-      security:
-        allowInsecureImages: true
-  
-
