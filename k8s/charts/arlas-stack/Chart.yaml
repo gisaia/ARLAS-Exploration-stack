@@ -28,7 +28,3 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 14.10.5
     condition: deployment.minio.enabled
-  - name: redis
-    repository: https://charts.bitnami.com/bitnami
-    version: 21.2.13
-    condition: deployment.redis.enabled

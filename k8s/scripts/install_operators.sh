@@ -91,7 +91,7 @@ fi
 # Install RabbitMQ
 if has_component "rabbitmq" "${COMPONENTS[@]}"; then
     RABBITMQ_VERSION=$(get_component_version "rabbitmq" "${COMPONENTS[@]}")
-    ELASTIC_OPERATOR_CHART_VERSION="${RABBITMQ_VERSION:-2.23.0}"
+    RABBITMQ_OPERATOR_REF="${RABBITMQ_VERSION:-2.23.0}"
     # Applying RabbitMQ operator resources
     CERT_MANAGER_VERSION="v1.16.0"
     echo "Applying RabbiMQ operator resources from ref $RABBITMQ_OPERATOR_REF..."

@@ -65,7 +65,7 @@ global:
 
   # Example of a redis connection url without sentinel:
   # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
-  celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-stack-redis-master:6379/0
+  celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-redis-client:6379/0
   # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
   # celery_result_backend: &arlasAppCeleryResultBackend sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
   
@@ -640,36 +640,74 @@ rabbitmq:
 
 redis:
   image:
-    # -- Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead.
-    repository: bitnamilegacy/redis
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  architecture: standalone
-  # @ignored  
-  auth:
-    password: *arlasAppRedisPassword
-  # @ignored  
-  commonConfiguration: |
-    loadmodule /opt/bitnami/redis/lib/redis/modules/redisbloom.so
-    loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
-    loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
-    loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
-  # @ignored  
-  master:
-    persistentVolumeClaimRetentionPolicy:
+    # -- Redis Stack image repository.
+    repository: redis/redis-stack-server
+    # -- Redis Stack image tag.
+    tag: "7.4.0-v3"
+    # -- Image pull policy.
+    pullPolicy: Always
+  # -- Secrets used to pull the Redis image from a private registry.
+  imagePullSecrets: []
+  # -- Number of Redis replicas (standalone use case: keep this at 1).
+  replicas: 1
+  # -- Password used to secure the Redis instance (mounted via a Kubernetes Secret).
+  password: *arlasAppRedisPassword
+  # -- Pod-level security context applied to the Redis pod.
+  podSecurityContext:
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+  # -- Container-level security context applied to the Redis container.
+  containerSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    allowPrivilegeEscalation: false
+  # -- Node selector for scheduling the Redis pod.
+  nodeSelector: {}
+  # -- Affinity rules for scheduling the Redis pod.
+  affinity: {}
+  # -- Tolerations for scheduling the Redis pod.
+  tolerations: []
+  # -- Additional init containers to run before the Redis container starts.
+  initContainers: []
+  # -- Additional environment variables to set on the Redis container.
+  extraEnv: []
+  # -- Additional volume mounts to add to the Redis container.
+  extraVolumeMounts: []
+  # -- Additional volumes to add to the pod.
+  extraVolumes: []
+  # -- Additional container config to run alongside Redis.
+  extraContainers: []
+  # -- Resource requests and limits for the Redis container.
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  persistence:
+    # -- Enable persistent storage for Redis data using a PVC (volumeClaimTemplate).
+    enabled: true
+    # -- Access modes for the persistent volume claim.
+    accessModes: ["ReadWriteOnce"]
+    # -- Size of the persistent volume claim.
+    size: 2Gi
+    # -- Storage class used for the persistent volume claim.
+    storageClass: *arlasAppDefaultStorageClass
+    # -- Annotations added to the persistent volume claim.
+    annotations: {}
+  service:
+    # -- Name of the headless Service used by the StatefulSet (required, provides stable pod DNS).
+    serviceName: arlas-redis
+    # -- Port exposed by the Redis service.
+    port: 6379
+    clientService:
+      # -- Enable a standard ClusterIP Service for application clients to connect to Redis.
       enabled: true
-    persistence:
-      storageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  replica:
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-    persistence:
-      storageClass: *arlasAppDefaultStorageClass
+      # -- Type of the client-facing Service.
+      type: ClusterIP
 
 minio:
   image:
