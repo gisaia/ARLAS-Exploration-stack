@@ -10,8 +10,7 @@ else
 fi
 
 not_running_pods_fct(){
-    # for now, arlas-permissions-server, arlas-persistence-server and arlas-server can not be running since host names are not set.
-    echo $( kubectl get pods --namespace "$namespace" --no-headers  | grep -v "create-and-public-minio"  | grep -v "arlas-agate"   | grep -v "arlas-permissions-server"  | grep -v "arlas-persistence-server"  | grep -v "arlas-server" | awk '$3 != "Running" {print $1}' )
+    echo $( kubectl get pods --namespace "$namespace" --no-headers  | awk '$3 != "Running" && $3 != "Completed" {print $1}' )
 }
 
 # Define the maximum number of loops

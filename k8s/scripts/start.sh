@@ -1,7 +1,6 @@
 #!/bin/bash
 set -o errexit -o pipefail
 
-
 check_command(){
     COMMAND_NAME=$1
     if ! command -v $COMMAND_NAME >/dev/null 2>&1; then
@@ -13,7 +12,6 @@ check_command(){
 check_command "kubectl"
 check_command "helm"
 check_command "curl"
-
 
 # Get the current kubectl context
 CURRENT_CONTEXT=$(kubectl config current-context)
@@ -34,7 +32,6 @@ else
     fi
 fi
 
-
 kubectl create namespace arlas --dry-run=client -o yaml | kubectl apply -f -
 
 helm dependency update k8s/charts/arlas-stack 
@@ -48,7 +45,6 @@ else
   echo "arlas-stack is not deployed ... installing deployment"
 fi
 
-
 if [ -e conf/arlas-ks.jks ]
 then
   if kubectl get secret keycloak-tls -n arlas &> /dev/null; then
@@ -59,7 +55,7 @@ then
     kubectl create configmap keycloak-certificate-configmap  \
       --from-file=arlas-ks.jks=conf/arlas-ks.jks \
       --dry-run=client  \
-      -o yaml > ./k8s/charts/arlas-stack/templates/keycloak-certificate-configmap.yaml
+      -o yaml > ./k8s/charts/arlas-stack/templates/keycloak-operator/keycloak-certificate-configmap.yaml
 
     # Create secret for keycloak certificate
     kubectl create secret tls keycloak-tls --cert=conf/server.crt --key=conf/server.key -n arlas
@@ -69,6 +65,7 @@ else
 fi
 
 helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml
-if [[ "$(uname)" == "Darwin" ]]; then
+
+if [[ "$(uname)" == "Darwin" ]] || [[ "${FIX_CORE_DNS}" == "true" ]]; then
   k8s/scripts/patch_coredns.sh
 fi

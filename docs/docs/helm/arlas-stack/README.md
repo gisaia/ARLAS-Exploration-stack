@@ -13,7 +13,6 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | file://../arlas-uis | arlas-uis | 28.9.0 |
 | file://../titiler | titiler | 28.9.0 |
 | https://charts.bitnami.com/bitnami | elasticsearch | 22.0.4 |
-| https://charts.bitnami.com/bitnami | keycloak | 25.2.0 |
 | https://charts.bitnami.com/bitnami | minio | 14.10.5 |
 | https://charts.bitnami.com/bitnami | rabbitmq | 16.0.11 |
 | https://charts.bitnami.com/bitnami | redis | 21.2.13 |
@@ -182,10 +181,70 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.rabbitMQLogin | string | `"admin"` | RabbitMQ Login |
 | global.rabbitMQPassword | string | `"secret4rabbitmq"` | __MUST BE CONFIGURED:__ RabbitMQ Password |
 | global.redisPassword | string | `"secret4redis"` | __MUST BE CONFIGURED:__ redis Password |
-| keycloak.httpsEnabled | bool | `true` |  |
-| keycloak.httpsPort | int | `8443` |  |
-| keycloak.image.repository | string | `"bitnamilegacy/keycloak"` | Keycloak for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead. |
-| keycloak.proxyHeaders | string | `"xforwarded"` |  |
+| keycloak | object | `{"auth":{"adminPassword":"secret4keycloak","adminUser":"admin"},"db":{"host":"keycloak-postgres","kind":"postgres","name":"keycloak","passwordKey":"password","port":5432,"postgresql":{"affinity":{},"containerSecurityContext":{"allowPrivilegeEscalation":false,"runAsGroup":999,"runAsNonRoot":true,"runAsUser":999},"database":"keycloak","enabled":true,"extraContainers":[],"extraEnv":[],"extraVolumeMounts":[],"extraVolumes":[],"image":{"pullPolicy":"Always","repository":"postgres","tag":"16"},"imagePullSecrets":[],"initContainers":[],"nodeSelector":{},"password":"secret4postgres","persistence":{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"1Gi","storageClass":"standard-retain"},"podSecurityContext":{"fsGroup":999,"runAsNonRoot":true,"runAsUser":999},"replicas":1,"resources":{"limits":{"cpu":"1","memory":"1Gi"},"requests":{"cpu":"250m","memory":"512Mi"}},"service":{"port":5432,"serviceName":"keycloak-postgres","type":"ClusterIP"},"tolerations":[],"username":"keycloak"},"secretName":"keycloak-db","userNamekey":"username"},"http":{"enabled":true,"port":8080},"httpRelativePath":"/","https":{"enabled":true,"port":8443,"secretName":"keycloak-tls"},"image":{"repository":"quay.io/keycloak/keycloak","tag":"26.7.4"},"ingress":{"annotations":{"nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffering":"enabled","nginx.ingress.kubernetes.io/proxy-buffers-number":"8","nginx.ingress.kubernetes.io/ssl-redirect":"true"},"enabled":true,"hostname":"keycloak.arlas.k8s","ingressClassName":"nginx","path":"/","servicePort":8080,"tls":{"secretName":"keycloak-tls"}},"instances":1,"probes":{"readiness":{"failureThreshold":30,"periodSeconds":15},"startup":{"failureThreshold":600,"periodSeconds":2}},"proxyHeaders":"xforwarded","realm":{"import":{"enabled":true}},"resources":{"limits":{"cpu":"1","memory":"1Gi"},"requests":{"cpu":"250m","memory":"512Mi"}}}` | Keycloak (Operator-managed) configuration. |
+| keycloak.auth.adminPassword | string | `arlasAppKeycloakPassword` (YAML anchor) | Password of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret. Only taken into account at the first startup, on an empty database. |
+| keycloak.auth.adminUser | string | `"admin"` | Login of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret. |
+| keycloak.db.host | string | `"keycloak-postgres"` | Hostname of the PostgreSQL server used by Keycloak (Service name when the chart deploys its own dev PostgreSQL). |
+| keycloak.db.kind | string | `"postgres"` | Database vendor used by Keycloak (`db.vendor` field of the Keycloak custom resource). |
+| keycloak.db.name | string | `"keycloak"` | Name of the PostgreSQL database. |
+| keycloak.db.passwordKey | string | `"password"` | Key of the Secret containing the database password. |
+| keycloak.db.port | int | `5432` | Port of the PostgreSQL server. |
+| keycloak.db.postgresql.affinity | object | `{}` | Affinity rules for the PostgreSQL Pod. |
+| keycloak.db.postgresql.containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"runAsGroup":999,"runAsNonRoot":true,"runAsUser":999}` | Container-level security context applied to the PostgreSQL container. |
+| keycloak.db.postgresql.database | string | `"keycloak"` | Name of the PostgreSQL database created for Keycloak. |
+| keycloak.db.postgresql.enabled | bool | `true` | Deploy a development PostgreSQL instance with the chart. Set to false to use an external PostgreSQL server (then adjust `host`, `port` and `name`). |
+| keycloak.db.postgresql.extraContainers | list | `[]` | Extra containers configuration to add to the PostgreSQL Pod. |
+| keycloak.db.postgresql.extraEnv | list | `[]` | Extra environment variables to add to the PostgreSQL container. |
+| keycloak.db.postgresql.extraVolumeMounts | list | `[]` | Extra volume mounts to add to the PostgreSQL container. |
+| keycloak.db.postgresql.extraVolumes | list | `[]` | Extra volumes to add to the PostgreSQL Pod. |
+| keycloak.db.postgresql.image.pullPolicy | string | `"Always"` | PostgreSQL image pull policy. |
+| keycloak.db.postgresql.image.repository | string | `"postgres"` | PostgreSQL image repository. |
+| keycloak.db.postgresql.image.tag | string | `"16"` | PostgreSQL image tag. |
+| keycloak.db.postgresql.imagePullSecrets | list | `[]` | Image pull secrets for the PostgreSQL image. |
+| keycloak.db.postgresql.initContainers | list | `[]` | Init containers to add to the PostgreSQL Pod. |
+| keycloak.db.postgresql.nodeSelector | object | `{}` | Node selector for the PostgreSQL Pod. |
+| keycloak.db.postgresql.password | string | `"secret4postgres"` | Password used by Keycloak to connect to the PostgreSQL database. |
+| keycloak.db.postgresql.persistence.accessModes | list | `["ReadWriteOnce"]` | Access modes for the PostgreSQL PersistentVolumeClaim. |
+| keycloak.db.postgresql.persistence.annotations | object | `{}` | Annotations to add to the PostgreSQL PersistentVolumeClaim. |
+| keycloak.db.postgresql.persistence.enabled | bool | `true` | Enable persistent storage for PostgreSQL data using a PersistentVolumeClaim. Set to false to use an ephemeral `emptyDir` (data lost on Pod restart, suitable for disposable/CI use only). |
+| keycloak.db.postgresql.persistence.size | string | `"1Gi"` | Size of the PostgreSQL PersistentVolumeClaim. |
+| keycloak.db.postgresql.persistence.storageClass | string | `"standard-retain"` | Storage class used for the PostgreSQL PersistentVolumeClaim. Set to `"-"` to disable dynamic provisioning, or leave empty to use the cluster's default storage class. |
+| keycloak.db.postgresql.podSecurityContext | object | `{"fsGroup":999,"runAsNonRoot":true,"runAsUser":999}` | Pod-level security context applied to the PostgreSQL StatefulSet. |
+| keycloak.db.postgresql.replicas | int | `1` | Number of PostgreSQL replicas. Keep it at 1: this is a single-instance development database, not a replicated cluster. |
+| keycloak.db.postgresql.resources | object | `{"limits":{"cpu":"1","memory":"1Gi"},"requests":{"cpu":"250m","memory":"512Mi"}}` | Resource requests and limits for the PostgreSQL container. |
+| keycloak.db.postgresql.service.port | int | `5432` | Port on which the PostgreSQL Service listens. |
+| keycloak.db.postgresql.service.serviceName | string | `"keycloak-postgres"` | Name of the Kubernetes Service exposing PostgreSQL. |
+| keycloak.db.postgresql.service.type | string | `"ClusterIP"` | Type of the Kubernetes Service exposing PostgreSQL. |
+| keycloak.db.postgresql.tolerations | list | `[]` | Tolerations for the PostgreSQL Pod. |
+| keycloak.db.postgresql.username | string | `"keycloak"` | Username used by Keycloak to connect to the PostgreSQL database. |
+| keycloak.db.secretName | string | `"keycloak-db"` | Name of the Secret containing the database credentials. |
+| keycloak.db.userNamekey | string | `"username"` | Key of the Secret containing the database username. |
+| keycloak.http.enabled | bool | `true` | Enable the HTTP listener of Keycloak. Needed when TLS is terminated by the ingress. |
+| keycloak.http.port | int | `8080` | HTTP port of Keycloak. |
+| keycloak.httpRelativePath | string | `"/"` | Relative path under which Keycloak is served (`http-relative-path` option). |
+| keycloak.https.enabled | bool | `true` | Enable the HTTPS listener of Keycloak. |
+| keycloak.https.port | int | `8443` | HTTPS port of Keycloak. |
+| keycloak.https.secretName | string | `"keycloak-tls"` | Name of the TLS secret used by Keycloak for HTTPS. |
+| keycloak.image.repository | string | `"quay.io/keycloak/keycloak"` | Keycloak image repository. Keycloak is deployed for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead. |
+| keycloak.image.tag | string | `"26.7.4"` | Keycloak image tag. Should match the version of the Keycloak Operator installed in the cluster. |
+| keycloak.ingress.annotations | object | `{"nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffering":"enabled","nginx.ingress.kubernetes.io/proxy-buffers-number":"8","nginx.ingress.kubernetes.io/ssl-redirect":"true"}` | Annotations of the Keycloak ingress. The default nginx ingress has proxy buffers that are too small for Keycloak headers, hence the buffer settings. |
+| keycloak.ingress.enabled | bool | `true` | Create an ingress for Keycloak. |
+| keycloak.ingress.hostname | string | `"keycloak.arlas.k8s"` | Public DNS hostname of Keycloak. Also used as Keycloak `hostname` (strict mode). |
+| keycloak.ingress.ingressClassName | string | `"nginx"` | Ingress class name used for the Keycloak ingress. |
+| keycloak.ingress.path | string | `"/"` | Path of the ingress rule. |
+| keycloak.ingress.servicePort | int | `8080` | Port of the Keycloak service targeted by the ingress. |
+| keycloak.ingress.tls.secretName | string | `"keycloak-tls"` | Name of the TLS secret used by the ingress. |
+| keycloak.instances | int | `1` | Number of Keycloak replicas. |
+| keycloak.probes.readiness.failureThreshold | int | `30` | Number of consecutive failed readiness probes before the pod is marked as not ready. |
+| keycloak.probes.readiness.periodSeconds | int | `15` | Interval in seconds between two readiness probes. |
+| keycloak.probes.startup.failureThreshold | int | `600` | Number of consecutive failed startup probes before the container is restarted. Together with `periodSeconds`, it defines the maximum startup time (here 2s x 600 = 20 min). |
+| keycloak.probes.startup.periodSeconds | int | `2` | Interval in seconds between two startup probes. |
+| keycloak.proxyHeaders | string | `"xforwarded"` | How Keycloak reads the proxy headers (`proxy-headers` option). Accepted values: `forwarded` or `xforwarded`. |
+| keycloak.realm.import.enabled | bool | `true` | Import the realm defined in arlas-stack/conf/keycloak.realm.json |
+| keycloak.resources.limits.cpu | string | `"1"` | CPU limit for the Keycloak container. |
+| keycloak.resources.limits.memory | string | `"1Gi"` | Memory limit for the Keycloak container. |
+| keycloak.resources.requests.cpu | string | `"250m"` | CPU requested for the Keycloak container. |
+| keycloak.resources.requests.memory | string | `"512Mi"` | Memory requested for the Keycloak container. |
 | minio.image.repository | string | `"bitnamilegacy/minio"` | Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead. |
 | rabbitmq.image.repository | string | `"bitnamilegacy/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
 | redis.image.repository | string | `"bitnamilegacy/redis"` | Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead. |

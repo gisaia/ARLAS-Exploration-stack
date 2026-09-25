@@ -15,7 +15,8 @@ helm search repo arlas
 - kubectl
 - helm
 - load balancer for kubernetes
-
+- kubernetes operators for keycloak 
+  
 Get the project by cloning the [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack) project.
 
 ```shell
@@ -37,7 +38,10 @@ __Note for test/dev environment__: If your cluster does not have an ingress cont
 k8s/scripts/install_metallb.sh
 k8s/scripts/install_nginx_ingress_controller.sh
 ```
-
+__Note for test/dev environment__:  If your KIND cluster does not have keycloak, elasticsearch or ... operators, you can install them:
+```shell
+k8s/scripts/install_operators.sh keycloak@26.7.4 ...
+```
 ## Configuring the ARLAS stack
 
 ### Directory structure

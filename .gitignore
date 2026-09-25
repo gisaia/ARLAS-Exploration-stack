@@ -5,7 +5,10 @@ conf/apisix/apisix.yaml
 conf/server.crt
 conf/server.key
 conf/server.csr
+conf/server-ks.crt
+conf/server-ks.key
 conf/truststore.p12
+conf/truststore-ks.p12
 conf/arlas-ks.jks
 conf/apisix/apisix.yaml
 conf/apisix/apisix.template.yaml
@@ -30,4 +33,6 @@ conf/custom.env
 k8s/charts/arlas-stack/Chart.lock
 k8s/charts/arlas-stack/charts
 k8s/charts/arlas-stack/templates/*-certificate-configmap.yaml
+k8s/charts/arlas-stack/templates/keycloak-operator/*-certificate-configmap.yaml
+
 custom_values.yaml
