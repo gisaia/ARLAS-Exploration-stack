@@ -3,10 +3,8 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ .Values.services.server.serviceName }}-hpa
-  namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ .Values.services.server.serviceName }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "arlasServices.labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.services.server.serviceName }}
 spec:
   scaleTargetRef:
