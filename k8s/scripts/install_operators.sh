@@ -65,7 +65,7 @@ if has_component "keycloak" "${COMPONENTS[@]}"; then
     kubectl apply -k "github.com/keycloak/keycloak-k8s-resources/kubernetes/cluster-wide?ref=$KC_KUSTOMIZE_REF"
 fi
 
-
+# Install elastic
 ELASTIC_OPERATOR_CHART_VERSION="${ELASTIC_OPERATOR_CHART_VERSION:-3.5.0}"
 ELASTIC_OPERATOR_NAMESPACE="elastic-system"
 ELASTIC_HELM_REPO_URL="https://helm.elastic.co"
@@ -85,4 +85,21 @@ if has_component "elasticsearch" "${COMPONENTS[@]}"; then
     --version "$ELASTIC_OPERATOR_CHART_VERSION" \
     --wait \
     --atomic
+fi
+
+
+# Install RabbitMQ
+if has_component "rabbitmq" "${COMPONENTS[@]}"; then
+    RABBITMQ_VERSION=$(get_component_version "rabbitmq" "${COMPONENTS[@]}")
+    ELASTIC_OPERATOR_CHART_VERSION="${RABBITMQ_VERSION:-2.23.0}"
+    # Applying RabbitMQ operator resources
+    CERT_MANAGER_VERSION="v1.16.0"
+    echo "Applying RabbiMQ operator resources from ref $RABBITMQ_OPERATOR_REF..."
+    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/$CERT_MANAGER_VERSION/cert-manager.yaml
+    kubectl wait --for=condition=Available deployment/cert-manager -n cert-manager --timeout=120s
+    kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+    kubectl wait --for=condition=Available deployment/cert-manager-cainjector -n cert-manager --timeout=120s
+    kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/download/v$RABBITMQ_OPERATOR_REF/cluster-operator.yml
+    echo "Waiting for RabbitMQ cluster operator to be ready..."
+    kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=rabbitmq-cluster-operator -n rabbitmq-system --timeout=120s
 fi

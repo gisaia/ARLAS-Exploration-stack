@@ -164,9 +164,9 @@ Image: `ARLAS_IAM_SERVER_VERSION` with `gisaia/arlas-iam-server:29.0.0-rc.4` in 
 | `ARLAS_SMTP_HOST` | `ARLAS_SMTP_HOST` | `` |  | empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_PASSWORD` | `ARLAS_SMTP_PASSWORD` | `` |  | empty value in `conf/arlas_iam.env` |
 | `ARLAS_SMTP_PORT` | `ARLAS_SMTP_PORT` | `25` |  |  |
-| `ARLAS_SMTP_RESET_LINK` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
+| `ARLAS_SMTP_RESET_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_SMTP_USERNAME` | `ARLAS_SMTP_USERNAME` | `` |  | empty value in `conf/arlas_iam.env` |
-| `ARLAS_SMTP_VERIFY_LINK` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
+| `ARLAS_SMTP_VERIFY_LINK` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `JDK_JAVA_OPTIONS` | `ARLAS_IAM_JDK_JAVA_OPTIONS` | `` |  | `"-Xmx1g -XX:+ExitOnOutOfMemoryError -Djavax.net.ss ...` in `conf/arlas_iam.env` |
 | `ARLAS_AUTH_KEYCLOAK_REALM` | `ARLAS_AUTH_KEYCLOAK_REALM` | `` |  |  |
 | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `ARLAS_AUTH_KEYCLOAK_RESOURCE` | `` |  |  |
@@ -310,7 +310,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:29.0.0-rc.9` in `conf/versions
 | `ARLAS_PERSISTENCE_URL` | `ARLAS_PERSISTENCE_URL` | `/arlas_persistence_server` |  | `/persist` in `conf/persistence-file.env`<br>`https://${ARLAS_HOST}/persist` in `conf/arlas_iam.env` |
 | `ARLAS_USE_AUTHENT` | `ARLAS_USE_AUTHENT` | `` |  | `true` in `conf/arlas_iam.env` |
 | `ARLAS_WUI_BASE_HREF` | `ARLAS_WUI_BASE_HREF` | `/wui` |  |  |
-| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `issarbe` in `conf/stack.env` |
+| `PUBLIC_HOST` | `ARLAS_HOST` | `` |  | `localhost` in `conf/stack.env` |
 | `ARLAS_STATIC_LINKS` | `ARLAS_WUI_LINKS` | `` |  | `'` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_URL` | `ARLAS_DOWNLOAD_PROCESS_URL` | `` |  | `/aproc/processes/download/execution` in `conf/arlas.env` |
 | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `ARLAS_DOWNLOAD_PROCESS_CHECK_URL` | `` |  | `/aproc/processes/download` in `conf/arlas.env` |

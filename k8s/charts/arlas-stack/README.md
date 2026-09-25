@@ -13,7 +13,6 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | file://../arlas-uis | arlas-uis | 28.9.0 |
 | file://../titiler | titiler | 28.9.0 |
 | https://charts.bitnami.com/bitnami | minio | 14.10.5 |
-| https://charts.bitnami.com/bitnami | rabbitmq | 16.0.11 |
 | https://charts.bitnami.com/bitnami | redis | 21.2.13 |
 
 ## Values
@@ -47,7 +46,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.services.aproc.configuration.accessManager.tmpDir | string | `"/tmp/"` | Temporary directory used by the access manager |
 | aias-services.services.aproc.configuration.airsEndpoint | string | `"http://airs-server:8000/airs"` | AIRS service endpoint URL accessed by APROC |
 | aias-services.services.aproc.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS search URL used by APROC to check whether an item exists |
-| aias-services.services.aproc.configuration.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
+| aias-services.services.aproc.configuration.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
 | aias-services.services.aproc.configuration.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
 | aias-services.services.aproc.configuration.celeryResultBackendTransportOptions | string | `nil` |  |
 | aias-services.services.aproc.configuration.extensions.download.index.name | string | `"org.com@aproc_downloads"` | __MUST BE CONFIGURED:__ Change with the domain (org.com) with your own organization name |
@@ -162,7 +161,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | elasticsearch.user.login | string | `"arlas-user"` | Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user |
 | elasticsearch.user.password | string | `"secret4elastic"` | Password of the custom Elasticsearch superuser account |
 | global.authIssuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
-| global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-stack-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
+| global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
 | global.celeryResultBackend | string | `"redis://:secret4redis@arlas-stack-redis-master:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
 | global.defaultStorageClass | string | `"standard-retain"` | __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy. |
 | global.dnsDomain | string | `"site.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment |
@@ -259,7 +258,17 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | kibana.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Kibana Ingress |
 | kibana.instances | int | `1` | Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource) |
 | minio.image.repository | string | `"bitnamilegacy/minio"` | Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead. |
-| rabbitmq.image.repository | string | `"bitnamilegacy/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
+| rabbitmq.auth.password | string | `"secret4rabbitmq"` | Password for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator. |
+| rabbitmq.auth.username | string | `"admin"` | Username for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator. |
+| rabbitmq.image.repository | string | `"docker.io/library/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
+| rabbitmq.image.tag | string | `"4.3.6"` | Image tag for the RabbitMQ container. |
+| rabbitmq.persistence.storage | string | `"2Gi"` | Size of the persistent volume claim used to store RabbitMQ data. |
+| rabbitmq.persistence.storageClass | string | `"standard-retain"` | Storage class used for the RabbitMQ persistent volume claim. |
+| rabbitmq.persistentVolumeClaimRetentionPolicy.enabled | bool | `true` | Enable a custom PVC retention policy on the RabbitMQ StatefulSet. |
+| rabbitmq.persistentVolumeClaimRetentionPolicy.whenDeleted | string | `"Retain"` | Policy applied to the PVC when the RabbitmqCluster (or its StatefulSet) is deleted. Allowed values: Retain | Delete. |
+| rabbitmq.persistentVolumeClaimRetentionPolicy.whenScaled | string | `"Retain"` | Policy applied to the PVC when the StatefulSet is scaled down (replica count reduced). Allowed values: Retain | Delete. |
+| rabbitmq.resources.limits.memory | string | `"2Gi"` | Memory limit allocated to the RabbitMQ container. |
+| rabbitmq.resources.requests.memory | string | `"1Gi"` | Memory request allocated to the RabbitMQ container. |
 | redis.image.repository | string | `"bitnamilegacy/redis"` | Redis for development and test only. For production, please refer to the redis documentation to deploy a production ready redis instance instead. |
 | titiler.image.tag | string | `"2.2.1"` |  |
 | titiler.podSecurityContext.fsGroup | int | `1001` |  |
