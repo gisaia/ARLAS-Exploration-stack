@@ -31,16 +31,23 @@ services:
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
-      requests:
-        cpu: 0.1
-        memory: 256Mi
+      requests:   # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+        cpu: 0.8
+        memory: 1000Mi 
       limits:
         cpu: 1
         memory: 1000Mi
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
+    autoscaling:
+      enabled: False
+      minReplicas: 1
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 70
+      customMetrics:
+      behavior: 
   permissions:
     serviceName: arlas-permissions-server
     image: gisaia/arlas-permissions-server:29.0.0-rc1
