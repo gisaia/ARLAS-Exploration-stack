@@ -24,7 +24,6 @@ A dynamic Web Map tile server
 | env.GDAL_HTTP_VERSION | int | `2` |  |
 | env.GDAL_INGESTED_BYTES_AT_OPEN | int | `32768` |  |
 | env.PYTHONWARNINGS | string | `"ignore"` |  |
-| env.TITILER_API_DEBUG | string | `"TRUE"` |  |
 | env.VSI_CACHE | string | `"TRUE"` |  |
 | env.VSI_CACHE_SIZE | int | `5000000` |  |
 | extraHostPathMounts | list | `[]` |  |
@@ -50,7 +49,7 @@ A dynamic Web Map tile server
 | nodeSelector | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
 | replicaCount | int | `1` |  |
-| resources.limits.cpu | int | `1` |  |
+| resources.limits.cpu | float | `0.2` |  |
 | resources.limits.memory | string | `"2Gi"` |  |
 | resources.requests.cpu | float | `0.1` |  |
 | resources.requests.memory | string | `"50Mi"` |  |

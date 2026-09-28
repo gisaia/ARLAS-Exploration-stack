@@ -11,12 +11,12 @@ A Helm Chart to deploy ARLAS User Interfaces
 | affinity | object | `{}` | Allows constraining pod(s) to only run on particular nodes, or to prefer to run on particular nodes. It is based on label-selection. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | authent.authMode | string | `"openid"` | Defines authentication mode (i.e. "iam", "openid" or not defined) |
 | authent.clearHashAfterLogin | bool | `true` | Defines whether to clear the hash fragment in url after logging in |
-| authent.clientId | string | `"arlas-front"` | The client's id as registered with the auth server |
+| authent.clientId | string | `"arlas-front"` |  |
 | authent.customQueryParams | list | `[{"audience":"http://arlas.io/api/server"}]` | Custom query params |
 | authent.disableAtHashCheck | bool | `true` | This property has been introduced to disable at_hash checks and is indented for Identity Provider that does not deliver an at_hash EVEN THOUGH its recommended by the OIDC specs. |
 | authent.forceConnect | bool | `true` | When authentication is enabled, this option forces to be connected to Identity Provider at application bootstrap |
 | authent.issuer | string | `nil` | The issuer's uri |
-| authent.logoutUrl | string | `nil` | The logout URL to be used |
+| authent.logoutUrl | string | `nil` |  |
 | authent.requireHttps | bool | `false` | Defines whether https is required |
 | authent.responseType | string | `"code"` | Response type values |
 | authent.scope | string | `"profile"` |  |
@@ -35,11 +35,11 @@ A Helm Chart to deploy ARLAS User Interfaces
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
 | enableGeocoding | bool | `false` | Enable or disable Geocoding feature |
 | geocodingUrl | string | `nil` | Geocoding find place URL |
-| geocodingZoomTo | int | `11` | Maximum zoom level for geocoding feature |
+| geocodingZoomTo | int | `11` |  |
 | googleAnalyticsKey | string | `nil` | The Google Analytics key of the wui app |
 | histogramsExportNbBuckets | int | `1000` | Maximum number of buckets for the histogram export |
 | histogramsMaxBucket | int | `200` | Maximum number of buckets for the histogram graph |
-| hitsExporterVersion | float | `2.2` | Version number of the ARLAS Hits Exporter to use |
+| hitsExporterVersion | float | `2.2` |  |
 | links | string | `" [ { \"name\":\"Dashboards\", \"url\":\"/hub/\", \"icon\":\"hub\", \"check_url\": \"/arlas/collections\", \"check_url_response_type\": \"text\" }, { \"name\": \"Archives\", \"url\": \"/fam-wui/\", \"icon\": \"collections\", \"check_url\": \"/fam/healthcheck\", \"check_url_response_type\": \"text\" } ]"` | List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes. |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
@@ -48,7 +48,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | replicaCount | int | `1` | Number of desired pods |
 | resources.limits.cpu | float | `0.1` |  |
 | resources.limits.memory | string | `"50Mi"` |  |
-| resources.requests.cpu | float | `0.05` |  |
+| resources.requests.cpu | float | `0.1` |  |
 | resources.requests.memory | string | `"10Mi"` |  |
 | resultListEnableExport | bool | `false` | Whether or not to enable result list export |
 | resultListExportSize | int | `1000` | Result list export size |
@@ -62,6 +62,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.aboutConfigMapName | string | `"arlas-builder-default-about-configmap"` |  |
 | uis.builder.advancedFeatures | bool | `false` |  |
 | uis.builder.allowExternalNodeConfiguration | bool | `true` |  |
+| uis.builder.basemaps | string | `"[ {\"name\":\"Contrast\",\"url\":\"/wui/assets/basemap/styles/protomap-contrast.json\",\"image\":\"/wui/assets/basemap/quicklook/contrast.png\", \"type\": \"protomap\"}, {\"name\":\"Dark\",\"url\":\"/wui/assets/basemap/styles/protomap-dark.json\",\"image\":\"/wui/assets/basemap/quicklook/dark.png\", \"type\": \"protomap\"}, {\"name\":\"Grayscale\",\"url\":\"/wui/assets/basemap/styles/protomap-grayscale.json\",\"image\":\"/wui/assets/basemap/quicklook/grayscale.png\", \"type\": \"protomap\"}, {\"name\":\"Light\",\"url\":\"/wui/assets/basemap/styles/protomap-light.json\",\"image\":\"/wui/assets/basemap/quicklook/light.png\", \"type\": \"protomap\"}, {\"name\":\"White\",\"url\":\"/wui/assets/basemap/styles/protomap-white.json\",\"image\":\"/wui/assets/basemap/quicklook/white.png\", \"type\": \"protomap\"} ]"` |  |
 | uis.builder.extraContainers | list | `[]` |  |
 | uis.builder.extraEnv | string | `nil` |  |
 | uis.builder.extraInitContainers | string | `nil` |  |

@@ -36,9 +36,7 @@ A Helm Chart to deploy ARLAS Server
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
-| persistence.hibernate.dialect | string | `"org.hibernate.dialect.PostgreSQLDialect"` | SQL Dialect |
 | persistence.hibernate.driver | string | `"org.postgresql.Driver"` | JDBC Driver |
-| persistence.hibernate.password | string | `nil` | Database user password |
 | persistence.hibernate.url | string | `"jdbc:postgresql://db:5432/arlas"` | JDBC URL |
 | persistence.hibernate.user | string | `nil` | Database user login |
 | persistence.localFolder | string | `"/persistence/"` | Path to use for file persistence |
@@ -58,7 +56,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.nodeSelector | object | `{}` |  |
 | services.permissions.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.permissions.replicaCount | int | `1` |  |
-| services.permissions.resources.limits.cpu | float | `0.5` |  |
+| services.permissions.resources.limits.cpu | float | `0.25` |  |
 | services.permissions.resources.limits.memory | string | `"512Mi"` |  |
 | services.permissions.resources.requests.cpu | float | `0.1` |  |
 | services.permissions.resources.requests.memory | string | `"128Mi"` |  |
@@ -78,7 +76,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.nodeSelector | object | `{}` |  |
 | services.persistence.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.persistence.replicaCount | int | `1` |  |
-| services.persistence.resources.limits.cpu | float | `0.5` |  |
+| services.persistence.resources.limits.cpu | float | `0.25` |  |
 | services.persistence.resources.limits.memory | string | `"512Mi"` |  |
 | services.persistence.resources.requests.cpu | float | `0.1` |  |
 | services.persistence.resources.requests.memory | string | `"128Mi"` |  |
@@ -94,7 +92,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.autoscaling.customMetrics | string | `nil` |  |
 | services.server.autoscaling.enabled | bool | `false` |  |
 | services.server.autoscaling.maxReplicas | int | `4` |  |
-| services.server.autoscaling.minReplicas | int | `2` |  |
+| services.server.autoscaling.minReplicas | int | `1` |  |
 | services.server.autoscaling.targetCPUUtilizationPercentage | int | `70` |  |
 | services.server.autoscaling.targetMemoryUtilizationPercentage | int | `70` |  |
 | services.server.extraContainers | list | `[]` |  |
@@ -110,7 +108,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.replicaCount | int | `1` |  |
 | services.server.resources.limits.cpu | int | `1` |  |
 | services.server.resources.limits.memory | string | `"1000Mi"` |  |
-| services.server.resources.requests.cpu | float | `0.8` |  |
+| services.server.resources.requests.cpu | float | `0.25` |  |
 | services.server.resources.requests.memory | string | `"1000Mi"` |  |
 | services.server.serviceName | string | `"arlas-server"` |  |
 | services.server.tolerations | list | `[]` |  |
