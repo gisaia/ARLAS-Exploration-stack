@@ -22,22 +22,22 @@ uis:
     urlPrefix: /wui
     tabName: ARLAS Exploration
     basemapUrl:
-    whitelistedUrls: [https://tiles.mapterhorn.com]
+    whitelistedUrls: [ https://tiles.mapterhorn.com ]
     aboutAndTourConfigMapName: arlas-default-about-and-tour-configmap
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
-    extraEnv:
-    #  - name: KEY
+    extraEnv: #  - name: KEY
+
     #    value: "value"
-    extraVolumeMounts:
-    #  - name: extra-assets-volume
+    extraVolumeMounts: #  - name: extra-assets-volume
+
     #    mountPath: /usr/share/nginx/html/assets/logo-only.png
     #    subPath: logo-only.png
     extraVolumes:
-    #  - name: extra-assets-volume
-    #    configMap:
-    #      name: arlas-example-assets-configmap
+      #  - name: extra-assets-volume
+      #    configMap:
+      #      name: arlas-example-assets-configmap
 
   famWui:
     serviceName: arlas-fam-wui
@@ -57,6 +57,7 @@ uis:
     extraVolumeMounts:
     extraVolumes:
 
+
   hub:
     serviceName: arlas-hub
     image: gisaia/arlas-wui-hub:29.0.0-rc.8
@@ -69,6 +70,7 @@ uis:
     extraEnv:
     extraVolumeMounts:
     extraVolumes:
+
 
   builder:
     serviceName: arlas-builder
@@ -83,21 +85,10 @@ uis:
     extraInitContainers:
     extraEnv:
     extraVolumeMounts:
-    extraVolumes:
-    # @ignored
-    basemaps: '[
-        {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"},
-        {"name":"Dark","url":"/wui/assets/basemap/styles/protomap-dark.json","image":"/wui/assets/basemap/quicklook/dark.png", "type": "protomap"},
-        {"name":"Grayscale","url":"/wui/assets/basemap/styles/protomap-grayscale.json","image":"/wui/assets/basemap/quicklook/grayscale.png", "type": "protomap"},
-        {"name":"Light","url":"/wui/assets/basemap/styles/protomap-light.json","image":"/wui/assets/basemap/quicklook/light.png", "type": "protomap"},
-        {"name":"White","url":"/wui/assets/basemap/styles/protomap-white.json","image":"/wui/assets/basemap/quicklook/white.png", "type": "protomap"}
-        ]'
-    terrain: '{
-        "type": "raster-dem",
-        "tiles": ["https://tiles.mapterhorn.com/{z}/{x}/{y}.webp"],
-        "encoding": terrarium,
-        "tileSize": 512
-        }'
+    extraVolumes: # @ignored
+
+    basemaps: '[ {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"}, {"name":"Dark","url":"/wui/assets/basemap/styles/protomap-dark.json","image":"/wui/assets/basemap/quicklook/dark.png", "type": "protomap"}, {"name":"Grayscale","url":"/wui/assets/basemap/styles/protomap-grayscale.json","image":"/wui/assets/basemap/quicklook/grayscale.png", "type": "protomap"}, {"name":"Light","url":"/wui/assets/basemap/styles/protomap-light.json","image":"/wui/assets/basemap/quicklook/light.png", "type": "protomap"}, {"name":"White","url":"/wui/assets/basemap/styles/protomap-white.json","image":"/wui/assets/basemap/quicklook/white.png", "type": "protomap"} ]'
+    terrain: '{ "type": "raster-dem", "tiles": ["https://tiles.mapterhorn.com/{z}/{x}/{y}.webp"], "encoding": terrarium, "tileSize": 512 }'
   colors:
     arlas:
       bg: "#ff4081"
@@ -107,11 +98,11 @@ uis:
     active:
       color: "#fbb03b"
       opacity: "0.1"
-      dash: [1]
+      dash: [ 1 ]
     inactive:
       color: "#3bb2d0"
       opacity: "0.1"
-      dash: [2,1]
+      dash: [ 2, 1 ]
 services:
   server:
     urlPrefix: /arlas
@@ -127,26 +118,10 @@ services:
     urlPrefix: /fam
 
 # -- List of links to be added in the left menu of the WUI. Each link must contain `icon`, `url` and `name` attributes.
-links: '
-        [
-            {
-                "name":"Dashboards",
-                "url":"/hub/",
-                "icon":"hub",
-                "check_url": "/arlas/collections",
-                "check_url_response_type": "text"
-            },
-            {
-                "name": "Archives",
-                "url": "/fam-wui/",
-                "icon": "collections",
-                "check_url": "/fam/healthcheck",
-                "check_url_response_type": "text"
-            }
-        ]'
+links: ' [ { "name":"Dashboards", "url":"/hub/", "icon":"hub", "check_url": "/arlas/collections", "check_url_response_type": "text" }, { "name": "Archives", "url": "/fam-wui/", "icon": "collections", "check_url": "/fam/healthcheck", "check_url_response_type": "text" } ]'
 # -- The Google Analytics key of the wui app
-googleAnalyticsKey:
-# -- Version number of the ARLAS Hits Exporter to use
+googleAnalyticsKey: # -- Version number of the ARLAS Hits Exporter to use
+
 hitsExporterVersion: 2.2
 # -- The text to display on the tab of the web browser (will be enriched with the dashboard name)
 # -- Whether to display the dashboard shortcut icon
@@ -162,8 +137,8 @@ histogramsExportNbBuckets: 1000
 # -- Enable or disable Geocoding feature
 enableGeocoding: false
 # -- Geocoding find place URL
-geocodingUrl:
-# -- Maximum zoom level for geocoding feature
+geocodingUrl: # -- Maximum zoom level for geocoding feature
+
 geocodingZoomTo: 11
 configuration: {}
 
@@ -182,7 +157,7 @@ authent:
   scope: profile
   # -- Custom query params
   customQueryParams:
-    - audience: http://arlas.io/api/server
+  - audience: http://arlas.io/api/server
   # -- Defines whether https is required
   requireHttps: false
   # -- Response type values
@@ -202,10 +177,10 @@ authent:
   # -- Defines the kind of storage: localstorage or sessionstorage
   storage: memorystorage
   # -- The issuer's uri
-  issuer:
-  # -- The logout URL to be used
-  logoutUrl:
-  # -- The client's id as registered with the auth server
+  issuer: # -- The logout URL to be used
+
+  logoutUrl: # -- The client's id as registered with the auth server
+
   clientId: arlas-front
 
 basemap:
@@ -217,7 +192,7 @@ replicaCount: 1
 
 resources:
   requests:
-    cpu: 0.05
+    cpu: 0.1
     memory: 10Mi
   limits:
     cpu: 0.1
@@ -229,11 +204,9 @@ logger:
   # -- Default console logging level
   loggingConsoleLevel: INFO
 
-
 # -- Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
 # -- Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 # -- Allows constraining pod(s) to only run on particular nodes, or to prefer to run on particular nodes. It is based on label-selection. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
-
