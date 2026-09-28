@@ -36,7 +36,9 @@ A Helm Chart to deploy ARLAS Server
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
+| persistence.hibernate.dialect | string | `"org.hibernate.dialect.PostgreSQLDialect"` | SQL Dialect |
 | persistence.hibernate.driver | string | `"org.postgresql.Driver"` | JDBC Driver |
+| persistence.hibernate.password | string | `nil` | Database user password |
 | persistence.hibernate.url | string | `"jdbc:postgresql://db:5432/arlas"` | JDBC URL |
 | persistence.hibernate.user | string | `nil` | Database user login |
 | persistence.localFolder | string | `"/persistence/"` | Path to use for file persistence |
