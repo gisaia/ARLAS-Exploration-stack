@@ -64,8 +64,9 @@ services:
         # -- S3 platform type. This value is provided in the item properties of the STAC item
         platform: MINIO
         # -- S3 bucket's region. This value is provided in the item properties of the STAC item
-        region: # -- S3 bucket's tier. This value is provided in the item properties of the STAC item
+        region:
 
+        # -- S3 bucket's tier. This value is provided in the item properties of the STAC item
         tier: Standard
 
       # -- ARLAS-EO mapping and collection URLs used for initializing new indices of new collections
@@ -368,8 +369,8 @@ services:
 
       # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
       # celery_result_backend: sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
-      celeryResultBackendTransportOptions: #   master_name: mymaster
-
+      celeryResultBackendTransportOptions: 
+      #   master_name: mymaster
       #     sentinel_kwargs:
       #       password: mypassword
 

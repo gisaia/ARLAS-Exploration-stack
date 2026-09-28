@@ -31,8 +31,7 @@ services:
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
-      requests:
-        # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+      requests:   # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
         cpu: 0.25
         memory: 1000Mi
       limits:
@@ -162,10 +161,10 @@ persistence:
     # -- JDBC URL
     url: jdbc:postgresql://db:5432/arlas
     # -- Database user login
-    user: # -- Database user password
-
-    password: # -- SQL Dialect
-
+    user: 
+    # -- Database user password
+    password: 
+    # -- SQL Dialect
     dialect: org.hibernate.dialect.PostgreSQLDialect
     # -- JDBC Driver
     driver: org.postgresql.Driver
