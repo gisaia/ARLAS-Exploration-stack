@@ -81,7 +81,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.configuration.s3.platform | string | `"MINIO"` | S3 platform type. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.region | string | `nil` | S3 bucket's region. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.secretAccessKey | string | `"airssecret"` | S3 secret access key |
-| services.airs.configuration.s3.tier | string | `"Standard"` |  |
+| services.airs.configuration.s3.tier | string | `"Standard"` | S3 bucket's tier. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.writablePaths | list | `["/"]` | List of writable paths in the S3 bucket |
 | services.airs.extraContainers | list | `[]` |  |
 | services.airs.extraEnv | list | `[]` |  |
