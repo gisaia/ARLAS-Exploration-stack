@@ -236,8 +236,7 @@ arlas-services:
       #  trustStoreOptions:
 
       resources:
-        requests:
-          # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+        requests:    # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
           cpu: 0.5
           memory: 1000Mi
         limits:
