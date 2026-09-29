@@ -14,7 +14,7 @@
 - [aproc-service](#service-aproc-service)
 - [arlas-fam-wui](#service-arlas-fam-wui)
 - [fam-service](#service-fam-service)
-- [minio](#service-minio)
+- [seaweedfs](#service-seaweedfs)
 - [rabbitmq](#service-rabbitmq)
 - [redis](#service-redis)
 - [agate](#service-agate)
@@ -358,10 +358,10 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:${ARLAS_VERSION_AIAS}` in `conf/ve
 | `AIRS_PORT` | `AIRS_PORT` | `8000` |  |  |
 | `AIRS_PREFIX` | `AIRS_PREFIX` | `/airs` |  |  |
 | `AIRS_S3_ACCESS_KEY_ID` | `AIRS_S3_ACCESS_KEY_ID` | `` |  | `airs` in `conf/aias.env` |
-| `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `` |  | `http://minio:9000/{}/{}` in `conf/aias.env` |
+| `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `` |  | `http://seaweedfs:8333/{}/{}` in `conf/aias.env` |
 | `AIRS_S3_BUCKET` | `AIRS_S3_BUCKET` | `airs-storage` |  | `airs-storage` in `conf/aias.env` |
-| `AIRS_S3_ENDPOINT_URL` | `AIRS_S3_ENDPOINT_URL` | `http://minio:9000` |  | `http://minio:9000` in `conf/aias.env` |
-| `AIRS_S3_PLATFORM` | `AIRS_S3_PLATFORM` | `MINIO` |  |  |
+| `AIRS_S3_ENDPOINT_URL` | `AIRS_S3_ENDPOINT_URL` | `http://seaweedfs:8333` |  | `http://seaweedfs:8333` in `conf/aias.env` |
+| `AIRS_S3_PLATFORM` | `AIRS_S3_PLATFORM` | `SEAWEEDFS` |  |  |
 | `AIRS_S3_REGION` | `AIRS_S3_REGION` | `Standart` |  |  |
 | `AIRS_S3_SECRET_ACCESS_KEY` | `AIRS_S3_SECRET_ACCESS_KEY` | `` |  | `airssecret` in `conf/aias.env` |
 | `AIRS_S3_TIER` | `AIRS_S3_TIER` | `Standard` |  |  |
@@ -422,11 +422,11 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:${ARLAS_VERSION_AIAS}`
 | `APROC_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 | `TMP_FOLDER` | `"/tmp"` | `` |  |  |
-| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://seaweedfs:8333` |  |  |
 | `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
 | `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
-| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://seaweedfs:8333/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
 | `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/test- ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
@@ -491,11 +491,11 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:${ARLAS_VERSION_
 | `APROC_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
-| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://seaweedfs:8333` |  |  |
 | `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
 | `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
-| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://seaweedfs:8333/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
 | `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/test- ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
@@ -575,21 +575,16 @@ List of volumes:
 - `${APROC_INPUT_DIR}:/inputs:ro`
 - `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
 - `${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro`
-## File dc/ref-dc-aias-minio.yaml
-### Service minio
-Description: Minio is an object store
+## File dc/ref-dc-aias-seaweedfs.yaml
+### Service seaweedfs
+Description: SeaweedFS is an object store
 
-Image: `ARLAS_VERSION_MINIO` with `quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z` in `conf/versions.env`
+Image: `SEAWEEDFS_VERSION` with `chrislusf/seaweedfs:4.47` in `conf/versions.env`
 
-| Container variable | Value or environment variable | Default | Description | Env file setting |
-| --- | --- | --- | --- | --- |
-| `MINIO_BROWSER` | `off` | `` |  |  |
-| `MINIO_ROOT_PASSWORD` | `MINIO_ROOT_PASSWORD` | `` |  | `airssecret` in `conf/minio.env` |
-| `MINIO_ROOT_USER` | `MINIO_ROOT_USER` | `` |  | `airs` in `conf/minio.env` |
 
 List of volumes:
 
-- `${AIRS_STORAGE_DIRECTORY:-arlas-data-minio}:/data`
+- `${AIRS_STORAGE_DIRECTORY:-arlas-data-seaweedfs}:/data`
 ## File dc/ref-dc-aias-rabbitmq.yaml
 ### Service rabbitmq
 Image: `ARLAS_VERSION_RABBITMQ` with `rabbitmq:3.13.7-management-alpine` in `conf/versions.env`
