@@ -1307,7 +1307,7 @@
                       ],
                       "name": "Sentinel 2",
                       "protocol": "titiler",
-                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-minio:9000/airs-storage/{collection}/items/{id}/assets/cog"
+                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-seaweedfs:8333/airs-storage/{collection}/items/{id}/assets/cog"
                     }
                   ],
                   "default": false
@@ -1335,7 +1335,7 @@
                       ],
                       "name": "Sentinel 2",
                       "protocol": "titiler",
-                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-minio:9000/airs-storage/{collection}/items/{id}/assets/all_bands_cog&expression=%28b8-b4%29%2F%28b8%2Bb4%29&colormap_name=viridis&rescale=0,1"
+                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-seaweedfs:8333/airs-storage/{collection}/items/{id}/assets/all_bands_cog&expression=%28b8-b4%29%2F%28b8%2Bb4%29&colormap_name=viridis&rescale=0,1"
                     }
                   ],
                   "default": false
@@ -1363,7 +1363,7 @@
                       ],
                       "name": "Sentinel 2",
                       "protocol": "titiler",
-                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-minio:9000/airs-storage/{collection}/items/{id}/assets/all_bands_cog&bidx=11&bidx=8&bidx=2&rescale=0,6000&nodata=0"
+                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-seaweedfs:8333/airs-storage/{collection}/items/{id}/assets/all_bands_cog&bidx=11&bidx=8&bidx=2&rescale=0,6000&nodata=0"
                     }
                   ],
                   "default": false
@@ -1391,7 +1391,7 @@
                       ],
                       "name": "Sentinel 2",
                       "protocol": "titiler",
-                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-minio:9000/airs-storage/{collection}/items/{id}/assets/all_bands_cog&expression=%28b13-b11%29%2F%28b13%2Bb11%29&colormap_name=plasma&rescale=0,1&nodata=0"
+                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-seaweedfs:8333/airs-storage/{collection}/items/{id}/assets/all_bands_cog&expression=%28b13-b11%29%2F%28b13%2Bb11%29&colormap_name=plasma&rescale=0,1&nodata=0"
                     }
                   ],
                   "default": false
@@ -1413,7 +1413,7 @@
                       ],
                       "name": "Has an overview COG",
                       "protocol": "titiler",
-                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-minio:9000/airs-storage/{collection}/items/{id}/assets/overview_cog"
+                      "visualisationUrl": "https://site.arlas.k8s/cog/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=http://arlas-stack-seaweedfs:8333/airs-storage/{collection}/items/{id}/assets/overview_cog"
                     }
                   ],
                   "default": true

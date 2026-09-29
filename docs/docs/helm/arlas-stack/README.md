@@ -288,7 +288,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | redis.persistence.storageClass | string | `"standard-retain"` | Storage class used for the persistent volume claim. |
 | redis.podSecurityContext | object | `{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}` | Pod-level security context applied to the Redis pod. |
 | redis.replicas | int | `1` | Number of Redis replicas (standalone use case: keep this at 1). |
-| redis.resources | object | `{"limits":{"cpu":0.25,"memory":"512Mi"},"requests":{"cpu":0.1,"memory":"256Mi"}}` | Resource requests and limits for the Redis container. |
+| redis.resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits for the Redis container. |
 | redis.service.clientService.enabled | bool | `true` | Enable a standard ClusterIP Service for application clients to connect to Redis. |
 | redis.service.clientService.type | string | `"ClusterIP"` | Type of the client-facing Service. |
 | redis.service.port | int | `6379` | Port exposed by the Redis service. |

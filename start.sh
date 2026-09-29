@@ -50,9 +50,9 @@ if [[ "$1" = "aias" ]] || [[ "$1" = "aiaskc" ]]
 then
     echo "CONFIGURE STACK WITH AIAS"
     COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-apisix-ssl.yaml"
-    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-fam-wui.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-aias-agate.yaml -f dc/ref-dc-aias-titiler.yaml"
-    COMPOSE_SERVICES=${COMPOSE_SERVICES}" airs-server aproc-service aproc-proc redis rabbitmq fam-service arlas-fam-wui minio agate titiler"
-    ENV_FILES=${ENV_FILES}" conf/aias.env conf/minio.env"
+    COMPOSE_FILES=${COMPOSE_FILES}" -f dc/ref-dc-aias-airs.yaml -f dc/ref-dc-aias-aproc-proc.yaml -f dc/ref-dc-aias-aproc-service.yaml -f dc/ref-dc-aias-fam-wui.yaml -f dc/ref-dc-aias-fam.yaml -f dc/ref-dc-aias-seaweedfs.yaml  -f dc/ref-dc-aias-seaweedfs-init.yaml -f dc/ref-dc-aias-rabbitmq.yaml -f dc/ref-dc-aias-redis.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-aias-agate.yaml -f dc/ref-dc-aias-titiler.yaml"
+    COMPOSE_SERVICES=${COMPOSE_SERVICES}" airs-server aproc-service aproc-proc redis rabbitmq fam-service arlas-fam-wui seaweedfs s3users agate titiler"
+    ENV_FILES=${ENV_FILES}" conf/aias.env"
 
     . conf/versions.env
 
@@ -65,7 +65,7 @@ then
         cat conf/apisix/apisix_part_aias_services_kc.yaml >> conf/apisix/apisix.template.yaml
     fi
 
-    echo "Initialising Minio configuration..."
+    echo "Initialising SeaweedFS configuration..."
     set +e
 
     . ./conf/aias.env
@@ -75,20 +75,18 @@ then
         --env-file conf/versions.env  \
         --env-file conf/stack.env \
         --env-file conf/aias.env \
-        --env-file conf/minio.env \
         --env-file conf/custom.env \
-        -f dc/ref-dc-net.yaml -f dc/ref-dc-aias-minio-init.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-volumes.yaml \
-    up -d --wait --wait-timeout 300 minio createbuckets
+        -f dc/ref-dc-net.yaml -f dc/ref-dc-aias-seaweedfs-init.yaml -f dc/ref-dc-aias-seaweedfs.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-volumes.yaml \
+    up -d --wait --wait-timeout 300 seaweedfs s3users createbuckets
 
     export BUCKET_NAME=$DOWNLOAD_S3_BUCKET
     docker compose  -p arlas-exploration-stack \
         --env-file conf/versions.env  \
         --env-file conf/stack.env \
         --env-file conf/aias.env \
-        --env-file conf/minio.env \
         --env-file conf/custom.env \
-        -f dc/ref-dc-net.yaml -f dc/ref-dc-aias-minio-init.yaml -f dc/ref-dc-aias-minio.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-volumes.yaml \
-    up -d --wait --wait-timeout 300 minio createbuckets
+        -f dc/ref-dc-net.yaml -f dc/ref-dc-aias-seaweedfs-init.yaml -f dc/ref-dc-aias-seaweedfs.yaml -f dc/ref-dc-aias-volumes.yaml -f dc/ref-dc-volumes.yaml \
+    up -d --wait --wait-timeout 300 seaweedfs s3users createbuckets
     echo "...done."
     set -e
 fi
