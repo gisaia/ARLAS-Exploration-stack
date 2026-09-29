@@ -65,7 +65,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
-| services.agate.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AGATE service |
+| services.agate.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AGATE service |
 | services.agate.serviceBinding | string | `"0.0.0.0"` |  |
 | services.agate.serviceName | string | `"arlas-agate"` |  |
 | services.agate.tolerations | list | `[]` | Tolerations for AGATE service pods |
@@ -92,7 +92,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
-| services.airs.resources | object | `{"limits":{"cpu":0.5,"memory":"2Gi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AIRS service |
+| services.airs.resources | object | `{"limits":{"cpu":0.25,"memory":"2Gi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AIRS service |
 | services.airs.serviceBinding | string | `"0.0.0.0"` |  |
 | services.airs.serviceName | string | `"airs-server"` |  |
 | services.airs.tolerations | list | `[]` | Tolerations for AIRS service pods |
@@ -286,7 +286,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
-| services.aproc.service.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for APROC service |
+| services.aproc.service.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for APROC service |
 | services.aproc.service.serviceBinding | string | `"0.0.0.0"` |  |
 | services.aproc.service.serviceName | string | `"aproc-service"` |  |
 | services.aproc.service.tolerations | list | `[]` | Tolerations for APROC service pods |
@@ -300,8 +300,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.image | string | `"gisaia/aproc-proc:0.19.0"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
-| services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
-| services.aproc.worker.resources | object | `{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":0.5,"memory":"512Mi"}}` | Resources configuration for APROC worker |
+| services.aproc.worker.replicaCount | int | `1` |  |
+| services.aproc.worker.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":0.25,"memory":"512Mi"}}` | Resources configuration for APROC worker |
 | services.aproc.worker.serviceName | string | `"aproc-proc"` |  |
 | services.aproc.worker.tolerations | list | `[]` | Tolerations for APROC worker pods |
 | services.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
@@ -315,7 +315,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
-| services.fam.resources | object | `{"limits":{"cpu":0.5,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for FAM service |
+| services.fam.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for FAM service |
 | services.fam.serviceBinding | string | `"0.0.0.0"` |  |
 | services.fam.serviceName | string | `"arlas-fam"` |  |
 | services.fam.tolerations | list | `[]` | Tolerations for FAM service pods |

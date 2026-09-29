@@ -48,7 +48,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | replicaCount | int | `1` | Number of desired pods |
 | resources.limits.cpu | float | `0.1` |  |
 | resources.limits.memory | string | `"50Mi"` |  |
-| resources.requests.cpu | float | `0.05` |  |
+| resources.requests.cpu | float | `0.1` |  |
 | resources.requests.memory | string | `"10Mi"` |  |
 | resultListEnableExport | bool | `false` | Whether or not to enable result list export |
 | resultListExportSize | int | `1000` | Result list export size |

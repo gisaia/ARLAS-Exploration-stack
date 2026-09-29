@@ -7,13 +7,13 @@ image:
   pullPolicy: IfNotPresent
   command: "uvicorn"
   args:
-    - "titiler.application.main:app"
-    - "--host"
-    - "0.0.0.0"
-    - "--port"
-    - "8000"
-    - "--workers"
-    - "4"
+  - "titiler.application.main:app"
+  - "--host"
+  - "0.0.0.0"
+  - "--port"
+  - "8000"
+  - "--workers"
+  - "4"
 
 nameOverride: ""
 fullnameOverride: ""
@@ -30,8 +30,8 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: titiler.local
-      paths: ["/"]
+  - host: titiler.local
+    paths: [ "/" ]
   tls: []
   #  - secretName: titiler-tls
   #    hosts:
@@ -48,23 +48,22 @@ imagePullSecrets: []
 
 env:
   CPL_TMPDIR: /tmp
-  GDAL_CACHEMAX: 200  # 200 mb
+  GDAL_CACHEMAX: 200 # 200 mb
   VSI_CACHE: "TRUE"
-  VSI_CACHE_SIZE: 5000000  # 5 MB (per file-handle)
+  VSI_CACHE_SIZE: 5000000 # 5 MB (per file-handle)
   GDAL_DISABLE_READDIR_ON_OPEN: "EMPTY_DIR"
   GDAL_INGESTED_BYTES_AT_OPEN: 32768
   GDAL_HTTP_MERGE_CONSECUTIVE_RANGES: "YES"
   GDAL_HTTP_MULTIPLEX: "YES"
   GDAL_HTTP_VERSION: 2
   PYTHONWARNINGS: "ignore"
-  TITILER_API_DEBUG: "TRUE"
 
 resources:
   requests:
     cpu: 0.1
     memory: 50Mi
   limits:
-    cpu: 1
+    cpu: 0.2
     memory: 2Gi
 
 serviceAccountName: ""
