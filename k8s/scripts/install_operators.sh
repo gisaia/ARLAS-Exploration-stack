@@ -83,6 +83,7 @@ if has_component "elasticsearch" "${COMPONENTS[@]}"; then
     -n "$ELASTIC_OPERATOR_NAMESPACE" \
     --create-namespace \
     --version "$ELASTIC_OPERATOR_CHART_VERSION" \
+    --set resources.limits.cpu=500m \
     --wait \
     --atomic
 fi
