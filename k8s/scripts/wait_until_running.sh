@@ -10,7 +10,8 @@ else
 fi
 
 not_running_pods_fct(){
-    echo $( kubectl get pods --namespace "$namespace" --no-headers  | awk '$3 != "Running" && $3 != "Completed" {print $1}' )
+    echo $( kubectl get pods --namespace "$namespace" --no-headers \
+      | awk '{split($2,r,"/")} $3 != "Completed" && ($3 != "Running" || r[1] != r[2]) {print $1}' )
 }
 
 # Define the maximum number of loops
@@ -45,7 +46,7 @@ else
     
     echo "Error: Not all pods are running after $max_loops checks: $not_running_pods"
     for pod in $not_running_pods; do
-        kubectl logs --namespace arlas $pod
+        kubectl logs --namespace "$namespace" $pod
     done
     exit 1
 fi

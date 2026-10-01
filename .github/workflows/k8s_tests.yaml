@@ -21,24 +21,38 @@ jobs:
     if: github.event.inputs.stack == 'all' || github.event_name == 'pull_request'
     runs-on: runner-8core-32gb
     steps:
+      - uses: actions/checkout@v4.1.4
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
-      - uses: actions/checkout@v4.1.4
+        with:
+          config: ./k8s/kind/kind.yaml
       - name: Add bitnami repo
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
       - name: Install yq
         run: sudo snap install yq
-      - name: Install metallb
-        run: ./k8s/scripts/install_metallb.sh
       - name: Install Ingress controller
         run: ./k8s/scripts/install_nginx_ingress_controller.sh
       - name: Install operators
         run: ./k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
-      - name: deploy arlas
-        env:
-          FIX_CORE_DNS: true
+      - name: Deploy arlas stack
         run: ./k8s/scripts/start.sh 
-      - name: wait arlas running
-        run: ./k8s/scripts/wait_until_running.sh        
+      - name: Patch core dns
+        run: ./ci/k8s/scripts/patch_coredns.sh
+      - name: Wait arlas running
+        run: ./k8s/scripts/wait_until_running.sh
+      - name: Map ingress hosts to 127.0.0.1
+        run: ./ci/k8s/scripts/set_hostname.sh
+      - name: Run endpoints tests
+        run: ./k8s/scripts/test_endpoints.sh
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: Install arlas_cli
+        run: "python -m pip install --only-binary :all: arlas-cli==26.6.4"
+      - name: Init configurations
+        run: ./k8s/scripts/init_arlas_cli_confs.sh site.arlas.k8s:443 elastic.arlas.k8s:443 keycloak.arlas.k8s:443
+      - name: Init stack with data
+        run: ./scripts/init_stack_with_data.sh local.k8s.kc.data
+        
