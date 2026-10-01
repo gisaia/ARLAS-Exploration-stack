@@ -10,7 +10,6 @@ check_command(){
 }
 
 check_command "kubectl"
-check_command "yq"
 
 # List of components (ex: ./install_operators.sh keycloak@26.8.0 elasticsearch)
 COMPONENTS=("$@")
