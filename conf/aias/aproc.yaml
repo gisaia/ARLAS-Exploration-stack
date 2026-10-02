@@ -66,7 +66,7 @@ access_manager:
     -
       type: s3
       bucket: archives
-      endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
+      endpoint: $APROC_ARCHIVE_ENDPOINT|http://seaweedfs:8333"
       readable_paths:
         - /inputs
     # -
@@ -84,7 +84,7 @@ access_manager:
     -
       type: s3
       bucket: downloads
-      endpoint: "http://minio:9000"
+      endpoint: "http://seaweedfs:8333"
       readable_paths:
         - "/"
       writable_paths:
