@@ -140,15 +140,14 @@ For a simple test environement of the ARLAS Exploration stack, you can install a
 
 2 - Create a cluster:
 ```shell
-kind create cluster --name arlas-kind-cluster
+kind create cluster --config k8s/kind/kind.yaml
 ```
 
 ### Load balancer for a test environement
 
-__Note for test/dev environment__: If your KIND cluster does not have an ingress controller, you can install `metallb` and `nginx_ingress_controller`:
+__Note for test/dev environment__: If your KIND cluster does not have an ingress controller, you can install `nginx_ingress_controller`:
 
 ```shell
-k8s/scripts/install_metallb.sh
 k8s/scripts/install_nginx_ingress_controller.sh
 ```
 
@@ -177,33 +176,13 @@ Four services are exposed with an ingress:
 - `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
 - `minio`, which serves as the object store, default DNS is `minio.arlas.k8s`
 
-In a Linux test environment, you will need to link the ingress external IP with the domain names of the services. The ingress external IP is obtained with:
-
-```shell
-kubectl get svc ingress-nginx-controller  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-```
-
-
-Once you have it (e.g. 172.18.0.10), you can add them in /etc/hosts:
+In a test environment use the ip of your machine e.g. 192.168.102.141 to access applications :
 
 ```
-172.18.0.10	keycloak.arlas.k8s
-172.18.0.10	elastic.arlas.k8s
-172.18.0.10	site.arlas.k8s
-172.18.0.10	minio.arlas.k8s
-```
-
-In a MacOs test environment keep local host and we will use port forwarding to access applications :
-
-```
-127.0.0.1	keycloak.arlas.k8s
-127.0.0.1	elastic.arlas.k8s
-127.0.0.1	site.arlas.k8s
-127.0.0.1	minio.arlas.k8s
-```
-and run 
-```shell
-sudo kubectl port-forward -n default service/ingress-nginx-controller 80:80 443:443
+192.168.102.141	elastic.arlas.k8s
+192.168.102.141	site.arlas.k8s
+192.168.102.141	minio.arlas.k8s
+192.168.102.141	keycloak.arlas.k8s
 ```
 
 ### Configuring `arlas_cli` for the keycloak test realm
@@ -240,8 +219,7 @@ Using default configuration local.k8s.kc.data
 ```
 ## Earth Observation Catalog
 
-Just like the docker compose deployment, you can init a catalog:
-
+Once you registered a product in a collection with the interface (https://site.arlas.k8s/fam-wui/), then you can create the collection and its dashboard with the command line:
 ```shell
 ./scripts/init_aias_catalog.sh local.k8s.kc.data main org.com
 ```

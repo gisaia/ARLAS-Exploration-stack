@@ -65,7 +65,3 @@ else
 fi
 
 helm $OPERATION --create-namespace --namespace arlas arlas-stack k8s/charts/arlas-stack -f k8s/charts/arlas-stack/values.yaml $*
-
-if [[ "$(uname)" == "Darwin" ]] || [[ "${FIX_CORE_DNS}" == "true" ]]; then
-  k8s/scripts/patch_coredns.sh
-fi
