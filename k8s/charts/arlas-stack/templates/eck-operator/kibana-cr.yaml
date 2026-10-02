@@ -1,0 +1,15 @@
+{{- if .Values.global.enableKibana }}
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: arlas-kibana
+spec:
+  version: {{ .Values.kibana.image.tag }}
+  count: {{ .Values.kibana.instances }}
+  elasticsearchRef:
+    name: arlas-elasticsearch
+  http:
+    service:
+      spec:
+        type: ClusterIP
+{{ end }}

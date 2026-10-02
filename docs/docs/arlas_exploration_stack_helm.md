@@ -2,19 +2,35 @@
 # ARLAS Exploration Stack with Kubernetes
 
 
-This documentation is for running ARLAS Exploration stack from the https://github.com/gisaia/ARLAS-Exploration-stack project. You can also run it by using directly the chart:
+This documentation is for running ARLAS Exploration stack from the https://github.com/gisaia/ARLAS-Exploration-stack project. You can also install it by using the [online chart](https://artifacthub.io/packages/helm/arlas-stack/arlas-aias):
+
 ```shell
-helm repo add arlas https://gisaia.github.io/ARLAS-Exploration-stack/
-helm search repo arlas
+helm repo add arlas-stack https://gisaia.github.io/ARLAS-Exploration-stack
+helm install my-arlas-aias arlas-stack/arlas-aias
 ```
 
 ## Prerequisites
 
+You need the following command lines to install the charts:
 - git
-- kubernetes cluster (e.g. [KIND](https://kind.sigs.k8s.io/) for testing: `kind create cluster --name arlas-kind-cluster`)
 - kubectl
 - helm
-- load balancer for kubernetes
+
+Also, you will need a kubernetes cluster with:
+- a load balancer for kubernetes
+- the operators for elasticsearch, keycloak and rabbitmq
+- metrics server if autoscaling is enabled
+
+For testing purpose, see the [Setup a test environement](#setup-a-test-environement) section
+
+Some of the third party helm charts are provided by bitnami. Its repository must be registered:
+
+```shell
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+__Important__: Bitnami charts are not supported anymore by bitnamy. The charts are used for development purpose only. You must deploy your own third party service charts.
+
+## The ARLAS Exploration stack project
 
 Get the project by cloning the [ARLAS Exploration Stack](https://github.com/gisaia/ARLAS-Exploration-stack) project.
 
@@ -22,23 +38,6 @@ Get the project by cloning the [ARLAS Exploration Stack](https://github.com/gisa
 git clone git@github.com:gisaia/ARLAS-Exploration-stack.git
 cd ARLAS-Exploration-stack
 ```
-
-The third party helm charts are provided by bitnami. Its repository must be registered:
-
-```shell
-helm repo add bitnami https://charts.bitnami.com/bitnami
-```
-
-__Important__: Bitnami charts are not supported anymore by bitnamy. The charts are used for development purpose only. You must deploy your own third party service charts.
-
-__Note for test/dev environment__: If your cluster does not have an ingress controller, you can install `metallb` and `nginx_ingress_controller`:
-
-```shell
-k8s/scripts/install_metallb.sh
-k8s/scripts/install_nginx_ingress_controller.sh
-```
-
-## Configuring the ARLAS stack
 
 ### Directory structure
 
@@ -49,6 +48,8 @@ Files are organized as follows:
 - `k8s/`: everything for installing the ARLAS Stack chart
    - `scripts/`: scripts for initializing and installing the charts
    - `charts/`: contains the umbrella chart (`k8s/charts/arlas-stack/Chart.yaml`) and sub charts for arlas backend, arlas front end and AIAS
+
+## Configuring the ARLAS stack
 
 ### Storage
 
@@ -104,6 +105,9 @@ This script:
 - install or upgrade the arlas-stack chart
 
 
+--set-json 'global.elasticDnsDomain="elasticsearch.arlas.k8s"' --set-json 'elasticsearch.ingress.hostname="elasticsearch.arlas.k8s"'
+
+
 ### Stop the ARLAS Stack
 
 You can remove the deployment with:
@@ -125,7 +129,43 @@ Before re-starting the ARLAS stack, please make sure that the persistence volume
 ./k8s/scripts/free_released_persistence_volumes.sh
 ```
 
-## Test/dev environment
+## Setup a test environement
+
+This section is only for the deployment of the ARLAS Exploration stack in a **testing purpose**. This is not for production.
+
+### K8s Cluster for a test environement
+For a simple test environement of the ARLAS Exploration stack, you can install a [KIND](https://kind.sigs.k8s.io/) cluster:
+
+1 - [Install KIND](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries)
+
+2 - Create a cluster:
+```shell
+kind create cluster --config k8s/kind/kind.yaml
+```
+
+### Load balancer for a test environement
+
+__Note for test/dev environment__: If your KIND cluster does not have an ingress controller, you can install `nginx_ingress_controller`:
+
+```shell
+k8s/scripts/install_nginx_ingress_controller.sh
+```
+
+### Metric server
+
+__Note for test/dev environment__: If your KIND cluster does not have a metric controller and you want to use autoscaling on arlas server, you can install one like this:
+
+```shell
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl patch -n kube-system deployment metrics-server --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+```
+
+### Installing operators
+
+__Note for test/dev environment__:  If your KIND cluster does not have operators like keycloak, elasticsearch or rabbitmq, you can install them:
+```shell
+k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
+```
 
 ### Services, DNS and Certificates
 
@@ -136,34 +176,16 @@ Four services are exposed with an ingress:
 - `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
 - `minio`, which serves as the object store, default DNS is `minio.arlas.k8s`
 
-In a Linux test environment, you will need to link the ingress external IP with the domain names of the services. You can for instance add them in /etc/hosts:
+In a test environment use the ip of your machine e.g. 192.168.102.141 to access applications :
 
 ```
-172.18.0.10	keycloak.arlas.k8s
-172.18.0.10	elastic.arlas.k8s
-172.18.0.10	site.arlas.k8s
-172.18.0.10	minio.arlas.k8s
+192.168.102.141	elastic.arlas.k8s
+192.168.102.141	site.arlas.k8s
+192.168.102.141	minio.arlas.k8s
+192.168.102.141	keycloak.arlas.k8s
 ```
 
-In a MacOs test environment keep local host and we will use port forwarding to access applications :
-
-```
-127.0.0.1	keycloak.arlas.k8s
-127.0.0.1	elastic.arlas.k8s
-127.0.0.1	site.arlas.k8s
-127.0.0.1	minio.arlas.k8s
-```
-and run 
-```shell
-sudo kubectl port-forward -n default service/ingress-nginx-controller 80:80 443:443
-```
-
-The arlas-ingress IP is obtained with:
-```shell
-kubectl get svc ingress-nginx-controller  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-```
-
-## Configuring `arlas_cli` for the keycloak test realm
+### Configuring `arlas_cli` for the keycloak test realm
 
 Let's assume the domain names are `elastic.arlas.k8s`, `keycloak.arlas.k8s` and `site.arlas.k8s`, then you can init your arlas_cli configuration file with:
 
@@ -195,20 +217,11 @@ Using default configuration local.k8s.kc.data
 +------+-------+
 +------+-------+
 ```
-## EO Catalog
+## Earth Observation Catalog
 
-Just like the docker compose deployment, you can init a catalog:
-
+Once you registered a product in a collection with the interface (https://site.arlas.k8s/fam-wui/), then you can create the collection and its dashboard with the command line:
 ```shell
 ./scripts/init_aias_catalog.sh local.k8s.kc.data main org.com
 ```
 
 Remember to change `main` and `org.com` according to the values you changed in the arlas-stack chart values.yaml file.
-
-
-**Remove deployment**
-
-To start, run: 
-```shell
-./k8s/scripts/remove_deployment.sh
-```

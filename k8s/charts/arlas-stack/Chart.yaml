@@ -24,23 +24,7 @@ dependencies:
     version: 28.9.0
     condition: deployment.titiler.enabled
   # THIRD PARTY REMOTE DEPENDENCIES
-  - name: elasticsearch
-    repository: https://charts.bitnami.com/bitnami
-    version: 22.0.4
-    condition: deployment.elasticsearch.enabled
   - name: minio
     repository: https://charts.bitnami.com/bitnami
     version: 14.10.5
     condition: deployment.minio.enabled
-  - name: rabbitmq
-    repository: https://charts.bitnami.com/bitnami
-    version: 16.0.11
-    condition: deployment.rabbitmq.enabled
-  - name: redis
-    repository: https://charts.bitnami.com/bitnami
-    version: 21.2.13
-    condition: deployment.redis.enabled
-  - name: keycloak
-    repository: https://charts.bitnami.com/bitnami
-    version: 25.2.0
-    condition: deployment.keycloak.enabled

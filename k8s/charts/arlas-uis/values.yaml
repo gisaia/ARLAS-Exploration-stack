@@ -17,27 +17,27 @@ uis:
 
   wui:
     serviceName: arlas-wui
-    image: gisaia/arlas-wui:28.0.3
+    image: gisaia/arlas-wui:29.0.0-rc.9
     # -- Extra environment variables for the arlas wui container
     urlPrefix: /wui
     tabName: ARLAS Exploration
     basemapUrl:
-    whitelistedUrls: [https://tiles.mapterhorn.com]
+    whitelistedUrls: [ https://tiles.mapterhorn.com ]
     aboutAndTourConfigMapName: arlas-default-about-and-tour-configmap
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
-    extraEnv:
-    #  - name: KEY
+    extraEnv: #  - name: KEY
+
     #    value: "value"
     extraVolumeMounts:
     #  - name: extra-assets-volume
     #    mountPath: /usr/share/nginx/html/assets/logo-only.png
     #    subPath: logo-only.png
     extraVolumes:
-    #  - name: extra-assets-volume
-    #    configMap:
-    #      name: arlas-example-assets-configmap
+      #  - name: extra-assets-volume
+      #    configMap:
+      #      name: arlas-example-assets-configmap
 
   famWui:
     serviceName: arlas-fam-wui
@@ -57,9 +57,10 @@ uis:
     extraVolumeMounts:
     extraVolumes:
 
+
   hub:
     serviceName: arlas-hub
-    image: gisaia/arlas-wui-hub:28.0.2
+    image: gisaia/arlas-wui-hub:29.0.0-rc.8
     urlPrefix: /hub
     tabName: ARLAS Hub
     aboutConfigMapName: arlas-hub-default-about-configmap
@@ -70,9 +71,10 @@ uis:
     extraVolumeMounts:
     extraVolumes:
 
+
   builder:
     serviceName: arlas-builder
-    image: gisaia/arlas-wui-builder:28.0.1
+    image: gisaia/arlas-wui-builder:29.0.0-rc.6
     urlPrefix: /builder/
     tabName: ARLAS Studio
     aboutConfigMapName: arlas-builder-default-about-configmap
@@ -82,8 +84,9 @@ uis:
     extraContainers: []
     extraInitContainers:
     extraEnv:
+
     extraVolumeMounts:
-    extraVolumes:
+    extraVolumes: 
     # @ignored
     basemaps: '[
         {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"},
@@ -103,7 +106,15 @@ uis:
       bg: "#ff4081"
     handle:
       color: "#ff4081"
-
+  drawTheme:
+    active:
+      color: "#fbb03b"
+      opacity: "0.1"
+      dash: [1]
+    inactive:
+      color: "#3bb2d0"
+      opacity: "0.1"
+      dash: [2, 1]
 services:
   server:
     urlPrefix: /arlas
@@ -138,6 +149,7 @@ links: '
         ]'
 # -- The Google Analytics key of the wui app
 googleAnalyticsKey:
+
 # -- Version number of the ARLAS Hits Exporter to use
 hitsExporterVersion: 2.2
 # -- The text to display on the tab of the web browser (will be enriched with the dashboard name)
@@ -155,6 +167,7 @@ histogramsExportNbBuckets: 1000
 enableGeocoding: false
 # -- Geocoding find place URL
 geocodingUrl:
+
 # -- Maximum zoom level for geocoding feature
 geocodingZoomTo: 11
 configuration: {}
@@ -174,7 +187,7 @@ authent:
   scope: profile
   # -- Custom query params
   customQueryParams:
-    - audience: http://arlas.io/api/server
+  - audience: http://arlas.io/api/server
   # -- Defines whether https is required
   requireHttps: false
   # -- Response type values
@@ -195,8 +208,10 @@ authent:
   storage: memorystorage
   # -- The issuer's uri
   issuer:
+
   # -- The logout URL to be used
   logoutUrl:
+
   # -- The client's id as registered with the auth server
   clientId: arlas-front
 
@@ -209,7 +224,7 @@ replicaCount: 1
 
 resources:
   requests:
-    cpu: 0.05
+    cpu: 0.1
     memory: 10Mi
   limits:
     cpu: 0.1
@@ -221,11 +236,9 @@ logger:
   # -- Default console logging level
   loggingConsoleLevel: INFO
 
-
 # -- Label-based selector, to control the nodes the pod(s) will run on. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
 # -- Pod-Tolerations & Nodes-Taints work together to allow nodes to repel certain kinds of pods. See https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 # -- Allows constraining pod(s) to only run on particular nodes, or to prefer to run on particular nodes. It is based on label-selection. See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
-

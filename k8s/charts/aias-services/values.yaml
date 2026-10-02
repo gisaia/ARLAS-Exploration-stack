@@ -35,7 +35,7 @@ services:
         cpu: 0.1
         memory: 50Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 2Gi
     # -- Node selector for AIRS service pods
     nodeSelector: {}
@@ -58,14 +58,14 @@ services:
         endpointUrl: http://arlas-stack-minio:9000
         # -- List of writable paths in the S3 bucket
         writablePaths:
-          - /
-
+        - /
         # -- Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item
         assetHttpEndpointUrl: https://arlas-stack-minio:9000/{}/{}
         # -- S3 platform type. This value is provided in the item properties of the STAC item
         platform: MINIO
         # -- S3 bucket's region. This value is provided in the item properties of the STAC item
         region:
+
         # -- S3 bucket's tier. This value is provided in the item properties of the STAC item
         tier: Standard
 
@@ -95,7 +95,7 @@ services:
         cpu: 0.1
         memory: 50Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 256Mi
     # -- Node selector for FAM service pods
     nodeSelector: {}
@@ -124,7 +124,7 @@ services:
         cpu: 0.1
         memory: 50Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 256Mi
     # -- Node selector for AGATE service pods
     nodeSelector: {}
@@ -170,7 +170,7 @@ services:
           description:
           - "Viewing data in ARLAS"
           permissions:
-      # ARLAS explore
+          # ARLAS explore
           - h:arlas-organization:${org}
           - h:arlas-workspace:${ws}
           - r:explore/.*:GET,POST
@@ -181,11 +181,11 @@ services:
           - r:stac:GET
           - r:openapi.json:GET
           - r:stac/.*:GET,POST
-      # ARLAS persistence
+          # ARLAS persistence
           - r:persist/resource/.*:GET
           - r:persist/groups/.*:GET
           - r:persist/resources/.*:GET
-      # ARLAS permissions
+          # ARLAS permissions
           - r:authorize/resources:GET
 
         # -- ARLAS Tagger role
@@ -276,34 +276,34 @@ services:
           jwt_name: authorization
           # -- Locations where to find the JWT token for storage access
           jwt_location:
-            - headers
+          - headers
           # -- Patterns for private assets
           private:
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
-              part: path
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
-              part: path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
+            part: path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
+            part: path
           # -- Patterns for private assets
           public:
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
-              part: path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
+            part: path
         # -- Configuration for accessing private COG assets
         cog:
           # -- Name of the header containing the JWT token for COG access
           jwt_name: authorization
           # -- Locations where to find the JWT token for COG access
           jwt_location:
-            - headers
-            - query_params
+          - headers
+          - query_params
           # -- Patterns for private COG assets
           private:
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
-              part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
+            part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
         titiler_public:
           # -- Patterns for public COG statistics access
           public:
-            - pattern: (/colorMaps/)(.*)
-              part: path
+          - pattern: (/colorMaps/)(.*)
+            part: path
 
   aproc:
     service:
@@ -325,7 +325,7 @@ services:
           cpu: 0.1
           memory: 50Mi
         limits:
-          cpu: 0.5
+          cpu: 0.25
           memory: 256Mi
       # -- Node selector for APROC service pods
       nodeSelector: {}
@@ -341,16 +341,16 @@ services:
       extraInitContainers:
       extraEnv:
       extraVolumeMounts:
-      extraVolumes:
-      # -- Number of APROC worker replicas
+      extraVolumes: # -- Number of APROC worker replicas
+
       replicaCount: 1
       # -- Resources configuration for APROC worker
       resources:
         requests:
-          cpu: 0.5
+          cpu: 0.25
           memory: 512Mi
         limits:
-          cpu: 2
+          cpu: 1
           memory: 2Gi
       # -- Node selector for APROC worker pods
       nodeSelector: {}
@@ -369,7 +369,7 @@ services:
 
       # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
       # celery_result_backend: sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
-      celeryResultBackendTransportOptions:
+      celeryResultBackendTransportOptions: 
       #   master_name: mymaster
       #     sentinel_kwargs:
       #       password: mypassword
@@ -391,7 +391,7 @@ services:
           aprocEndpoint: http://aproc-service:8000
           resourceIdHashStartAt: 1
           enrichments:
-            - OVERVIEW_COG
+          - OVERVIEW_COG
           drivers:
             dimap:
               enabled: true
@@ -520,8 +520,8 @@ services:
               build_overview_when_local: true
               build_overview_when_remote: true
               product_types:
-                - platero
-                - hammer
+              - platero
+              - hammer
             tiff:
               enabled: true
               priority: 100
@@ -575,7 +575,7 @@ services:
                 cog_max_width_or_height: -1
                 cog_overview_max_width_or_height: 2000
                 all_bands_cog_max_width_or_height: 10000
-                
+
         dc3build:
           # -- Whether the DC3 build extension is enabled or not
           enabled: true
@@ -630,7 +630,7 @@ services:
                 # -- change to windows path
                 windows: False
               admin:
-              # -- admin emails that will receive the download notifications, other than the user himself
+                # -- admin emails that will receive the download notifications, other than the user himself
                 emails: "admin@the.boss,someone.else@the.boss"
               done:
                 # -- Message templates for download done notifications to users
@@ -660,27 +660,27 @@ services:
         tmpDir: /tmp/
         # -- Configuration of the storages used by the access manager to provide access to various storage backends
         storages:
-          -
-            type: file
-            writable_paths:
-              - /tmp
-              - /outbox
-            readable_paths:
-              - /inputs
-          -
-            type: s3
-            bucket: archives
-            endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
-            readable_paths:
-              - /inputs
-          -
-            type: s3
-            bucket: downloads
-            endpoint: "http://minio:9000"
-            readable_paths:
-              - "/"
-            writable_paths:
-              - "/"
+
+        - type: file
+          writable_paths:
+          - /tmp
+          - /outbox
+          readable_paths:
+          - /inputs
+
+        - type: s3
+          bucket: archives
+          endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
+          readable_paths:
+          - /inputs
+
+        - type: s3
+          bucket: downloads
+          endpoint: "http://minio:9000"
+          readable_paths:
+          - "/"
+          writable_paths:
+          - "/"
 
 cors:
   # cors.allowedOrigins -- CORS Allowed Origins
@@ -711,7 +711,6 @@ elastic:
   login: elastic
   # -- Elasticsearch password
   password: elastic
-
 
 smtp:
   # -- Whether SMTP email sending is enabled or not

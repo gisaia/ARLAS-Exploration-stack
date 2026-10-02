@@ -1,10 +1,9 @@
 #!/bin/bash
 set -e
 
-# Get the ingress controller external IP assigned by MetalLB
+# Get the ingress controller clusterIP
 INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n default \
-  -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
+  -o jsonpath='{.spec.clusterIP}')
 echo "Patching CoreDNS with ingress IP: $INGRESS_IP"
 
 # Fetch the current Corefile
