@@ -43,6 +43,6 @@ services:
         set -e
         weed shell -master=seaweedfs:9333 -filer=seaweedfs:8888 <<EOF
         s3.configure -user=$$LOGIN -access_key=$$LOGIN -secret_key=$$PASSWORD -actions=Admin,Read,Write,List,Tagging -apply
-        s3.configure -user=anonymous -buckets=$$AIRS_S3_BUCKET,$$DOWNLOAD_S3_BUCKET,archives -actions=Read,List,Write -apply
+        s3.configure -user=anonymous -buckets=$$AIRS_S3_BUCKET,$$DOWNLOAD_S3_BUCKET,archives -actions=Read,List -apply
         s3.configure
         EOF
