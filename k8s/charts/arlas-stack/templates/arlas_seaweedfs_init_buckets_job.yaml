@@ -1,0 +1,37 @@
+{{- if .Values.initBuckets }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seaweedfs-create-buckets
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: weed-shell
+          image: chrislusf/seaweedfs:4.48
+          env:
+            - name: MASTER
+              value: "{{ .Values.deployment.aias.services.seaweedfs.masterServiceName }}:{{.Values.deployment.aias.services.seaweedfs.masterServicePort }}"
+            - name: FILER
+              value: "{{ .Values.deployment.aias.services.seaweedfs.filerServiceName }}:{{ .Values.deployment.aias.services.seaweedfs.filerServicePort }}"
+            - name: AIRS_BUCKET
+              value: {{ .Values.services.airs.configuration.s3.bucket | quote }}
+            - name: OUTBOX_BUCKET
+              value: {{ .Values.services.aproc.configuration.extensions.download.outboxS3.bucket | quote }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "⏳ Waiting for SeaweedFS cluster..."
+              until wget -q -O /dev/null "http://$MASTER/cluster/status"; do sleep 5; done
+              until wget -q -O /dev/null "http://$FILER/"; do sleep 5; done
+
+              echo "📦 Buckets creation..."
+              for b in "$AIRS_BUCKET" "$OUTBOX_BUCKET"; do
+                echo "  -> $b"
+                echo "s3.bucket.create -name $b" | weed shell -master=$MASTER -filer=$FILER || echo "$b already exists ?"
+              done
+
+              echo "📋 Buckets list :"
+              echo "s3.bucket.list" | weed shell -master=$MASTER -filer=$FILER
+{{- end }}

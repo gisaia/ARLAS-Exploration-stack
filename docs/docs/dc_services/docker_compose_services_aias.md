@@ -618,7 +618,7 @@ List of volumes:
 ### Service seaweedfs
 Description: SeaweedFS is an object store
 
-Image: `SEAWEEDFS_VERSION` with `chrislusf/seaweedfs:4.47` in `conf/versions.env`
+Image: `SEAWEEDFS_VERSION` with `chrislusf/seaweedfs:4.48` in `conf/versions.env`
 
 
 List of volumes:

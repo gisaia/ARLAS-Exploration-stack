@@ -12,7 +12,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | file://../arlas-services | arlas-services | 28.9.0 |
 | file://../arlas-uis | arlas-uis | 28.9.0 |
 | file://../titiler | titiler | 28.9.0 |
-| https://charts.bitnami.com/bitnami | minio | 14.10.5 |
+| https://seaweedfs.github.io/seaweedfs/helm | seaweedfs | 4.48.0 |
 
 ## Values
 
@@ -22,7 +22,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.elastic.endpoint | string | `"https://arlas-elasticsearch-es-http:9200"` | Elasticsearch endpoint for aias-services |
 | aias-services.elastic.login | string | `"arlas-user"` | Do not change: value defined in global section |
 | aias-services.elastic.password | string | `"secret4elastic"` | Do not change: value defined in global section |
-| aias-services.initBuckets | bool | `true` | Init the AIAS minio buckets   |
+| aias-services.initBuckets | bool | `true` | Init the AIAS seaweedFS buckets   |
 | aias-services.logger.loggingConsoleLevel | string | `"DEBUG"` | Console logging level for aias-services |
 | aias-services.logger.loggingLevel | string | `"DEBUG"` | Logging level for aias-services |
 | aias-services.protocol | string | `"https"` | __Do not change:__ value defined in global section |
@@ -34,14 +34,14 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.services.agate.configuration.urlHeader | string | `"x-auth-request-redirect"` | Headers used by the ingress controller to pass the original request information to Agate |
 | aias-services.services.agate.serviceName | string | `"arlas-agate"` | Agate service configuration for AIAS |
 | aias-services.services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | __MUST BE CONFIGURED:__ Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
-| aias-services.services.airs.configuration.s3.accessKeyId | string | `"minioadmin"` | __Do not change:__ value defined in global section |
+| aias-services.services.airs.configuration.s3.accessKeyId | string | `"seaweedFSadmin"` | __Do not change:__ value defined in global section |
 | aias-services.services.airs.configuration.s3.assetHttpEndpointUrl | string | `"https://site.arlas.k8s/{}/{}"` | __MUST BE CONFIGURED:__ Change with the domain of your deployment |
 | aias-services.services.airs.configuration.s3.bucket | string | `"airs-storage"` | __IMPORTANT:__ If you change the bucket name here, make sure to overwrite the patterns in agate.configuration.services (k8s/charts/aias-services/values.yaml). |
-| aias-services.services.airs.configuration.s3.endpoint | string | `"http://arlas-stack-minio:9000"` | Minio endpoint |
-| aias-services.services.airs.configuration.s3.secretAccessKey | string | `"secret4minio"` | __Do not change:__ value defined in global section |
+| aias-services.services.airs.configuration.s3.endpoint | string | `"http://arlas-stack-seaweedfs-s3:8333"` | SeaweedFS endpoint |
+| aias-services.services.airs.configuration.s3.secretAccessKey | string | `"secret4seaweedFS"` | __Do not change:__ value defined in global section |
 | aias-services.services.airs.configuration.s3.writablePaths | list | `["/"]` | Paths that can be written by AIRS to store assets |
 | aias-services.services.airs.serviceName | string | `"airs-server"` | AIRS service configuration for AIAS |
-| aias-services.services.aproc.configuration.accessManager.storages | list | `[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"gisaia-public","readable_paths":["/"],"type":"gs"},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://arlas-stack-minio:9000\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"gisaia-public","endpoint":"https://storage.googleapis.com","readable_paths":["/"],"type":"s3"},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"downloads","endpoint":"http://arlas-stack-minio:9000","readable_paths":["/"],"type":"s3","writable_paths":["/"]},{"api_key":{"access_key":"minioadmin","secret_key":"secret4minio"},"bucket":"inputs","endpoint":"http://arlas-stack-minio:9000","readable_paths":["/"],"type":"s3"}]` | Configuration of the storages used by the access manager to provide access to various storage backends. See https://docs.arlas.io/external_docs/aias/aproc/configuration/#storage-access-configuration |
+| aias-services.services.aproc.configuration.accessManager.storages | list | `[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"gisaia-public","readable_paths":["/"],"type":"gs"},{"api_key":{"access_key":"seaweedFSadmin","secret_key":"secret4seaweedFS"},"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://arlas-stack-seaweedfs-s3:83333\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"gisaia-public","endpoint":"https://storage.googleapis.com","readable_paths":["/"],"type":"s3"},{"api_key":{"access_key":"seaweedFSadmin","secret_key":"secret4seaweedFS"},"bucket":"downloads","endpoint":"http://arlas-stack-seaweedfs-s3:8333","readable_paths":["/"],"type":"s3","writable_paths":["/"]},{"api_key":{"access_key":"seaweedFSadmin","secret_key":"secret4seaweedFS"},"bucket":"inputs","endpoint":"http://arlas-stack-seaweedfs-s3:8333","readable_paths":["/"],"type":"s3"}]` | Configuration of the storages used by the access manager to provide access to various storage backends. See https://docs.arlas.io/external_docs/aias/aproc/configuration/#storage-access-configuration |
 | aias-services.services.aproc.configuration.accessManager.tmpDir | string | `"/tmp/"` | Temporary directory used by the access manager |
 | aias-services.services.aproc.configuration.airsEndpoint | string | `"http://airs-server:8000/airs"` | AIRS service endpoint URL accessed by APROC |
 | aias-services.services.aproc.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS search URL used by APROC to check whether an item exists |
@@ -49,14 +49,14 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.services.aproc.configuration.celeryResultBackend | string | `"redis://:secret4redis@arlas-redis-client:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
 | aias-services.services.aproc.configuration.celeryResultBackendTransportOptions | string | `nil` |  |
 | aias-services.services.aproc.configuration.extensions.download.index.name | string | `"org.com@aproc_downloads"` | __MUST BE CONFIGURED:__ Change with the domain (org.com) with your own organization name |
-| aias-services.services.aproc.configuration.extensions.download.outboxS3.accessKeyId | string | `"minioadmin"` | Do not change: value defined in global section |
+| aias-services.services.aproc.configuration.extensions.download.outboxS3.accessKeyId | string | `"seaweedFSadmin"` | Do not change: value defined in global section |
 | aias-services.services.aproc.configuration.extensions.download.outboxS3.assetHttpEndpointUrl | string | `"https://site.arlas.k8s/{}/{}"` | __MUST BE CONFIGURED:__ Change with the domain of your deployment |
 | aias-services.services.aproc.configuration.extensions.download.outboxS3.bucket | string | `"downloads"` | Bucket where downloads are stored |
-| aias-services.services.aproc.configuration.extensions.download.outboxS3.endpointUrl | string | `"http://arlas-stack-minio:9000"` | Minio endpoint |
-| aias-services.services.aproc.configuration.extensions.download.outboxS3.secretAccessKey | string | `"secret4minio"` | Do not change: value defined in global section |
+| aias-services.services.aproc.configuration.extensions.download.outboxS3.endpointUrl | string | `"http://arlas-stack-seaweedfs-s3:8333"` | SeaweedFS endpoint |
+| aias-services.services.aproc.configuration.extensions.download.outboxS3.secretAccessKey | string | `"secret4seaweedFS"` | Do not change: value defined in global section |
 | aias-services.services.aproc.configuration.extensions.ingest.aprocEndpoint | string | `"http://aproc-service:8000/aproc"` | APROC endpoint URL accessed by ingest processes |
 | aias-services.services.aproc.configuration.extensions.ingest.enrichments | list | `[]` | List of enrichments to be applied to all ingest drivers (e.g. OVERVIEW_COG, COG). If you want to apply different enrichments for each driver, you can configure them in the driver configuration below. If you don't want to apply any enrichment, set this value to an empty list. |
-| aias-services.services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"https://storage.googleapis.com/gisaia-public/test-aias"` | Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo inputsDirectory: http://arlas-stack-minio:9000/inputs |
+| aias-services.services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"https://storage.googleapis.com/gisaia-public/test-aias"` | Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo inputsDirectory: http://arlas-stack-seaweedfs-s3:8333/inputs |
 | aias-services.services.aproc.service.serviceName | string | `"aproc-service"` | APROC service name |
 | aias-services.services.aproc.worker | object | `{"affinity":{},"nodeSelector":{},"replicaCount":1,"resources":{"limits":{"cpu":0.75,"memory":"5Gi"}},"tolerations":[]}` | APROC worker configuration |
 | aias-services.services.fam.serviceName | string | `"arlas-fam"` | FAM service name |
@@ -107,11 +107,15 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.aias.services.fam.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for FAM ingress |
 | deployment.aias.services.fam.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"` | Annotations for FAM ingress |
 | deployment.aias.services.fam.ingress.enabled | bool | `true` | Should the chart deploy fam ingress |
-| deployment.aias.services.minio.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Minio ingress |
-| deployment.aias.services.minio.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"` | Annotations for Minio ingress |
-| deployment.aias.services.minio.ingress.enabled | bool | `true` | Should the chart deploy minio ingress |
-| deployment.aias.services.minio.port | int | `9000` | Minio service port for AIAS |
-| deployment.aias.services.minio.serviceName | string | `"arlas-stack-minio"` | Minio service configuration for AIAS |
+| deployment.aias.services.seaweedfs.filerServiceName | string | `"arlas-stack-seaweedfs-filer"` | Name of the Kubernetes service exposing the seaweedfs filer |
+| deployment.aias.services.seaweedfs.filerServicePort | int | `8888` | Port of the seaweedfs filer service |
+| deployment.aias.services.seaweedfs.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for SeaweedFS ingress |
+| deployment.aias.services.seaweedfs.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"` | Annotations for SeaweedFS ingress |
+| deployment.aias.services.seaweedfs.ingress.enabled | bool | `true` | Should the chart deploy seaweedfs ingress |
+| deployment.aias.services.seaweedfs.masterServiceName | string | `"arlas-stack-seaweedfs-master"` | Name of the Kubernetes service exposing the seaweedfs master |
+| deployment.aias.services.seaweedfs.masterServicePort | int | `9333` | Port of the seaweedfs master service |
+| deployment.aias.services.seaweedfs.port | int | `8333` | SeaweedFS service port for AIAS |
+| deployment.aias.services.seaweedfs.serviceName | string | `"arlas-stack-seaweedfs-s3"` | SeaweedFS service configuration for AIAS |
 | deployment.aias.services.titiler.ingress.enabled | bool | `true` | Should the chart deploy titiler ingress |
 | deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` | Annotations for Titiler ingress |
@@ -134,10 +138,10 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.elasticsearch.enabled | bool | `true` | Should the chart deploy elasticsearch |
 | deployment.elasticsearch.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch ingress |
 | deployment.keycloak.enabled | bool | `true` | __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs. |
-| deployment.minio.enabled | bool | `true` | Should the chart deploy minio |
-| deployment.minio.ingress.enabled | bool | `true` | Should the chart deploy minio ingress |
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
+| deployment.seaweedfs.enabled | bool | `true` | Should the chart deploy seaweedfs |
+| deployment.seaweedfs.ingress.enabled | bool | `true` | Should the chart deploy seaweedfs ingress |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
 | elasticsearch.clusterName | string | `"arlas-elasticsearch"` | Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets) |
 | elasticsearch.image.repository | string | `"docker.elastic.co/elasticsearch/elasticsearch"` | Elasticsearch container image repository (official Elastic image, required by the ECK operator) |
@@ -145,13 +149,13 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | elasticsearch.ingress.annotations | object | `{"blackbox.monitoring/enabled":"true","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-body-size":"100240m","nginx.ingress.kubernetes.io/ssl-passthrough":"true"}` | Additional annotations applied to the Elasticsearch Ingress (e.g. nginx-ingress TLS passthrough, body size limits, monitoring probes) |
 | elasticsearch.ingress.hostname | string | `"elastic.arlas.k8s"` | Public hostname used to expose Elasticsearch through the Ingress controller |
 | elasticsearch.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Elasticsearch Ingress |
-| elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":0.5,"memory":"4Gi"},"requests":{"cpu":0.25,"memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group (e.g. dedicated master/data/ingest tiers) |
-| elasticsearch.nodeSets[0] | object | `{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":0.5,"memory":"4Gi"},"requests":{"cpu":0.25,"memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}` | Name of this nodeSet (used as a suffix for the generated StatefulSet; must remain stable, renaming it recreates the underlying StatefulSet and PVCs) |
+| elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":"500m","memory":"4Gi"},"requests":{"cpu":"250m","memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group (e.g. dedicated master/data/ingest tiers) |
+| elasticsearch.nodeSets[0] | object | `{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":"500m","memory":"4Gi"},"requests":{"cpu":"250m","memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}` | Name of this nodeSet (used as a suffix for the generated StatefulSet; must remain stable, renaming it recreates the underlying StatefulSet and PVCs) |
 | elasticsearch.nodeSets[0].allowMmap | bool | `false` | Disable memory-mapped storage (node.store.allow_mmap). Set to false when the host does not allow raising vm.max_map_count |
 | elasticsearch.nodeSets[0].count | int | `1` | Number of Elasticsearch pods (replicas) in this nodeSet |
-| elasticsearch.nodeSets[0].resources.limits.cpu | float | `0.5` | CPU limit for the Elasticsearch container |
+| elasticsearch.nodeSets[0].resources.limits.cpu | string | `"500m"` | CPU limit for the Elasticsearch container |
 | elasticsearch.nodeSets[0].resources.limits.memory | string | `"4Gi"` | Memory limit for the Elasticsearch container |
-| elasticsearch.nodeSets[0].resources.requests.cpu | float | `0.25` | CPU request for the Elasticsearch container |
+| elasticsearch.nodeSets[0].resources.requests.cpu | string | `"250m"` | CPU request for the Elasticsearch container |
 | elasticsearch.nodeSets[0].resources.requests.memory | string | `"4Gi"` | Memory request for the Elasticsearch container |
 | elasticsearch.nodeSets[0].roles | list | `["master","data","ingest"]` | Elasticsearch node roles assigned to this nodeSet (e.g. master, data, ingest, data_hot, data_content...) |
 | elasticsearch.nodeSets[0].storageSize | string | `"3Gi"` | Size of the persistent volume claim requested for Elasticsearch data storage |
@@ -176,15 +180,15 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.keycloakPassword | string | `"secret4keycloak"` | __MUST BE CONFIGURED:__ Keycloak admin password  |
 | global.kibanaDnsDomain | string | `"kibana.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing kibana for ARLAS deployment |
 | global.logoutUrl | string | `nil` | The logout URL to be used |
-| global.minioDnsDomain | string | `"minio.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment |
-| global.minioLogin | string | `"minioadmin"` | Minio login for minio itself and the services that are connecting to minio |
-| global.minioPassword | string | `"secret4minio"` | __MUST BE CONFIGURED:__ Minio password for minio itself and the services that are connecting to minio |
 | global.organization | string | `"org.com"` | __MUST BE CONFIGURED:__ Name of the organization using AIAS |
 | global.postgresql.auth.password | string | `"secret4postgres"` | __MUST BE CONFIGURED:__ postgres password for keycloak |
 | global.protocol | string | `"https"` | __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment |
 | global.rabbitMQLogin | string | `"admin"` | RabbitMQ Login |
 | global.rabbitMQPassword | string | `"secret4rabbitmq"` | __MUST BE CONFIGURED:__ RabbitMQ Password |
 | global.redisPassword | string | `"secret4redis"` | __MUST BE CONFIGURED:__ redis Password |
+| global.seaweedFSDnsDomain | string | `"seaweedfs.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing seaweedFS for ARLAS deployment |
+| global.seaweedFSLogin | string | `"seaweedFSadmin"` | SeaweedFS login for seaweedFS admin console and to access seaweedFS from services |
+| global.seaweedFSPassword | string | `"secret4seaweedFS"` | __MUST BE CONFIGURED:__ SeaweedFS password for seaweedFS admin console and to access seaweedFS from services |
 | keycloak | object | `{"auth":{"adminPassword":"secret4keycloak","adminUser":"admin"},"db":{"host":"keycloak-postgres","kind":"postgres","name":"keycloak","passwordKey":"password","port":5432,"postgresql":{"affinity":{},"containerSecurityContext":{"allowPrivilegeEscalation":false,"runAsGroup":999,"runAsNonRoot":true,"runAsUser":999},"database":"keycloak","enabled":true,"extraContainers":[],"extraEnv":[],"extraVolumeMounts":[],"extraVolumes":[],"image":{"pullPolicy":"Always","repository":"postgres","tag":"16"},"imagePullSecrets":[],"initContainers":[],"nodeSelector":{},"password":"secret4postgres","persistence":{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"1Gi","storageClass":"standard-retain"},"podSecurityContext":{"fsGroup":999,"runAsNonRoot":true,"runAsUser":999},"replicas":1,"resources":{"limits":{"cpu":0.25,"memory":"1Gi"},"requests":{"cpu":0.1,"memory":"512Mi"}},"service":{"port":5432,"serviceName":"keycloak-postgres","type":"ClusterIP"},"tolerations":[],"username":"keycloak"},"secretName":"keycloak-db","userNamekey":"username"},"http":{"enabled":true,"port":8080},"httpRelativePath":"/","https":{"enabled":true,"port":8443,"secretName":"keycloak-tls"},"image":{"repository":"quay.io/keycloak/keycloak","tag":"26.7.4"},"ingress":{"annotations":{"nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffering":"enabled","nginx.ingress.kubernetes.io/proxy-buffers-number":"8","nginx.ingress.kubernetes.io/ssl-redirect":"true"},"enabled":true,"hostname":"keycloak.arlas.k8s","ingressClassName":"nginx","path":"/","servicePort":8080,"tls":{"secretName":"keycloak-tls"}},"instances":1,"probes":{"readiness":{"failureThreshold":30,"periodSeconds":15},"startup":{"failureThreshold":600,"periodSeconds":2}},"proxyHeaders":"xforwarded","realm":{"import":{"enabled":true}},"resources":{"limits":{"cpu":0.25,"memory":"1Gi"},"requests":{"cpu":0.1,"memory":"512Mi"}}}` | Keycloak (Operator-managed) configuration. |
 | keycloak.auth.adminPassword | string | `arlasAppKeycloakPassword` (YAML anchor) | Password of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret. Only taken into account at the first startup, on an empty database. |
 | keycloak.auth.adminUser | string | `"admin"` | Login of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret. |
@@ -256,7 +260,6 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | kibana.ingress.hostname | string | `"kibana.arlas.k8s"` | Public hostname used to expose Kibana through the Ingress controller |
 | kibana.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Kibana Ingress |
 | kibana.instances | int | `1` | Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource) |
-| minio.image.repository | string | `"bitnamilegacy/minio"` | Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead. |
 | rabbitmq.auth.password | string | `"secret4rabbitmq"` | Password for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator. |
 | rabbitmq.auth.username | string | `"admin"` | Username for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator. |
 | rabbitmq.image.repository | string | `"docker.io/library/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |
@@ -266,8 +269,8 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | rabbitmq.persistentVolumeClaimRetentionPolicy.enabled | bool | `true` | Enable a custom PVC retention policy on the RabbitMQ StatefulSet. |
 | rabbitmq.persistentVolumeClaimRetentionPolicy.whenDeleted | string | `"Retain"` | Policy applied to the PVC when the RabbitmqCluster (or its StatefulSet) is deleted. Allowed values: Retain | Delete. |
 | rabbitmq.persistentVolumeClaimRetentionPolicy.whenScaled | string | `"Retain"` | Policy applied to the PVC when the StatefulSet is scaled down (replica count reduced). Allowed values: Retain | Delete. |
-| rabbitmq.resources.limits.memory | string | `"0.5Gi"` | Memory limit allocated to the RabbitMQ container. |
-| rabbitmq.resources.requests.memory | string | `"0.1Gi"` | Memory request allocated to the RabbitMQ container. |
+| rabbitmq.resources.limits.memory | string | `"512Mi"` | Memory limit allocated to the RabbitMQ container. |
+| rabbitmq.resources.requests.memory | string | `"100Mi"` | Memory request allocated to the RabbitMQ container. |
 | redis.affinity | object | `{}` | Affinity rules for scheduling the Redis pod. |
 | redis.containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}` | Container-level security context applied to the Redis container. |
 | redis.extraContainers | list | `[]` | Additional container config to run alongside Redis. |
@@ -288,12 +291,30 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | redis.persistence.storageClass | string | `"standard-retain"` | Storage class used for the persistent volume claim. |
 | redis.podSecurityContext | object | `{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}` | Pod-level security context applied to the Redis pod. |
 | redis.replicas | int | `1` | Number of Redis replicas (standalone use case: keep this at 1). |
-| redis.resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits for the Redis container. |
+| redis.resources | object | `{"limits":{"cpu":0.25,"memory":"512Mi"},"requests":{"cpu":0.1,"memory":"256Mi"}}` | Resource requests and limits for the Redis container. |
 | redis.service.clientService.enabled | bool | `true` | Enable a standard ClusterIP Service for application clients to connect to Redis. |
 | redis.service.clientService.type | string | `"ClusterIP"` | Type of the client-facing Service. |
 | redis.service.port | int | `6379` | Port exposed by the Redis service. |
 | redis.service.serviceName | string | `"arlas-redis"` | Name of the headless Service used by the StatefulSet (required, provides stable pod DNS). |
 | redis.tolerations | list | `[]` | Tolerations for scheduling the Redis pod. |
+| seaweedfs | object | `{"admin":{"enabled":true,"ingress":{"className":"nginx","enabled":true,"host":"seaweedfs.arlas.k8s"},"secret":{"adminPassword":"secret4seaweedFS","adminUser":"seaweedFSadmin"}},"filer":{"enablePVC":true,"replicas":1,"s3":{"enabled":true}},"master":{"data":{"size":"1Gi","storageClass":"standard-retain","type":"persistentVolumeClaim"},"replicas":1,"resources":{"requests":{"cpu":"250m","memory":"512Mi"}}},"volume":{"dataDirs":[{"maxVolumes":0,"name":"data","size":"1Gi","storageClass":"standard-retain","type":"persistentVolumeClaim"}],"replicas":1,"resources":{"requests":{"cpu":"250m","memory":"512Mi"}}}}` | SeaweedFS subchart configuration |
+| seaweedfs.admin.enabled | bool | `true` | Deploy the SeaweedFS admin web interface. |
+| seaweedfs.admin.ingress.className | string | `"nginx"` | Ingress class used by the admin Ingress. |
+| seaweedfs.admin.ingress.enabled | bool | `true` | Expose the admin interface through an Ingress. |
+| seaweedfs.admin.ingress.host | string | `"seaweedfs.arlas.k8s"` | Host name of the admin Ingress. |
+| seaweedfs.admin.secret.adminPassword | string | `"secret4seaweedFS"` | Admin interface password. |
+| seaweedfs.admin.secret.adminUser | string | `"seaweedFSadmin"` | Admin interface username. |
+| seaweedfs.filer.enablePVC | bool | `true` | Store the filer metadata (file and bucket names) on a PVC so it survives pod restarts. |
+| seaweedfs.filer.replicas | int | `1` | Number of filer replicas. The filer serves the file namespace and hosts the S3 gateway. |
+| seaweedfs.filer.s3.enabled | bool | `true` | Enable the S3 gateway on the filer (port 8333). Users and anonymous access are configured by the `seaweedfs-configure-s3` job. |
+| seaweedfs.master.data.size | string | `"1Gi"` | Size of the master data volume. |
+| seaweedfs.master.data.storageClass | string | `"standard-retain"` | Storage class of the master PVC. |
+| seaweedfs.master.data.type | string | `"persistentVolumeClaim"` | Storage type used by the master data directory (`persistentVolumeClaim`, `emptyDir` or `hostPath`). |
+| seaweedfs.master.replicas | int | `1` | Number of master replicas. Use 3 for high availability in production. |
+| seaweedfs.master.resources | object | `{"requests":{"cpu":"250m","memory":"512Mi"}}` | Resource requests and limits of the master pods. |
+| seaweedfs.volume.dataDirs | list | `[{"maxVolumes":0,"name":"data","size":"1Gi","storageClass":"standard-retain","type":"persistentVolumeClaim"}]` | Data directories of the volume servers. Each entry creates a separate storage location (PVC, hostPath or emptyDir). `maxVolumes: 0` lets SeaweedFS compute the maximum number of volumes from the free disk space. |
+| seaweedfs.volume.replicas | int | `1` | Number of volume server replicas. |
+| seaweedfs.volume.resources | object | `{"requests":{"cpu":"250m","memory":"512Mi"}}` | Resource requests and limits of the volume server pods. |
 | titiler.image.tag | string | `"2.2.1"` |  |
 | titiler.podSecurityContext.fsGroup | int | `1001` |  |
 | titiler.podSecurityContext.runAsNonRoot | bool | `true` |  |

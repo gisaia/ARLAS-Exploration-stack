@@ -24,7 +24,7 @@ dependencies:
     version: 28.9.0
     condition: deployment.titiler.enabled
   # THIRD PARTY REMOTE DEPENDENCIES
-  - name: minio
-    repository: https://charts.bitnami.com/bitnami
-    version: 14.10.5
-    condition: deployment.minio.enabled
+  - name: seaweedfs
+    repository: https://seaweedfs.github.io/seaweedfs/helm
+    version: 4.48.0
+    condition: deployment.seaweedfs.enabled

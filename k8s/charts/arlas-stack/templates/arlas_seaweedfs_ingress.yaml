@@ -1,0 +1,21 @@
+{{- if and .Values.deployment.aias.services.seaweedfs.ingress.enabled .Values.deployment.seaweedfs.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arlas-seaweedfs-ingress
+  annotations:
+    {{ .Values.deployment.aias.services.seaweedfs.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.global.ingressClassName }}
+  rules:
+    - host: {{ .Values.global.dnsDomain }}
+      http:
+        paths:
+          - path: /airs-storage/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.deployment.aias.services.seaweedfs.serviceName }}
+                port:
+                  number: {{ .Values.deployment.aias.services.seaweedfs.port }}
+{{- end }}
