@@ -75,10 +75,10 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.configuration.arlaseoMappingUrl | string | `"/app/mappings/arlas_eo_mapping.json"` | ARLAS-EO mapping and collection URLs used for initializing new indices of new collections |
 | services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
 | services.airs.configuration.s3.accessKeyId | string | `"airs"` | S3 access key id |
-| services.airs.configuration.s3.assetHttpEndpointUrl | string | `"https://arlas-stack-minio:9000/{}/{}"` | Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item |
+| services.airs.configuration.s3.assetHttpEndpointUrl | string | `"https://arlas-stack-seaweedfs-s3:8333/{}/{}"` | Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item |
 | services.airs.configuration.s3.bucket | string | `"airs-storage"` | S3 bucket name for storing and accessing the STAC collections, items and managed assets |
-| services.airs.configuration.s3.endpointUrl | string | `"http://arlas-stack-minio:9000"` | S3 internal endpoint URL, e.g. http://minio:9000 |
-| services.airs.configuration.s3.platform | string | `"MINIO"` | S3 platform type. This value is provided in the item properties of the STAC item |
+| services.airs.configuration.s3.endpointUrl | string | `"http://arlas-stack-seaweedfs-s3:8333"` | S3 internal endpoint URL, e.g. http://seaweedfs:8333 |
+| services.airs.configuration.s3.platform | string | `"SeaweedFS"` | S3 platform type. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.region | string | `nil` | S3 bucket's region. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.secretAccessKey | string | `"airssecret"` | S3 secret access key |
 | services.airs.configuration.s3.tier | string | `"Standard"` | S3 bucket's tier. This value is provided in the item properties of the STAC item |
@@ -97,7 +97,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.serviceName | string | `"airs-server"` |  |
 | services.airs.tolerations | list | `[]` | Tolerations for AIRS service pods |
 | services.airs.urlPrefix | string | `"/airs"` |  |
-| services.aproc.configuration.accessManager.storages | list | `[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://minio:9000\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"downloads","endpoint":"http://minio:9000","readable_paths":["/"],"type":"s3","writable_paths":["/"]}]` | Configuration of the storages used by the access manager to provide access to various storage backends |
+| services.aproc.configuration.accessManager.storages | list | `[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://seaweedfs:8333\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"downloads","endpoint":"http://seaweedfs:8333","readable_paths":["/"],"type":"s3","writable_paths":["/"]}]` | Configuration of the storages used by the access manager to provide access to various storage backends |
 | services.aproc.configuration.accessManager.tmpDir | string | `"/tmp/"` | Temporary directory used by the access manager |
 | services.aproc.configuration.airsEndpoint | string | `"http://airs-server:8000/arlas/airs"` | AIRS service endpoint URL accessed by APROC |
 | services.aproc.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS search URL used by APROC to check whether an item exists |
@@ -128,11 +128,11 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.download.enabled | bool | `true` | Whether the download extension is enabled or not |
 | services.aproc.configuration.extensions.download.index.name | string | `"aproc_downloads"` | Elasticsearch index name for the download requests |
 | services.aproc.configuration.extensions.download.outboxDirectory | string | `"/tmp/downloads"` | where downloads are placed |
-| services.aproc.configuration.extensions.download.outboxS3 | object | `{"accessKeyId":"airs","assetHttpEndpointUrl":"http://arlas-stack-minio:9000/{}/{}","bucket":"downloads","endpointUrl":"http://arlas-stack-minio:9000","secretAccessKey":"airssecret"}` | S3 configuration for uploading the built downloads |
+| services.aproc.configuration.extensions.download.outboxS3 | object | `{"accessKeyId":"airs","assetHttpEndpointUrl":"http://arlas-stack-seaweedfs-s3:8333/{}/{}","bucket":"downloads","endpointUrl":"http://arlas-stack-seaweedfs-s3:8333","secretAccessKey":"airssecret"}` | S3 configuration for uploading the built downloads |
 | services.aproc.configuration.extensions.download.outboxS3.accessKeyId | string | `"airs"` | S3 access key id for uploading the built downloads |
-| services.aproc.configuration.extensions.download.outboxS3.assetHttpEndpointUrl | string | `"http://arlas-stack-minio:9000/{}/{}"` | Public URL Pattern to access the built downloads over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object |
+| services.aproc.configuration.extensions.download.outboxS3.assetHttpEndpointUrl | string | `"http://arlas-stack-seaweedfs-s3:8333/{}/{}"` | Public URL Pattern to access the built downloads over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object |
 | services.aproc.configuration.extensions.download.outboxS3.bucket | string | `"downloads"` | S3 bucket name for uploading the built downloads |
-| services.aproc.configuration.extensions.download.outboxS3.endpointUrl | string | `"http://arlas-stack-minio:9000"` | S3 endpoint URL for uploading the built downloads |
+| services.aproc.configuration.extensions.download.outboxS3.endpointUrl | string | `"http://arlas-stack-seaweedfs-s3:8333"` | S3 endpoint URL for uploading the built downloads |
 | services.aproc.configuration.extensions.download.outboxS3.secretAccessKey | string | `"airssecret"` | S3 secret access key for uploading the built downloads |
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.configuration.all_bands_cog_max_width_or_height | int | `10000` |  |
 | services.aproc.configuration.extensions.enrich.drivers.csk_h5_cog.configuration.cog_max_width_or_height | int | `-1` |  |

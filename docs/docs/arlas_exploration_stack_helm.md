@@ -14,7 +14,7 @@ helm install my-arlas-aias arlas-stack/arlas-aias
 You need the following command lines to install the charts:
 - git
 - kubectl
-- helm
+- helm 4.3.0
 
 Also, you will need a kubernetes cluster with:
 - a load balancer for kubernetes
@@ -23,12 +23,12 @@ Also, you will need a kubernetes cluster with:
 
 For testing purpose, see the [Setup a test environement](#setup-a-test-environement) section
 
-Some of the third party helm charts are provided by bitnami. Its repository must be registered:
+The S3 storage remote third party helm charts are provided by SeaweedFS. Its repository must be registered:
 
 ```shell
-helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add seaweedfs https://seaweedfs.github.io/seaweedfs/helm
+helm repo update
 ```
-__Important__: Bitnami charts are not supported anymore by bitnamy. The charts are used for development purpose only. You must deploy your own third party service charts.
 
 ## The ARLAS Exploration stack project
 
@@ -174,7 +174,7 @@ Four services are exposed with an ingress:
 - `keycloak`, default DNS is `keycloak.arlas.k8s`
 - `elasticsearch`, default DNS is `elastic.arlas.k8s`
 - `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
-- `minio`, which serves as the object store, default DNS is `minio.arlas.k8s`
+- `seaweedfs`, which serves as the object store, default DNS is `seaweedfs.arlas.k8s`
 
 In a test environment use the ip of your machine e.g. 192.168.102.141 to access applications :
 

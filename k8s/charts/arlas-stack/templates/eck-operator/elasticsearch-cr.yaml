@@ -26,6 +26,7 @@ spec:
               requests:
                 storage: {{ .storageSize | default "3Gi" }}
       podTemplate:
+        metadata: {}
         spec:
           {{- if .nodeSelector }}
           nodeSelector:
