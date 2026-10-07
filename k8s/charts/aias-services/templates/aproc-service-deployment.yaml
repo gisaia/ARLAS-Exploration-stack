@@ -73,7 +73,11 @@ spec:
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
-
+            {{- if .Values.services.aproc.service.otel }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ .Values.services.aproc.service.serviceName }}
+            {{- include "aiasServices.otel" . | nindent 12 }}
+            {{- end }}
             {{- with .Values.services.aproc.service.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}

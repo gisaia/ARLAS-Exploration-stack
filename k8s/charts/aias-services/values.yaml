@@ -74,6 +74,8 @@ services:
       # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.21.0/conf/mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
       arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
 
   fam:
     serviceName: arlas-fam
@@ -103,6 +105,8 @@ services:
     tolerations: []
     # -- Affinity for FAM service pods
     affinity: {}
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
 
   agate:
     serviceName: arlas-agate
@@ -269,7 +273,8 @@ services:
           - r:users/.*:GET,PUT,DELETE
           - r:session:DELETE
           - r:permissions:GET
-
+      # -- Whether OpenTelemetry should be activated or not
+      otel: true
       services:
         airs-storage:
           # -- Name of the header containing the JWT token
@@ -304,7 +309,8 @@ services:
           public:
           - pattern: (/colorMaps/)(.*)
             part: path
-
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
   aproc:
     service:
       serviceName: aproc-service
@@ -333,6 +339,8 @@ services:
       tolerations: []
       # -- Affinity for APROC service pods
       affinity: {}
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
     worker:
       serviceName: aproc-proc
       image: gisaia/aproc-proc:0.21.0
@@ -696,7 +704,6 @@ services:
           - "/"
           writable_paths:
           - "/"
-
 cors:
   # cors.allowedOrigins -- CORS Allowed Origins
   allowedOrigins: '"*"'
@@ -740,3 +747,22 @@ smtp:
   password: "tobechanged"
   # -- SMTP sender email address
   from: "tobechanged"
+
+otel:
+  # -- OTLP endpoint
+  endpoint: http://apm-server-apm-http:8200
+  # -- OTLP protocol used by the agent (`grpc`, `http/protobuf`)
+  protocol: http/protobuf
+  # -- Resource attributes attached to all telemetry (comma-separated `key=value` pairs, e.g. `deployment.environment=dev`)
+  attributes: "deployment.environment={{ .Values.dnsDomain }}"
+  # -- User agents ignored by the HTTP server instrumentation (regex, e.g. Kubernetes probes)
+  ignoredUserAgents: "GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"
+  auth:
+    # -- Send an `Authorization: Bearer` header built from a Secret. Disable if the Server token authentication is disabled
+    enabled: true
+    # -- Name of the Secret holding the token.
+    secretName: apm-server-apm-token
+    # -- Key of the token in the Secret
+    secretKey: secret-token
+  # -- Additional environment variables for the OTel agent, as a `name: value` map
+  extraEnv: {}

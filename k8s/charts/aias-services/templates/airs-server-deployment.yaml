@@ -78,7 +78,11 @@ spec:
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
-
+            {{- if .Values.services.airs.otel }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ .Values.services.airs.serviceName }}
+            {{- include "aiasServices.otel" . | nindent 12 }}
+            {{- end }}
             {{- with .Values.services.airs.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}

@@ -71,7 +71,11 @@ spec:
             # LOGGING
             - name: AGATE_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
-
+            {{- if .Values.services.agate.otel }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ .Values.services.agate.serviceName }}
+            {{- include "aiasServices.otel" . | nindent 12 }}
+            {{- end }}
             {{- with .Values.services.agate.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
