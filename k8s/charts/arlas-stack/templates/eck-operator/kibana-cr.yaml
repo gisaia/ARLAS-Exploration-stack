@@ -1,15 +1,19 @@
-{{- if .Values.global.enableKibana }}
+{{- range $key, $inst := (include "elastic.instances" . | fromJson) }}
+{{- if and $inst.enabled $inst.kibana.enabled }}
+---
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
-  name: arlas-kibana
+  name: {{ $inst.kibana.name }}
 spec:
-  version: {{ .Values.kibana.image.tag }}
-  count: {{ .Values.kibana.instances }}
+  image: "{{ $inst.kibana.image.repository }}:{{ $inst.kibana.image.tag }}"
+  version: {{ $inst.kibana.image.tag | quote }}
+  count: {{ $inst.kibana.instances }}
   elasticsearchRef:
-    name: arlas-elasticsearch
+    name: {{ $inst.elasticsearch.clusterName }}
   http:
     service:
       spec:
         type: ClusterIP
-{{ end }}
+{{- end }}
+{{- end }}

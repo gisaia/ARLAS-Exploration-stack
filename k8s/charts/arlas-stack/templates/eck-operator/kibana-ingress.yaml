@@ -1,21 +1,23 @@
-{{- if and .Values.global.enableKibana .Values.kibana.ingress.enabled }}
+{{- range $key, $inst := (include "elastic.instances" . | fromJson) }}
+{{- if and $inst.enabled $inst.kibana.enabled $inst.kibana.ingress.enabled }}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: arlas-kibana-ingress
-  annotations:
-    {{ .Values.kibana.ingress.annotations | toYaml | nindent 4 }}
+  name: {{ $inst.kibana.name }}-ingress
+  annotations: {{- toYaml $inst.kibana.ingress.annotations | nindent 4 }}
 spec:
-  ingressClassName: {{ .Values.kibana.ingress.ingressClassName }}
+  ingressClassName: {{ $inst.kibana.ingress.ingressClassName }}
   rules:
-    - host: {{ .Values.kibana.ingress.hostname }}
+    - host: {{ $inst.kibana.ingress.hostname }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: arlas-kibana-http
+                name: {{ $inst.kibana.name }}-kb-http
                 port:
                   number: 5601
-{{ end }}
+{{- end }}
+{{- end }}
