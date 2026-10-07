@@ -9,8 +9,8 @@ global:
   kibanaDnsDomain: &arlasAppKibanaDnsDomain kibana.arlas.k8s
   enableKibana: &arlasAppEnableKibana true
 
-  # -- __MUST BE CONFIGURED:__ The domain name for accessing minio for ARLAS deployment
-  minioDnsDomain: &arlasAppMinioDnsDomain minio.arlas.k8s
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing seaweedFS for ARLAS deployment
+  seaweedFSDnsDomain: &arlasAppSeaweedFSDnsDomain seaweedfs.arlas.k8s
 
   # -- __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment
   keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
@@ -43,10 +43,10 @@ global:
   # -- __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
   elasticPassword: &arlasAppElasticPassword secret4elastic
 
-  # -- Minio login for minio itself and the services that are connecting to minio
-  minioLogin: &arlasAppMinioLogin minioadmin
-  # -- __MUST BE CONFIGURED:__ Minio password for minio itself and the services that are connecting to minio
-  minioPassword: &arlasAppMinioPassword secret4minio
+  # -- SeaweedFS login for seaweedFS admin console and to access seaweedFS from services
+  seaweedFSLogin: &arlasAppSeaweedFSLogin seaweedFSadmin
+  # -- __MUST BE CONFIGURED:__ SeaweedFS password for seaweedFS admin console and to access seaweedFS from services
+  seaweedFSPassword: &arlasAppSeaweedFSPassword secret4seaweedFS
 
   # -- Keycloak admin login for keycloak deployment (for test only)
   keycloakLogin: &arlasAppKeycloakLogin admin
@@ -144,18 +144,26 @@ deployment:
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"
             # -- Annotations for FAM ingress
             nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
-      minio:
-        # -- Minio service configuration for AIAS
-        serviceName: arlas-stack-minio
-        # -- Minio service port for AIAS
-        port: 9000
+      seaweedfs:
+        # -- Name of the Kubernetes service exposing the seaweedfs master
+        masterServiceName: arlas-stack-seaweedfs-master
+        # -- Port of the seaweedfs master service
+        masterServicePort: 9333
+        # -- Name of the Kubernetes service exposing the seaweedfs filer
+        filerServiceName: arlas-stack-seaweedfs-filer
+        # -- Port of the seaweedfs filer service
+        filerServicePort: 8888
+        # -- SeaweedFS service configuration for AIAS
+        serviceName: arlas-stack-seaweedfs-s3
+        # -- SeaweedFS service port for AIAS
+        port: 8333
         ingress:
-          # -- Should the chart deploy minio ingress
+          # -- Should the chart deploy seaweedfs ingress
           enabled: true
           annotations:
-            # -- Annotations for Minio ingress
+            # -- Annotations for SeaweedFS ingress
             nginx.ingress.kubernetes.io/auth-url: "http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"
-            # -- Annotations for Minio ingress
+            # -- Annotations for SeaweedFS ingress
             nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
       titiler:
         # -- Titiler service configuration for AIAS
@@ -184,12 +192,12 @@ deployment:
     ingress:
       # -- Should the chart deploy elasticsearch ingress
       enabled: true
-  minio:
-    # -- Should the chart deploy minio
+  seaweedfs:
+    # -- Should the chart deploy seaweedfs
     enabled: true
     ingress:
-      # -- Should the chart deploy minio ingress
-      enabled: true
+      # -- Should the chart deploy seaweedfs ingress
+      enabled: &arlasAppSeaweedFSIngressEnabled true 
   rabbitmq:
     # -- Should the chart deploy rabbitmq
     enabled: true
@@ -309,7 +317,7 @@ aias-services:
   dnsDomain: *arlasAppDnsDomain
   # -- __Do not change:__ value defined in global section
   protocol: *arlasAppProtocol
-  # -- Init the AIAS minio buckets  
+  # -- Init the AIAS seaweedFS buckets  
   initBuckets: true
   services:
     airs:
@@ -320,11 +328,11 @@ aias-services:
         indexCollectionPrefix: org.com@airs
         s3:
           # -- __Do not change:__ value defined in global section
-          accessKeyId: *arlasAppMinioLogin
+          accessKeyId: *arlasAppSeaweedFSLogin
           # -- __Do not change:__ value defined in global section
-          secretAccessKey: *arlasAppMinioPassword
-          # -- Minio endpoint
-          endpoint: http://arlas-stack-minio:9000
+          secretAccessKey: *arlasAppSeaweedFSPassword
+          # -- SeaweedFS endpoint
+          endpoint: http://arlas-stack-seaweedfs-s3:8333
           # -- __IMPORTANT:__ If you change the bucket name here, make sure to overwrite the patterns in agate.configuration.services (k8s/charts/aias-services/values.yaml).
           bucket: airs-storage
           # -- Paths that can be written by AIRS to store assets
@@ -411,11 +419,11 @@ aias-services:
           download:
             outboxS3:
               # -- Do not change: value defined in global section
-              accessKeyId: *arlasAppMinioLogin
+              accessKeyId: *arlasAppSeaweedFSLogin
               # -- Do not change: value defined in global section
-              secretAccessKey: *arlasAppMinioPassword
-              # -- Minio endpoint
-              endpointUrl: http://arlas-stack-minio:9000
+              secretAccessKey: *arlasAppSeaweedFSPassword
+              # -- SeaweedFS endpoint
+              endpointUrl: http://arlas-stack-seaweedfs-s3:8333
               # -- Bucket where downloads are stored
               bucket: downloads
               # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
@@ -426,7 +434,7 @@ aias-services:
 
           ingest:
             # -- Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo
-            #inputsDirectory: http://arlas-stack-minio:9000/inputs
+            #inputsDirectory: http://arlas-stack-seaweedfs-s3:8333/inputs
             inputsDirectory: https://storage.googleapis.com/gisaia-public/test-aias
             # -- APROC endpoint URL accessed by ingest processes
             aprocEndpoint: http://aproc-service:8000/aproc
@@ -457,10 +465,10 @@ aias-services:
 
           - type: s3
             bucket: archives
-            endpoint: $APROC_ARCHIVE_ENDPOINT|http://arlas-stack-minio:9000"
+            endpoint: $APROC_ARCHIVE_ENDPOINT|http://arlas-stack-seaweedfs-s3:83333"
             api_key:
-              access_key: *arlasAppMinioLogin
-              secret_key: *arlasAppMinioPassword
+              access_key: *arlasAppSeaweedFSLogin
+              secret_key: *arlasAppSeaweedFSPassword
             readable_paths:
             - /inputs
           # -
@@ -477,10 +485,10 @@ aias-services:
 
           - type: s3
             bucket: downloads
-            endpoint: "http://arlas-stack-minio:9000"
+            endpoint: "http://arlas-stack-seaweedfs-s3:8333"
             api_key:
-              access_key: *arlasAppMinioLogin
-              secret_key: *arlasAppMinioPassword
+              access_key: *arlasAppSeaweedFSLogin
+              secret_key: *arlasAppSeaweedFSPassword
             readable_paths:
             - "/"
             writable_paths:
@@ -488,10 +496,10 @@ aias-services:
 
           - type: s3
             bucket: inputs
-            endpoint: "http://arlas-stack-minio:9000"
+            endpoint: "http://arlas-stack-seaweedfs-s3:8333"
             api_key:
-              access_key: *arlasAppMinioLogin
-              secret_key: *arlasAppMinioPassword
+              access_key: *arlasAppSeaweedFSLogin
+              secret_key: *arlasAppSeaweedFSPassword
             readable_paths:
             - "/"
 
@@ -562,12 +570,12 @@ elasticsearch:
     resources:
       requests:
         # -- CPU request for the Elasticsearch container
-        cpu: 0.25
+        cpu: 250m
         # -- Memory request for the Elasticsearch container
         memory: 4Gi
       limits:
         # -- CPU limit for the Elasticsearch container
-        cpu: 0.5
+        cpu: 500m
         # -- Memory limit for the Elasticsearch container
         memory: 4Gi
   service:
@@ -618,10 +626,10 @@ rabbitmq:
   resources:
     limits:
       # -- Memory limit allocated to the RabbitMQ container.
-      memory: 0.5Gi
+      memory: 512Mi
     requests:
       # -- Memory request allocated to the RabbitMQ container.
-      memory: 0.1Gi
+      memory: 100Mi
   auth:
     # -- Username for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator.
     username: *arlasAppRabbitMQLogin
@@ -711,28 +719,57 @@ redis:
       # -- Type of the client-facing Service.
       type: ClusterIP
 
-minio:
-  image:
-    # -- Minio for development and test only. For production, please refer to the minio documentation to deploy a production ready minio instance instead.
-    repository: bitnamilegacy/minio
-  # @ignored  
-  global:
-    security:
-      allowInsecureImages: true
-    defaultStorageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  persistence:
-    storageClass: *arlasAppDefaultStorageClass
-  # @ignored  
-  auth:
-    rootUser: *arlasAppMinioLogin
-    rootPassword: *arlasAppMinioPassword
-  # @ignored  
-  resourcesPreset: large
-  # @ignored  
-  console:
-    image:
-      repository: bitnamilegacy/minio-object-browser
+# -- SeaweedFS subchart configuration
+seaweedfs:
+  master:
+    # -- Number of master replicas. Use 3 for high availability in production.
+    replicas: 1
+    data:
+      # -- Storage type used by the master data directory (`persistentVolumeClaim`, `emptyDir` or `hostPath`).
+      type: persistentVolumeClaim
+      # -- Size of the master data volume.
+      size: 1Gi
+      # -- Storage class of the master PVC.
+      storageClass: *arlasAppDefaultStorageClass
+    # -- Resource requests and limits of the master pods.
+    resources: { requests: { cpu: 250m, memory: 512Mi } }
+  volume:
+    # -- Number of volume server replicas.
+    replicas: 1
+    # -- Data directories of the volume servers. Each entry creates a separate storage location (PVC, hostPath or emptyDir).
+    # `maxVolumes: 0` lets SeaweedFS compute the maximum number of volumes from the free disk space.
+    dataDirs:
+      - name: data
+        type: persistentVolumeClaim
+        size: 1Gi
+        storageClass: *arlasAppDefaultStorageClass
+        maxVolumes: 0
+    # -- Resource requests and limits of the volume server pods.
+    resources: { requests: { cpu: 250m, memory: 512Mi } }
+  filer:
+    # -- Number of filer replicas. The filer serves the file namespace and hosts the S3 gateway.
+    replicas: 1
+    # -- Store the filer metadata (file and bucket names) on a PVC so it survives pod restarts.
+    enablePVC: true
+    s3:
+      # -- Enable the S3 gateway on the filer (port 8333).
+      # Users and anonymous access are configured by the `seaweedfs-configure-s3` job.
+      enabled: true
+  admin:
+    # -- Deploy the SeaweedFS admin web interface.
+    enabled: true
+    secret:
+      # -- Admin interface username.
+      adminUser: *arlasAppSeaweedFSLogin
+      # -- Admin interface password.
+      adminPassword: *arlasAppSeaweedFSPassword
+    ingress:
+      # -- Expose the admin interface through an Ingress.
+      enabled: *arlasAppSeaweedFSIngressEnabled
+      # -- Host name of the admin Ingress.
+      host: *arlasAppSeaweedFSDnsDomain
+      # -- Ingress class used by the admin Ingress.
+      className: *arlasAppIngressClassName
 
 # -- Keycloak (Operator-managed) configuration.
 keycloak:

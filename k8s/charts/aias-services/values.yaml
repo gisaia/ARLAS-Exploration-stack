@@ -54,15 +54,15 @@ services:
         accessKeyId: airs
         # -- S3 secret access key
         secretAccessKey: airssecret
-        # -- S3 internal endpoint URL, e.g. http://minio:9000
-        endpointUrl: http://arlas-stack-minio:9000
+        # -- S3 internal endpoint URL, e.g. http://seaweedfs:8333
+        endpointUrl: http://arlas-stack-seaweedfs-s3:8333
         # -- List of writable paths in the S3 bucket
         writablePaths:
         - /
         # -- Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item
-        assetHttpEndpointUrl: https://arlas-stack-minio:9000/{}/{}
+        assetHttpEndpointUrl: https://arlas-stack-seaweedfs-s3:8333/{}/{}
         # -- S3 platform type. This value is provided in the item properties of the STAC item
-        platform: MINIO
+        platform: SeaweedFS
         # -- S3 bucket's region. This value is provided in the item properties of the STAC item
         region:
 
@@ -610,7 +610,7 @@ services:
           # -- S3 configuration for uploading the built downloads
           outboxS3:
             # -- S3 endpoint URL for uploading the built downloads
-            endpointUrl: http://arlas-stack-minio:9000
+            endpointUrl: http://arlas-stack-seaweedfs-s3:8333
             # -- S3 bucket name for uploading the built downloads
             bucket: downloads
             # -- S3 access key id for uploading the built downloads
@@ -618,7 +618,7 @@ services:
             # -- S3 secret access key for uploading the built downloads
             secretAccessKey: airssecret
             # -- Public URL Pattern to access the built downloads over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object
-            assetHttpEndpointUrl: http://arlas-stack-minio:9000/{}/{}
+            assetHttpEndpointUrl: http://arlas-stack-seaweedfs-s3:8333/{}/{}
           index:
             # -- Elasticsearch index name for the download requests
             name: aproc_downloads
@@ -670,13 +670,13 @@ services:
 
         - type: s3
           bucket: archives
-          endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
+          endpoint: $APROC_ARCHIVE_ENDPOINT|http://seaweedfs:8333"
           readable_paths:
           - /inputs
 
         - type: s3
           bucket: downloads
-          endpoint: "http://minio:9000"
+          endpoint: "http://seaweedfs:8333"
           readable_paths:
           - "/"
           writable_paths:
