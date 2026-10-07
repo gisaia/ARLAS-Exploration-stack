@@ -1,0 +1,25 @@
+{{- if .Values.deployment.rabbitmq.enabled }}
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: arlas-rabbitmq
+spec:
+  replicas: {{ .Values.rabbitmq.replicas | default 1 }}
+  image: "{{ .Values.rabbitmq.image.repository }}:{{ .Values.rabbitmq.image.tag }}"
+  resources:
+    {{- toYaml .Values.rabbitmq.resources | nindent 4 }}
+  persistence:
+    storageClassName: {{ .Values.rabbitmq.persistence.storageClass | quote }}
+    storage: {{ .Values.rabbitmq.persistence.storage | default "10Gi" | quote }}
+  {{- if .Values.rabbitmq.persistentVolumeClaimRetentionPolicy.enabled }}
+  override:
+    statefulSet:
+      spec:
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: {{ .Values.rabbitmq.persistentVolumeClaimRetentionPolicy.whenDeleted | default "Delete" }}
+          whenScaled: {{ .Values.rabbitmq.persistentVolumeClaimRetentionPolicy.whenScaled | default "Retain" }}
+  {{- end }}
+  rabbitmq:
+    additionalConfig: |
+      deprecated_features.permit.transient_nonexcl_queues = true
+{{- end }}

@@ -6,8 +6,8 @@ volumes:
     name: arlas-data-pg
   arlas-config-pg:
     name: arlas-config-pg
-  arlas-data-minio:
-    name: arlas-data-minio
+  arlas-data-seaweedfs:
+    name: arlas-data-seaweedfs
   arlas-data-mc-conf:
     name: arlas-data-mc-conf
   arlas-data-rabbimq:

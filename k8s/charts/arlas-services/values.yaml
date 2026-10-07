@@ -15,9 +15,9 @@ services:
     runAsUser: 65532
   containerSecurityContext:
     allowPrivilegeEscalation: false
-  server: 
+  server:
     serviceName: arlas-server
-    image: gisaia/arlas-server:28.0.0
+    image: gisaia/arlas-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
@@ -31,19 +31,26 @@ services:
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
-      requests:
-        cpu: 0.1
-        memory: 256Mi
+      requests:   # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+        cpu: 0.25
+        memory: 1000Mi
       limits:
         cpu: 1
         memory: 1000Mi
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
+    autoscaling:
+      enabled: False
+      minReplicas: 1
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 70
+      customMetrics:
+      behavior:
   permissions:
     serviceName: arlas-permissions-server
-    image: gisaia/arlas-permissions-server:28.0.0
+    image: gisaia/arlas-permissions-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
     apm: false
@@ -61,15 +68,15 @@ services:
         cpu: 0.1
         memory: 128Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 512Mi
     nodeSelector: {}
     tolerations: []
     affinity: {}
 
-  persistence: 
+  persistence:
     serviceName: arlas-persistence-server
-    image: gisaia/arlas-persistence-server:28.0.0
+    image: gisaia/arlas-persistence-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
     # -- Whether ES APM should be activated or not
@@ -87,7 +94,7 @@ services:
         cpu: 0.1
         memory: 128Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 512Mi
     nodeSelector: {}
     tolerations: []
@@ -108,7 +115,6 @@ cacheTimeout: 60
 cacheFactoryClass: io.arlas.server.core.impl.cache.LocalCacheFactory
 # -- The java package to process for extracting the APIs displayed in Swagger
 swaggerResource: io.arlas.server.rest,io.arlas.server.stac
-
 
 cors:
   # cors.enabled -- Enable CORS or not
@@ -149,15 +155,15 @@ persistence:
   storageSize: 100Mi
   # -- Path to use for file persistence
   localFolder: /persistence/
-  
+
   # -- Configuration node if `engine=hibernate`, ignored otherwise
   hibernate:
     # -- JDBC URL
     url: jdbc:postgresql://db:5432/arlas
     # -- Database user login
-    user:
+    user: 
     # -- Database user password
-    password:
+    password: 
     # -- SQL Dialect
     dialect: org.hibernate.dialect.PostgreSQLDialect
     # -- JDBC Driver

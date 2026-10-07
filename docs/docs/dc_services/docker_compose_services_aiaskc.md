@@ -14,7 +14,7 @@
 - [aproc-service](#service-aproc-service)
 - [arlas-fam-wui](#service-arlas-fam-wui)
 - [fam-service](#service-fam-service)
-- [minio](#service-minio)
+- [seaweedfs](#service-seaweedfs)
 - [rabbitmq](#service-rabbitmq)
 - [redis](#service-redis)
 - [agate](#service-agate)
@@ -22,7 +22,7 @@
 ### Service arlas-server
 Description: ARLAS Server is the geo-analytic engine of the ARLAS Exploration Stack
 
-Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:28.0.0` in `conf/versions.env`
+Image: `ARLAS_SERVER_VERSION` with `gisaia/arlas-server:29.0.0-rc1` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -69,7 +69,7 @@ List of volumes:
 ### Service arlas-persistence-server
 Description: ARLAS Persistence is a service for storing and retrieving small ojects, such as JSON documents or image previews.
 
-Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:28.0.0` in `conf/versions.env`
+Image: `ARLAS_PERSISTENCE_VERSION` with `gisaia/arlas-persistence-server:29.0.0-rc1` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -111,7 +111,7 @@ List of volumes:
 ### Service arlas-permissions-server
 Description: ARLAS Permissions is a service for listing user's permissions
 
-Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:28.0.0` in `conf/versions.env`
+Image: `ARLAS_PERMISSIONS_VERSION` with `gisaia/arlas-permissions-server:29.0.0-rc1` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -147,7 +147,7 @@ List of volumes:
 ### Service arlas-builder
 Description: ARLAS Builder is the interface for elaborating ARLAS Dashboards.
 
-Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:28.0.1` in `conf/versions.env`
+Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:29.0.0-rc.6` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -189,7 +189,7 @@ Image: `ARLAS_BUILDER_VERSION` with `gisaia/arlas-wui-builder:28.0.1` in `conf/v
 ### Service arlas-hub
 Description: ARLAS Hub is the interface for discovering all the available ARLAS Dashboards
 
-Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:28.0.2` in `conf/versions.env`
+Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:29.0.0-rc.8` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -213,6 +213,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:28.0.2` in `conf/versions.
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_USE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
 | `ARLAS_BUILDER_URL` | `ARLAS_BUILDER_URL` | `/builder/` |  | `https://${ARLAS_HOST}/builder/` in `conf/arlas_keycloak.env` |
+| `ARLAS_DARK_THEME_ENABLED` | `true` | `` |  |  |
 | `ARLAS_HUB_BASE_HREF` | `ARLAS_HUB_BASE_HREF` | `/hub` |  |  |
 | `ARLAS_IAM_SERVER_URL` | `ARLAS_IAM_SERVER_URL` | `/arlas_iam_server` |  |  |
 | `ARLAS_PERMISSIONS_URL` | `ARLAS_PERMISSIONS_URL` | `/arlas_permissions_server` |  |  |
@@ -226,7 +227,7 @@ Image: `ARLAS_HUB_VERSION` with `gisaia/arlas-wui-hub:28.0.2` in `conf/versions.
 ### Service arlas-wui
 Description: ARLAS WUI is ARLAS Web interface for visualising an analytic ARLAS Dashboard.
 
-Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:28.0.3` in `conf/versions.env`
+Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:29.0.0-rc.9` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
@@ -251,6 +252,7 @@ Image: `ARLAS_WUI_VERSION` with `gisaia/arlas-wui:28.0.3` in `conf/versions.env`
 | `ARLAS_AUTHENT_THRESHOLD` | `ARLAS_AUTHENT_THRESHOLD` | `` |  |  |
 | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `ARLAS_AUTHENT_TIMEOUT_FACTOR` | `0.75` |  | `0.75` in `conf/arlas_keycloak.env` |
 | `ARLAS_AUTHENT_USE_DISCOVERY` | `ARLAS_AUTHENT_USE_DISCOVERY` | `` |  | `true` in `conf/arlas_keycloak.env` |
+| `ARLAS_DARK_THEME_ENABLED` | `true` | `` |  |  |
 | `ARLAS_GEOCODING_FIND_PLACE_URL` | `ARLAS_GEOCODING_FIND_PLACE_URL` | `` |  | empty value in `conf/arlas.env` |
 | `ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO` | `ARLAS_GEOCODING_FIND_PLACE_ZOOM_TO` | `10` |  |  |
 | `ARLAS_HUB_URL` | `ARLAS_HUB_URL` | `/hub/` |  |  |
@@ -356,10 +358,10 @@ Image: `ARLAS_VERSION_AIRS` with `gisaia/airs:${ARLAS_VERSION_AIAS}` in `conf/ve
 | `AIRS_PORT` | `AIRS_PORT` | `8000` |  |  |
 | `AIRS_PREFIX` | `AIRS_PREFIX` | `/airs` |  |  |
 | `AIRS_S3_ACCESS_KEY_ID` | `AIRS_S3_ACCESS_KEY_ID` | `` |  | `airs` in `conf/aias.env` |
-| `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `` |  | `http://minio:9000/{}/{}` in `conf/aias.env` |
+| `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `AIRS_S3_ASSET_HTTP_ENDPOINT_URL` | `` |  | `http://seaweedfs:8333/{}/{}` in `conf/aias.env` |
 | `AIRS_S3_BUCKET` | `AIRS_S3_BUCKET` | `airs-storage` |  | `airs-storage` in `conf/aias.env` |
-| `AIRS_S3_ENDPOINT_URL` | `AIRS_S3_ENDPOINT_URL` | `http://minio:9000` |  | `http://minio:9000` in `conf/aias.env` |
-| `AIRS_S3_PLATFORM` | `AIRS_S3_PLATFORM` | `MINIO` |  |  |
+| `AIRS_S3_ENDPOINT_URL` | `AIRS_S3_ENDPOINT_URL` | `http://seaweedfs:8333` |  | `http://seaweedfs:8333` in `conf/aias.env` |
+| `AIRS_S3_PLATFORM` | `AIRS_S3_PLATFORM` | `SEAWEEDFS` |  |  |
 | `AIRS_S3_REGION` | `AIRS_S3_REGION` | `Standart` |  |  |
 | `AIRS_S3_SECRET_ACCESS_KEY` | `AIRS_S3_SECRET_ACCESS_KEY` | `` |  | `airssecret` in `conf/aias.env` |
 | `AIRS_S3_TIER` | `AIRS_S3_TIER` | `Standard` |  |  |
@@ -420,11 +422,11 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:${ARLAS_VERSION_AIAS}`
 | `APROC_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
 | `TMP_FOLDER` | `"/tmp"` | `` |  |  |
-| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://seaweedfs:8333` |  |  |
 | `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
 | `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
-| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://seaweedfs:8333/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
 | `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/test- ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
@@ -489,11 +491,11 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:${ARLAS_VERSION_
 | `APROC_INDEX_LOGIN` | `ELASTIC_USER` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_INDEX_PWD` | `ELASTIC_PASSWORD` | `` |  | `elastic` in `conf/elastic.env` |
 | `APROC_RESOURCE_ID_HASH_STARTS_AT` | `3` | `` |  |  |
-| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://minio:9000` |  |  |
+| `DOWNLOAD_S3_ENDPOINT_URL` | `DOWNLOAD_S3_ENDPOINT_URL` | `http://seaweedfs:8333` |  |  |
 | `DOWNLOAD_S3_BUCKET` | `DOWNLOAD_S3_BUCKET` | `` |  | `downloads` in `conf/aias.env` |
 | `DOWNLOAD_S3_ACCESS_KEY_ID` | `DOWNLOAD_S3_ACCESS_KEY_ID` | `airs` |  |  |
 | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `DOWNLOAD_S3_SECRET_ACCESS_KEY` | `airssecret` |  |  |
-| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://minio:9000/{}/{}` |  |  |
+| `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `DOWNLOAD_S3_ASSET_HTTP_ENDPOINT_URL` | `http://seaweedfs:8333/{}/{}` |  |  |
 | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `CLEAN_DOWNLOAD_OUTBOX_DIR` | `True` |  |  |
 | `INGESTED_FOLDER` | `INGESTED_FOLDER` | `/inputs` |  | `https://storage.googleapis.com/gisaia-public/test- ...` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_TYPE` | `APROC_INPUT_STORAGE_TYPE` | `` |  | `"https"` in `conf/aias.env` |
@@ -573,21 +575,16 @@ List of volumes:
 - `${APROC_INPUT_DIR}:/inputs:ro`
 - `${PWD}/conf/aias/drivers.yaml:/app/conf/drivers.yaml:ro`
 - `${PWD}/conf/aias/aproc.yaml:/app/conf/aproc.yaml:ro`
-## File dc/ref-dc-aias-minio.yaml
-### Service minio
-Description: Minio is an object store
+## File dc/ref-dc-aias-seaweedfs.yaml
+### Service seaweedfs
+Description: SeaweedFS is an object store
 
-Image: `ARLAS_VERSION_MINIO` with `minio/minio:RELEASE.2025-04-22T22-12-26Z` in `conf/versions.env`
+Image: `SEAWEEDFS_VERSION` with `chrislusf/seaweedfs:4.48` in `conf/versions.env`
 
-| Container variable | Value or environment variable | Default | Description | Env file setting |
-| --- | --- | --- | --- | --- |
-| `MINIO_BROWSER` | `off` | `` |  |  |
-| `MINIO_ROOT_PASSWORD` | `MINIO_ROOT_PASSWORD` | `` |  | `airssecret` in `conf/minio.env` |
-| `MINIO_ROOT_USER` | `MINIO_ROOT_USER` | `` |  | `airs` in `conf/minio.env` |
 
 List of volumes:
 
-- `${AIRS_STORAGE_DIRECTORY:-arlas-data-minio}:/data`
+- `${AIRS_STORAGE_DIRECTORY:-arlas-data-seaweedfs}:/data`
 ## File dc/ref-dc-aias-rabbitmq.yaml
 ### Service rabbitmq
 Image: `ARLAS_VERSION_RABBITMQ` with `rabbitmq:3.13.7-management-alpine` in `conf/versions.env`
