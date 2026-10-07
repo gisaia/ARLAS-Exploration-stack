@@ -5,12 +5,18 @@ global:
   # -- __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment
   elasticDnsDomain: &arlasAppElasticDnsDomain elastic.arlas.k8s
 
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing ES for logs for ARLAS deployment
+  elasticLogsDnsDomain: &arlasAppElasticLogsDnsDomain elastic.logs.arlas.k8s
+
   # -- __MUST BE CONFIGURED:__ The domain name for accessing kibana for ARLAS deployment
   kibanaDnsDomain: &arlasAppKibanaDnsDomain kibana.arlas.k8s
   enableKibana: &arlasAppEnableKibana true
 
   # -- __MUST BE CONFIGURED:__ The domain name for accessing seaweedFS for ARLAS deployment
   seaweedFSDnsDomain: &arlasAppSeaweedFSDnsDomain seaweedfs.arlas.k8s
+  # -- __MUST BE CONFIGURED:__ The domain name for accessing kibana for logs for ARLAS deployment
+  kibanaLogsDnsDomain: &arlasAppKibanaLogsDnsDomain kibana.logs.arlas.k8s
+  enableKibanaLogs: &arlasAppEnableKibanaLogs true
 
   # -- __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment
   keycloakDnsDomain: &arlasAppKeycloakDnsDomain keycloak.arlas.k8s
@@ -47,6 +53,10 @@ global:
   seaweedFSLogin: &arlasAppSeaweedFSLogin seaweedFSadmin
   # -- __MUST BE CONFIGURED:__ SeaweedFS password for seaweedFS admin console and to access seaweedFS from services
   seaweedFSPassword: &arlasAppSeaweedFSPassword secret4seaweedFS
+ # -- Elasticsearch login for elasticsearch-logs itself and the services that are connecting to elasticsearch-logs
+  elasticLogsLogin: &arlasAppElasticLogsLogin elasticlogs
+  # -- __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch-logs itself and the services that are connecting to elasticsearch-logs
+  elasticLogsPassword: &arlasAppElasticLogsPassword secret4elasticlogs
 
   # -- Keycloak admin login for keycloak deployment (for test only)
   keycloakLogin: &arlasAppKeycloakLogin admin
@@ -186,12 +196,25 @@ deployment:
               # -- Annotations for Titiler ingress
               nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, arlas-org-filter"
 
-  elasticsearch:
-    # -- Should the chart deploy elasticsearch
+  apmServer:
+    # -- Should the chart deploy apm-server to collect log with OTEL
     enabled: true
     ingress:
       # -- Should the chart deploy elasticsearch ingress
       enabled: true
+  elasticsearch:
+    app:
+      # -- Should the chart deploy elasticsearch for app
+      enabled: &arlasAppElasticAppEnabled true 
+      ingress:
+        # -- Should the chart deploy elasticsearch for app ingress
+        enabled: &arlasAppElasticAppIngressEnabled true 
+    logs:
+      # -- Should the chart deploy elasticsearch for logs
+      enabled: &arlasAppElasticLogsEnabled true 
+      ingress:
+        # -- Should the chart deploy elasticsearch for logs ingress
+        enabled: &arlasAppElasticLogsIngressEnabled true 
   seaweedfs:
     # -- Should the chart deploy seaweedfs
     enabled: true
@@ -542,81 +565,153 @@ titiler:
     runAsNonRoot: true
     runAsUser: 1001
 
-elasticsearch:
-  # -- Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets)
-  clusterName: arlas-elasticsearch
-  image:
-    # -- Elasticsearch container image repository (official Elastic image, required by the ECK operator)
-    repository: docker.elastic.co/elasticsearch/elasticsearch
-    # -- Elasticsearch version / image tag. Must match a version supported by the installed ECK operator
-    tag: "9.5.0"
-  user:
-    # -- Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user
-    login: *arlasAppElasticLogin
-    # -- Password of the custom Elasticsearch superuser account
-    password: *arlasAppElasticPassword
-  # -- List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group (e.g. dedicated master/data/ingest tiers)
-  nodeSets:
-  # -- Name of this nodeSet (used as a suffix for the generated StatefulSet; must remain stable, renaming it recreates the underlying StatefulSet and PVCs)
-  - name: default
-    # -- Number of Elasticsearch pods (replicas) in this nodeSet
-    count: 1
-    # -- Elasticsearch node roles assigned to this nodeSet (e.g. master, data, ingest, data_hot, data_content...)
-    roles: [ "master", "data", "ingest" ]
-    # -- Disable memory-mapped storage (node.store.allow_mmap). Set to false when the host does not allow raising vm.max_map_count
-    allowMmap: false
-    # -- Size of the persistent volume claim requested for Elasticsearch data storage
-    storageSize: 3Gi
-    resources:
-      requests:
-        # -- CPU request for the Elasticsearch container
-        cpu: 250m
-        # -- Memory request for the Elasticsearch container
-        memory: 4Gi
-      limits:
-        # -- CPU limit for the Elasticsearch container
-        cpu: 500m
-        # -- Memory limit for the Elasticsearch container
-        memory: 4Gi
-  service:
-    # -- Kubernetes Service type used to expose the Elasticsearch HTTP endpoint internally
-    type: ClusterIP
-  tls:
-    # -- Whether to disable the self-signed certificate auto-generated by ECK for the HTTP layer. Keep false to retain TLS encryption by default
-    selfSignedDisabled: false
-  ingress:
-    # -- Public hostname used to expose Elasticsearch through the Ingress controller
-    hostname: *arlasAppElasticDnsDomain
-    # -- IngressClass used to route traffic to the Elasticsearch Ingress
-    ingressClassName: *arlasAppIngressClassName
-    # -- Additional annotations applied to the Elasticsearch Ingress (e.g. nginx-ingress TLS passthrough, body size limits, monitoring probes)
-    annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: 100240m
-      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      blackbox.monitoring/enabled: "true"
+elastic:
+  # -- Default values shared by all instances. Each instance is deep-merged on top of these defaults (the instance wins). Lists such as `nodeSets` are replaced, not merged. Do not set `enabled: true` here, as a merge cannot override it back to `false`
+  defaults:
+    elasticsearch:
+      image:
+        # -- Elasticsearch container image repository (official Elastic image, required by the ECK operator)
+        repository: docker.elastic.co/elasticsearch/elasticsearch
+        # -- Elasticsearch version / image tag. Must match a version supported by the installed ECK operator
+        tag: "9.5.0"
+      service:
+        # -- Kubernetes Service type used to expose the Elasticsearch HTTP endpoint internally
+        type: ClusterIP
+      tls:
+        # -- Whether to disable the self-signed certificate auto-generated by ECK for the HTTP layer. Keep false to retain TLS encryption by default
+        selfSignedDisabled: false
+      ingress:
+        # -- IngressClass used to route traffic to the Elasticsearch Ingress
+        ingressClassName: *arlasAppIngressClassName
+        # -- Additional annotations applied to the Elasticsearch Ingress (e.g. nginx-ingress TLS passthrough, body size limits, monitoring probes)
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: 100240m
+          nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          blackbox.monitoring/enabled: "true"
+    kibana:
+      # -- Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource)
+      instances: 1
+      image:
+        # -- Kibana container image repository (official Elastic image, required by the ECK operator)
+        repository: docker.elastic.co/kibana/kibana
+        # -- Kibana version / image tag. Should match the Elasticsearch version to avoid compatibility issues
+        tag: "9.5.0"
+      ingress:
+        # -- IngressClass used to route traffic to the Kibana Ingress
+        ingressClassName: *arlasAppIngressClassName
+        # -- Additional annotations applied to the Kibana Ingress
+        annotations:
+          kubernetes.io/ingress.class: *arlasAppIngressClassName
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
-kibana:
-  # -- Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource)
-  instances: 1
-  image:
-    # -- Kibana container image repository (official Elastic image, required by the ECK operator)
-    repository: docker.elastic.co/kibana/kibana
-    # -- Kibana version / image tag. Should match the Elasticsearch version to avoid compatibility issues
-    tag: 9.5.0
-  ingress:
-    # -- Enable the Kibana Ingress resource
-    enabled: *arlasAppEnableKibana
-    # -- Public hostname used to expose Kibana through the Ingress controller
-    hostname: *arlasAppKibanaDnsDomain
-    # -- IngressClass used to route traffic to the Kibana Ingress
-    ingressClassName: *arlasAppIngressClassName
-    # -- Additional annotations applied to the Kibana Ingress
-    annotations:
-      kubernetes.io/ingress.class: *arlasAppIngressClassName
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  instances:
+    # ───────────── Application instance (ARLAS data) ─────────────
+    app:
+      # -- Enable the Elasticsearch and Kibana stack dedicated to the ARLAS application data
+      enabled: *arlasAppElasticAppEnabled
+      elasticsearch:
+        # -- Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets). Must be unique across instances
+        clusterName: arlas-elasticsearch
+        user:
+          # -- Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user
+          login: *arlasAppElasticLogin
+          # -- Password of the custom Elasticsearch superuser account
+          password: *arlasAppElasticPassword
+        # -- List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group
+        nodeSets:
+          # -- Name of this nodeSet
+          - name: default
+            # -- Number of Elasticsearch pods (replicas) in this nodeSet
+            count: 1
+            # -- Elasticsearch node roles assigned to this nodeSet
+            roles: [ "master", "data", "ingest" ]
+            # -- Allow memory-mapped storage (node.store.allow_mmap). Keep false when the host does not allow raising vm.max_map_count
+            allowMmap: false
+            # -- Size of the persistent volume claim requested for Elasticsearch data storage
+            storageSize: 3Gi
+            resources:
+              requests:
+                # -- CPU request for the Elasticsearch container
+                cpu: 250m
+                # -- Memory request for the Elasticsearch container
+                memory: 1Gi
+              limits:
+                # -- CPU limit for the Elasticsearch container
+                cpu: 500m
+                # -- Memory limit for the Elasticsearch container
+                memory: 1Gi
+        ingress:
+          # -- Enable the Elasticsearch Ingress resource
+          enabled: *arlasAppElasticAppIngressEnabled
+          # -- Name of the Elasticsearch Ingress
+          name: elasticsearch-ingress
+          # -- Public hostname used to expose Elasticsearch through the Ingress controller
+          hostname: *arlasAppElasticDnsDomain
+      kibana:
+        # -- Enable the Kibana custom resource for this instance
+        enabled: *arlasAppEnableKibana
+        # -- Name of the ECK Kibana custom resource. The generated Service is named `<name>-kb-http`. Must be unique across instances
+        name: arlas-kibana
+        ingress:
+          # -- Enable the Kibana Ingress resource
+          enabled: *arlasAppEnableKibana
+          # -- Public hostname used to expose Kibana through the Ingress controller
+          hostname: *arlasAppKibanaDnsDomain
 
+    # ───────────── Logs instance (logs and APM data) ─────────────
+    logs:
+      # -- Enable the Elasticsearch and Kibana stack dedicated to logs and APM data
+      enabled: *arlasAppElasticLogsEnabled
+      elasticsearch:
+        # -- Name of the logs Elasticsearch cluster
+        clusterName: elasticsearch-logs
+        user:
+          # -- Login of the custom superuser account of the logs cluster, created via the ECK file realm
+          login: *arlasAppElasticLogsLogin
+          # -- Password of the custom superuser account of the logs cluster
+          password: *arlasAppElasticLogsPassword
+        # -- List of Elasticsearch nodeSets of the logs cluster. Each entry maps to one nodeSet in the ECK Elasticsearch CR
+        nodeSets:
+          # -- Name of this nodeSet (must remain stable, renaming it recreates the underlying StatefulSet and PVCs)
+          - name: default
+            # -- Number of Elasticsearch pods (replicas) in this nodeSet
+            count: 1
+            # -- Elasticsearch node roles assigned to this nodeSet
+            roles: [ "master", "data", "ingest" ]
+            # -- Allow memory-mapped storage (node.store.allow_mmap). Keep false when the host does not allow raising vm.max_map_count
+            allowMmap: false
+            # -- Size of the persistent volume claim requested for logs storage
+            storageSize: 3Gi
+            resources:
+              requests:
+                # -- CPU request for the Elasticsearch container
+                cpu: 250m
+                # -- Memory request for the Elasticsearch container
+                memory: 1Gi
+              limits:
+                # -- CPU limit for the Elasticsearch container
+                cpu: 500m
+                # -- Memory limit for the Elasticsearch container
+                memory: 1Gi
+        ingress:
+          # -- Enable the logs Elasticsearch Ingress resource
+          enabled: *arlasAppElasticLogsIngressEnabled
+          # -- Name of the Elasticsearch Ingress
+          name: elasticsearch-logs-ingress
+          # -- Public hostname used to expose the logs Elasticsearch through the Ingress controller
+          hostname: *arlasAppElasticLogsDnsDomain
+      kibana:
+        # -- Enable the Kibana custom resource of the logs instance
+        enabled: *arlasAppEnableKibanaLogs
+        # -- Name of the logs Kibana custom resource. Must match `apmServer.kibanaRef`
+        name: kibana-logs
+        ingress:
+          # -- Enable the logs Kibana Ingress resource
+          enabled: *arlasAppEnableKibanaLogs
+          # -- Public hostname used to expose the logs Kibana through the Ingress controller
+          hostname: *arlasAppKibanaLogsDnsDomain
 rabbitmq:
   image:
     # -- Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead.
@@ -938,3 +1033,31 @@ keycloak:
       nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
   # -- How Keycloak reads the proxy headers (`proxy-headers` option). Accepted values: `forwarded` or `xforwarded`.
   proxyHeaders: "xforwarded"
+
+apmServer:
+  # -- Name of the ECK ApmServer custom resource. The generated Service is named `<name>-apm-http` (port 8200)
+  name: apm-server
+  # -- Number of APM Server pod replicas (maps to spec.count in the ECK ApmServer custom resource)
+  instances: 1
+  # -- Name of the ECK Elasticsearch custom resource that stores the APM data (maps to spec.elasticsearchRef.name). Must be in the same namespace as the ApmServer
+  elasticsearchRef: elasticsearch-logs
+  # -- Name of the ECK Kibana custom resource used to set up the APM integration (maps to spec.kibanaRef.name). Optional: remove it if the target Elasticsearch has no Kibana
+  kibanaRef: kibana-logs
+  image:
+    # -- APM Server version / image tag. Must be lower than or equal to the version of the referenced Elasticsearch, as ECK rejects an APM Server newer than its Elasticsearch
+    tag: "9.5.0"
+  resources:
+    requests:
+      # -- CPU request for the APM Server container
+      cpu: 250m
+      # -- Memory request for the APM Server container
+      memory: 1Gi
+    limits:
+      # -- CPU limit for the APM Server container
+      cpu: 500m
+      # -- Memory limit for the APM Server container
+      memory: 1Gi
+  # -- Node selector applied to the APM Server pods (e.g. `{ "node-role": "monitoring" }`)
+  nodeSelector: {}
+  # -- Tolerations applied to the APM Server pods, allowing scheduling on tainted nodes
+  tolerations: []

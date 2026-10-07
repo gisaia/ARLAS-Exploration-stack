@@ -60,6 +60,17 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.services.aproc.service.serviceName | string | `"aproc-service"` | APROC service name |
 | aias-services.services.aproc.worker | object | `{"affinity":{},"nodeSelector":{},"replicaCount":1,"resources":{"limits":{"cpu":0.75,"memory":"5Gi"}},"tolerations":[]}` | APROC worker configuration |
 | aias-services.services.fam.serviceName | string | `"arlas-fam"` | FAM service name |
+| apmServer.elasticsearchRef | string | `"elasticsearch-logs"` | Name of the ECK Elasticsearch custom resource that stores the APM data (maps to spec.elasticsearchRef.name). Must be in the same namespace as the ApmServer |
+| apmServer.image.tag | string | `"9.5.0"` | APM Server version / image tag. Must be lower than or equal to the version of the referenced Elasticsearch, as ECK rejects an APM Server newer than its Elasticsearch |
+| apmServer.instances | int | `1` | Number of APM Server pod replicas (maps to spec.count in the ECK ApmServer custom resource) |
+| apmServer.kibanaRef | string | `"kibana-logs"` | Name of the ECK Kibana custom resource used to set up the APM integration (maps to spec.kibanaRef.name). Optional: remove it if the target Elasticsearch has no Kibana |
+| apmServer.name | string | `"apm-server"` | Name of the ECK ApmServer custom resource. The generated Service is named `<name>-apm-http` (port 8200) |
+| apmServer.nodeSelector | object | `{}` | Node selector applied to the APM Server pods (e.g. `{ "node-role": "monitoring" }`) |
+| apmServer.resources.limits.cpu | string | `"500m"` | CPU limit for the APM Server container |
+| apmServer.resources.limits.memory | string | `"4Gi"` | Memory limit for the APM Server container |
+| apmServer.resources.requests.cpu | string | `"250m"` | CPU request for the APM Server container |
+| apmServer.resources.requests.memory | string | `"4Gi"` | Memory request for the APM Server container |
+| apmServer.tolerations | list | `[]` | Tolerations applied to the APM Server pods, allowing scheduling on tainted nodes |
 | arlas-services.defaultStorageClass | string | `"standard-retain"` | Do not change: value defined in global section |
 | arlas-services.dnsDomain | string | `"site.arlas.k8s"` | Do not change: value defined in global section |
 | arlas-services.elastic.login | string | `"arlas-user"` | Do not change: value defined in global section |
@@ -126,6 +137,8 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
 | deployment.aias.uis.ingress.enabled | bool | `true` | Should the chart deploy aias-uis ingress |
+| deployment.apmServer.enabled | bool | `true` | Should the chart deploy apm-server to collect log with OTEL |
+| deployment.apmServer.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch ingress |
 | deployment.arlas.services.enabled | bool | `true` | Should the chart deploy arlas-services |
 | deployment.arlas.services.ingress.annotations | string | `nil` | Annotations for arlas-services ingress |
 | deployment.arlas.services.ingress.enabled | bool | `true` | Should the chart deploy arlas-services ingress |
@@ -135,34 +148,70 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` | Annotation for ARLAS UI ingress |
 | deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` | Annotation for ARLAS UI ingress |
 | deployment.arlas.uis.ingress.enabled | bool | `true` |  |
-| deployment.elasticsearch.enabled | bool | `true` | Should the chart deploy elasticsearch |
-| deployment.elasticsearch.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch ingress |
+| deployment.elasticsearch.app.enabled | bool | `true` | Should the chart deploy elasticsearch for app |
+| deployment.elasticsearch.app.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch for app ingress |
+| deployment.elasticsearch.logs.enabled | bool | `true` | Should the chart deploy elasticsearch for logs |
+| deployment.elasticsearch.logs.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch for logs ingress |
 | deployment.keycloak.enabled | bool | `true` | __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs. |
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.seaweedfs.enabled | bool | `true` | Should the chart deploy seaweedfs |
 | deployment.seaweedfs.ingress.enabled | bool | `true` | Should the chart deploy seaweedfs ingress |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
-| elasticsearch.clusterName | string | `"arlas-elasticsearch"` | Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets) |
-| elasticsearch.image.repository | string | `"docker.elastic.co/elasticsearch/elasticsearch"` | Elasticsearch container image repository (official Elastic image, required by the ECK operator) |
-| elasticsearch.image.tag | string | `"9.5.0"` | Elasticsearch version / image tag. Must match a version supported by the installed ECK operator |
-| elasticsearch.ingress.annotations | object | `{"blackbox.monitoring/enabled":"true","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-body-size":"100240m","nginx.ingress.kubernetes.io/ssl-passthrough":"true"}` | Additional annotations applied to the Elasticsearch Ingress (e.g. nginx-ingress TLS passthrough, body size limits, monitoring probes) |
-| elasticsearch.ingress.hostname | string | `"elastic.arlas.k8s"` | Public hostname used to expose Elasticsearch through the Ingress controller |
-| elasticsearch.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Elasticsearch Ingress |
-| elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":"500m","memory":"4Gi"},"requests":{"cpu":"250m","memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group (e.g. dedicated master/data/ingest tiers) |
-| elasticsearch.nodeSets[0] | object | `{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":"500m","memory":"4Gi"},"requests":{"cpu":"250m","memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}` | Name of this nodeSet (used as a suffix for the generated StatefulSet; must remain stable, renaming it recreates the underlying StatefulSet and PVCs) |
-| elasticsearch.nodeSets[0].allowMmap | bool | `false` | Disable memory-mapped storage (node.store.allow_mmap). Set to false when the host does not allow raising vm.max_map_count |
-| elasticsearch.nodeSets[0].count | int | `1` | Number of Elasticsearch pods (replicas) in this nodeSet |
-| elasticsearch.nodeSets[0].resources.limits.cpu | string | `"500m"` | CPU limit for the Elasticsearch container |
-| elasticsearch.nodeSets[0].resources.limits.memory | string | `"4Gi"` | Memory limit for the Elasticsearch container |
-| elasticsearch.nodeSets[0].resources.requests.cpu | string | `"250m"` | CPU request for the Elasticsearch container |
-| elasticsearch.nodeSets[0].resources.requests.memory | string | `"4Gi"` | Memory request for the Elasticsearch container |
-| elasticsearch.nodeSets[0].roles | list | `["master","data","ingest"]` | Elasticsearch node roles assigned to this nodeSet (e.g. master, data, ingest, data_hot, data_content...) |
-| elasticsearch.nodeSets[0].storageSize | string | `"3Gi"` | Size of the persistent volume claim requested for Elasticsearch data storage |
-| elasticsearch.service.type | string | `"ClusterIP"` | Kubernetes Service type used to expose the Elasticsearch HTTP endpoint internally |
-| elasticsearch.tls.selfSignedDisabled | bool | `false` | Whether to disable the self-signed certificate auto-generated by ECK for the HTTP layer. Keep false to retain TLS encryption by default |
-| elasticsearch.user.login | string | `"arlas-user"` | Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user |
-| elasticsearch.user.password | string | `"secret4elastic"` | Password of the custom Elasticsearch superuser account |
+| elastic.defaults | object | `{"elasticsearch":{"image":{"repository":"docker.elastic.co/elasticsearch/elasticsearch","tag":"9.5.0"},"ingress":{"annotations":{"blackbox.monitoring/enabled":"true","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-body-size":"100240m","nginx.ingress.kubernetes.io/ssl-passthrough":"true"},"ingressClassName":"nginx"},"service":{"type":"ClusterIP"},"tls":{"selfSignedDisabled":false}},"kibana":{"image":{"repository":"docker.elastic.co/kibana/kibana","tag":"9.5.0"},"ingress":{"annotations":{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS"},"ingressClassName":"nginx"},"instances":1}}` | Default values shared by all instances. Each instance is deep-merged on top of these defaults (the instance wins). Lists such as `nodeSets` are replaced, not merged. Do not set `enabled: true` here, as a merge cannot override it back to `false` |
+| elastic.defaults.elasticsearch.image.repository | string | `"docker.elastic.co/elasticsearch/elasticsearch"` | Elasticsearch container image repository (official Elastic image, required by the ECK operator) |
+| elastic.defaults.elasticsearch.image.tag | string | `"9.5.0"` | Elasticsearch version / image tag. Must match a version supported by the installed ECK operator |
+| elastic.defaults.elasticsearch.ingress.annotations | object | `{"blackbox.monitoring/enabled":"true","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-body-size":"100240m","nginx.ingress.kubernetes.io/ssl-passthrough":"true"}` | Additional annotations applied to the Elasticsearch Ingress (e.g. nginx-ingress TLS passthrough, body size limits, monitoring probes) |
+| elastic.defaults.elasticsearch.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Elasticsearch Ingress |
+| elastic.defaults.elasticsearch.service.type | string | `"ClusterIP"` | Kubernetes Service type used to expose the Elasticsearch HTTP endpoint internally |
+| elastic.defaults.elasticsearch.tls.selfSignedDisabled | bool | `false` | Whether to disable the self-signed certificate auto-generated by ECK for the HTTP layer. Keep false to retain TLS encryption by default |
+| elastic.defaults.kibana.image.repository | string | `"docker.elastic.co/kibana/kibana"` | Kibana container image repository (official Elastic image, required by the ECK operator) |
+| elastic.defaults.kibana.image.tag | string | `"9.5.0"` | Kibana version / image tag. Should match the Elasticsearch version to avoid compatibility issues |
+| elastic.defaults.kibana.ingress.annotations | object | `{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS"}` | Additional annotations applied to the Kibana Ingress |
+| elastic.defaults.kibana.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Kibana Ingress |
+| elastic.defaults.kibana.instances | int | `1` | Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource) |
+| elastic.instances.app.elasticsearch.clusterName | string | `"arlas-elasticsearch"` | Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets). Must be unique across instances |
+| elastic.instances.app.elasticsearch.ingress.enabled | bool | `true` | Enable the Elasticsearch Ingress resource |
+| elastic.instances.app.elasticsearch.ingress.hostname | string | `"elastic.arlas.k8s"` | Public hostname used to expose Elasticsearch through the Ingress controller |
+| elastic.instances.app.elasticsearch.ingress.name | string | `"elasticsearch-ingress"` | Name of the Elasticsearch Ingress |
+| elastic.instances.app.elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":0.5,"memory":"4Gi"},"requests":{"cpu":0.25,"memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group |
+| elastic.instances.app.elasticsearch.nodeSets[0] | object | `{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":0.5,"memory":"4Gi"},"requests":{"cpu":0.25,"memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}` | Name of this nodeSet |
+| elastic.instances.app.elasticsearch.nodeSets[0].allowMmap | bool | `false` | Allow memory-mapped storage (node.store.allow_mmap). Keep false when the host does not allow raising vm.max_map_count |
+| elastic.instances.app.elasticsearch.nodeSets[0].count | int | `1` | Number of Elasticsearch pods (replicas) in this nodeSet |
+| elastic.instances.app.elasticsearch.nodeSets[0].resources.limits.cpu | float | `0.5` | CPU limit for the Elasticsearch container |
+| elastic.instances.app.elasticsearch.nodeSets[0].resources.limits.memory | string | `"4Gi"` | Memory limit for the Elasticsearch container |
+| elastic.instances.app.elasticsearch.nodeSets[0].resources.requests.cpu | float | `0.25` | CPU request for the Elasticsearch container |
+| elastic.instances.app.elasticsearch.nodeSets[0].resources.requests.memory | string | `"4Gi"` | Memory request for the Elasticsearch container |
+| elastic.instances.app.elasticsearch.nodeSets[0].roles | list | `["master","data","ingest"]` | Elasticsearch node roles assigned to this nodeSet |
+| elastic.instances.app.elasticsearch.nodeSets[0].storageSize | string | `"3Gi"` | Size of the persistent volume claim requested for Elasticsearch data storage |
+| elastic.instances.app.elasticsearch.user.login | string | `"arlas-user"` | Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user |
+| elastic.instances.app.elasticsearch.user.password | string | `"secret4elastic"` | Password of the custom Elasticsearch superuser account |
+| elastic.instances.app.enabled | bool | `true` | Enable the Elasticsearch and Kibana stack dedicated to the ARLAS application data |
+| elastic.instances.app.kibana.enabled | bool | `true` | Enable the Kibana custom resource for this instance |
+| elastic.instances.app.kibana.ingress.enabled | bool | `true` | Enable the Kibana Ingress resource |
+| elastic.instances.app.kibana.ingress.hostname | string | `"kibana.arlas.k8s"` | Public hostname used to expose Kibana through the Ingress controller |
+| elastic.instances.app.kibana.name | string | `"arlas-kibana"` | Name of the ECK Kibana custom resource. The generated Service is named `<name>-kb-http`. Must be unique across instances |
+| elastic.instances.logs.elasticsearch.clusterName | string | `"elasticsearch-logs"` | Name of the logs Elasticsearch cluster |
+| elastic.instances.logs.elasticsearch.ingress.enabled | bool | `true` | Enable the logs Elasticsearch Ingress resource |
+| elastic.instances.logs.elasticsearch.ingress.hostname | string | `"elastic.logs.arlas.k8s"` | Public hostname used to expose the logs Elasticsearch through the Ingress controller |
+| elastic.instances.logs.elasticsearch.ingress.name | string | `"elasticsearch-logs-ingress"` | Name of the Elasticsearch Ingress |
+| elastic.instances.logs.elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":0.5,"memory":"4Gi"},"requests":{"cpu":0.25,"memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets of the logs cluster. Each entry maps to one nodeSet in the ECK Elasticsearch CR |
+| elastic.instances.logs.elasticsearch.nodeSets[0] | object | `{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":0.5,"memory":"4Gi"},"requests":{"cpu":0.25,"memory":"4Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}` | Name of this nodeSet (must remain stable, renaming it recreates the underlying StatefulSet and PVCs) |
+| elastic.instances.logs.elasticsearch.nodeSets[0].allowMmap | bool | `false` | Allow memory-mapped storage (node.store.allow_mmap). Keep false when the host does not allow raising vm.max_map_count |
+| elastic.instances.logs.elasticsearch.nodeSets[0].count | int | `1` | Number of Elasticsearch pods (replicas) in this nodeSet |
+| elastic.instances.logs.elasticsearch.nodeSets[0].resources.limits.cpu | float | `0.5` | CPU limit for the Elasticsearch container |
+| elastic.instances.logs.elasticsearch.nodeSets[0].resources.limits.memory | string | `"4Gi"` | Memory limit for the Elasticsearch container |
+| elastic.instances.logs.elasticsearch.nodeSets[0].resources.requests.cpu | float | `0.25` | CPU request for the Elasticsearch container |
+| elastic.instances.logs.elasticsearch.nodeSets[0].resources.requests.memory | string | `"4Gi"` | Memory request for the Elasticsearch container |
+| elastic.instances.logs.elasticsearch.nodeSets[0].roles | list | `["master","data","ingest"]` | Elasticsearch node roles assigned to this nodeSet |
+| elastic.instances.logs.elasticsearch.nodeSets[0].storageSize | string | `"3Gi"` | Size of the persistent volume claim requested for logs storage |
+| elastic.instances.logs.elasticsearch.user.login | string | `"elasticlogs"` | Login of the custom superuser account of the logs cluster, created via the ECK file realm |
+| elastic.instances.logs.elasticsearch.user.password | string | `"secret4elasticlogs"` | Password of the custom superuser account of the logs cluster |
+| elastic.instances.logs.enabled | bool | `true` | Enable the Elasticsearch and Kibana stack dedicated to logs and APM data |
+| elastic.instances.logs.kibana.enabled | bool | `true` | Enable the Kibana custom resource of the logs instance |
+| elastic.instances.logs.kibana.ingress.enabled | bool | `true` | Enable the logs Kibana Ingress resource |
+| elastic.instances.logs.kibana.ingress.hostname | string | `"kibana.logs.arlas.k8s"` | Public hostname used to expose the logs Kibana through the Ingress controller |
+| elastic.instances.logs.kibana.name | string | `"kibana-logs"` | Name of the logs Kibana custom resource. Must match `apmServer.kibanaRef` |
 | global.authIssuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
 | global.celeryBrokerUrl | string | `"pyamqp://admin:secret4rabbitmq@arlas-rabbitmq:5672//"` | __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks |
 | global.celeryResultBackend | string | `"redis://:secret4redis@arlas-redis-client:6379/0"` | __MUST BE CONFIGURED:__ Redis backend URL for APROC task results |
@@ -170,8 +219,12 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.dnsDomain | string | `"site.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment |
 | global.elasticDnsDomain | string | `"elastic.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment |
 | global.elasticLogin | string | `"arlas-user"` | Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch |
+| global.elasticLogsDnsDomain | string | `"elastic.logs.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for logs for ARLAS deployment |
+| global.elasticLogsLogin | string | `"elasticlogs"` | Elasticsearch login for elasticsearch-logs itself and the services that are connecting to elasticsearch-logs |
+| global.elasticLogsPassword | string | `"secret4elasticlogs"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch-logs itself and the services that are connecting to elasticsearch-logs |
 | global.elasticPassword | string | `"secret4elastic"` | __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch |
 | global.enableKibana | bool | `true` |  |
+| global.enableKibanaLogs | bool | `true` |  |
 | global.ingressClassName | string | `"nginx"` | __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used. |
 | global.keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` | __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm  |
 | global.keycloak.url | string | `"https://keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ Keycloak URL |
@@ -179,6 +232,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.keycloakLogin | string | `"admin"` | Keycloak admin login for keycloak deployment (for test only) |
 | global.keycloakPassword | string | `"secret4keycloak"` | __MUST BE CONFIGURED:__ Keycloak admin password  |
 | global.kibanaDnsDomain | string | `"kibana.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing kibana for ARLAS deployment |
+| global.kibanaLogsDnsDomain | string | `"kibana.logs.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing kibana for logs for ARLAS deployment |
 | global.logoutUrl | string | `nil` | The logout URL to be used |
 | global.organization | string | `"org.com"` | __MUST BE CONFIGURED:__ Name of the organization using AIAS |
 | global.postgresql.auth.password | string | `"secret4postgres"` | __MUST BE CONFIGURED:__ postgres password for keycloak |
@@ -253,13 +307,6 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | keycloak.resources.limits.memory | string | `"1Gi"` | Memory limit for the Keycloak container. |
 | keycloak.resources.requests.cpu | float | `0.1` | CPU requested for the Keycloak container. |
 | keycloak.resources.requests.memory | string | `"512Mi"` | Memory requested for the Keycloak container. |
-| kibana.image.repository | string | `"docker.elastic.co/kibana/kibana"` | Kibana container image repository (official Elastic image, required by the ECK operator) |
-| kibana.image.tag | string | `"9.5.0"` | Kibana version / image tag. Should match the Elasticsearch version to avoid compatibility issues |
-| kibana.ingress.annotations | object | `{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS"}` | Additional annotations applied to the Kibana Ingress |
-| kibana.ingress.enabled | bool | `true` | Enable the Kibana Ingress resource |
-| kibana.ingress.hostname | string | `"kibana.arlas.k8s"` | Public hostname used to expose Kibana through the Ingress controller |
-| kibana.ingress.ingressClassName | string | `"nginx"` | IngressClass used to route traffic to the Kibana Ingress |
-| kibana.instances | int | `1` | Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource) |
 | rabbitmq.auth.password | string | `"secret4rabbitmq"` | Password for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator. |
 | rabbitmq.auth.username | string | `"admin"` | Username for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator. |
 | rabbitmq.image.repository | string | `"docker.io/library/rabbitmq"` | Rabbitmq for development and test only. For production, please refer to the rabbitmq documentation to deploy a production ready rabbitmq instance instead. |

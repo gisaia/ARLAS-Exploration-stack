@@ -21,7 +21,8 @@ services:
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -53,7 +54,8 @@ services:
     image: gisaia/arlas-permissions-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -62,14 +64,13 @@ services:
     extraVolumes:
     urlPrefix: /permissions
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
-
     resources:
       requests:
-        cpu: 0.1
-        memory: 128Mi
+        cpu: 500m  
+        memory: 1000Mi
       limits:
-        cpu: 0.25
-        memory: 512Mi
+        cpu: 500m  
+        memory: 1000Mi
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -79,8 +80,8 @@ services:
     image: gisaia/arlas-persistence-server:29.0.0-rc1
     replicaCount: 1
     jvmXmx: 512m
-    # -- Whether ES APM should be activated or not
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: true
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -91,11 +92,11 @@ services:
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
       requests:
-        cpu: 0.1
-        memory: 128Mi
+        cpu: 500m  
+        memory: 1000Mi
       limits:
-        cpu: 0.25
-        memory: 512Mi
+        cpu: 500m  
+        memory: 1000Mi
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -147,6 +148,25 @@ elastic:
   ssl:
     enabled: true
   nodes: elasticsearch:9200
+
+otel:
+  # -- OTLP endpoint
+  endpoint: http://apm-server-apm-http:8200
+  # -- OTLP protocol used by the agent (`grpc`, `http/protobuf`)
+  protocol: http/protobuf
+  # -- Resource attributes attached to all telemetry (comma-separated `key=value` pairs, e.g. `deployment.environment=dev`)
+  attributes: "deployment.environment={{ .Values.dnsDomain }}"
+  # -- User agents ignored by the HTTP server instrumentation (regex, e.g. Kubernetes probes)
+  ignoredUserAgents: "GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"
+  auth:
+    # -- Send an `Authorization: Bearer` header built from a Secret. Disable if the Server token authentication is disabled
+    enabled: true
+    # -- Name of the Secret holding the token.
+    secretName: apm-server-apm-token
+    # -- Key of the token in the Secret
+    secretKey: secret-token
+  # -- Additional environment variables for the OTel agent, as a `name: value` map
+  extraEnv: {}
 
 persistence:
   # -- Storage engine to use: either `file` or `hibernate`
