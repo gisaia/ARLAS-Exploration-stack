@@ -1,0 +1,25 @@
+{{- if .Values.global.gateway.enabled }}
+{{- range $key, $inst := (include "elastic.instances" . | fromJson) }}
+{{- if and $inst.enabled $inst.kibana.enabled $inst.kibana.gateway.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ $inst.kibana.name }}-route
+spec:
+  parentRefs:
+    - name: {{ $.Values.global.gateway.name }}
+      sectionName: https
+  hostnames:
+    - {{ $inst.kibana.gateway.hostname | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ $inst.kibana.name }}-kb-http
+          port: 5601
+{{- end }}
+{{- end }}
+{{- end }}

@@ -92,20 +92,26 @@ In case you want to use a local protomap basemap, you must specify the right Per
 
 ### Start the ARLAS Stack
 
-To start, run: 
+To start with Gateway, run: 
 ```shell
-./k8s/scripts/start.sh 
+./k8s/scripts/start.sh
+```
+or 
+```shell
+./k8s/scripts/start_gateway.sh
+```
+
+To start with Ingress, run: 
+```shell
+./k8s/scripts/start_ingress.sh
 ```
 
 This script:
 
 - creates the configmaps for the AIAS configuration files
-- create a secret and configmap for keycloak certificate if the certificate exists (e.g. created with `./scripts/create_certificate.sh keycloak.arlas.k8s`)
+- create a secret and configmap for arlas domain certificate if the certificate exists (e.g. created with `./scripts/create_certificate.sh '*.arlas.k8s'`)
 - update and build the sub charts
 - install or upgrade the arlas-stack chart
-
-
---set-json 'global.elasticDnsDomain="elasticsearch.arlas.k8s"' --set-json 'elasticsearch.ingress.hostname="elasticsearch.arlas.k8s"'
 
 
 ### Stop the ARLAS Stack
@@ -119,7 +125,7 @@ You can remove the deployment with:
 The script:
 
 - uninstall the chart
-- delete the keycloak-tls secret if exists
+- delete the arlas-tls secret if exists
 
 ### Restart the ARLAS Stack
 
@@ -151,6 +157,13 @@ __Note for test/dev environment__: If your KIND cluster does not have an ingress
 k8s/scripts/install_nginx_ingress_controller.sh
 ```
 
+If you want to use the Envoy Gateway Controller, you can install:
+
+```shell
+k8s/scripts/install_envoy_gateway_controller.sh
+```
+You have to choose between Ingress and Gateway.
+
 ### Metric server
 
 __Note for test/dev environment__: If your KIND cluster does not have a metric controller and you want to use autoscaling on arlas server, you can install one like this:
@@ -169,7 +182,8 @@ k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.
 
 ### Services, DNS and Certificates
 
-Seven services are exposed with an ingress:
+The services can be exposed either with ingresses or with gateway routes.
+Seven services are exposed:
 
 - `keycloak`, default DNS is `keycloak.arlas.k8s`
 - `elasticsearch`, default DNS is `elastic.arlas.k8s`

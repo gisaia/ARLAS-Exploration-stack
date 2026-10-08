@@ -110,6 +110,7 @@
             ],
             "iconColorFieldName": "properties.constellation",
             "useHttpQuicklooks": true,
+            "useHttpThumbnails": true,
             "displayQuicklookOnMap": {
               "enabled": false,
               "boundsFieldName": ""

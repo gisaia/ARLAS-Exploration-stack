@@ -51,4 +51,7 @@ spec:
   additionalOptions:
     - name: http-relative-path
       value: {{ .Values.keycloak.httpRelativePath | quote }}
+  ingress:
+    #We have a dedicated ingress resource 
+    enabled: false
 {{- end }}
