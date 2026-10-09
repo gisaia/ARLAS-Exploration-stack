@@ -1,0 +1,21 @@
+{{- if and .Values.deployment.arlas.services.gateway.enabled .Values.global.gateway.enabled }}
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: arlas-services-jwt-check
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: arlas-server-route
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: arlas-permissions-route
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: arlas-persistence-route
+  jwt:
+    providers:
+{{ include "arlas.jwtProvider.keycloak" . | nindent 4 }}
+
+{{- end }}

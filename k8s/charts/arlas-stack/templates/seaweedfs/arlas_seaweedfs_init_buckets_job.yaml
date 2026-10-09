@@ -1,4 +1,4 @@
-{{- if .Values.initBuckets }}
+{{- if and (get .Values "aias-services").initBuckets .Values.deployment.seaweedfs.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -16,9 +16,9 @@ spec:
             - name: FILER
               value: "{{ .Values.deployment.aias.services.seaweedfs.filerServiceName }}:{{ .Values.deployment.aias.services.seaweedfs.filerServicePort }}"
             - name: AIRS_BUCKET
-              value: {{ .Values.services.airs.configuration.s3.bucket | quote }}
+              value: {{ (get .Values "aias-services").services.airs.configuration.s3.bucket | quote }}
             - name: OUTBOX_BUCKET
-              value: {{ .Values.services.aproc.configuration.extensions.download.outboxS3.bucket | quote }}
+              value: {{ (get .Values "aias-services").services.aproc.configuration.extensions.download.outboxS3.bucket | quote }}
           command: ["/bin/sh", "-c"]
           args:
             - |
