@@ -34,6 +34,10 @@ jobs:
         run: ./k8s/scripts/install_nginx_ingress_controller.sh
       - name: Install operators
         run: ./k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
+      - name: Add seaweedfs repo
+        run: |
+          helm repo add seaweedfs https://seaweedfs.github.io/seaweedfs/helm
+          helm repo update
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
       - name: Deploy arlas stack

@@ -1,16 +1,18 @@
-{{- if .Values.deployment.elasticsearch.enabled }}
+{{- range $key, $inst := (include "elastic.instances" . | fromJson) }}
+{{- if $inst.enabled }}
+---
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
-  name: {{ .Values.elasticsearch.clusterName | default "arlas-elasticsearch" }}
+  name: {{ $inst.elasticsearch.clusterName }}
 spec:
-  image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
-  version: {{ .Values.elasticsearch.image.tag }}
+  image: "{{ $inst.elasticsearch.image.repository }}:{{ $inst.elasticsearch.image.tag }}"
+  version: {{ $inst.elasticsearch.image.tag | quote }}
   auth:
     fileRealm:
-      - secretName: {{ .Values.elasticsearch.clusterName | default "arlas-elasticsearch" }}-user
+      - secretName: {{ $inst.elasticsearch.clusterName }}-user
   nodeSets:
-    {{- range .Values.elasticsearch.nodeSets }}
+    {{- range $inst.elasticsearch.nodeSets }}
     - name: {{ .name }}
       count: {{ .count }}
       config:
@@ -49,8 +51,9 @@ spec:
   http:
     service:
       spec:
-        type: {{ .Values.elasticsearch.service.type | default "ClusterIP" }}
+        type: {{ $inst.elasticsearch.service.type }}
     tls:
       selfSignedCertificate:
-        disabled: {{ .Values.elasticsearch.tls.selfSignedDisabled | default false }}
+        disabled: {{ $inst.elasticsearch.tls.selfSignedDisabled }}
+{{- end }}
 {{- end }}

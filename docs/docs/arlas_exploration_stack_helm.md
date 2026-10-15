@@ -169,20 +169,26 @@ k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.
 
 ### Services, DNS and Certificates
 
-Four services are exposed with an ingress:
+Seven services are exposed with an ingress:
 
 - `keycloak`, default DNS is `keycloak.arlas.k8s`
 - `elasticsearch`, default DNS is `elastic.arlas.k8s`
+- `kibana`, default DNS is `kibana.arlas.k8s`
 - `apisix`, which serves ARLAS and AIAS, default DNS is `site.arlas.k8s`
 - `seaweedfs`, which serves as the object store, default DNS is `seaweedfs.arlas.k8s`
-
+- `elasticsearch-logs`, default DNS is `elastic.logs.arlas.k8s`
+- `kibana-logs`, default DNS is `kibana.logs.arlas.k8s`
+  
 In a test environment use the ip of your machine e.g. 192.168.102.141 to access applications :
 
 ```
 192.168.102.141	elastic.arlas.k8s
+192.168.102.141	kibana.arlas.k8s
 192.168.102.141	site.arlas.k8s
 192.168.102.141	minio.arlas.k8s
 192.168.102.141	keycloak.arlas.k8s
+192.168.102.141	elastic.logs.arlas.k8s
+192.168.102.141	kibana.logs.arlas.k8s
 ```
 
 ### Configuring `arlas_cli` for the keycloak test realm
