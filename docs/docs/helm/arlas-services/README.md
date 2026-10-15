@@ -65,7 +65,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
-| services.permissions.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
+| services.permissions.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.permissions.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.permissions.replicaCount | int | `1` |  |
 | services.permissions.resources.limits.cpu | float | `0.25` |  |
@@ -87,7 +87,7 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
-| services.persistence.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
+| services.persistence.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.persistence.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.persistence.replicaCount | int | `1` |  |
 | services.persistence.resources.limits.cpu | float | `0.25` |  |
@@ -119,7 +119,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
-| services.server.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
+| services.server.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.server.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.server.replicaCount | int | `1` |  |
 | services.server.resources.limits.cpu | int | `1` |  |

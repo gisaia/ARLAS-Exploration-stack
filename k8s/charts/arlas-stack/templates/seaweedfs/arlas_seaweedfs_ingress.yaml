@@ -1,4 +1,4 @@
-{{- if and .Values.deployment.aias.services.seaweedfs.ingress.enabled .Values.deployment.seaweedfs.enabled }}
+{{- if and .Values.deployment.seaweedfs.ingress.enabled .Values.deployment.seaweedfs.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

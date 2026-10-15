@@ -15,7 +15,7 @@ not_running_pods_fct(){
 }
 
 # Define the maximum number of loops
-max_loops=60
+max_loops=100
 
 # Define the namespace you want to check
 

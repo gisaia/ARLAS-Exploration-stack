@@ -1,0 +1,20 @@
+{{- if and .Values.deployment.aias.services.airs.gateway.enabled .Values.global.gateway.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: arlas-airs-route
+spec:
+  parentRefs:
+    - name: {{ .Values.global.gateway.name }}
+      sectionName: https
+  hostnames:
+    - {{ .Values.global.dnsDomain | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /airs/collections/
+      backendRefs:
+        - name: {{ (get .Values "aias-services").services.airs.serviceName }}
+          port: {{ (get .Values "aias-services").services.servicePort }}
+{{- end }}

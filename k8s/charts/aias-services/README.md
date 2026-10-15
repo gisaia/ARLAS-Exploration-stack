@@ -36,7 +36,6 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS endpoint used by AGATE to check whether an item is accessible or not |
 | services.agate.configuration.methodHeader | string | `"x-forwarded-method"` | URBAC HTTP header containing the method of the original request |
 | services.agate.configuration.nbWorkers | int | `4` | Number of worker processes for AGATE |
-| services.agate.configuration.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.agate.configuration.roles.group/public | object | `{"description":["Public group"],"permissions":["r:session:DELETE","r:permissions:GET","r:organisations:GET,POST","r:organisations/check:GET","r:users/.*:GET,PUT,DELETE"]}` | Public role. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml |
 | services.agate.configuration.roles.role/arlas/builder | object | `{"description":["Building dashboards in ARLAS"],"permissions":["r:collections:GET","r:collections/.*:PATCH,PUT,DELETE","r:collections/_export:GET","r:collections/_import:POST","r:persist/resource/.*:PUT,POST,DELETE"]}` | ARLAS Builder role |
 | services.agate.configuration.roles.role/arlas/datasets | object | `{"description":["Managing data (ingest, update and enrich) in ARLAS"],"permissions":["r:datasets/.*:GET,PUT,POST,DELETE","r:/aproc/processes/ingest:GET","r:/aproc/processes/ingest/execution:POST","r:/aproc/processes/enrich:GET","r:/aproc/processes/enrich/execution:POST","r:/aproc/processes/directory_ingest:GET","r:/aproc/processes/directory_ingest/execution:POST","r:/aproc/processes/dc3build:GET","r:/aproc/processes/dc3build/execution:POST","r:/fam/.*:GET,POST","r:/aproc/jobs/.*:GET,DELETE","r:/aproc/jobs:GET","r:/airs/collections:GET","r:/airs/collections/.*:GET,POST,PUT,DELETE"]}` | ARLAS Datasets role |
@@ -74,7 +73,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.image | string | `"gisaia/agate:0.21.0"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
-| services.agate.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
+| services.agate.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
 | services.agate.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AGATE service |
 | services.agate.serviceBinding | string | `"0.0.0.0"` |  |
@@ -103,7 +102,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.image | string | `"gisaia/airs:0.21.0"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
-| services.airs.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
+| services.airs.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
 | services.airs.resources | object | `{"limits":{"cpu":0.25,"memory":"2Gi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AIRS service |
 | services.airs.serviceBinding | string | `"0.0.0.0"` |  |
@@ -303,8 +302,6 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest | int | `100000` | Maximum number of archives that can be ingested in a single batch |
 | services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
 | services.aproc.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the Celery configuration |
-| services.aproc.storageExistingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the storage access configuration |
-| services.aproc.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
 | services.aproc.service.extraContainers | list | `[]` |  |
 | services.aproc.service.extraEnv | string | `nil` |  |
@@ -314,12 +311,14 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.image | string | `"gisaia/aproc-service:0.21.0"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
+| services.aproc.service.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.aproc.service.replicaCount | int | `1` | Number of APROC service replicas |
 | services.aproc.service.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for APROC service |
 | services.aproc.service.serviceBinding | string | `"0.0.0.0"` |  |
 | services.aproc.service.serviceName | string | `"aproc-service"` |  |
 | services.aproc.service.tolerations | list | `[]` | Tolerations for APROC service pods |
 | services.aproc.service.urlPrefix | string | `"/aproc"` |  |
+| services.aproc.storageExistingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the storage access configuration |
 | services.aproc.worker.affinity | object | `{}` | Affinity for APROC worker pods |
 | services.aproc.worker.extraContainers | list | `[]` |  |
 | services.aproc.worker.extraEnv | string | `nil` |  |
@@ -343,7 +342,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.image | string | `"gisaia/fam:0.21.0"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
-| services.fam.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
+| services.fam.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
 | services.fam.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for FAM service |
 | services.fam.serviceBinding | string | `"0.0.0.0"` |  |
