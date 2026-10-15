@@ -20,24 +20,30 @@ A Helm Chart to deploy ARLAS Server
 | defaultStorageClass | string | `"standard"` |  |
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
 | elastic.cluster | string | `"elastic"` |  |
-| elastic.login | string | `"elastic"` |  |
+| elastic.existingSecret | string | `"arlas-stack-secret"` |  |
+| elastic.loginKey | string | `"elastic"` |  |
 | elastic.nodes | string | `"elasticsearch:9200"` |  |
-| elastic.password | string | `"password4elastic"` |  |
+| elastic.passwordKey | string | `"password4elastic"` |  |
 | elastic.skipMaster | bool | `true` |  |
 | elastic.sniffing | bool | `false` |  |
 | elastic.ssl.enabled | bool | `true` |  |
 | keycloak.client | string | `"arlas-backend"` |  |
 | keycloak.enabled | bool | `true` |  |
+| keycloak.existingSecret | string | `"arlas-stack-secret"` |  |
 | keycloak.realm | string | `"arlas"` |  |
-| keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` |  |
+| keycloak.secretKey | string | `"ARLAS_APP_KEYCLOAK_SECRET"` |  |
 | keycloak.url | string | `"http://172.18.0.2/auth"` |  |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingFile | string | `"/tmp/arlas.log"` | Default logging file |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
-| otel.attributes | string | `"deployment.environment={{ .Values.dnsDomain }}"` |  |
-| otel.endpoint | string | `"https://apm-server-apm-http:8200"` |  |
-| otel.ignoredUserAgents | string | `"GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"` |  |
-| otel.protocol | string | `"http/protobuf"` |  |
+| otel.attributes | string | `"deployment.environment={{ .Values.dnsDomain }}"` | Resource attributes attached to all telemetry (comma-separated `key=value` pairs, e.g. `deployment.environment=dev`) |
+| otel.auth.enabled | bool | `true` | Send an `Authorization: Bearer` header built from a Secret. Disable if the Server token authentication is disabled |
+| otel.auth.secretKey | string | `"secret-token"` | Key of the token in the Secret |
+| otel.auth.secretName | string | `"apm-server-apm-token"` | Name of the Secret holding the token. |
+| otel.endpoint | string | `"http://apm-server-apm-http:8200"` | OTLP endpoint |
+| otel.extraEnv | object | `{"OTEL_INSTRUMENTATION_APACHE_HTTPCLIENT_ENABLED":true,"OTEL_INSTRUMENTATION_COMMON_DEFAULT_ENABLED":false,"OTEL_INSTRUMENTATION_ELASTICSEARCH_REST_ENABLED":true,"OTEL_INSTRUMENTATION_JAXRS_ENABLED":true,"OTEL_INSTRUMENTATION_JERSEY_ENABLED":true,"OTEL_INSTRUMENTATION_JETTY_ENABLED":true,"OTEL_INSTRUMENTATION_LOGBACK_MDC_ENABLED":true,"OTEL_INSTRUMENTATION_OPENTELEMETRY_API_ENABLED":true,"OTEL_INSTRUMENTATION_SERVLET_ENABLED":true,"OTEL_JAVAAGENT_DEBUG":false}` | Additional environment variables for the OTel agent, as a `name: value` map |
+| otel.ignoredUserAgents | string | `"GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"` | User agents ignored by the HTTP server instrumentation (regex, e.g. Kubernetes probes) |
+| otel.protocol | string | `"http/protobuf"` | OTLP protocol used by the agent (`grpc`, `http/protobuf`) |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
 | persistence.hibernate.dialect | string | `"org.hibernate.dialect.PostgreSQLDialect"` | SQL Dialect |
@@ -67,6 +73,8 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.resources.requests.cpu | float | `0.1` |  |
 | services.permissions.resources.requests.memory | string | `"128Mi"` |  |
 | services.permissions.serviceName | string | `"arlas-permissions-server"` |  |
+| services.permissions.startupProbe.failureThreshold | int | `36` |  |
+| services.permissions.startupProbe.periodSeconds | int | `5` |  |
 | services.permissions.tolerations | list | `[]` |  |
 | services.permissions.urlPrefix | string | `"/permissions"` |  |
 | services.persistence.affinity | object | `{}` |  |
@@ -87,6 +95,8 @@ A Helm Chart to deploy ARLAS Server
 | services.persistence.resources.requests.cpu | float | `0.1` |  |
 | services.persistence.resources.requests.memory | string | `"128Mi"` |  |
 | services.persistence.serviceName | string | `"arlas-persistence-server"` |  |
+| services.persistence.startupProbe.failureThreshold | int | `36` |  |
+| services.persistence.startupProbe.periodSeconds | int | `5` |  |
 | services.persistence.tolerations | list | `[]` |  |
 | services.persistence.urlPrefix | string | `"/persist"` |  |
 | services.podSecurityContext.fsGroup | int | `65532` |  |
@@ -117,6 +127,8 @@ A Helm Chart to deploy ARLAS Server
 | services.server.resources.requests.cpu | float | `0.25` |  |
 | services.server.resources.requests.memory | string | `"1000Mi"` |  |
 | services.server.serviceName | string | `"arlas-server"` |  |
+| services.server.startupProbe.failureThreshold | int | `36` |  |
+| services.server.startupProbe.periodSeconds | int | `5` |  |
 | services.server.tolerations | list | `[]` |  |
 | services.server.trustStoreOptions | string | `"-Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword"` |  |
 | services.server.urlPrefix | string | `"/arlas"` |  |

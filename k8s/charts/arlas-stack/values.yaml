@@ -31,8 +31,6 @@ global:
   defaultStorageClass: &arlasAppDefaultStorageClass standard-retain
 
   keycloak:
-    # -- __MUST BE CONFIGURED:__ The secret configured for the ARLAS client of the keyckloak's realm 
-    secret: &arlasAppKeycloakSecret rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
     # -- __MUST BE CONFIGURED:__ Keycloak URL
     url: &arlasAppKeycloakUrl https://keycloak.arlas.k8s
 
@@ -43,46 +41,6 @@ global:
 
   # -- __MUST BE CONFIGURED:__ Name of the organization using AIAS
   organization: &arlasAppOrganization org.com
-
-  # -- Elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch
-  elasticLogin: &arlasAppElasticLogin arlas-user
-  # -- __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
-  elasticPassword: &arlasAppElasticPassword secret4elastic
-
-  # -- SeaweedFS login for seaweedFS admin console and to access seaweedFS from services
-  seaweedFSLogin: &arlasAppSeaweedFSLogin seaweedFSadmin
-  # -- __MUST BE CONFIGURED:__ SeaweedFS password for seaweedFS admin console and to access seaweedFS from services
-  seaweedFSPassword: &arlasAppSeaweedFSPassword secret4seaweedFS
- # -- Elasticsearch login for elasticsearch-logs itself and the services that are connecting to elasticsearch-logs
-  elasticLogsLogin: &arlasAppElasticLogsLogin elasticlogs
-  # -- __MUST BE CONFIGURED:__ Elasticsearch password for elasticsearch-logs itself and the services that are connecting to elasticsearch-logs
-  elasticLogsPassword: &arlasAppElasticLogsPassword secret4elasticlogs
-
-  # -- Keycloak admin login for keycloak deployment (for test only)
-  keycloakLogin: &arlasAppKeycloakLogin admin
-  # -- __MUST BE CONFIGURED:__ Keycloak admin password 
-  keycloakPassword: &arlasAppKeycloakPassword secret4keycloak
-
-  # -- RabbitMQ Login
-  rabbitMQLogin: &arlasAppRabbitMQLogin admin
-  # -- __MUST BE CONFIGURED:__ RabbitMQ Password
-  rabbitMQPassword: &arlasAppRabbitMQPassword secret4rabbitmq
-  # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
-  celeryBrokerUrl: &arlasAppCeleryBrokerUrl pyamqp://admin:secret4rabbitmq@arlas-rabbitmq:5672//
-
-  # -- __MUST BE CONFIGURED:__ redis Password
-  redisPassword: &arlasAppRedisPassword secret4redis
-
-  # Example of a redis connection url without sentinel:
-  # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
-  celeryResultBackend: &arlasAppCeleryResultBackend redis://:secret4redis@arlas-redis-client:6379/0
-  # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
-  # celery_result_backend: &arlasAppCeleryResultBackend sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
-
-  postgresql:
-    auth:
-      # -- __MUST BE CONFIGURED:__ postgres password for keycloak
-      password: &arlasAppPostgresPassword secret4postgres
 
 deployment:
   arlas:
@@ -165,6 +123,12 @@ deployment:
         filerServicePort: 8888
         # -- SeaweedFS service configuration for AIAS
         serviceName: arlas-stack-seaweedfs-s3
+        # -- Name of secret with SeaweedFS credentials login password use in initbucket
+        existingSecret: arlas-stack-secret
+        # -- Key in secret existingSecret for the login
+        loginKey: ARLAS_APP_SEAWEEDFS_LOGIN
+        # -- Key in secret existingSecret for the password
+        passwordKey: ARLAS_APP_SEAWEEDFS_PASSWORD
         # -- SeaweedFS service port for AIAS
         port: 8333
         ingress:
@@ -242,10 +206,12 @@ arlas-services:
   # -- Do not change: value defined in global section
   defaultStorageClass: *arlasAppDefaultStorageClass
   elastic:
-    # -- Do not change: value defined in global section
-    login: *arlasAppElasticLogin
-    # -- Do not change: value defined in global section
-    password: *arlasAppElasticPassword
+    # -- __MUST BE CONFIGURED:__ The secret name where secret (login/password) for elasticsearch are defined
+    existingSecret: arlas-stack-secret
+    # -- __MUST BE CONFIGURED:__  Key in secret for elasticsearch login for elasticsearch itself and the services that are connecting to elasticsearch
+    loginKey: ARLAS_APP_ELASTIC_LOGIN
+    # -- __MUST BE CONFIGURED:__ Key in secret for elasticsearch password for elasticsearch itself and the services that are connecting to elasticsearch
+    passwordKey: ARLAS_APP_ELASTIC_PASSWORD
     # -- Elasticsearch endpoint for arlas-services
     nodes: arlas-elasticsearch-es-http:9200
   logger:
@@ -255,8 +221,10 @@ arlas-services:
     loggingConsoleLevel: INFO
   # @ignored  
   keycloak:
-    # -- Do not change: value defined in global section
-    secret: *arlasAppKeycloakSecret
+    # -- __MUST BE CONFIGURED:__ The secret name where secret for keycloak are defined
+    existingSecret: arlas-stack-secret
+    # -- __MUST BE CONFIGURED:__  Key in secret for the secret configured for the ARLAS client of the keyckloak's realm
+    secretKey: ARLAS_APP_KEYCLOAK_SECRET
     # -- Do not change: value defined in global section
     url: *arlasAppKeycloakUrl
   services:
@@ -288,7 +256,6 @@ arlas-services:
         customMetrics: # -- Custom behavior for autoscaling, keep nothing for default behavior
 
         behavior:
-
 
 arlas-uis:
   # -- Do not change: value defined in global section
@@ -334,7 +301,6 @@ arlas-uis:
       # -- Extra environment variables for the basemap url to download at init container startup (no download if already present). If none specified, a small basemap is used. See for instance https://build.protomaps.com/20231225.pmtiles for a full basemap or https://storage.googleapis.com/gisaia-public/protomaps/world-20231225-0-9.pmtiles for zoom 0 to 9.
       basemapUrl:
 
-
 aias-services:
   # -- __Do not change:__ value defined in global section
   dnsDomain: *arlasAppDnsDomain
@@ -350,10 +316,10 @@ aias-services:
         # -- __MUST BE CONFIGURED:__ Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs
         indexCollectionPrefix: org.com@airs
         s3:
-          # -- __Do not change:__ value defined in global section
-          accessKeyId: *arlasAppSeaweedFSLogin
-          # -- __Do not change:__ value defined in global section
-          secretAccessKey: *arlasAppSeaweedFSPassword
+         # -- __MUST BE CONFIGURED:__ Name of the environment variable contained within the airs existingSecret that holds the s3 access key id
+          accessKeyId: $ARLAS_APP_SEAWEEDFS_LOGIN
+         # -- __MUST BE CONFIGURED:__ Name of the environment variable contained within the airs existingSecret that holds the s3 access key secret
+          secretAccessKey: $ARLAS_APP_SEAWEEDFS_PASSWORD
           # -- SeaweedFS endpoint
           endpoint: http://arlas-stack-seaweedfs-s3:8333
           # -- __IMPORTANT:__ If you change the bucket name here, make sure to overwrite the patterns in agate.configuration.services (k8s/charts/aias-services/values.yaml).
@@ -363,7 +329,8 @@ aias-services:
           - /
           # -- __MUST BE CONFIGURED:__ Change with the domain of your deployment
           assetHttpEndpointUrl: https://site.arlas.k8s/{}/{}
-
+       # -- __MUST BE CONFIGURED:__ Name of the secret containing the environment variables that hold the login and password for connecting to s3
+      existingSecret: arlas-stack-secret
     agate:
       # -- Agate service configuration for AIAS
       serviceName: arlas-agate
@@ -411,6 +378,12 @@ aias-services:
       serviceName: arlas-fam
 
     aproc:
+       # -- __MUST BE CONFIGURED:__ Name of the secret containing the environment variables that hold the Celery configuration
+      existingSecret: arlas-stack-secret
+       # -- __MUST BE CONFIGURED:__ Name of the key contained in the existingSecret that holds the celery broker url
+      celeryBrokerUrlKey: ARLAS_APP_CELERY_BROKER_URL
+       # -- __MUST BE CONFIGURED:__ Name of the secret containing the environment variables that hold the storage access configuration
+      storageExistingSecret: arlas-stack-secret
       service:
         # -- APROC service name
         serviceName: aproc-service
@@ -425,10 +398,10 @@ aias-services:
         tolerations: []
         affinity: {}
       configuration:
-        # -- __MUST BE CONFIGURED:__ RabbitMQ broker URL for APROC tasks
-        celeryBrokerUrl: *arlasAppCeleryBrokerUrl
-        # -- __MUST BE CONFIGURED:__ Redis backend URL for APROC task results
-        celeryResultBackend: *arlasAppCeleryResultBackend
+        # -- __ENV VAR MUST BE DEFINED in aproc.existingSecret :__ RabbitMQ broker URL for APROC tasks
+        celeryBrokerUrl: $ARLAS_APP_CELERY_BROKER_URL
+        # -- __ENV VAR MUST BE DEFINED in aproc.existingSecret :__ Redis backend URL for APROC task results
+        celeryResultBackend: $ARLAS_APP_CELERY_RESULT_BACKEND
         celeryResultBackendTransportOptions: #   master_name: mymaster
 
         #     sentinel_kwargs:
@@ -441,10 +414,10 @@ aias-services:
         extensions:
           download:
             outboxS3:
-              # -- Do not change: value defined in global section
-              accessKeyId: *arlasAppSeaweedFSLogin
-              # -- Do not change: value defined in global section
-              secretAccessKey: *arlasAppSeaweedFSPassword
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              accessKeyId: $ARLAS_APP_SEAWEEDFS_LOGIN
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              secretAccessKey: $ARLAS_APP_SEAWEEDFS_PASSWORD
               # -- SeaweedFS endpoint
               endpointUrl: http://arlas-stack-seaweedfs-s3:8333
               # -- Bucket where downloads are stored
@@ -488,10 +461,12 @@ aias-services:
 
           - type: s3
             bucket: archives
-            endpoint: $APROC_ARCHIVE_ENDPOINT|http://arlas-stack-seaweedfs-s3:83333"
+            endpoint: $APROC_ARCHIVE_ENDPOINT|http://arlas-stack-seaweedfs-s3:8333"
             api_key:
-              access_key: *arlasAppSeaweedFSLogin
-              secret_key: *arlasAppSeaweedFSPassword
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              access_key: $ARLAS_APP_SEAWEEDFS_LOGIN
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              secret_key: $ARLAS_APP_SEAWEEDFS_PASSWORD
             readable_paths:
             - /inputs
           # -
@@ -510,8 +485,10 @@ aias-services:
             bucket: downloads
             endpoint: "http://arlas-stack-seaweedfs-s3:8333"
             api_key:
-              access_key: *arlasAppSeaweedFSLogin
-              secret_key: *arlasAppSeaweedFSPassword
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              access_key: $ARLAS_APP_SEAWEEDFS_LOGIN
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              secret_key: $ARLAS_APP_SEAWEEDFS_PASSWORD
             readable_paths:
             - "/"
             writable_paths:
@@ -521,16 +498,20 @@ aias-services:
             bucket: inputs
             endpoint: "http://arlas-stack-seaweedfs-s3:8333"
             api_key:
-              access_key: *arlasAppSeaweedFSLogin
-              secret_key: *arlasAppSeaweedFSPassword
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              access_key: $ARLAS_APP_SEAWEEDFS_LOGIN
+              # -- __ENV VAR MUST BE DEFINED in aproc.storageExistingSecret
+              secret_key: $ARLAS_APP_SEAWEEDFS_PASSWORD
             readable_paths:
             - "/"
 
   elastic:
-    # -- Do not change: value defined in global section
-    login: *arlasAppElasticLogin
-    # -- Do not change: value defined in global section
-    password: *arlasAppElasticPassword
+    # -- __MUST BE CONFIGURED:__   Name of the secret containing the environment variables that hold the login and password for connecting to Elasticsearch
+    existingSecret: arlas-stack-secret
+    # -- __ENV VAR MUST BE DEFINED name of the environment variable contained within the existingSecret that holds the login
+    login: $ARLAS_APP_ELASTIC_LOGIN
+    # -- __ENV VAR MUST BE DEFINED name of the environment variable contained within the existingSecret that holds the password
+    password: $ARLAS_APP_ELASTIC_PASSWORD
     # -- Elasticsearch endpoint for aias-services
     endpoint: https://arlas-elasticsearch-es-http:9200
 
@@ -614,11 +595,6 @@ elastic:
       elasticsearch:
         # -- Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets). Must be unique across instances
         clusterName: arlas-elasticsearch
-        user:
-          # -- Login of the custom Elasticsearch superuser account, created via the ECK file realm and used by ARLAS server instead of the built-in `elastic` user
-          login: *arlasAppElasticLogin
-          # -- Password of the custom Elasticsearch superuser account
-          password: *arlasAppElasticPassword
         # -- List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group
         nodeSets:
           # -- Name of this nodeSet
@@ -649,6 +625,7 @@ elastic:
           name: elasticsearch-ingress
           # -- Public hostname used to expose Elasticsearch through the Ingress controller
           hostname: *arlasAppElasticDnsDomain
+        existingSecret: arlas-elasticsearch-user
       kibana:
         # -- Enable the Kibana custom resource for this instance
         enabled: *arlasAppEnableKibana
@@ -667,11 +644,6 @@ elastic:
       elasticsearch:
         # -- Name of the logs Elasticsearch cluster
         clusterName: elasticsearch-logs
-        user:
-          # -- Login of the custom superuser account of the logs cluster, created via the ECK file realm
-          login: *arlasAppElasticLogsLogin
-          # -- Password of the custom superuser account of the logs cluster
-          password: *arlasAppElasticLogsPassword
         # -- List of Elasticsearch nodeSets of the logs cluster. Each entry maps to one nodeSet in the ECK Elasticsearch CR
         nodeSets:
           # -- Name of this nodeSet (must remain stable, renaming it recreates the underlying StatefulSet and PVCs)
@@ -702,6 +674,7 @@ elastic:
           name: elasticsearch-logs-ingress
           # -- Public hostname used to expose the logs Elasticsearch through the Ingress controller
           hostname: *arlasAppElasticLogsDnsDomain
+        existingSecret: arlas-elasticsearch-user
       kibana:
         # -- Enable the Kibana custom resource of the logs instance
         enabled: *arlasAppEnableKibanaLogs
@@ -725,11 +698,6 @@ rabbitmq:
     requests:
       # -- Memory request allocated to the RabbitMQ container.
       memory: 100Mi
-  auth:
-    # -- Username for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator.
-    username: *arlasAppRabbitMQLogin
-    # -- Password for the default RabbitMQ user. Used to pre-create the default-user secret consumed by the operator.
-    password: *arlasAppRabbitMQPassword
   persistence:
     # -- Storage class used for the RabbitMQ persistent volume claim.
     storageClass: *arlasAppDefaultStorageClass
@@ -755,8 +723,10 @@ redis:
   imagePullSecrets: []
   # -- Number of Redis replicas (standalone use case: keep this at 1).
   replicas: 1
-  # -- Password used to secure the Redis instance (mounted via a Kubernetes Secret).
-  password: *arlasAppRedisPassword
+  # -- __MUST BE CONFIGURED:__ The secret name where password for redis are defined.
+  existingSecret: arlas-stack-secret
+  # -- __MUST BE CONFIGURED :__ The key in the secret where password is stored.
+  passwordKey: ARLAS_APP_REDIS_PASSWORD
   # -- Pod-level security context applied to the Redis pod.
   podSecurityContext:
     fsGroup: 1000
@@ -854,10 +824,12 @@ seaweedfs:
     # -- Deploy the SeaweedFS admin web interface.
     enabled: true
     secret:
-      # -- Admin interface username.
-      adminUser: *arlasAppSeaweedFSLogin
-      # -- Admin interface password.
-      adminPassword: *arlasAppSeaweedFSPassword
+      ## -- __MUST BE CONFIGURED:__ Name of an existing secret containing admin credentials.
+      existingSecret: arlas-stack-secret
+      ## -- __MUST BE CONFIGURED:__ Key in the existing secret for the admin username. Required if existingSecret is set.
+      userKey: ARLAS_APP_SEAWEEDFS_LOGIN
+      ## -- __MUST BE CONFIGURED:__ Key in the existing secret for the admin password. Required if existingSecret is set.
+      pwKey: ARLAS_APP_SEAWEEDFS_PASSWORD
     ingress:
       # -- Expose the admin interface through an Ingress.
       enabled: *arlasAppSeaweedFSIngressEnabled
@@ -892,10 +864,6 @@ keycloak:
       replicas: 1
       # -- Name of the PostgreSQL database created for Keycloak.
       database: keycloak
-      # -- Username used by Keycloak to connect to the PostgreSQL database.
-      username: keycloak
-      # -- Password used by Keycloak to connect to the PostgreSQL database.
-      password: *arlasAppPostgresPassword
       # -- Pod-level security context applied to the PostgreSQL StatefulSet.
       podSecurityContext:
         fsGroup: 999
@@ -1004,12 +972,8 @@ keycloak:
       periodSeconds: 2
       # -- Number of consecutive failed startup probes before the container is restarted. Together with `periodSeconds`, it defines the maximum startup time (here 2s x 600 = 20 min).
       failureThreshold: 600
-  auth:
-    # -- Login of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret.
-    adminUser: *arlasAppKeycloakLogin
-    # -- Password of the initial Keycloak admin, stored in the `keycloak-bootstrap-admin` secret. Only taken into account at the first startup, on an empty database.
-    # @default -- `arlasAppKeycloakPassword` (YAML anchor)
-    adminPassword: *arlasAppKeycloakPassword
+  ## -- __MUST BE CONFIGURED:__ The secret name where secret to boostrap keycloak are defined
+  existingSecret: keycloak-bootstrap-admin
   ingress:
     # -- Ingress class name used for the Keycloak ingress.
     ingressClassName: *arlasAppIngressClassName

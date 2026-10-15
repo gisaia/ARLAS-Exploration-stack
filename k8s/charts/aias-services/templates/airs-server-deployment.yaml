@@ -86,7 +86,11 @@ spec:
             {{- with .Values.services.airs.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
-
+          envFrom:
+            - secretRef:
+                name: {{ .Values.services.airs.existingSecret | default "arlas-stack-secret" }}
+            - secretRef:
+                name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret" }}
           volumeMounts:
             - name: airs-files
               mountPath: /app/conf/

@@ -36,8 +36,18 @@
   value: {{ .Values.elastic.cluster| quote }}
 - name: ARLAS_ELASTIC_NODES
   value: {{ .Values.elastic.nodes| quote  }}
+- name: ARLAS_APP_ELASTIC_LOGIN
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret" }}
+      key: {{ .Values.elastic.loginKey | default "ARLAS_APP_ELASTIC_LOGIN" }}
+- name: ARLAS_APP_ELASTIC_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret" }}
+      key: {{ .Values.elastic.passwordKey | default "ARLAS_APP_ELASTIC_PASSWORD" }}
 - name: ARLAS_ELASTIC_CREDENTIALS
-  value: "{{ .Values.elastic.login}}:{{ .Values.elastic.password}}"
+  value: "$(ARLAS_APP_ELASTIC_LOGIN):$(ARLAS_APP_ELASTIC_PASSWORD)"
 - name: ARLAS_ELASTIC_SKIP_MASTER
   value: {{ .Values.elastic.skipMaster | quote }}
 - name: ARLAS_ELASTIC_SNIFFING
@@ -84,7 +94,10 @@
 - name: ARLAS_AUTH_KEYCLOAK_RESOURCE
   value: {{ .Values.keycloak.client | quote }}
 - name: ARLAS_AUTH_KEYCLOAK_SECRET
-  value: {{ .Values.keycloak.secret | quote }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.keycloak.existingSecret | default "arlas-stack-secret" }}
+      key: {{ .Values.keycloak.secretKey | default "ARLAS_APP_KEYCLOAK_SECRET" }}
 - name: ARLAS_AUTH_KEYCLOAK_URL
   value: {{ .Values.keycloak.url | quote }}
 - name: ARLAS_CHECK_ORGANISATIONS

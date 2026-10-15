@@ -10,7 +10,7 @@ spec:
   startOptimized: false
   bootstrapAdmin:
     user:
-      secret: keycloak-bootstrap-admin
+      secret: {{ .Values.keycloak.existingSecret }}
   db:
     vendor: {{ .Values.keycloak.db.kind | quote }}
     host: {{ .Values.keycloak.db.host | quote }}

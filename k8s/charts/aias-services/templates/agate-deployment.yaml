@@ -79,7 +79,6 @@ spec:
             {{- with .Values.services.agate.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
-
           volumeMounts:
             - name: agate-files
               mountPath: /app/conf/

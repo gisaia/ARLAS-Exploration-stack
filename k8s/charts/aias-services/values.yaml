@@ -50,10 +50,10 @@ services:
       s3:
         # -- S3 bucket name for storing and accessing the STAC collections, items and managed assets
         bucket: airs-storage
-        # -- S3 access key id
-        accessKeyId: airs
-        # -- S3 secret access key
-        secretAccessKey: airssecret
+        # -- Name of the environment variable contained within the airs existingSecret that holds the s3 access key id
+        accessKeyId: $ARLAS_APP_SEAWEEDFS_LOGIN
+        # -- Name of the environment variable contained within the airs existingSecret that holds the s3 access key secret
+        secretAccessKey: $ARLAS_APP_SEAWEEDFS_PASSWORD
         # -- S3 internal endpoint URL, e.g. http://seaweedfs:8333
         endpointUrl: http://arlas-stack-seaweedfs-s3:8333
         # -- List of writable paths in the S3 bucket
@@ -76,6 +76,8 @@ services:
       arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json
     # -- Whether OpenTelemetry should be activated or not
     otel: true
+    # --  Name of the secret containing the environment variables that hold the login and password for connecting to s3
+    existingSecret: arlas-stack-secret
 
   fam:
     serviceName: arlas-fam
@@ -312,6 +314,12 @@ services:
     # -- Whether OpenTelemetry should be activated or not
     otel: true
   aproc:
+    # --  Name of the secret containing the environment variables that hold the Celery configuration
+    existingSecret: arlas-stack-secret
+    # -- Name of the key contained in the existingSecret that holds the celery broker url
+    celeryBrokerUrlKey: ARLAS_APP_CELERY_BROKER_URL
+    # --  Name of the secret containing the environment variables that hold the storage access configuration
+    storageExistingSecret: arlas-stack-secret
     service:
       serviceName: aproc-service
       image: gisaia/aproc-service:0.21.0
@@ -725,16 +733,20 @@ logger:
   loggingConsoleLevel: INFO
 
 elastic:
+  # --  Name of the secret containing the environment variables that hold the login and password for connecting to Elasticsearch
+  existingSecret: arlas-stack-secret
   # -- Elasticsearch endpoint URL for AIRS and APROC services
   endpoint: https://elasticsearch:9200
   # -- Elasticsearch cluster name
   cluster: elastic
-  # -- Elasticsearch login
-  login: elastic
-  # -- Elasticsearch password
-  password: elastic
+  # -- Name of the environment variable contained within the existingSecret that holds the login
+  login: $ARLAS_APP_ELASTIC_LOGIN
+  # -- Name of the environment variable contained within the existingSecret that holds the password
+  password: $ARLAS_APP_ELASTIC_PASSWORD
 
 smtp:
+  # --  Name of the secret containing the environment variables that hold the password for connecting to smtp
+  existingSecret: arlas-stack-secret
   # -- Whether SMTP email sending is enabled or not
   enabled: false
   # -- SMTP server host
@@ -744,7 +756,7 @@ smtp:
   # -- SMTP username
   username: "tobechanged"
   # -- SMTP password
-  password: "tobechanged"
+  password: $ARLAS_APP_SMTP_PASSWORD
   # -- SMTP sender email address
   from: "tobechanged"
 
