@@ -1,14 +1,5 @@
 {{- if and .Values.deployment.keycloak.enabled .Values.keycloak.db.postgresql.enabled }}
 apiVersion: v1
-kind: Secret
-metadata:
-  name: keycloak-db
-type: Opaque
-stringData:
-  username: {{ .Values.keycloak.db.postgresql.username | quote }}
-  password: {{ .Values.keycloak.db.postgresql.password  | quote }}
----
-apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.keycloak.db.postgresql.service.serviceName }}
@@ -78,10 +69,14 @@ spec:
               value: {{ .Values.keycloak.db.postgresql.database | quote }}
             - name: POSTGRES_USER
               valueFrom:
-                secretKeyRef: {name: keycloak-db, key: username}
+                secretKeyRef:
+                  name: {{ .Values.keycloak.db.secretName | quote }}
+                  key: {{ .Values.keycloak.db.userNamekey | quote }}
             - name: POSTGRES_PASSWORD
               valueFrom:
-                secretKeyRef: {name: keycloak-db, key: password}
+                secretKeyRef:
+                  name: {{ .Values.keycloak.db.secretName | quote }}
+                  key: {{ .Values.keycloak.db.passwordKey | quote }}
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
             {{- with .Values.keycloak.db.postgresql.extraEnv }}

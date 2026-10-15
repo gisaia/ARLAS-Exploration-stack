@@ -10,7 +10,7 @@ spec:
   version: {{ $inst.elasticsearch.image.tag | quote }}
   auth:
     fileRealm:
-      - secretName: {{ $inst.elasticsearch.clusterName }}-user
+      - secretName: {{ $inst.elasticsearch.existingSecret }}
   nodeSets:
     {{- range $inst.elasticsearch.nodeSets }}
     - name: {{ .name }}

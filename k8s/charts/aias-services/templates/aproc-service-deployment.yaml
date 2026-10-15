@@ -81,7 +81,15 @@ spec:
             {{- with .Values.services.aproc.service.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
-
+          envFrom:
+            - secretRef:
+                name: {{ .Values.services.aproc.existingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.services.aproc.storageExistingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.smtp.existingSecret | default "arlas-stack-secret"  }}
           volumeMounts:
             - name: aproc-files
               mountPath: /app/conf/

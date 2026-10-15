@@ -38,6 +38,18 @@ jobs:
         run: |
           helm repo add seaweedfs https://seaweedfs.github.io/seaweedfs/helm
           helm repo update
+      - name: Generate secret.env
+        env:
+          VARS_CONTEXT: ${{ toJson(vars) }}
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+        run: |
+          mkdir -p ./conf
+          {
+            jq -r 'to_entries[] | "\(.key)=\(.value)"' <<< "$VARS_CONTEXT"
+            jq -r 'to_entries[] | "\(.key)=\(.value)"' <<< "$SECRETS_CONTEXT"
+          } > ./conf/secret.env
+      - name: Create secrets
+        run: ./k8s/scripts/create_secrets.sh arlas keycloak elasticsearch rabbitmq
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
       - name: Deploy arlas stack

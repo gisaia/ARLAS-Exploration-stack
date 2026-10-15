@@ -17,16 +17,26 @@ A Helm Chart to deploy ARLAS AIAS Services
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
 | elastic.cluster | string | `"elastic"` | Elasticsearch cluster name |
 | elastic.endpoint | string | `"https://elasticsearch:9200"` | Elasticsearch endpoint URL for AIRS and APROC services |
-| elastic.login | string | `"elastic"` | Elasticsearch login |
-| elastic.password | string | `"elastic"` | Elasticsearch password |
+| elastic.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the login and password for connecting to Elasticsearch |
+| elastic.login | string | `"$ARLAS_APP_ELASTIC_LOGIN"` | Name of the environment variable contained within the existingSecret that holds the login |
+| elastic.password | string | `"$ARLAS_APP_ELASTIC_PASSWORD"` | Name of the environment variable contained within the existingSecret that holds the password |
 | initBuckets | bool | `false` | Whether to initialize the S3 buckets used by AIRS service at startup or not |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
+| otel.attributes | string | `"deployment.environment={{ .Values.dnsDomain }}"` | Resource attributes attached to all telemetry (comma-separated `key=value` pairs, e.g. `deployment.environment=dev`) |
+| otel.auth.enabled | bool | `true` | Send an `Authorization: Bearer` header built from a Secret. Disable if the Server token authentication is disabled |
+| otel.auth.secretKey | string | `"secret-token"` | Key of the token in the Secret |
+| otel.auth.secretName | string | `"apm-server-apm-token"` | Name of the Secret holding the token. |
+| otel.endpoint | string | `"http://apm-server-apm-http:8200"` | OTLP endpoint |
+| otel.extraEnv | object | `{}` | Additional environment variables for the OTel agent, as a `name: value` map |
+| otel.ignoredUserAgents | string | `"GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"` | User agents ignored by the HTTP server instrumentation (regex, e.g. Kubernetes probes) |
+| otel.protocol | string | `"http/protobuf"` | OTLP protocol used by the agent (`grpc`, `http/protobuf`) |
 | protocol | string | `"http"` | HTTP protocol used to access AIAS services |
 | services.agate.affinity | object | `{}` | Affinity for AGATE service pods |
 | services.agate.configuration.arlasUrlSearch | string | `"http://arlas-server:8000/arlas/explore/{collection}/_search?f=id:eq:{item}"` | ARLAS endpoint used by AGATE to check whether an item is accessible or not |
 | services.agate.configuration.methodHeader | string | `"x-forwarded-method"` | URBAC HTTP header containing the method of the original request |
 | services.agate.configuration.nbWorkers | int | `4` | Number of worker processes for AGATE |
+| services.agate.configuration.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.agate.configuration.roles.group/public | object | `{"description":["Public group"],"permissions":["r:session:DELETE","r:permissions:GET","r:organisations:GET,POST","r:organisations/check:GET","r:users/.*:GET,PUT,DELETE"]}` | Public role. See example at https://raw.githubusercontent.com/gisaia/ARLAS-server/master/arlas-commons/src/main/resources/roles.yaml |
 | services.agate.configuration.roles.role/arlas/builder | object | `{"description":["Building dashboards in ARLAS"],"permissions":["r:collections:GET","r:collections/.*:PATCH,PUT,DELETE","r:collections/_export:GET","r:collections/_import:POST","r:persist/resource/.*:PUT,POST,DELETE"]}` | ARLAS Builder role |
 | services.agate.configuration.roles.role/arlas/datasets | object | `{"description":["Managing data (ingest, update and enrich) in ARLAS"],"permissions":["r:datasets/.*:GET,PUT,POST,DELETE","r:/aproc/processes/ingest:GET","r:/aproc/processes/ingest/execution:POST","r:/aproc/processes/enrich:GET","r:/aproc/processes/enrich/execution:POST","r:/aproc/processes/directory_ingest:GET","r:/aproc/processes/directory_ingest/execution:POST","r:/aproc/processes/dc3build:GET","r:/aproc/processes/dc3build/execution:POST","r:/fam/.*:GET,POST","r:/aproc/jobs/.*:GET,DELETE","r:/aproc/jobs:GET","r:/airs/collections:GET","r:/airs/collections/.*:GET,POST,PUT,DELETE"]}` | ARLAS Datasets role |
@@ -64,6 +74,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.image | string | `"gisaia/agate:0.19.0"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
+| services.agate.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.agate.replicaCount | int | `1` | Number of AGATE service replicas |
 | services.agate.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AGATE service |
 | services.agate.serviceBinding | string | `"0.0.0.0"` |  |
@@ -74,15 +85,16 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.configuration.arlaseoCollectionUrl | string | `"https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json"` | ARLAS-EO collection URL used for initializing new collections. |
 | services.airs.configuration.arlaseoMappingUrl | string | `"/app/mappings/arlas_eo_mapping.json"` | ARLAS-EO mapping and collection URLs used for initializing new indices of new collections |
 | services.airs.configuration.indexCollectionPrefix | string | `"org.com@airs"` | Prefix for elasticsearch indices created for AIRS collections. This MUST contain the organization name followed by '@' followed by a custom suffix, e.g. org.com@airs |
-| services.airs.configuration.s3.accessKeyId | string | `"airs"` | S3 access key id |
+| services.airs.configuration.s3.accessKeyId | string | `"$ARLAS_APP_SEAWEEDFS_LOGIN"` | Name of the environment variable contained within the airs existingSecret that holds the s3 access key id |
 | services.airs.configuration.s3.assetHttpEndpointUrl | string | `"https://arlas-stack-seaweedfs-s3:8333/{}/{}"` | Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item |
 | services.airs.configuration.s3.bucket | string | `"airs-storage"` | S3 bucket name for storing and accessing the STAC collections, items and managed assets |
 | services.airs.configuration.s3.endpointUrl | string | `"http://arlas-stack-seaweedfs-s3:8333"` | S3 internal endpoint URL, e.g. http://seaweedfs:8333 |
 | services.airs.configuration.s3.platform | string | `"SeaweedFS"` | S3 platform type. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.region | string | `nil` | S3 bucket's region. This value is provided in the item properties of the STAC item |
-| services.airs.configuration.s3.secretAccessKey | string | `"airssecret"` | S3 secret access key |
+| services.airs.configuration.s3.secretAccessKey | string | `"$ARLAS_APP_SEAWEEDFS_PASSWORD"` | Name of the environment variable contained within the airs existingSecret that holds the s3 access key secret |
 | services.airs.configuration.s3.tier | string | `"Standard"` | S3 bucket's tier. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.writablePaths | list | `["/"]` | List of writable paths in the S3 bucket |
+| services.airs.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the login and password for connecting to s3 |
 | services.airs.extraContainers | list | `[]` |  |
 | services.airs.extraEnv | list | `[]` |  |
 | services.airs.extraInitContainers | list | `[]` |  |
@@ -91,12 +103,14 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.image | string | `"gisaia/airs:0.19.0"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
+| services.airs.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.airs.replicaCount | int | `1` | Number of AIRS service replicas |
 | services.airs.resources | object | `{"limits":{"cpu":0.25,"memory":"2Gi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for AIRS service |
 | services.airs.serviceBinding | string | `"0.0.0.0"` |  |
 | services.airs.serviceName | string | `"airs-server"` |  |
 | services.airs.tolerations | list | `[]` | Tolerations for AIRS service pods |
 | services.airs.urlPrefix | string | `"/airs"` |  |
+| services.aproc.celeryBrokerUrlKey | string | `"ARLAS_APP_CELERY_BROKER_URL"` | Name of the key contained in the existingSecret that holds the celery broker url |
 | services.aproc.configuration.accessManager.storages | list | `[{"readable_paths":["/inputs"],"type":"file","writable_paths":["/tmp","/outbox"]},{"bucket":"archives","endpoint":"$APROC_ARCHIVE_ENDPOINT|http://seaweedfs:8333\"","readable_paths":["/inputs"],"type":"s3"},{"bucket":"downloads","endpoint":"http://seaweedfs:8333","readable_paths":["/"],"type":"s3","writable_paths":["/"]}]` | Configuration of the storages used by the access manager to provide access to various storage backends |
 | services.aproc.configuration.accessManager.tmpDir | string | `"/tmp/"` | Temporary directory used by the access manager |
 | services.aproc.configuration.airsEndpoint | string | `"http://airs-server:8000/arlas/airs"` | AIRS service endpoint URL accessed by APROC |
@@ -276,6 +290,9 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"/inputs"` | Directory where archives to ingest are stored |
 | services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest | int | `100000` | Maximum number of archives that can be ingested in a single batch |
 | services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
+| services.aproc.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the Celery configuration |
+| services.aproc.storageExistingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the storage access configuration |
+| services.aproc.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
 | services.aproc.service.extraContainers | list | `[]` |  |
 | services.aproc.service.extraEnv | string | `nil` |  |
@@ -314,6 +331,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.image | string | `"gisaia/fam:0.19.0"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
+| services.fam.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.fam.replicaCount | int | `1` | Number of FAM service replicas |
 | services.fam.resources | object | `{"limits":{"cpu":0.25,"memory":"256Mi"},"requests":{"cpu":0.1,"memory":"50Mi"}}` | Resources configuration for FAM service |
 | services.fam.serviceBinding | string | `"0.0.0.0"` |  |
@@ -326,9 +344,10 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.servicePort | int | `8000` |  |
 | services.serviceType | string | `"ClusterIP"` |  |
 | smtp.enabled | bool | `false` | Whether SMTP email sending is enabled or not |
+| smtp.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the password for connecting to smtp |
 | smtp.from | string | `"tobechanged"` | SMTP sender email address |
 | smtp.host | string | `"tobechanged"` | SMTP server host |
-| smtp.password | string | `"tobechanged"` | SMTP password |
+| smtp.password | string | `"$ARLAS_APP_SMTP_PASSWORD"` | SMTP password |
 | smtp.port | int | `25` | SMTP server port |
 | smtp.username | string | `"tobechanged"` | SMTP username |
 

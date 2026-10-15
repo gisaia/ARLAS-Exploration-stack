@@ -116,7 +116,8 @@ keycloak:
   enabled: true
   realm: arlas
   client: arlas-backend
-  secret: rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+  existingSecret: arlas-stack-secret
+  secretKey: ARLAS_APP_KEYCLOAK_SECRET
   url: http://172.18.0.2/auth
 
 # -- Cache TTL for items in cache (seconds), used for all deployments to ensure consistency
@@ -150,8 +151,9 @@ logger:
 
 elastic:
   cluster: elastic
-  login: elastic
-  password: password4elastic
+  existingSecret: arlas-stack-secret
+  loginKey: elastic
+  passwordKey: password4elastic
   skipMaster: true
   sniffing: false
   ssl:

@@ -52,7 +52,7 @@ spec:
           env:
             - name: REDIS_PASSWORD
               valueFrom:
-                secretKeyRef: {name: {{ .Values.redis.service.serviceName }}-secret, key: redis-password}
+                secretKeyRef: {name: {{ .Values.redis.existingSecret }}, key: {{ .Values.redis.passwordKey }}}
             - name: REDIS_ARGS
               value: "--requirepass $(REDIS_PASSWORD)"
             {{- with .Values.redis.extraEnv }}
