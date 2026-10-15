@@ -75,7 +75,7 @@ services:
       # -- ARLAS-EO collection URL used for initializing new collections.
       arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json
     # -- Whether OpenTelemetry should be activated or not
-    otel: true
+    otel: false
     # --  Name of the secret containing the environment variables that hold the login and password for connecting to s3
     existingSecret: arlas-stack-secret
 
@@ -108,7 +108,7 @@ services:
     # -- Affinity for FAM service pods
     affinity: {}
     # -- Whether OpenTelemetry should be activated or not
-    otel: true
+    otel: false
 
   agate:
     serviceName: arlas-agate
@@ -275,8 +275,6 @@ services:
           - r:users/.*:GET,PUT,DELETE
           - r:session:DELETE
           - r:permissions:GET
-      # -- Whether OpenTelemetry should be activated or not
-      otel: true
       services:
         airs-storage:
           # -- Name of the header containing the JWT token
@@ -312,7 +310,7 @@ services:
           - pattern: (/colorMaps/)(.*)
             part: path
     # -- Whether OpenTelemetry should be activated or not
-    otel: true
+    otel: false
   aproc:
     # --  Name of the secret containing the environment variables that hold the Celery configuration
     existingSecret: arlas-stack-secret
@@ -347,8 +345,8 @@ services:
       tolerations: []
       # -- Affinity for APROC service pods
       affinity: {}
-    # -- Whether OpenTelemetry should be activated or not
-    otel: true
+      # -- Whether OpenTelemetry should be activated or not
+      otel: false
     worker:
       serviceName: aproc-proc
       image: gisaia/aproc-proc:0.19.0

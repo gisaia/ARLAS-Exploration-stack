@@ -11,7 +11,7 @@ check_exists(){
   fi
 }
 
-rm -rf conf/server.crt and conf/server.key conf/arlas-ks.jks
+rm -f conf/server.crt conf/server.key conf/arlas.jks conf/truststore.p12 conf/arlas-ks.jks
 echo "creating conf/server.crt and conf/server.key ..."
 
 . conf/stack.env
@@ -25,11 +25,12 @@ else
     echo "CONFIGURE CERTIFICATE WITH ARLAS HOST=${ARLAS_HOST} FROM PARAMETER"
 fi
 
-docker run  -u "$(id -u):$(id -g)" -v $(pwd):/data alpine/openssl:3.5.8 genpkey -algorithm RSA -out /data/conf/server.key -pkeyopt rsa_keygen_bits:2048
+docker run -u "$(id -u):$(id -g)" -v $(pwd):/data alpine/openssl:3.5.8 genpkey -algorithm RSA -out /data/conf/server.key -pkeyopt rsa_keygen_bits:2048
 check_exists conf/server.key
 
-docker run  -u "$(id -u):$(id -g)" -v $(pwd):/data alpine/openssl:3.5.8 req -new -x509 -key /data/conf/server.key -out /data/conf/server.crt \
-  -subj "/CN="${ARLAS_HOST} -days 365
+docker run -u "$(id -u):$(id -g)" -v $(pwd):/data alpine/openssl:3.5.8 req -new -x509 -key /data/conf/server.key -out /data/conf/server.crt \
+  -subj "/CN="${ARLAS_HOST} -days 365 \
+  -addext "subjectAltName=DNS:${ARLAS_HOST},DNS:${ARLAS_HOST#\*.}"
 check_exists conf/server.crt
 
 chmod ag+r conf/server.key

@@ -17,10 +17,8 @@ then
     ./scripts/generate_apisix_conf.sh
 fi
 
-if [[ ! -f conf/server.key ]]
-then
-    ./scripts/create_certificate.sh
-fi
+
+./scripts/create_certificate.sh
 
 if [[ "$1" = "iam" ]] || [[ "$1" = "aias" ]]
 then
