@@ -16,9 +16,15 @@ spec:
             - name: FILER
               value: "{{ .Values.deployment.aias.services.seaweedfs.filerServiceName }}:{{ .Values.deployment.aias.services.seaweedfs.filerServicePort }}"
             - name: LOGIN
-              value: {{ .Values.global.seaweedFSLogin }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.deployment.aias.services.seaweedfs.existingSecret | default "arlas-stack-secret" }}
+                  key: {{ .Values.deployment.aias.services.seaweedfs.loginKey | default "ARLAS_APP_SEAWEEDFS_LOGIN" }}
             - name: PASSWORD
-              value: {{ .Values.global.seaweedFSPassword }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.deployment.aias.services.seaweedfs.existingSecret | default "arlas-stack-secret" }}
+                  key: {{ .Values.deployment.aias.services.seaweedfs.passwordKey | default "ARLAS_APP_SEAWEEDFS_PASSWORD" }}
             - name: AIRS_BUCKET
               value: {{ (get .Values "aias-services").services.airs.configuration.s3.bucket | quote }}
             - name: OUTBOX_BUCKET

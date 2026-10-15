@@ -16,6 +16,7 @@ conf/apisix/domains.generated.ext
 conf/apisix/apisix.template.yaml
 conf/apisix/apisix.generated.yaml
 conf/apisix/apisix.generated.tmp.yaml
+conf/secret.env
 sample/dashboard.generated.json
 docker-compose-config.yaml
 tmp/
