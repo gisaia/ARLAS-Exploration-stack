@@ -287,3 +287,35 @@ drivers:
     priority: 23
     enrichments:
       - OVERVIEW_COG
+
+  - 
+    name: soacom
+    class_name: extensions.aproc.proc.ingest.drivers.impl.soacom
+    assets_dir: /tmp/aproc/soacom
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 24
+    enrichments:
+      - OVERVIEW_COG
+  -
+    name: osk_stac
+    class_name: extensions.aproc.proc.ingest.drivers.impl.osk_stac
+    assets_dir: /tmp/aproc/osk_stac
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 25
+    enrichments:
+      - OVERVIEW_COG
+  - 
+    name: osk
+    class_name: extensions.aproc.proc.ingest.drivers.impl.osk
+    assets_dir: /tmp/aproc/osk
+    configuration:
+      tmp_directory: $TMP_FOLDER|/tmp
+      build_overview_when_remote: true
+      build_overview_when_local: true
+    priority: 26

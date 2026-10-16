@@ -546,6 +546,50 @@ data:
         {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.enabled }}
+      -
+        name: soacom
+        class_name: extensions.aproc.proc.ingest.drivers.impl.soacom
+        assets_dir: /tmp/aproc/soacom
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.build_overview_when_local }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
+      {{- end }}
+
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.osk.enabled }}
+      -
+        name: osk
+        class_name: extensions.aproc.proc.ingest.drivers.impl.osk
+        assets_dir: /tmp/aproc/osk
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.osk.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.osk.build_overview_when_local }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.osk.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
+      {{- end }}
+
+
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.osk_stac.enabled }}
+      -
+        name: osk_stac
+        class_name: extensions.aproc.proc.ingest.drivers.impl.osk_stac
+        assets_dir: /tmp/aproc/osk_stac
+        configuration:
+          tmp_directory: $TMP_FOLDER|/tmp
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.osk_stac.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.osk_stac.build_overview_when_local }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.osk_stac.priority }}
+        enrichments:
+        {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
+      {{- end }}
+
 
   enrich_drivers.yaml: |
     drivers:
