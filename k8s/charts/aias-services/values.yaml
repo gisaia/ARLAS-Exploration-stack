@@ -73,7 +73,7 @@ services:
       arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
       # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.21.0/conf/mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
-      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json
+      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.21.0/conf/collection.json
     # -- Whether OpenTelemetry should be activated or not
     otel: false
     # --  Name of the secret containing the environment variables that hold the login and password for connecting to s3
