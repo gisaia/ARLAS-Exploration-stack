@@ -67,8 +67,8 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | aias-services.services.aproc.configuration.extensions.ingest.enrichments | list | `[]` | List of enrichments to be applied to all ingest drivers (e.g. OVERVIEW_COG, COG). If you want to apply different enrichments for each driver, you can configure them in the driver configuration below. If you don't want to apply any enrichment, set this value to an empty list. |
 | aias-services.services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"https://storage.googleapis.com/gisaia-public/test-aias"` | Directory where archives to ingest are stored. Must be in sync with the accessManager readable_paths configuration below. Examples: /inputs, https://storage.googleapis.com/gisaia-public/OPENDATA/eo inputsDirectory: http://arlas-stack-seaweedfs-s3:8333/inputs |
 | aias-services.services.aproc.existingSecret | string | `"arlas-stack-secret"` | __MUST BE CONFIGURED:__ Name of the secret containing the environment variables that hold the Celery configuration |
-| aias-services.services.aproc.storageExistingSecret | string | `"arlas-stack-secret"` | __MUST BE CONFIGURED:__ Name of the secret containing the environment variables that hold the storage access configuration |
 | aias-services.services.aproc.service.serviceName | string | `"aproc-service"` | APROC service name |
+| aias-services.services.aproc.storageExistingSecret | string | `"arlas-stack-secret"` | __MUST BE CONFIGURED:__ Name of the secret containing the environment variables that hold the storage access configuration |
 | aias-services.services.aproc.worker | object | `{"affinity":{},"nodeSelector":{},"replicaCount":1,"resources":{"limits":{"cpu":0.75,"memory":"5Gi"}},"tolerations":[]}` | APROC worker configuration |
 | aias-services.services.fam.serviceName | string | `"arlas-fam"` | FAM service name |
 | apmServer.elasticsearchRef | string | `"elasticsearch-logs"` | Name of the ECK Elasticsearch custom resource that stores the APM data (maps to spec.elasticsearchRef.name). Must be in the same namespace as the ApmServer |
@@ -120,58 +120,76 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | arlas-uis.uis.wui.basemapUrl | string | `nil` | Extra environment variables for the basemap url to download at init container startup (no download if already present). If none specified, a small basemap is used. See for instance https://build.protomaps.com/20231225.pmtiles for a full basemap or https://storage.googleapis.com/gisaia-public/protomaps/world-20231225-0-9.pmtiles for zoom 0 to 9. |
 | arlas-uis.uis.wui.customi18nConfigMap | string | `"arlas-wui-custom-i18n"` | Configuration for the ARLAS Web User Interface (WUI) translation with a custom configmap. If you want to add custom translations, create a configmap with the same structure as the one in k8s/charts/arlas-stack/templates/arlas_i18n_custom_configmap.yaml file and set the name of this configmap here. If you don't want to add custom translations, set this value to null or empty string and do not create the configmap. Keys can be found in the ARLAS WUI codebase, in the i18n folder: https://github.com/gisaia/ARLAS-wui/tree/develop/src/assets/i18n. |
 | deployment.aias.enabled | bool | `true` | Should the chart deploy aias-services |
+| deployment.aias.services.airs.gateway.enabled | bool | `true` |  |
 | deployment.aias.services.airs.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for AIRS ingress |
 | deployment.aias.services.airs.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"` | Annotations for AIRS ingress |
 | deployment.aias.services.airs.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffering" | string | `"off"` | Annotations for AIRS ingress |
-| deployment.aias.services.airs.ingress.enabled | bool | `true` | Should the chart deploy airs ingress |
+| deployment.aias.services.airs.ingress.enabled | bool | `false` | Should the chart deploy airs ingress |
+| deployment.aias.services.aproc.gateway.enabled | bool | `true` |  |
 | deployment.aias.services.aproc.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for APROC ingress |
 | deployment.aias.services.aproc.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"` | Annotations for APROC ingress |
-| deployment.aias.services.aproc.ingress.enabled | bool | `true` | Should the chart deploy aproc ingress |
+| deployment.aias.services.aproc.ingress.enabled | bool | `false` | Should the chart deploy aproc ingress |
+| deployment.aias.services.fam.gateway.enabled | bool | `true` |  |
 | deployment.aias.services.fam.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for FAM ingress |
 | deployment.aias.services.fam.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/url-role-based-authorization"` | Annotations for FAM ingress |
-| deployment.aias.services.fam.ingress.enabled | bool | `true` | Should the chart deploy fam ingress |
+| deployment.aias.services.fam.ingress.enabled | bool | `false` | Should the chart deploy fam ingress |
+| deployment.aias.services.seaweedfs.adminPort | int | `23646` | Port of the Kubernetes service exposing the seaweedfs admin |
+| deployment.aias.services.seaweedfs.adminServiceName | string | `"arlas-stack-seaweedfs-admin"` | Name of the Kubernetes service exposing the seaweedfs admin |
 | deployment.aias.services.seaweedfs.existingSecret | string | `"arlas-stack-secret"` | Name of secret with SeaweedFS credentials login password use in initbucket |
 | deployment.aias.services.seaweedfs.filerServiceName | string | `"arlas-stack-seaweedfs-filer"` | Name of the Kubernetes service exposing the seaweedfs filer |
 | deployment.aias.services.seaweedfs.filerServicePort | int | `8888` | Port of the seaweedfs filer service |
 | deployment.aias.services.seaweedfs.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for SeaweedFS ingress |
 | deployment.aias.services.seaweedfs.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"` | Annotations for SeaweedFS ingress |
-| deployment.aias.services.seaweedfs.ingress.enabled | bool | `true` | Should the chart deploy seaweedfs ingress |
 | deployment.aias.services.seaweedfs.loginKey | string | `"ARLAS_APP_SEAWEEDFS_LOGIN"` | Key in secret existingSecret for the login |
 | deployment.aias.services.seaweedfs.masterServiceName | string | `"arlas-stack-seaweedfs-master"` | Name of the Kubernetes service exposing the seaweedfs master |
 | deployment.aias.services.seaweedfs.masterServicePort | int | `9333` | Port of the seaweedfs master service |
 | deployment.aias.services.seaweedfs.passwordKey | string | `"ARLAS_APP_SEAWEEDFS_PASSWORD"` | Key in secret existingSecret for the password |
 | deployment.aias.services.seaweedfs.port | int | `8333` | SeaweedFS service port for AIAS |
 | deployment.aias.services.seaweedfs.serviceName | string | `"arlas-stack-seaweedfs-s3"` | SeaweedFS service configuration for AIAS |
-| deployment.aias.services.titiler.ingress.enabled | bool | `true` | Should the chart deploy titiler ingress |
+| deployment.aias.services.titiler.gateway.enabled | bool | `true` |  |
+| deployment.aias.services.titiler.ingress.enabled | bool | `false` | Should the chart deploy titiler ingress |
 | deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.ingress.public.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.ingress.public.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/titiler_public"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.port | int | `8000` | Titiler service port for AIAS |
 | deployment.aias.services.titiler.serviceName | string | `"arlas-stack-titiler"` | Titiler service configuration for AIAS |
+| deployment.aias.uis.gateway.enabled | bool | `true` |  |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
-| deployment.aias.uis.ingress.enabled | bool | `true` | Should the chart deploy aias-uis ingress |
-| deployment.apmServer.enabled | bool | `true` | Should the chart deploy apm-server to collect log with OTEL |
-| deployment.apmServer.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch ingress |
+| deployment.aias.uis.ingress.enabled | bool | `false` | Should the chart deploy aias-uis ingress |
+| deployment.apmServer.enabled | bool | `false` | Should the chart deploy apm-server to collect log with OTEL |
 | deployment.arlas.services.enabled | bool | `true` | Should the chart deploy arlas-services |
+| deployment.arlas.services.gateway.enabled | bool | `true` |  |
 | deployment.arlas.services.ingress.annotations | string | `nil` | Annotations for arlas-services ingress |
-| deployment.arlas.services.ingress.enabled | bool | `true` | Should the chart deploy arlas-services ingress |
+| deployment.arlas.services.ingress.enabled | bool | `false` | Should the chart deploy arlas-services ingress |
 | deployment.arlas.uis.enabled | bool | `true` |  |
+| deployment.arlas.uis.gateway.enabled | bool | `true` |  |
 | deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/force-ssl-redirect" | string | `"true"` | Annotation for ARLAS UI ingress |
 | deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffering" | string | `"off"` | Annotation for ARLAS UI ingress |
 | deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` | Annotation for ARLAS UI ingress |
 | deployment.arlas.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` | Annotation for ARLAS UI ingress |
-| deployment.arlas.uis.ingress.enabled | bool | `true` |  |
+| deployment.arlas.uis.ingress.enabled | bool | `false` |  |
 | deployment.elasticsearch.app.enabled | bool | `true` | Should the chart deploy elasticsearch for app |
-| deployment.elasticsearch.app.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch for app ingress |
-| deployment.elasticsearch.logs.enabled | bool | `true` | Should the chart deploy elasticsearch for logs |
-| deployment.elasticsearch.logs.ingress.enabled | bool | `true` | Should the chart deploy elasticsearch for logs ingress |
+| deployment.elasticsearch.app.gateway.enabled | bool | `true` | Should the chart deploy elasticsearch for app gateway |
+| deployment.elasticsearch.app.ingress.enabled | bool | `false` | Should the chart deploy elasticsearch for app ingress |
+| deployment.elasticsearch.logs.enabled | bool | `false` | Should the chart deploy elasticsearch for logs |
+| deployment.elasticsearch.logs.gateway.enabled | bool | `true` | Should the chart deploy elasticsearch for app gateway |
+| deployment.elasticsearch.logs.ingress.enabled | bool | `false` | Should the chart deploy elasticsearch for logs ingress |
 | deployment.keycloak.enabled | bool | `true` | __MUST BE CONFIGURED:__ Should the chart deploy keycloak. __Enable for tests only__ or configure carefully the chart for your production needs. |
+| deployment.keycloak.gateway.enabled | bool | `true` |  |
+| deployment.keycloak.ingress.enabled | bool | `false` |  |
+| deployment.kibana.app.enabled | bool | `true` | Should the chart deploy kibana for app |
+| deployment.kibana.app.gateway.enabled | bool | `true` | Should the chart deploy kibana for app gateway |
+| deployment.kibana.app.ingress.enabled | bool | `false` | Should the chart deploy kibana for app ingress |
+| deployment.kibana.logs.enabled | bool | `false` | Should the chart deploy kibana for logs |
+| deployment.kibana.logs.gateway.enabled | bool | `true` | Should the chart deploy kibana for logs gateway |
+| deployment.kibana.logs.ingress.enabled | bool | `false` | Should the chart deploy kibana for logs ingress |
 | deployment.rabbitmq.enabled | bool | `true` | Should the chart deploy rabbitmq |
 | deployment.redis.enabled | bool | `true` | Should the chart deploy redis |
 | deployment.seaweedfs.enabled | bool | `true` | Should the chart deploy seaweedfs |
-| deployment.seaweedfs.ingress.enabled | bool | `true` | Should the chart deploy seaweedfs ingress |
+| deployment.seaweedfs.gateway.enabled | bool | `true` | Should the chart deploy seaweedfs gateway |
+| deployment.seaweedfs.ingress.enabled | bool | `false` | Should the chart deploy seaweedfs ingress |
 | deployment.titiler.enabled | bool | `true` | Should the chart deploy titiler |
 | elastic.defaults | object | `{"elasticsearch":{"image":{"repository":"docker.elastic.co/elasticsearch/elasticsearch","tag":"9.5.0"},"ingress":{"annotations":{"blackbox.monitoring/enabled":"true","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-body-size":"100240m","nginx.ingress.kubernetes.io/ssl-passthrough":"true"},"ingressClassName":"nginx"},"service":{"type":"ClusterIP"},"tls":{"selfSignedDisabled":false}},"kibana":{"image":{"repository":"docker.elastic.co/kibana/kibana","tag":"9.5.0"},"ingress":{"annotations":{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/backend-protocol":"HTTPS"},"ingressClassName":"nginx"},"instances":1}}` | Default values shared by all instances. Each instance is deep-merged on top of these defaults (the instance wins). Lists such as `nodeSets` are replaced, not merged. Do not set `enabled: true` here, as a merge cannot override it back to `false` |
 | elastic.defaults.elasticsearch.image.repository | string | `"docker.elastic.co/elasticsearch/elasticsearch"` | Elasticsearch container image repository (official Elastic image, required by the ECK operator) |
@@ -187,7 +205,9 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | elastic.defaults.kibana.instances | int | `1` | Number of Kibana pod replicas (maps to spec.count in the ECK Kibana custom resource) |
 | elastic.instances.app.elasticsearch.clusterName | string | `"arlas-elasticsearch"` | Name of the Elasticsearch cluster (used as the ECK Elasticsearch custom resource name, and as a prefix for all generated resources: Service, Secrets, StatefulSets). Must be unique across instances |
 | elastic.instances.app.elasticsearch.existingSecret | string | `"arlas-elasticsearch-user"` |  |
-| elastic.instances.app.elasticsearch.ingress.enabled | bool | `true` | Enable the Elasticsearch Ingress resource |
+| elastic.instances.app.elasticsearch.gateway.enabled | bool | `true` | Expose this Elasticsearch through the Gateway API instead of an Ingress |
+| elastic.instances.app.elasticsearch.gateway.hostname | string | `"elastic.arlas.k8s"` | Public hostname served by the HTTPRoute |
+| elastic.instances.app.elasticsearch.ingress.enabled | bool | `false` | Enable the Elasticsearch Ingress resource |
 | elastic.instances.app.elasticsearch.ingress.hostname | string | `"elastic.arlas.k8s"` | Public hostname used to expose Elasticsearch through the Ingress controller |
 | elastic.instances.app.elasticsearch.ingress.name | string | `"elasticsearch-ingress"` | Name of the Elasticsearch Ingress |
 | elastic.instances.app.elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"250m","memory":"1Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets. Each entry maps to one nodeSet in the ECK Elasticsearch CR, allowing independent scaling, roles, and resources per node group |
@@ -202,12 +222,16 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | elastic.instances.app.elasticsearch.nodeSets[0].storageSize | string | `"3Gi"` | Size of the persistent volume claim requested for Elasticsearch data storage |
 | elastic.instances.app.enabled | bool | `true` | Enable the Elasticsearch and Kibana stack dedicated to the ARLAS application data |
 | elastic.instances.app.kibana.enabled | bool | `true` | Enable the Kibana custom resource for this instance |
-| elastic.instances.app.kibana.ingress.enabled | bool | `true` | Enable the Kibana Ingress resource |
+| elastic.instances.app.kibana.gateway.enabled | bool | `true` | Expose this Kibana through the Gateway API instead of an Ingress |
+| elastic.instances.app.kibana.gateway.hostname | string | `"kibana.arlas.k8s"` | Public hostname served by the HTTPRoute |
+| elastic.instances.app.kibana.ingress.enabled | bool | `false` | Enable the Kibana Ingress resource |
 | elastic.instances.app.kibana.ingress.hostname | string | `"kibana.arlas.k8s"` | Public hostname used to expose Kibana through the Ingress controller |
 | elastic.instances.app.kibana.name | string | `"arlas-kibana"` | Name of the ECK Kibana custom resource. The generated Service is named `<name>-kb-http`. Must be unique across instances |
 | elastic.instances.logs.elasticsearch.clusterName | string | `"elasticsearch-logs"` | Name of the logs Elasticsearch cluster |
 | elastic.instances.logs.elasticsearch.existingSecret | string | `"arlas-elasticsearch-user"` |  |
-| elastic.instances.logs.elasticsearch.ingress.enabled | bool | `true` | Enable the logs Elasticsearch Ingress resource |
+| elastic.instances.logs.elasticsearch.gateway.enabled | bool | `true` | Expose this Elasticsearch through the Gateway API instead of an Ingress |
+| elastic.instances.logs.elasticsearch.gateway.hostname | string | `"elastic.logs.arlas.k8s"` | Public hostname served by the HTTPRoute |
+| elastic.instances.logs.elasticsearch.ingress.enabled | bool | `false` | Enable the logs Elasticsearch Ingress resource |
 | elastic.instances.logs.elasticsearch.ingress.hostname | string | `"elastic.logs.arlas.k8s"` | Public hostname used to expose the logs Elasticsearch through the Ingress controller |
 | elastic.instances.logs.elasticsearch.ingress.name | string | `"elasticsearch-logs-ingress"` | Name of the Elasticsearch Ingress |
 | elastic.instances.logs.elasticsearch.nodeSets | list | `[{"allowMmap":false,"count":1,"name":"default","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"250m","memory":"1Gi"}},"roles":["master","data","ingest"],"storageSize":"3Gi"}]` | List of Elasticsearch nodeSets of the logs cluster. Each entry maps to one nodeSet in the ECK Elasticsearch CR |
@@ -220,18 +244,30 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | elastic.instances.logs.elasticsearch.nodeSets[0].resources.requests.memory | string | `"1Gi"` | Memory request for the Elasticsearch container |
 | elastic.instances.logs.elasticsearch.nodeSets[0].roles | list | `["master","data","ingest"]` | Elasticsearch node roles assigned to this nodeSet |
 | elastic.instances.logs.elasticsearch.nodeSets[0].storageSize | string | `"3Gi"` | Size of the persistent volume claim requested for logs storage |
-| elastic.instances.logs.enabled | bool | `true` | Enable the Elasticsearch and Kibana stack dedicated to logs and APM data |
-| elastic.instances.logs.kibana.enabled | bool | `true` | Enable the Kibana custom resource of the logs instance |
-| elastic.instances.logs.kibana.ingress.enabled | bool | `true` | Enable the logs Kibana Ingress resource |
+| elastic.instances.logs.enabled | bool | `false` | Enable the Elasticsearch and Kibana stack dedicated to logs and APM data |
+| elastic.instances.logs.kibana.enabled | bool | `false` | Enable the Kibana custom resource of the logs instance |
+| elastic.instances.logs.kibana.gateway.enabled | bool | `true` | Expose this Kibana through the Gateway API instead of an Ingress |
+| elastic.instances.logs.kibana.gateway.hostname | string | `"kibana.logs.arlas.k8s"` | Public hostname served by the HTTPRoute |
+| elastic.instances.logs.kibana.ingress.enabled | bool | `false` | Enable the logs Kibana Ingress resource |
 | elastic.instances.logs.kibana.ingress.hostname | string | `"kibana.logs.arlas.k8s"` | Public hostname used to expose the logs Kibana through the Ingress controller |
 | elastic.instances.logs.kibana.name | string | `"kibana-logs"` | Name of the logs Kibana custom resource. Must match `apmServer.kibanaRef` |
 | global.authIssuer | string | `"https://keycloak.arlas.k8s/realms/arlas"` | __MUST BE CONFIGURED:__ The issuer's uri |
 | global.defaultStorageClass | string | `"standard-retain"` | __MUST BE CONFIGURED:__ The default ARLAS storage class for the persistence. By default, the `standard-retain` storage class is created based on the provisioner `rancher.io/local-path` with a retain policy. |
 | global.dnsDomain | string | `"site.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing the ARLAS deployment |
+| global.domain | string | `"arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing the service with gateway |
 | global.elasticDnsDomain | string | `"elastic.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for ARLAS deployment |
 | global.elasticLogsDnsDomain | string | `"elastic.logs.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing ES for logs for ARLAS deployment |
-| global.enableKibana | bool | `true` |  |
-| global.enableKibanaLogs | bool | `true` |  |
+| global.gateway.controllerName | string | `"gateway.envoyproxy.io/gatewayclass-controller"` | __MUST BE CONFIGURED:__ The default gateway class. By default, the `gateway.envoyproxy.io/gatewayclass-controller` controler is used. |
+| global.gateway.enabled | bool | `true` |  |
+| global.gateway.extAuth.headersToBackend[0] | string | `"Authorization"` |  |
+| global.gateway.extAuth.headersToBackend[1] | string | `"arlas-org-filter"` |  |
+| global.gateway.extAuth.headersToExtAuth[0] | string | `"authorization"` |  |
+| global.gateway.extAuth.headersToExtAuth[1] | string | `"x-auth-request-redirect"` |  |
+| global.gateway.extAuth.headersToExtAuth[2] | string | `"x-original-method"` |  |
+| global.gateway.hostPort.enabled | bool | `true` |  |
+| global.gateway.name | string | `"arlas-gateway"` |  |
+| global.gateway.remoteJWKSuri | string | `"http://keycloak-service.arlas.svc.cluster.local:8080/realms/arlas/protocol/openid-connect/certs"` |  |
+| global.gateway.tls.secretName | string | `"arlas-tls"` |  |
 | global.ingressClassName | string | `"nginx"` | __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used. |
 | global.keycloak.url | string | `"https://keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ Keycloak URL |
 | global.keycloakDnsDomain | string | `"keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment |
@@ -241,7 +277,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.organization | string | `"org.com"` | __MUST BE CONFIGURED:__ Name of the organization using AIAS |
 | global.protocol | string | `"https"` | __MUST BE CONFIGURED:__ The protocol for accessing the ARLAS deployment |
 | global.seaweedFSDnsDomain | string | `"seaweedfs.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing seaweedFS for ARLAS deployment |
-| keycloak | object | `{"db":{"host":"keycloak-postgres","kind":"postgres","name":"keycloak","passwordKey":"password","port":5432,"postgresql":{"affinity":{},"containerSecurityContext":{"allowPrivilegeEscalation":false,"runAsGroup":999,"runAsNonRoot":true,"runAsUser":999},"database":"keycloak","enabled":true,"extraContainers":[],"extraEnv":[],"extraVolumeMounts":[],"extraVolumes":[],"image":{"pullPolicy":"Always","repository":"postgres","tag":"16"},"imagePullSecrets":[],"initContainers":[],"nodeSelector":{},"persistence":{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"1Gi","storageClass":"standard-retain"},"podSecurityContext":{"fsGroup":999,"runAsNonRoot":true,"runAsUser":999},"replicas":1,"resources":{"limits":{"cpu":0.25,"memory":"1Gi"},"requests":{"cpu":0.1,"memory":"512Mi"}},"service":{"port":5432,"serviceName":"keycloak-postgres","type":"ClusterIP"},"tolerations":[]},"secretName":"keycloak-db","userNamekey":"username"},"existingSecret":"keycloak-bootstrap-admin","http":{"enabled":true,"port":8080},"httpRelativePath":"/","https":{"enabled":true,"port":8443,"secretName":"keycloak-tls"},"image":{"repository":"quay.io/keycloak/keycloak","tag":"26.7.4"},"ingress":{"annotations":{"nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffering":"enabled","nginx.ingress.kubernetes.io/proxy-buffers-number":"8","nginx.ingress.kubernetes.io/ssl-redirect":"true"},"enabled":true,"hostname":"keycloak.arlas.k8s","ingressClassName":"nginx","path":"/","servicePort":8080,"tls":{"secretName":"keycloak-tls"}},"instances":1,"probes":{"readiness":{"failureThreshold":30,"periodSeconds":15},"startup":{"failureThreshold":600,"periodSeconds":2}},"proxyHeaders":"xforwarded","realm":{"import":{"enabled":true}},"resources":{"limits":{"cpu":0.25,"memory":"1Gi"},"requests":{"cpu":0.1,"memory":"512Mi"}}}` | Keycloak (Operator-managed) configuration. |
+| keycloak | object | `{"db":{"host":"keycloak-postgres","kind":"postgres","name":"keycloak","passwordKey":"password","port":5432,"postgresql":{"affinity":{},"containerSecurityContext":{"allowPrivilegeEscalation":false,"runAsGroup":999,"runAsNonRoot":true,"runAsUser":999},"database":"keycloak","enabled":true,"extraContainers":[],"extraEnv":[],"extraVolumeMounts":[],"extraVolumes":[],"image":{"pullPolicy":"Always","repository":"postgres","tag":"16"},"imagePullSecrets":[],"initContainers":[],"nodeSelector":{},"persistence":{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"1Gi","storageClass":"standard-retain"},"podSecurityContext":{"fsGroup":999,"runAsNonRoot":true,"runAsUser":999},"replicas":1,"resources":{"limits":{"cpu":0.25,"memory":"1Gi"},"requests":{"cpu":0.1,"memory":"512Mi"}},"service":{"port":5432,"serviceName":"keycloak-postgres","type":"ClusterIP"},"tolerations":[]},"secretName":"keycloak-db","userNamekey":"username"},"existingSecret":"keycloak-bootstrap-admin","http":{"enabled":true,"port":8080},"httpRelativePath":"/","https":{"enabled":true,"port":8443,"secretName":"arlas-tls"},"image":{"repository":"quay.io/keycloak/keycloak","tag":"26.7.4"},"ingress":{"annotations":{"nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffering":"enabled","nginx.ingress.kubernetes.io/proxy-buffers-number":"8","nginx.ingress.kubernetes.io/ssl-redirect":"true"},"enabled":false,"hostname":"keycloak.arlas.k8s","ingressClassName":"nginx","path":"/","servicePort":8080,"tls":{"secretName":"arlas-tls"}},"instances":1,"probes":{"readiness":{"failureThreshold":30,"periodSeconds":15},"startup":{"failureThreshold":600,"periodSeconds":2}},"proxyHeaders":"xforwarded","realm":{"import":{"enabled":true}},"resources":{"limits":{"cpu":0.25,"memory":"1Gi"},"requests":{"cpu":0.1,"memory":"512Mi"}}}` | Keycloak (Operator-managed) configuration. |
 | keycloak.db.host | string | `"keycloak-postgres"` | Hostname of the PostgreSQL server used by Keycloak (Service name when the chart deploys its own dev PostgreSQL). |
 | keycloak.db.kind | string | `"postgres"` | Database vendor used by Keycloak (`db.vendor` field of the Keycloak custom resource). |
 | keycloak.db.name | string | `"keycloak"` | Name of the PostgreSQL database. |
@@ -280,16 +316,16 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | keycloak.httpRelativePath | string | `"/"` | Relative path under which Keycloak is served (`http-relative-path` option). |
 | keycloak.https.enabled | bool | `true` | Enable the HTTPS listener of Keycloak. |
 | keycloak.https.port | int | `8443` | HTTPS port of Keycloak. |
-| keycloak.https.secretName | string | `"keycloak-tls"` | Name of the TLS secret used by Keycloak for HTTPS. |
+| keycloak.https.secretName | string | `"arlas-tls"` | Name of the TLS secret used by Keycloak for HTTPS. |
 | keycloak.image.repository | string | `"quay.io/keycloak/keycloak"` | Keycloak image repository. Keycloak is deployed for development and test only. For production, please refer to the Keycloak documentation to deploy a production ready Keycloak instance instead. |
 | keycloak.image.tag | string | `"26.7.4"` | Keycloak image tag. Should match the version of the Keycloak Operator installed in the cluster. |
 | keycloak.ingress.annotations | object | `{"nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k","nginx.ingress.kubernetes.io/proxy-buffering":"enabled","nginx.ingress.kubernetes.io/proxy-buffers-number":"8","nginx.ingress.kubernetes.io/ssl-redirect":"true"}` | Annotations of the Keycloak ingress. The default nginx ingress has proxy buffers that are too small for Keycloak headers, hence the buffer settings. |
-| keycloak.ingress.enabled | bool | `true` | Create an ingress for Keycloak. |
+| keycloak.ingress.enabled | bool | `false` | Create an ingress for Keycloak. |
 | keycloak.ingress.hostname | string | `"keycloak.arlas.k8s"` | Public DNS hostname of Keycloak. Also used as Keycloak `hostname` (strict mode). |
 | keycloak.ingress.ingressClassName | string | `"nginx"` | Ingress class name used for the Keycloak ingress. |
 | keycloak.ingress.path | string | `"/"` | Path of the ingress rule. |
 | keycloak.ingress.servicePort | int | `8080` | Port of the Keycloak service targeted by the ingress. |
-| keycloak.ingress.tls.secretName | string | `"keycloak-tls"` | Name of the TLS secret used by the ingress. |
+| keycloak.ingress.tls.secretName | string | `"arlas-tls"` | Name of the TLS secret used by the ingress. |
 | keycloak.instances | int | `1` | Number of Keycloak replicas. |
 | keycloak.probes.readiness.failureThreshold | int | `30` | Number of consecutive failed readiness probes before the pod is marked as not ready. |
 | keycloak.probes.readiness.periodSeconds | int | `15` | Interval in seconds between two readiness probes. |
@@ -337,10 +373,10 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | redis.service.port | int | `6379` | Port exposed by the Redis service. |
 | redis.service.serviceName | string | `"arlas-redis"` | Name of the headless Service used by the StatefulSet (required, provides stable pod DNS). |
 | redis.tolerations | list | `[]` | Tolerations for scheduling the Redis pod. |
-| seaweedfs | object | `{"admin":{"enabled":true,"ingress":{"className":"nginx","enabled":true,"host":"seaweedfs.arlas.k8s"},"secret":{"existingSecret":"arlas-stack-secret","pwKey":"ARLAS_APP_SEAWEEDFS_PASSWORD","userKey":"ARLAS_APP_SEAWEEDFS_LOGIN"}},"filer":{"enablePVC":true,"replicas":1,"s3":{"enabled":true}},"master":{"data":{"size":"1Gi","storageClass":"standard-retain","type":"persistentVolumeClaim"},"replicas":1,"resources":{"requests":{"cpu":"250m","memory":"512Mi"}}},"volume":{"dataDirs":[{"maxVolumes":0,"name":"data","size":"1Gi","storageClass":"standard-retain","type":"persistentVolumeClaim"}],"replicas":1,"resources":{"requests":{"cpu":"250m","memory":"512Mi"}}}}` | SeaweedFS subchart configuration |
+| seaweedfs | object | `{"admin":{"enabled":true,"ingress":{"className":"nginx","enabled":false,"host":"seaweedfs.arlas.k8s"},"secret":{"existingSecret":"arlas-stack-secret","pwKey":"ARLAS_APP_SEAWEEDFS_PASSWORD","userKey":"ARLAS_APP_SEAWEEDFS_LOGIN"}},"filer":{"enablePVC":true,"replicas":1,"s3":{"enabled":true}},"master":{"data":{"size":"1Gi","storageClass":"standard-retain","type":"persistentVolumeClaim"},"replicas":1,"resources":{"requests":{"cpu":"250m","memory":"512Mi"}}},"volume":{"dataDirs":[{"maxVolumes":0,"name":"data","size":"1Gi","storageClass":"standard-retain","type":"persistentVolumeClaim"}],"replicas":1,"resources":{"requests":{"cpu":"250m","memory":"512Mi"}}}}` | SeaweedFS subchart configuration |
 | seaweedfs.admin.enabled | bool | `true` | Deploy the SeaweedFS admin web interface. |
 | seaweedfs.admin.ingress.className | string | `"nginx"` | Ingress class used by the admin Ingress. |
-| seaweedfs.admin.ingress.enabled | bool | `true` | Expose the admin interface through an Ingress. |
+| seaweedfs.admin.ingress.enabled | bool | `false` | Expose the admin interface through an Ingress. |
 | seaweedfs.admin.ingress.host | string | `"seaweedfs.arlas.k8s"` | Host name of the admin Ingress. |
 | seaweedfs.filer.enablePVC | bool | `true` | Store the filer metadata (file and bucket names) on a PVC so it survives pod restarts. |
 | seaweedfs.filer.replicas | int | `1` | Number of filer replicas. The filer serves the file namespace and hosts the S3 gateway. |

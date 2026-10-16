@@ -1,0 +1,32 @@
+{{- if .Values.global.gateway.enabled }}
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: order-proxy-config
+spec:
+  provider:
+    type: Kubernetes
+    {{- if .Values.global.gateway.hostPort.enabled }}
+    kubernetes:
+      envoyDeployment:
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              template:
+                spec:
+                  tolerations:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: Exists
+                      effect: NoSchedule
+                  containers:
+                    - name: envoy
+                      ports:
+                        - containerPort: 10443
+                          hostPort: 443
+                          protocol: TCP
+    {{- end }}
+  filterOrder:
+    - name: envoy.filters.http.jwt_authn
+      before: envoy.filters.http.ext_authz
+{{- end }}
