@@ -36,14 +36,49 @@
   value: {{ .Values.elastic.cluster| quote }}
 - name: ARLAS_ELASTIC_NODES
   value: {{ .Values.elastic.nodes| quote  }}
+- name: ARLAS_APP_ELASTIC_LOGIN
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret" }}
+      key: {{ .Values.elastic.loginKey | default "ARLAS_APP_ELASTIC_LOGIN" }}
+- name: ARLAS_APP_ELASTIC_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret" }}
+      key: {{ .Values.elastic.passwordKey | default "ARLAS_APP_ELASTIC_PASSWORD" }}
 - name: ARLAS_ELASTIC_CREDENTIALS
-  value: "{{ .Values.elastic.login}}:{{ .Values.elastic.password}}"
+  value: "$(ARLAS_APP_ELASTIC_LOGIN):$(ARLAS_APP_ELASTIC_PASSWORD)"
 - name: ARLAS_ELASTIC_SKIP_MASTER
   value: {{ .Values.elastic.skipMaster | quote }}
 - name: ARLAS_ELASTIC_SNIFFING
   value: {{ .Values.elastic.sniffing | quote }}
 - name: ARLAS_ELASTIC_ENABLE_SSL
   value: {{ .Values.elastic.ssl.enabled | quote }}
+{{- end }}
+
+{{- define "arlasServices.otel" -}}
+# OTEL CONFIGURATION
+- name: OTEL_EXPORTER_OTLP_ENDPOINT
+  value: {{ .Values.otel.endpoint | quote }}
+- name: OTEL_EXPORTER_OTLP_PROTOCOL
+  value: {{ .Values.otel.protocol | quote }}
+- name: OTEL_RESOURCE_ATTRIBUTES
+  value: {{ tpl .Values.otel.attributes . | quote }}
+- name: OTEL_INSTRUMENTATION_HTTP_SERVER_REQUEST_IGNORED_USERAGENTS
+  value: {{ .Values.otel.ignoredUserAgents | quote }}
+{{- if .Values.otel.auth.enabled }}
+- name: OTEL_TOKEN
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.otel.auth.secretName }}
+      key: {{ .Values.otel.auth.secretKey }}
+- name: OTEL_EXPORTER_OTLP_HEADERS
+  value: "Authorization=Bearer $(OTEL_TOKEN)"
+{{- end }}
+{{- range $k, $v := .Values.otel.extraEnv }}
+- name: {{ $k }}
+  value: {{ $v | quote }}
+{{- end }}
 {{- end }}
 
 {{- define "arlasServices.keycloakEnv" -}}
@@ -59,7 +94,10 @@
 - name: ARLAS_AUTH_KEYCLOAK_RESOURCE
   value: {{ .Values.keycloak.client | quote }}
 - name: ARLAS_AUTH_KEYCLOAK_SECRET
-  value: {{ .Values.keycloak.secret | quote }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.keycloak.existingSecret | default "arlas-stack-secret" }}
+      key: {{ .Values.keycloak.secretKey | default "ARLAS_APP_KEYCLOAK_SECRET" }}
 - name: ARLAS_AUTH_KEYCLOAK_URL
   value: {{ .Values.keycloak.url | quote }}
 - name: ARLAS_CHECK_ORGANISATIONS
@@ -85,7 +123,7 @@
 
 {{- define "arlasServices.mountCertificate" -}}
 {{- if .Values.services.mountCertificate }}
-            - name: keycloak-certificate-configmap
+            - name: arlas-certificate-configmap
               mountPath: /opt/app/store/
               readOnly: true
 {{- end }}
@@ -93,8 +131,8 @@
 
 {{- define "arlasServices.volumeCertificate" -}}
 {{- if .Values.services.mountCertificate }}
-        - name: keycloak-certificate-configmap
+        - name: arlas-certificate-configmap
           configMap:
-            name: keycloak-certificate-configmap
+            name: arlas-certificate-configmap
 {{- end }}
 {{- end }}

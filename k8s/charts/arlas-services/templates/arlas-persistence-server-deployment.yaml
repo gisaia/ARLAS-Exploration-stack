@@ -31,16 +31,21 @@ spec:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
               protocol: TCP
+          startupProbe:
+            httpGet:
+              path: {{ .Values.services.persistence.urlPrefix }}/admin/healthcheck
+              port: http
+            periodSeconds: {{ .Values.services.persistence.startupProbe.periodSeconds | default 5 }}
+            failureThreshold: {{ .Values.services.persistence.startupProbe.failureThreshold | default 36 }}
+            timeoutSeconds: 3
           livenessProbe:
             httpGet:
               path: {{ .Values.services.persistence.urlPrefix }}/admin/healthcheck
               port: http
-            initialDelaySeconds: 40            
           readinessProbe:
             httpGet:
               path: {{ .Values.services.persistence.urlPrefix }}/admin/healthcheck
               port: http
-            initialDelaySeconds: 40
           env:
             # PERSISTENCE CONFIGURATION
             - name: ARLAS_PERSISTENCE_ENGINE
@@ -62,10 +67,6 @@ spec:
             - name: ARLAS_AUTH_PUBLIC_URIS
               value: {{ .Values.services.persistence.publicUris  | quote }}
 
-            # JVM CONFIG
-            - name: JDK_JAVA_OPTIONS
-              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }}"
-
             # ENDPOINT CONFIGURATION
             - name: ARLAS_PERSISTENCE_APP_PATH
               value: /
@@ -84,6 +85,18 @@ spec:
             {{- include "arlasServices.loggingEnv" . | nindent 12 }}
             {{- include "arlasServices.elasticEnv" . | nindent 12 }}
 
+            {{- if .Values.services.persistence.otel }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ .Values.services.persistence.serviceName }}
+            {{- include "arlasServices.otel" . | nindent 12 }}
+            # JVM CONFIG
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }} -javaagent:/opt/app/opentelemetry-javaagent.jar"
+            {{- else }}
+            # JVM CONFIG
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.persistence.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }}"
+            {{- end }}
             {{- with .Values.services.persistence.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}

@@ -77,6 +77,8 @@ spec:
 
             {{- include "arlasWebUserInterface.actionsEnv" . | nindent 12 }}
 
+            {{- include "arlasWebUserInterface.lookandfeelEnv" . | nindent 12 }}
+
             # ENDPOINT CONFIGURATION
             - name: ARLAS_WUI_BASE_HREF
               value: {{ .Values.uis.wui.urlPrefix }}

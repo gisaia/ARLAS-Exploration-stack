@@ -38,8 +38,7 @@ if [ ${CONF} == "local.kc.data" ]; then
 fi
 
 if [ ${CONF} == "local.k8s.kc.data" ]; then
-    export ARLAS_HOST=`kubectl get services arlas-stack-apisix-data-plane -n arlas  -o=jsonpath={.status.loadBalancer.ingress[0].ip}`
-    export ARLAS_SERVER_URL="http://"${ARLAS_HOST}
+    export ARLAS_SERVER_URL="https://site.arlas.k8s"
     USER_CONF="local.k8s.kc.data"
 fi
 

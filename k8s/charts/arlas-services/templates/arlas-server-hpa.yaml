@@ -1,0 +1,40 @@
+{{- if .Values.services.server.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.services.server.serviceName }}-hpa
+  labels:
+    {{- include "arlasServices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.services.server.serviceName }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.services.server.serviceName }}
+  minReplicas: {{ .Values.services.server.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.services.server.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.services.server.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.services.server.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.services.server.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.services.server.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.services.server.autoscaling.customMetrics }}
+    {{- toYaml .Values.services.server.autoscaling.customMetrics | nindent 4 }}
+    {{- end }}
+  {{- if .Values.services.server.autoscaling.behavior }}
+  behavior:
+    {{- toYaml .Values.services.server.autoscaling.behavior | nindent 4 }}
+  {{- end }}
+{{- end }}

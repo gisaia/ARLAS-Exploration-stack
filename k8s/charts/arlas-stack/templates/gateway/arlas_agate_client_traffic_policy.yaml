@@ -1,0 +1,18 @@
+{{- if .Values.global.gateway.enabled }}
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: enrich-header-for-forward-auth
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: {{ .Values.global.gateway.name }}
+  headers:
+    earlyRequestHeaders:
+      set:
+        - name: x-auth-request-redirect
+          value: '%PATH%'
+        - name: x-original-method
+          value: '%REQ(:method)%'
+{{- end }}

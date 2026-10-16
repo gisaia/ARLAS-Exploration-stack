@@ -1,0 +1,19 @@
+{{- range $key, $inst := (include "elastic.instances" . | fromJson) }}
+{{- if and $inst.enabled $inst.kibana.enabled }}
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: {{ $inst.kibana.name }}
+spec:
+  image: "{{ $inst.kibana.image.repository }}:{{ $inst.kibana.image.tag }}"
+  version: {{ $inst.kibana.image.tag | quote }}
+  count: {{ $inst.kibana.instances }}
+  elasticsearchRef:
+    name: {{ $inst.elasticsearch.clusterName }}
+  http:
+    service:
+      spec:
+        type: ClusterIP
+{{- end }}
+{{- end }}

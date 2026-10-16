@@ -15,13 +15,14 @@ services:
     runAsUser: 65532
   containerSecurityContext:
     allowPrivilegeEscalation: false
-  server: 
+  server:
     serviceName: arlas-server
-    image: gisaia/arlas-server:28.0.0
+    image: gisaia/arlas-server:29.0.0
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: false
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -31,22 +32,33 @@ services:
     urlPrefix: /arlas
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
     resources:
-      requests:
-        cpu: 0.1
-        memory: 256Mi
+      requests:   # autoscaling is based on requests.cpu and requests.memory, so we set it close to the limits to avoid scaling up too early
+        cpu: 0.25
+        memory: 1000Mi
       limits:
         cpu: 1
         memory: 1000Mi
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 36
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
+    autoscaling:
+      enabled: False
+      minReplicas: 1
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 70
+      customMetrics:
+      behavior:
   permissions:
     serviceName: arlas-permissions-server
-    image: gisaia/arlas-permissions-server:28.0.0
+    image: gisaia/arlas-permissions-server:29.0.0
     replicaCount: 1
     jvmXmx: 512m
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: false
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -55,25 +67,27 @@ services:
     extraVolumes:
     urlPrefix: /permissions
     publicUris: swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET
-
     resources:
       requests:
         cpu: 0.1
         memory: 128Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 512Mi
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 36
     nodeSelector: {}
     tolerations: []
     affinity: {}
 
-  persistence: 
+  persistence:
     serviceName: arlas-persistence-server
-    image: gisaia/arlas-persistence-server:28.0.0
+    image: gisaia/arlas-persistence-server:29.0.0
     replicaCount: 1
     jvmXmx: 512m
-    # -- Whether ES APM should be activated or not
-    apm: false
+    # -- Whether OpenTelemetry should be activated or not
+    otel: false
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
@@ -87,8 +101,11 @@ services:
         cpu: 0.1
         memory: 128Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 512Mi
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 36
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -99,7 +116,8 @@ keycloak:
   enabled: true
   realm: arlas
   client: arlas-backend
-  secret: rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8
+  existingSecret: arlas-stack-secret
+  secretKey: ARLAS_APP_KEYCLOAK_SECRET
   url: http://172.18.0.2/auth
 
 # -- Cache TTL for items in cache (seconds), used for all deployments to ensure consistency
@@ -108,7 +126,6 @@ cacheTimeout: 60
 cacheFactoryClass: io.arlas.server.core.impl.cache.LocalCacheFactory
 # -- The java package to process for extracting the APIs displayed in Swagger
 swaggerResource: io.arlas.server.rest,io.arlas.server.stac
-
 
 cors:
   # cors.enabled -- Enable CORS or not
@@ -134,13 +151,44 @@ logger:
 
 elastic:
   cluster: elastic
-  login: elastic
-  password: password4elastic
+  existingSecret: arlas-stack-secret
+  loginKey: elastic
+  passwordKey: password4elastic
   skipMaster: true
   sniffing: false
   ssl:
     enabled: true
   nodes: elasticsearch:9200
+
+otel:
+  # -- OTLP endpoint
+  endpoint: http://apm-server-apm-http:8200
+  # -- OTLP protocol used by the agent (`grpc`, `http/protobuf`)
+  protocol: http/protobuf
+  # -- Resource attributes attached to all telemetry (comma-separated `key=value` pairs, e.g. `deployment.environment=dev`)
+  attributes: "deployment.environment={{ .Values.dnsDomain }}"
+  # -- User agents ignored by the HTTP server instrumentation (regex, e.g. Kubernetes probes)
+  ignoredUserAgents: "GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"
+  auth:
+    # -- Send an `Authorization: Bearer` header built from a Secret. Disable if the Server token authentication is disabled
+    enabled: true
+    # -- Name of the Secret holding the token.
+    secretName: apm-server-apm-token
+    # -- Key of the token in the Secret
+    secretKey: secret-token
+  # -- Additional environment variables for the OTel agent, as a `name: value` map
+  extraEnv: {
+    OTEL_INSTRUMENTATION_COMMON_DEFAULT_ENABLED: false, 
+    OTEL_JAVAAGENT_DEBUG: false, 
+    OTEL_INSTRUMENTATION_SERVLET_ENABLED: true,
+    OTEL_INSTRUMENTATION_JAXRS_ENABLED: true,
+    OTEL_INSTRUMENTATION_JETTY_ENABLED: true,
+    OTEL_INSTRUMENTATION_ELASTICSEARCH_REST_ENABLED: true,
+    OTEL_INSTRUMENTATION_APACHE_HTTPCLIENT_ENABLED: true,
+    OTEL_INSTRUMENTATION_LOGBACK_MDC_ENABLED: true,
+    OTEL_INSTRUMENTATION_OPENTELEMETRY_API_ENABLED: true,
+    OTEL_INSTRUMENTATION_JERSEY_ENABLED: true
+  }
 
 persistence:
   # -- Storage engine to use: either `file` or `hibernate`
@@ -149,15 +197,15 @@ persistence:
   storageSize: 100Mi
   # -- Path to use for file persistence
   localFolder: /persistence/
-  
+
   # -- Configuration node if `engine=hibernate`, ignored otherwise
   hibernate:
     # -- JDBC URL
     url: jdbc:postgresql://db:5432/arlas
     # -- Database user login
-    user:
+    user: 
     # -- Database user password
-    password:
+    password: 
     # -- SQL Dialect
     dialect: org.hibernate.dialect.PostgreSQLDialect
     # -- JDBC Driver

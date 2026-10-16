@@ -51,7 +51,6 @@ See [ARLAS with Keycloak configuration](dc_services/docker_compose_services_kc.m
 Same as [IAM deployment](#iam-deployment) and:
 
 - `conf/aias.env`: Configuration of AIAS
-- `conf/minio.env`: Configuration of the minio object store
 
 See [ARLAS Items and Assets Services (AIAS) configuration](dc_services/docker_compose_services_aias.md)
 
@@ -60,7 +59,6 @@ See [ARLAS Items and Assets Services (AIAS) configuration](dc_services/docker_co
 Same as [Keycloak deployment](#keycloak-deployment) and:
 
 - `conf/aias.env`: Configuration of AIAS
-- `conf/minio.env`: Configuration of the minio object store
 
 See [ARLAS Items and Assets Services (AIAS) configuration with Keycloak](dc_services/docker_compose_services_aiaskc.md)
 
