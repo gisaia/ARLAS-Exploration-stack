@@ -290,6 +290,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest | int | `100000` | Maximum number of archives that can be ingested in a single batch |
 | services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
 | services.aproc.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the Celery configuration |
+| services.aproc.storageExistingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the storage access configuration |
+| services.aproc.otel | bool | `true` | Whether OpenTelemetry should be activated or not |
 | services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
 | services.aproc.service.extraContainers | list | `[]` |  |
 | services.aproc.service.extraEnv | string | `nil` |  |
