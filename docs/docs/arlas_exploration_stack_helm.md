@@ -177,13 +177,13 @@ kubectl patch -n kube-system deployment metrics-server --type='json' -p='[{"op":
 
 __Note for test/dev environment__:  If your KIND cluster does not have operators like keycloak, elasticsearch or rabbitmq, you can install them:
 ```shell
-k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
+./k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
 ```
 ### Create secret
 
 __Note for test/dev environment__:  If your KIND cluster does not already contain the secrets described in `./conf/secret.env.template`, you can create them with:
 ```shell
-k8s/scripts/create_secrets.sh arlas keycloak elasticsearch rabbitmq
+./k8s/scripts/create_secrets.sh arlas keycloak elasticsearch rabbitmq
 ```
 Make sure that `./conf/secret.env` exists and contains valid values before running the script or your current environment contains all the variables .
 

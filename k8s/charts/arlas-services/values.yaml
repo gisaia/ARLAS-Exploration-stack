@@ -17,7 +17,7 @@ services:
     allowPrivilegeEscalation: false
   server:
     serviceName: arlas-server
-    image: gisaia/arlas-server:29.0.0-rc1
+    image: gisaia/arlas-server:29.0.0
     replicaCount: 1
     jvmXmx: 1800m
     trustStoreOptions: -Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword
@@ -54,7 +54,7 @@ services:
       behavior:
   permissions:
     serviceName: arlas-permissions-server
-    image: gisaia/arlas-permissions-server:29.0.0-rc1
+    image: gisaia/arlas-permissions-server:29.0.0
     replicaCount: 1
     jvmXmx: 512m
     # -- Whether OpenTelemetry should be activated or not
@@ -83,7 +83,7 @@ services:
 
   persistence:
     serviceName: arlas-persistence-server
-    image: gisaia/arlas-persistence-server:29.0.0-rc1
+    image: gisaia/arlas-persistence-server:29.0.0
     replicaCount: 1
     jvmXmx: 512m
     # -- Whether OpenTelemetry should be activated or not
