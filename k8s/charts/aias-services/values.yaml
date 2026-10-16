@@ -18,7 +18,7 @@ services:
     allowPrivilegeEscalation: false
   airs:
     serviceName: airs-server
-    image: gisaia/airs:0.19.0
+    image: gisaia/airs:0.21.0
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers: []
@@ -71,13 +71,13 @@ services:
 
       # -- ARLAS-EO mapping and collection URLs used for initializing new indices of new collections
       arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
-      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/mapping.json
+      # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.21.0/conf/mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
       arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json
 
   fam:
     serviceName: arlas-fam
-    image: gisaia/fam:0.19.0
+    image: gisaia/fam:0.21.0
     # -- Extra environment variables for the fam container
     imagePullSecrets: []
     extraContainers: []
@@ -106,7 +106,7 @@ services:
 
   agate:
     serviceName: arlas-agate
-    image: gisaia/agate:0.19.0
+    image: gisaia/agate:0.21.0
     # -- Extra environment variables for the agate container
     imagePullSecrets: []
     extraContainers: []
@@ -308,7 +308,7 @@ services:
   aproc:
     service:
       serviceName: aproc-service
-      image: gisaia/aproc-service:0.19.0
+      image: gisaia/aproc-service:0.21.0
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -335,7 +335,7 @@ services:
       affinity: {}
     worker:
       serviceName: aproc-proc
-      image: gisaia/aproc-proc:0.19.0
+      image: gisaia/aproc-proc:0.21.0
       imagePullSecrets: []
       extraContainers: []
       extraInitContainers:
@@ -522,6 +522,21 @@ services:
               product_types:
                 - platero
                 - hammer
+            soacom:
+              enabled: true
+              priority: 24
+              build_overview_when_local: true
+              build_overview_when_remote: true
+            osk_stac:
+              enabled: true
+              priority: 25
+              build_overview_when_local: true
+              build_overview_when_remote: true
+            osk:
+              enabled: true
+              priority: 26
+              build_overview_when_local: true
+              build_overview_when_remote: true
             tiff:
               enabled: true
               priority: 100
