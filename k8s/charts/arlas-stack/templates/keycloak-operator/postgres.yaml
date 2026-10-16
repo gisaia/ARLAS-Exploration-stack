@@ -29,6 +29,7 @@ spec:
       labels:
         app.kubernetes.io/component: {{ .Values.keycloak.db.postgresql.service.serviceName }}
     spec:
+      automountServiceAccountToken: false
       {{- with .Values.keycloak.db.postgresql.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -108,9 +109,11 @@ spec:
             requests:
               cpu: {{ .Values.keycloak.db.postgresql.resources.requests.cpu | quote }}
               memory: {{ .Values.keycloak.db.postgresql.resources.requests.memory | quote }}
+              ephemeral-storage: {{ .Values.keycloak.db.postgresql.resources.requests.ephemeralStorage | quote }}
             limits:
               cpu: {{ .Values.keycloak.db.postgresql.resources.limits.cpu | quote }}
               memory: {{ .Values.keycloak.db.postgresql.resources.limits.memory | quote }}
+              ephemeral-storage: {{ .Values.keycloak.db.postgresql.resources.limits.ephemeralStorage | quote }}
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
@@ -124,7 +127,8 @@ spec:
       volumes:
         {{- if not .Values.keycloak.db.postgresql.persistence.enabled }}
         - name: data
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: {{ .Values.keycloak.db.postgresql.emptyDirSizeLimit | quote }}
         {{- end }}
         {{- with .Values.keycloak.db.postgresql.extraVolumes }}
         {{- toYaml . | nindent 8 }}
