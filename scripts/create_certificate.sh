@@ -4,7 +4,7 @@ set -o errexit -o pipefail
 
 check_exists(){
   FILE=$1
-  if [ ! -f "$FILE" ] || [ ! -r "$FILE" ]; then
+  if [[ ! -f "$FILE" ]] || [[ ! -r "$FILE" ]]; then
       echo "Error: File $FILE is missing or not readable."
   else
       echo "$FILE exists and readable."

@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.4
       - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1.14.0
         with:
           config: ./k8s/kind/kind.yaml
       - name: Install yq
@@ -38,16 +38,51 @@ jobs:
           helm repo update
       - name: Generate secret.env
         env:
-          VARS_CONTEXT: ${{ toJson(vars) }}
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          NAMESPACE: ${{ vars.NAMESPACE }}
+
+          # ARLAS STACK
+          ARLAS_APP_KEYCLOAK_SECRET: ${{ secrets.ARLAS_APP_KEYCLOAK_SECRET }}
+          ARLAS_APP_SEAWEEDFS_LOGIN: ${{ vars.ARLAS_APP_SEAWEEDFS_LOGIN }}
+          ARLAS_APP_SEAWEEDFS_PASSWORD: ${{ secrets.ARLAS_APP_SEAWEEDFS_PASSWORD }}
+          ARLAS_APP_CELERY_BROKER_URL: ${{ secrets.ARLAS_APP_CELERY_BROKER_URL }}
+          ARLAS_APP_CELERY_RESULT_BACKEND: ${{ secrets.ARLAS_APP_CELERY_RESULT_BACKEND }}
+          ARLAS_APP_REDIS_PASSWORD: ${{ secrets.ARLAS_APP_REDIS_PASSWORD }}
+          ARLAS_APP_SMTP_PASSWORD: ${{ secrets.ARLAS_APP_SMTP_PASSWORD }}
+          ARLAS_APP_ELASTIC_LOGIN: ${{ vars.ARLAS_APP_ELASTIC_LOGIN }}
+          ARLAS_APP_ELASTIC_PASSWORD: ${{ secrets.ARLAS_APP_ELASTIC_PASSWORD }}
+
+          # KEYCLOAK
+          ARLAS_APP_KEYCLOAK_LOGIN: ${{ vars.ARLAS_APP_KEYCLOAK_LOGIN }}
+          ARLAS_APP_KEYCLOAK_PASSWORD: ${{ secrets.ARLAS_APP_KEYCLOAK_PASSWORD }}
+          ARLAS_APP_POSTGRES_LOGIN: ${{ vars.ARLAS_APP_POSTGRES_LOGIN }}
+          ARLAS_APP_POSTGRES_PASSWORD: ${{ secrets.ARLAS_APP_POSTGRES_PASSWORD }}
+
+          # RABBITMQ
+          ARLAS_APP_RABBITMQ_LOGIN: ${{ vars.ARLAS_APP_RABBITMQ_LOGIN }}
+          ARLAS_APP_RABBITMQ_PASSWORD: ${{ secrets.ARLAS_APP_RABBITMQ_PASSWORD }}
         run: |
           mkdir -p ./conf
+          umask 077
           {
-            jq -r 'to_entries[] | "\(.key)=\(.value)"' <<< "$VARS_CONTEXT"
-            jq -r 'to_entries[] | "\(.key)=\(.value)"' <<< "$SECRETS_CONTEXT"
+            printf 'NAMESPACE=%s\n' "$NAMESPACE"
+            printf 'ARLAS_APP_KEYCLOAK_SECRET=%s\n' "$ARLAS_APP_KEYCLOAK_SECRET"
+            printf 'ARLAS_APP_SEAWEEDFS_LOGIN=%s\n' "$ARLAS_APP_SEAWEEDFS_LOGIN"
+            printf 'ARLAS_APP_SEAWEEDFS_PASSWORD=%s\n' "$ARLAS_APP_SEAWEEDFS_PASSWORD"
+            printf 'ARLAS_APP_CELERY_BROKER_URL=%s\n' "$ARLAS_APP_CELERY_BROKER_URL"
+            printf 'ARLAS_APP_CELERY_RESULT_BACKEND=%s\n' "$ARLAS_APP_CELERY_RESULT_BACKEND"
+            printf 'ARLAS_APP_REDIS_PASSWORD=%s\n' "$ARLAS_APP_REDIS_PASSWORD"
+            printf 'ARLAS_APP_SMTP_PASSWORD=%s\n' "$ARLAS_APP_SMTP_PASSWORD"
+            printf 'ARLAS_APP_ELASTIC_LOGIN=%s\n' "$ARLAS_APP_ELASTIC_LOGIN"
+            printf 'ARLAS_APP_ELASTIC_PASSWORD=%s\n' "$ARLAS_APP_ELASTIC_PASSWORD"
+            printf 'ARLAS_APP_KEYCLOAK_LOGIN=%s\n' "$ARLAS_APP_KEYCLOAK_LOGIN"
+            printf 'ARLAS_APP_KEYCLOAK_PASSWORD=%s\n' "$ARLAS_APP_KEYCLOAK_PASSWORD"
+            printf 'ARLAS_APP_POSTGRES_LOGIN=%s\n' "$ARLAS_APP_POSTGRES_LOGIN"
+            printf 'ARLAS_APP_POSTGRES_PASSWORD=%s\n' "$ARLAS_APP_POSTGRES_PASSWORD"
+            printf 'ARLAS_APP_RABBITMQ_LOGIN=%s\n' "$ARLAS_APP_RABBITMQ_LOGIN"
+            printf 'ARLAS_APP_RABBITMQ_PASSWORD=%s\n' "$ARLAS_APP_RABBITMQ_PASSWORD"
           } > ./conf/secret.env
       - name: Create secrets
-        run: ./k8s/scripts/create_secrets.sh arlas keycloak elasticsearch rabbitmq
+        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
       - name: Deploy arlas stack
@@ -76,7 +111,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.4
       - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1.14.0
         with:
           config: ./k8s/kind/kind.yaml
       - name: Install yq
@@ -91,16 +126,51 @@ jobs:
           helm repo update
       - name: Generate secret.env
         env:
-          VARS_CONTEXT: ${{ toJson(vars) }}
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          NAMESPACE: ${{ vars.NAMESPACE }}
+
+          # ARLAS STACK
+          ARLAS_APP_KEYCLOAK_SECRET: ${{ secrets.ARLAS_APP_KEYCLOAK_SECRET }}
+          ARLAS_APP_SEAWEEDFS_LOGIN: ${{ vars.ARLAS_APP_SEAWEEDFS_LOGIN }}
+          ARLAS_APP_SEAWEEDFS_PASSWORD: ${{ secrets.ARLAS_APP_SEAWEEDFS_PASSWORD }}
+          ARLAS_APP_CELERY_BROKER_URL: ${{ secrets.ARLAS_APP_CELERY_BROKER_URL }}
+          ARLAS_APP_CELERY_RESULT_BACKEND: ${{ secrets.ARLAS_APP_CELERY_RESULT_BACKEND }}
+          ARLAS_APP_REDIS_PASSWORD: ${{ secrets.ARLAS_APP_REDIS_PASSWORD }}
+          ARLAS_APP_SMTP_PASSWORD: ${{ secrets.ARLAS_APP_SMTP_PASSWORD }}
+          ARLAS_APP_ELASTIC_LOGIN: ${{ vars.ARLAS_APP_ELASTIC_LOGIN }}
+          ARLAS_APP_ELASTIC_PASSWORD: ${{ secrets.ARLAS_APP_ELASTIC_PASSWORD }}
+
+          # KEYCLOAK
+          ARLAS_APP_KEYCLOAK_LOGIN: ${{ vars.ARLAS_APP_KEYCLOAK_LOGIN }}
+          ARLAS_APP_KEYCLOAK_PASSWORD: ${{ secrets.ARLAS_APP_KEYCLOAK_PASSWORD }}
+          ARLAS_APP_POSTGRES_LOGIN: ${{ vars.ARLAS_APP_POSTGRES_LOGIN }}
+          ARLAS_APP_POSTGRES_PASSWORD: ${{ secrets.ARLAS_APP_POSTGRES_PASSWORD }}
+
+          # RABBITMQ
+          ARLAS_APP_RABBITMQ_LOGIN: ${{ vars.ARLAS_APP_RABBITMQ_LOGIN }}
+          ARLAS_APP_RABBITMQ_PASSWORD: ${{ secrets.ARLAS_APP_RABBITMQ_PASSWORD }}
         run: |
           mkdir -p ./conf
+          umask 077
           {
-            jq -r 'to_entries[] | "\(.key)=\(.value)"' <<< "$VARS_CONTEXT"
-            jq -r 'to_entries[] | "\(.key)=\(.value)"' <<< "$SECRETS_CONTEXT"
+            printf 'NAMESPACE=%s\n' "$NAMESPACE"
+            printf 'ARLAS_APP_KEYCLOAK_SECRET=%s\n' "$ARLAS_APP_KEYCLOAK_SECRET"
+            printf 'ARLAS_APP_SEAWEEDFS_LOGIN=%s\n' "$ARLAS_APP_SEAWEEDFS_LOGIN"
+            printf 'ARLAS_APP_SEAWEEDFS_PASSWORD=%s\n' "$ARLAS_APP_SEAWEEDFS_PASSWORD"
+            printf 'ARLAS_APP_CELERY_BROKER_URL=%s\n' "$ARLAS_APP_CELERY_BROKER_URL"
+            printf 'ARLAS_APP_CELERY_RESULT_BACKEND=%s\n' "$ARLAS_APP_CELERY_RESULT_BACKEND"
+            printf 'ARLAS_APP_REDIS_PASSWORD=%s\n' "$ARLAS_APP_REDIS_PASSWORD"
+            printf 'ARLAS_APP_SMTP_PASSWORD=%s\n' "$ARLAS_APP_SMTP_PASSWORD"
+            printf 'ARLAS_APP_ELASTIC_LOGIN=%s\n' "$ARLAS_APP_ELASTIC_LOGIN"
+            printf 'ARLAS_APP_ELASTIC_PASSWORD=%s\n' "$ARLAS_APP_ELASTIC_PASSWORD"
+            printf 'ARLAS_APP_KEYCLOAK_LOGIN=%s\n' "$ARLAS_APP_KEYCLOAK_LOGIN"
+            printf 'ARLAS_APP_KEYCLOAK_PASSWORD=%s\n' "$ARLAS_APP_KEYCLOAK_PASSWORD"
+            printf 'ARLAS_APP_POSTGRES_LOGIN=%s\n' "$ARLAS_APP_POSTGRES_LOGIN"
+            printf 'ARLAS_APP_POSTGRES_PASSWORD=%s\n' "$ARLAS_APP_POSTGRES_PASSWORD"
+            printf 'ARLAS_APP_RABBITMQ_LOGIN=%s\n' "$ARLAS_APP_RABBITMQ_LOGIN"
+            printf 'ARLAS_APP_RABBITMQ_PASSWORD=%s\n' "$ARLAS_APP_RABBITMQ_PASSWORD"
           } > ./conf/secret.env
       - name: Create secrets
-        run: ./k8s/scripts/create_secrets.sh arlas keycloak elasticsearch rabbitmq
+        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq
       - name: Create certificate
         run: ./scripts/create_certificate.sh *.arlas.k8s
       - name: Deploy arlas stack

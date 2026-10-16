@@ -14,6 +14,7 @@ spec:
       labels:
         app.kubernetes.io/component: {{ .Values.redis.service.serviceName }}
     spec:
+      automountServiceAccountToken: false
       {{- with .Values.redis.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -84,9 +85,11 @@ spec:
             requests:
               cpu: {{ .Values.redis.resources.requests.cpu | quote }}
               memory: {{ .Values.redis.resources.requests.memory | quote }}
+              ephemeral-storage: {{ .Values.redis.resources.requests.ephemeralStorage | quote }}
             limits:
               cpu: {{ .Values.redis.resources.limits.cpu | quote }}
               memory: {{ .Values.redis.resources.limits.memory | quote }}
+              ephemeral-storage: {{ .Values.redis.resources.limits.ephemeralStorage | quote }}
           volumeMounts:
             - name: data
               mountPath: /data
@@ -100,7 +103,8 @@ spec:
       volumes:
         {{- if not .Values.redis.persistence.enabled }}
         - name: data
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: {{ .Values.redis.emptyDirSizeLimit | quote }}
         {{- end }}
         {{- with .Values.redis.extraVolumes }}
         {{- toYaml . | nindent 8 }}

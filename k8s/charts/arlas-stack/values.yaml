@@ -841,14 +841,17 @@ redis:
   extraVolumes: []
   # -- Additional container config to run alongside Redis.
   extraContainers: []
+  emptyDirSizeLimit: 256Mi
   # -- Resource requests and limits for the Redis container.
   resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
+      ephemeralStorage: "256Mi"
     limits:
       cpu: 0.25
       memory: "512Mi"
+      ephemeralStorage: "512Mi"
   persistence:
     # -- Enable persistent storage for Redis data using a PVC (volumeClaimTemplate).
     enabled: true
@@ -978,14 +981,17 @@ keycloak:
       tolerations: []
       # -- Affinity rules for the PostgreSQL Pod.
       affinity: {}
+      emptyDirSizeLimit: 256Mi
       # -- Resource requests and limits for the PostgreSQL container.
       resources:
         requests:
           cpu: 0.1
           memory: 512Mi
+          ephemeralStorage: 256Mi
         limits:
           cpu: 0.25
           memory: 1Gi
+          ephemeralStorage: 512Mi
       persistence:
         # -- Enable persistent storage for PostgreSQL data using a PersistentVolumeClaim. Set to false to use an ephemeral `emptyDir` (data lost on Pod restart, suitable for disposable/CI use only).
         enabled: true

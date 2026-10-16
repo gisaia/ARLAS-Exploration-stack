@@ -7,12 +7,13 @@ spec:
   template:
     spec:
       restartPolicy: OnFailure
+      automountServiceAccountToken: false
       containers:
         - name: weed-shell
           image: chrislusf/seaweedfs:4.48
           env:
             - name: MASTER
-              value: "{{ .Values.deployment.aias.services.seaweedfs.masterServiceName }}:{{.Values.deployment.aias.services.seaweedfs.masterServicePort }}"
+              value: "{{ .Values.deployment.aias.services.seaweedfs.masterServiceName }}:{{ .Values.deployment.aias.services.seaweedfs.masterServicePort }}"
             - name: FILER
               value: "{{ .Values.deployment.aias.services.seaweedfs.filerServiceName }}:{{ .Values.deployment.aias.services.seaweedfs.filerServicePort }}"
             - name: LOGIN
