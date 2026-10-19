@@ -577,7 +577,7 @@ List of volumes:
 ### Service minio
 Description: Minio is an object store
 
-Image: `ARLAS_VERSION_MINIO` with `minio/minio:RELEASE.2025-04-22T22-12-26Z` in `conf/versions.env`
+Image: `ARLAS_VERSION_MINIO` with `quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z` in `conf/versions.env`
 
 | Container variable | Value or environment variable | Default | Description | Env file setting |
 | --- | --- | --- | --- | --- |
