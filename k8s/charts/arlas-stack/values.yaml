@@ -621,7 +621,7 @@ elastic:
         # -- Elasticsearch container image repository (official Elastic image, required by the ECK operator)
         repository: docker.elastic.co/elasticsearch/elasticsearch
         # -- Elasticsearch version / image tag. Must match a version supported by the installed ECK operator
-        tag: "9.5.0"
+        tag: "9.5.5"
       service:
         # -- Kubernetes Service type used to expose the Elasticsearch HTTP endpoint internally
         type: ClusterIP
