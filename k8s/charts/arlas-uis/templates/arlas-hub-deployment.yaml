@@ -58,12 +58,13 @@ spec:
             - name: ARLAS_STATIC_LINKS
               value: {{ .Values.links | quote }}
 
-
             {{- include "arlasWebUserInterface.auth2Env" . | nindent 12 }}
 
             {{- include "arlasWebUserInterface.linksEnv" . | nindent 12 }}
 
             {{- include "arlasWebUserInterface.servicesEnv" . | nindent 12 }}
+
+            {{- include "arlasWebUserInterface.lookandfeelEnv" . | nindent 12 }}
 
           {{- with .Values.uis.hub.extraEnv }}
             {{ toYaml . | nindent 12 }}

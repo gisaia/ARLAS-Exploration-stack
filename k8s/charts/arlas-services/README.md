@@ -20,20 +20,30 @@ A Helm Chart to deploy ARLAS Server
 | defaultStorageClass | string | `"standard"` |  |
 | dnsDomain | string | `"localhost"` | DNS domain hosting ARLAS |
 | elastic.cluster | string | `"elastic"` |  |
-| elastic.login | string | `"elastic"` |  |
+| elastic.existingSecret | string | `"arlas-stack-secret"` |  |
+| elastic.loginKey | string | `"elastic"` |  |
 | elastic.nodes | string | `"elasticsearch:9200"` |  |
-| elastic.password | string | `"password4elastic"` |  |
+| elastic.passwordKey | string | `"password4elastic"` |  |
 | elastic.skipMaster | bool | `true` |  |
 | elastic.sniffing | bool | `false` |  |
 | elastic.ssl.enabled | bool | `true` |  |
 | keycloak.client | string | `"arlas-backend"` |  |
 | keycloak.enabled | bool | `true` |  |
+| keycloak.existingSecret | string | `"arlas-stack-secret"` |  |
 | keycloak.realm | string | `"arlas"` |  |
-| keycloak.secret | string | `"rha14c4202RB0Dxlke6ZNCCTw9gkvLJ8"` |  |
+| keycloak.secretKey | string | `"ARLAS_APP_KEYCLOAK_SECRET"` |  |
 | keycloak.url | string | `"http://172.18.0.2/auth"` |  |
 | logger.loggingConsoleLevel | string | `"INFO"` | Default console logging level |
 | logger.loggingFile | string | `"/tmp/arlas.log"` | Default logging file |
 | logger.loggingLevel | string | `"INFO"` | Default logging level |
+| otel.attributes | string | `"deployment.environment={{ .Values.dnsDomain }}"` | Resource attributes attached to all telemetry (comma-separated `key=value` pairs, e.g. `deployment.environment=dev`) |
+| otel.auth.enabled | bool | `true` | Send an `Authorization: Bearer` header built from a Secret. Disable if the Server token authentication is disabled |
+| otel.auth.secretKey | string | `"secret-token"` | Key of the token in the Secret |
+| otel.auth.secretName | string | `"apm-server-apm-token"` | Name of the Secret holding the token. |
+| otel.endpoint | string | `"http://apm-server-apm-http:8200"` | OTLP endpoint |
+| otel.extraEnv | object | `{"OTEL_INSTRUMENTATION_APACHE_HTTPCLIENT_ENABLED":true,"OTEL_INSTRUMENTATION_COMMON_DEFAULT_ENABLED":false,"OTEL_INSTRUMENTATION_ELASTICSEARCH_REST_ENABLED":true,"OTEL_INSTRUMENTATION_JAXRS_ENABLED":true,"OTEL_INSTRUMENTATION_JERSEY_ENABLED":true,"OTEL_INSTRUMENTATION_JETTY_ENABLED":true,"OTEL_INSTRUMENTATION_LOGBACK_MDC_ENABLED":true,"OTEL_INSTRUMENTATION_OPENTELEMETRY_API_ENABLED":true,"OTEL_INSTRUMENTATION_SERVLET_ENABLED":true,"OTEL_JAVAAGENT_DEBUG":false}` | Additional environment variables for the OTel agent, as a `name: value` map |
+| otel.ignoredUserAgents | string | `"GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"` | User agents ignored by the HTTP server instrumentation (regex, e.g. Kubernetes probes) |
+| otel.protocol | string | `"http/protobuf"` | OTLP protocol used by the agent (`grpc`, `http/protobuf`) |
 | persistence.engine | string | `"file"` | Storage engine to use: either `file` or `hibernate` |
 | persistence.hibernate | object | `{"dialect":"org.hibernate.dialect.PostgreSQLDialect","driver":"org.postgresql.Driver","password":null,"url":"jdbc:postgresql://db:5432/arlas","user":null}` | Configuration node if `engine=hibernate`, ignored otherwise |
 | persistence.hibernate.dialect | string | `"org.hibernate.dialect.PostgreSQLDialect"` | SQL Dialect |
@@ -46,66 +56,79 @@ A Helm Chart to deploy ARLAS Server
 | services.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | services.mountCertificate | bool | `false` |  |
 | services.permissions.affinity | object | `{}` |  |
-| services.permissions.apm | bool | `false` |  |
 | services.permissions.extraContainers | list | `[]` |  |
 | services.permissions.extraEnv | string | `nil` |  |
 | services.permissions.extraInitContainers | string | `nil` |  |
 | services.permissions.extraVolumeMounts | string | `nil` |  |
 | services.permissions.extraVolumes | string | `nil` |  |
-| services.permissions.image | string | `"gisaia/arlas-permissions-server:28.0.0"` |  |
+| services.permissions.image | string | `"gisaia/arlas-permissions-server:29.0.1"` |  |
 | services.permissions.imagePullSecrets | list | `[]` |  |
 | services.permissions.jvmXmx | string | `"512m"` |  |
 | services.permissions.nodeSelector | object | `{}` |  |
+| services.permissions.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.permissions.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.permissions.replicaCount | int | `1` |  |
-| services.permissions.resources.limits.cpu | float | `0.5` |  |
+| services.permissions.resources.limits.cpu | float | `0.25` |  |
 | services.permissions.resources.limits.memory | string | `"512Mi"` |  |
 | services.permissions.resources.requests.cpu | float | `0.1` |  |
 | services.permissions.resources.requests.memory | string | `"128Mi"` |  |
 | services.permissions.serviceName | string | `"arlas-permissions-server"` |  |
+| services.permissions.startupProbe.failureThreshold | int | `36` |  |
+| services.permissions.startupProbe.periodSeconds | int | `5` |  |
 | services.permissions.tolerations | list | `[]` |  |
 | services.permissions.urlPrefix | string | `"/permissions"` |  |
 | services.persistence.affinity | object | `{}` |  |
-| services.persistence.apm | bool | `false` | Whether ES APM should be activated or not |
 | services.persistence.extraContainers | list | `[]` |  |
 | services.persistence.extraEnv | string | `nil` |  |
 | services.persistence.extraInitContainers | string | `nil` |  |
 | services.persistence.extraVolumeMounts | string | `nil` |  |
 | services.persistence.extraVolumes | string | `nil` |  |
-| services.persistence.image | string | `"gisaia/arlas-persistence-server:28.0.0"` |  |
+| services.persistence.image | string | `"gisaia/arlas-persistence-server:29.0.1"` |  |
 | services.persistence.imagePullSecrets | list | `[]` |  |
 | services.persistence.jvmXmx | string | `"512m"` |  |
 | services.persistence.nodeSelector | object | `{}` |  |
+| services.persistence.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.persistence.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.persistence.replicaCount | int | `1` |  |
-| services.persistence.resources.limits.cpu | float | `0.5` |  |
+| services.persistence.resources.limits.cpu | float | `0.25` |  |
 | services.persistence.resources.limits.memory | string | `"512Mi"` |  |
 | services.persistence.resources.requests.cpu | float | `0.1` |  |
 | services.persistence.resources.requests.memory | string | `"128Mi"` |  |
 | services.persistence.serviceName | string | `"arlas-persistence-server"` |  |
+| services.persistence.startupProbe.failureThreshold | int | `36` |  |
+| services.persistence.startupProbe.periodSeconds | int | `5` |  |
 | services.persistence.tolerations | list | `[]` |  |
 | services.persistence.urlPrefix | string | `"/persist"` |  |
 | services.podSecurityContext.fsGroup | int | `65532` |  |
 | services.podSecurityContext.runAsNonRoot | bool | `true` |  |
 | services.podSecurityContext.runAsUser | int | `65532` |  |
 | services.server.affinity | object | `{}` |  |
-| services.server.apm | bool | `false` |  |
+| services.server.autoscaling.behavior | string | `nil` |  |
+| services.server.autoscaling.customMetrics | string | `nil` |  |
+| services.server.autoscaling.enabled | bool | `false` |  |
+| services.server.autoscaling.maxReplicas | int | `4` |  |
+| services.server.autoscaling.minReplicas | int | `1` |  |
+| services.server.autoscaling.targetCPUUtilizationPercentage | int | `70` |  |
+| services.server.autoscaling.targetMemoryUtilizationPercentage | int | `70` |  |
 | services.server.extraContainers | list | `[]` |  |
 | services.server.extraEnv | string | `nil` |  |
 | services.server.extraInitContainers | string | `nil` |  |
 | services.server.extraVolumeMounts | string | `nil` |  |
 | services.server.extraVolumes | string | `nil` |  |
-| services.server.image | string | `"gisaia/arlas-server:28.0.0"` |  |
+| services.server.image | string | `"gisaia/arlas-server:29.0.3"` |  |
 | services.server.imagePullSecrets | list | `[]` |  |
 | services.server.jvmXmx | string | `"1800m"` |  |
 | services.server.nodeSelector | object | `{}` |  |
+| services.server.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
 | services.server.publicUris | string | `"swagger.*:*,stac:GET,openapi.json:GET,stac/.*:GET/POST,explore/.*:GET/POST,persist/.*:GET,authorize/resources:GET"` |  |
 | services.server.replicaCount | int | `1` |  |
 | services.server.resources.limits.cpu | int | `1` |  |
 | services.server.resources.limits.memory | string | `"1000Mi"` |  |
-| services.server.resources.requests.cpu | float | `0.1` |  |
-| services.server.resources.requests.memory | string | `"256Mi"` |  |
+| services.server.resources.requests.cpu | float | `0.25` |  |
+| services.server.resources.requests.memory | string | `"1000Mi"` |  |
 | services.server.serviceName | string | `"arlas-server"` |  |
+| services.server.startupProbe.failureThreshold | int | `36` |  |
+| services.server.startupProbe.periodSeconds | int | `5` |  |
 | services.server.tolerations | list | `[]` |  |
 | services.server.trustStoreOptions | string | `"-Djavax.net.ssl.trustStore=/opt/app/store/arlas-ks.jks -Djavax.net.ssl.trustStorePassword=arlaspassword"` |  |
 | services.server.urlPrefix | string | `"/arlas"` |  |

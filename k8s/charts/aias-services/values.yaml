@@ -35,7 +35,7 @@ services:
         cpu: 0.1
         memory: 50Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 2Gi
     # -- Node selector for AIRS service pods
     nodeSelector: {}
@@ -50,22 +50,22 @@ services:
       s3:
         # -- S3 bucket name for storing and accessing the STAC collections, items and managed assets
         bucket: airs-storage
-        # -- S3 access key id
-        accessKeyId: airs
-        # -- S3 secret access key
-        secretAccessKey: airssecret
-        # -- S3 internal endpoint URL, e.g. http://minio:9000
-        endpointUrl: http://arlas-stack-minio:9000
+        # -- Name of the environment variable contained within the airs existingSecret that holds the s3 access key id
+        accessKeyId: $ARLAS_APP_SEAWEEDFS_LOGIN
+        # -- Name of the environment variable contained within the airs existingSecret that holds the s3 access key secret
+        secretAccessKey: $ARLAS_APP_SEAWEEDFS_PASSWORD
+        # -- S3 internal endpoint URL, e.g. http://seaweedfs:8333
+        endpointUrl: http://arlas-stack-seaweedfs-s3:8333
         # -- List of writable paths in the S3 bucket
         writablePaths:
-          - /
-
+        - /
         # -- Public URL Pattern to access assets over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object. This is used to generate the asset URLs in the STAC item
-        assetHttpEndpointUrl: https://arlas-stack-minio:9000/{}/{}
+        assetHttpEndpointUrl: https://arlas-stack-seaweedfs-s3:8333/{}/{}
         # -- S3 platform type. This value is provided in the item properties of the STAC item
-        platform: MINIO
+        platform: SeaweedFS
         # -- S3 bucket's region. This value is provided in the item properties of the STAC item
         region:
+
         # -- S3 bucket's tier. This value is provided in the item properties of the STAC item
         tier: Standard
 
@@ -73,7 +73,11 @@ services:
       arlaseoMappingUrl: /app/mappings/arlas_eo_mapping.json
       # arlaseoMappingUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.21.0/conf/mapping.json
       # -- ARLAS-EO collection URL used for initializing new collections.
-      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.19.0/conf/collection.json
+      arlaseoCollectionUrl: https://raw.githubusercontent.com/gisaia/aias/refs/tags/0.21.0/conf/collection.json
+    # -- Whether OpenTelemetry should be activated or not
+    otel: false
+    # --  Name of the secret containing the environment variables that hold the login and password for connecting to s3
+    existingSecret: arlas-stack-secret
 
   fam:
     serviceName: arlas-fam
@@ -95,7 +99,7 @@ services:
         cpu: 0.1
         memory: 50Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 256Mi
     # -- Node selector for FAM service pods
     nodeSelector: {}
@@ -103,6 +107,8 @@ services:
     tolerations: []
     # -- Affinity for FAM service pods
     affinity: {}
+    # -- Whether OpenTelemetry should be activated or not
+    otel: false
 
   agate:
     serviceName: arlas-agate
@@ -124,7 +130,7 @@ services:
         cpu: 0.1
         memory: 50Mi
       limits:
-        cpu: 0.5
+        cpu: 0.25
         memory: 256Mi
     # -- Node selector for AGATE service pods
     nodeSelector: {}
@@ -170,7 +176,7 @@ services:
           description:
           - "Viewing data in ARLAS"
           permissions:
-      # ARLAS explore
+          # ARLAS explore
           - h:arlas-organization:${org}
           - h:arlas-workspace:${ws}
           - r:explore/.*:GET,POST
@@ -181,11 +187,11 @@ services:
           - r:stac:GET
           - r:openapi.json:GET
           - r:stac/.*:GET,POST
-      # ARLAS persistence
+          # ARLAS persistence
           - r:persist/resource/.*:GET
           - r:persist/groups/.*:GET
           - r:persist/resources/.*:GET
-      # ARLAS permissions
+          # ARLAS permissions
           - r:authorize/resources:GET
 
         # -- ARLAS Tagger role
@@ -269,43 +275,49 @@ services:
           - r:users/.*:GET,PUT,DELETE
           - r:session:DELETE
           - r:permissions:GET
-
       services:
         airs-storage:
           # -- Name of the header containing the JWT token
           jwt_name: authorization
           # -- Locations where to find the JWT token for storage access
           jwt_location:
-            - headers
+          - headers
           # -- Patterns for private assets
           private:
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
-              part: path
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
-              part: path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/overview
+            part: path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/cog
+            part: path
           # -- Patterns for private assets
           public:
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
-              part: path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/thumbnail
+            part: path
         # -- Configuration for accessing private COG assets
         cog:
           # -- Name of the header containing the JWT token for COG access
           jwt_name: authorization
           # -- Locations where to find the JWT token for COG access
           jwt_location:
-            - headers
-            - query_params
+          - headers
+          - query_params
           # -- Patterns for private COG assets
           private:
-            - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
-              part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
+          - pattern: (/airs-storage/)(?P<collection>[^/]+)/items/(?P<item>[^/]+)/assets/(?P<asset>[^/]+)
+            part: query.url.url.path # takes the query parametters, use it as a url, then extract the path
         titiler_public:
           # -- Patterns for public COG statistics access
           public:
-            - pattern: (/colorMaps/)(.*)
-              part: path
-
+          - pattern: (/colorMaps/)(.*)
+            part: path
+    # -- Whether OpenTelemetry should be activated or not
+    otel: false
   aproc:
+    # --  Name of the secret containing the environment variables that hold the Celery configuration
+    existingSecret: arlas-stack-secret
+    # -- Name of the key contained in the existingSecret that holds the celery broker url
+    celeryBrokerUrlKey: ARLAS_APP_CELERY_BROKER_URL
+    # --  Name of the secret containing the environment variables that hold the storage access configuration
+    storageExistingSecret: arlas-stack-secret
     service:
       serviceName: aproc-service
       image: gisaia/aproc-service:0.21.0
@@ -325,7 +337,7 @@ services:
           cpu: 0.1
           memory: 50Mi
         limits:
-          cpu: 0.5
+          cpu: 0.25
           memory: 256Mi
       # -- Node selector for APROC service pods
       nodeSelector: {}
@@ -333,6 +345,8 @@ services:
       tolerations: []
       # -- Affinity for APROC service pods
       affinity: {}
+      # -- Whether OpenTelemetry should be activated or not
+      otel: false
     worker:
       serviceName: aproc-proc
       image: gisaia/aproc-proc:0.21.0
@@ -341,16 +355,16 @@ services:
       extraInitContainers:
       extraEnv:
       extraVolumeMounts:
-      extraVolumes:
-      # -- Number of APROC worker replicas
+      extraVolumes: # -- Number of APROC worker replicas
+
       replicaCount: 1
       # -- Resources configuration for APROC worker
       resources:
         requests:
-          cpu: 0.5
+          cpu: 0.25
           memory: 512Mi
         limits:
-          cpu: 2
+          cpu: 1
           memory: 2Gi
       # -- Node selector for APROC worker pods
       nodeSelector: {}
@@ -369,7 +383,7 @@ services:
 
       # Alternative: example of a redis connection url with 3 sentinels and transport options for contacting the redis master:
       # celery_result_backend: sentinel://:mypassword@sentinel1:26379;sentinel://:mypassword@sentinel2:26379;sentinel://:mypassword@sentinel3:26379
-      celeryResultBackendTransportOptions:
+      celeryResultBackendTransportOptions: 
       #   master_name: mymaster
       #     sentinel_kwargs:
       #       password: mypassword
@@ -391,7 +405,7 @@ services:
           aprocEndpoint: http://aproc-service:8000
           resourceIdHashStartAt: 1
           enrichments:
-            - OVERVIEW_COG
+          - OVERVIEW_COG
           drivers:
             dimap:
               enabled: true
@@ -590,7 +604,7 @@ services:
                 cog_max_width_or_height: -1
                 cog_overview_max_width_or_height: 2000
                 all_bands_cog_max_width_or_height: 10000
-                
+
         dc3build:
           # -- Whether the DC3 build extension is enabled or not
           enabled: true
@@ -625,7 +639,7 @@ services:
           # -- S3 configuration for uploading the built downloads
           outboxS3:
             # -- S3 endpoint URL for uploading the built downloads
-            endpointUrl: http://arlas-stack-minio:9000
+            endpointUrl: http://arlas-stack-seaweedfs-s3:8333
             # -- S3 bucket name for uploading the built downloads
             bucket: downloads
             # -- S3 access key id for uploading the built downloads
@@ -633,7 +647,7 @@ services:
             # -- S3 secret access key for uploading the built downloads
             secretAccessKey: airssecret
             # -- Public URL Pattern to access the built downloads over HTTPS, must look like http(s)://your-s3-endpoint/{}/{} where first {} is the bucket, second {} is the path to the object
-            assetHttpEndpointUrl: http://arlas-stack-minio:9000/{}/{}
+            assetHttpEndpointUrl: http://arlas-stack-seaweedfs-s3:8333/{}/{}
           index:
             # -- Elasticsearch index name for the download requests
             name: aproc_downloads
@@ -645,7 +659,7 @@ services:
                 # -- change to windows path
                 windows: False
               admin:
-              # -- admin emails that will receive the download notifications, other than the user himself
+                # -- admin emails that will receive the download notifications, other than the user himself
                 emails: "admin@the.boss,someone.else@the.boss"
               done:
                 # -- Message templates for download done notifications to users
@@ -675,28 +689,27 @@ services:
         tmpDir: /tmp/
         # -- Configuration of the storages used by the access manager to provide access to various storage backends
         storages:
-          -
-            type: file
-            writable_paths:
-              - /tmp
-              - /outbox
-            readable_paths:
-              - /inputs
-          -
-            type: s3
-            bucket: archives
-            endpoint: $APROC_ARCHIVE_ENDPOINT|http://minio:9000"
-            readable_paths:
-              - /inputs
-          -
-            type: s3
-            bucket: downloads
-            endpoint: "http://minio:9000"
-            readable_paths:
-              - "/"
-            writable_paths:
-              - "/"
 
+        - type: file
+          writable_paths:
+          - /tmp
+          - /outbox
+          readable_paths:
+          - /inputs
+
+        - type: s3
+          bucket: archives
+          endpoint: $APROC_ARCHIVE_ENDPOINT|http://seaweedfs:8333"
+          readable_paths:
+          - /inputs
+
+        - type: s3
+          bucket: downloads
+          endpoint: "http://seaweedfs:8333"
+          readable_paths:
+          - "/"
+          writable_paths:
+          - "/"
 cors:
   # cors.allowedOrigins -- CORS Allowed Origins
   allowedOrigins: '"*"'
@@ -718,17 +731,20 @@ logger:
   loggingConsoleLevel: INFO
 
 elastic:
+  # --  Name of the secret containing the environment variables that hold the login and password for connecting to Elasticsearch
+  existingSecret: arlas-stack-secret
   # -- Elasticsearch endpoint URL for AIRS and APROC services
   endpoint: https://elasticsearch:9200
   # -- Elasticsearch cluster name
   cluster: elastic
-  # -- Elasticsearch login
-  login: elastic
-  # -- Elasticsearch password
-  password: elastic
-
+  # -- Name of the environment variable contained within the existingSecret that holds the login
+  login: $ARLAS_APP_ELASTIC_LOGIN
+  # -- Name of the environment variable contained within the existingSecret that holds the password
+  password: $ARLAS_APP_ELASTIC_PASSWORD
 
 smtp:
+  # --  Name of the secret containing the environment variables that hold the password for connecting to smtp
+  existingSecret: arlas-stack-secret
   # -- Whether SMTP email sending is enabled or not
   enabled: false
   # -- SMTP server host
@@ -738,6 +754,25 @@ smtp:
   # -- SMTP username
   username: "tobechanged"
   # -- SMTP password
-  password: "tobechanged"
+  password: $ARLAS_APP_SMTP_PASSWORD
   # -- SMTP sender email address
   from: "tobechanged"
+
+otel:
+  # -- OTLP endpoint
+  endpoint: http://apm-server-apm-http:8200
+  # -- OTLP protocol used by the agent (`grpc`, `http/protobuf`)
+  protocol: http/protobuf
+  # -- Resource attributes attached to all telemetry (comma-separated `key=value` pairs, e.g. `deployment.environment=dev`)
+  attributes: "deployment.environment={{ .Values.dnsDomain }}"
+  # -- User agents ignored by the HTTP server instrumentation (regex, e.g. Kubernetes probes)
+  ignoredUserAgents: "GoogleHC/*, kube-probe/*, curl*, GoogleStackdriverMonitoring*"
+  auth:
+    # -- Send an `Authorization: Bearer` header built from a Secret. Disable if the Server token authentication is disabled
+    enabled: true
+    # -- Name of the Secret holding the token.
+    secretName: apm-server-apm-token
+    # -- Key of the token in the Secret
+    secretKey: secret-token
+  # -- Additional environment variables for the OTel agent, as a `name: value` map
+  extraEnv: {}

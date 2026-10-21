@@ -73,11 +73,23 @@ spec:
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
-
+            {{- if .Values.services.fam.otel }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ .Values.services.fam.serviceName }}
+            {{- include "aiasServices.otel" . | nindent 12 }}
+            {{- end }}
             {{- with .Values.services.fam.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
-
+          envFrom:
+            - secretRef:
+                name: {{ .Values.services.aproc.existingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.services.aproc.storageExistingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.smtp.existingSecret | default "arlas-stack-secret"  }}
           volumeMounts:
             - name: fam-files
               mountPath: /app/conf/
@@ -98,7 +110,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
 
-      # NODE SELECTION      
+      # NODE SELECTION
       {{- with .Values.services.fam.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -6,7 +6,7 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
-      minio:
+      seaweedfs:
         condition: service_healthy
     restart: ${ARLAS_AIRS_RESTART_STRATEGY:-always}
 #    labels:
@@ -33,8 +33,8 @@ services:
       - AIRS_S3_ACCESS_KEY_ID=${AIRS_S3_ACCESS_KEY_ID}
       - AIRS_S3_ASSET_HTTP_ENDPOINT_URL=${AIRS_S3_ASSET_HTTP_ENDPOINT_URL}
       - AIRS_S3_BUCKET=${AIRS_S3_BUCKET:-airs-storage}
-      - AIRS_S3_ENDPOINT_URL=${AIRS_S3_ENDPOINT_URL:-http://minio:9000}
-      - AIRS_S3_PLATFORM=${AIRS_S3_PLATFORM:-MINIO}
+      - AIRS_S3_ENDPOINT_URL=${AIRS_S3_ENDPOINT_URL:-http://seaweedfs:8333}
+      - AIRS_S3_PLATFORM=${AIRS_S3_PLATFORM:-SEAWEEDFS}
       - AIRS_S3_REGION=${AIRS_S3_REGION:-Standart}
       - AIRS_S3_SECRET_ACCESS_KEY=${AIRS_S3_SECRET_ACCESS_KEY}
       - AIRS_S3_TIER=${AIRS_S3_TIER:-Standard}

@@ -1,0 +1,22 @@
+services:
+  seaweedfs: #SeaweedFS is an object store
+    image: ${SEAWEEDFS_VERSION}
+    platform: linux/x86_64
+    container_name: seaweedfs
+    restart: ${SEAWEEDFS_RESTART_STRATEGY:-always}
+    command: server -dir=/data -master.telemetry=false -s3
+    expose:
+      - "8333"
+    networks:
+      - arlas-net
+    volumes:
+      - ${AIRS_STORAGE_DIRECTORY:-arlas-data-seaweedfs}:/data
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:9333/cluster/status"]
+      interval: 10s
+      timeout: 10s
+      retries: 10

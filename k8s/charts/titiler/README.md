@@ -49,7 +49,7 @@ A dynamic Web Map tile server
 | nodeSelector | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
 | replicaCount | int | `1` |  |
-| resources.limits.cpu | int | `1` |  |
+| resources.limits.cpu | float | `0.2` |  |
 | resources.limits.memory | string | `"2Gi"` |  |
 | resources.requests.cpu | float | `0.1` |  |
 | resources.requests.memory | string | `"50Mi"` |  |

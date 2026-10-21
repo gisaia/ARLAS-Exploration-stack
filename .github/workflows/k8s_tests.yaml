@@ -17,24 +17,178 @@ on:
           - all
 
 jobs:
-  aias-on-k8s-cluster:
+  aias-on-k8s-cluster-ingress:
     if: github.event.inputs.stack == 'all' || github.event_name == 'pull_request'
     runs-on: runner-8core-32gb
     steps:
-      - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1
       - uses: actions/checkout@v4.1.4
-      - name: Add bitnami repo
-        run: helm repo add bitnami https://charts.bitnami.com/bitnami
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1.14.0
+        with:
+          config: ./k8s/kind/kind.yaml
       - name: Install yq
         run: sudo snap install yq
-      - name: Install metallb
-        run: ./k8s/scripts/install_metallb.sh
       - name: Install Ingress controller
         run: ./k8s/scripts/install_nginx_ingress_controller.sh
+      - name: Install operators
+        run: ./k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
+      - name: Add seaweedfs repo
+        run: |
+          helm repo add seaweedfs https://seaweedfs.github.io/seaweedfs/helm
+          helm repo update
+      - name: Generate secret.env
+        env:
+          NAMESPACE: ${{ vars.NAMESPACE }}
+
+          # ARLAS STACK
+          ARLAS_APP_KEYCLOAK_SECRET: ${{ secrets.ARLAS_APP_KEYCLOAK_SECRET }}
+          ARLAS_APP_SEAWEEDFS_LOGIN: ${{ vars.ARLAS_APP_SEAWEEDFS_LOGIN }}
+          ARLAS_APP_SEAWEEDFS_PASSWORD: ${{ secrets.ARLAS_APP_SEAWEEDFS_PASSWORD }}
+          ARLAS_APP_CELERY_BROKER_URL: ${{ secrets.ARLAS_APP_CELERY_BROKER_URL }}
+          ARLAS_APP_CELERY_RESULT_BACKEND: ${{ secrets.ARLAS_APP_CELERY_RESULT_BACKEND }}
+          ARLAS_APP_REDIS_PASSWORD: ${{ secrets.ARLAS_APP_REDIS_PASSWORD }}
+          ARLAS_APP_SMTP_PASSWORD: ${{ secrets.ARLAS_APP_SMTP_PASSWORD }}
+          ARLAS_APP_ELASTIC_LOGIN: ${{ vars.ARLAS_APP_ELASTIC_LOGIN }}
+          ARLAS_APP_ELASTIC_PASSWORD: ${{ secrets.ARLAS_APP_ELASTIC_PASSWORD }}
+
+          # KEYCLOAK
+          ARLAS_APP_KEYCLOAK_LOGIN: ${{ vars.ARLAS_APP_KEYCLOAK_LOGIN }}
+          ARLAS_APP_KEYCLOAK_PASSWORD: ${{ secrets.ARLAS_APP_KEYCLOAK_PASSWORD }}
+          ARLAS_APP_POSTGRES_LOGIN: ${{ vars.ARLAS_APP_POSTGRES_LOGIN }}
+          ARLAS_APP_POSTGRES_PASSWORD: ${{ secrets.ARLAS_APP_POSTGRES_PASSWORD }}
+
+          # RABBITMQ
+          ARLAS_APP_RABBITMQ_LOGIN: ${{ vars.ARLAS_APP_RABBITMQ_LOGIN }}
+          ARLAS_APP_RABBITMQ_PASSWORD: ${{ secrets.ARLAS_APP_RABBITMQ_PASSWORD }}
+        run: |
+          mkdir -p ./conf
+          umask 077
+          {
+            printf 'NAMESPACE=%s\n' "$NAMESPACE"
+            printf 'ARLAS_APP_KEYCLOAK_SECRET=%s\n' "$ARLAS_APP_KEYCLOAK_SECRET"
+            printf 'ARLAS_APP_SEAWEEDFS_LOGIN=%s\n' "$ARLAS_APP_SEAWEEDFS_LOGIN"
+            printf 'ARLAS_APP_SEAWEEDFS_PASSWORD=%s\n' "$ARLAS_APP_SEAWEEDFS_PASSWORD"
+            printf 'ARLAS_APP_CELERY_BROKER_URL=%s\n' "$ARLAS_APP_CELERY_BROKER_URL"
+            printf 'ARLAS_APP_CELERY_RESULT_BACKEND=%s\n' "$ARLAS_APP_CELERY_RESULT_BACKEND"
+            printf 'ARLAS_APP_REDIS_PASSWORD=%s\n' "$ARLAS_APP_REDIS_PASSWORD"
+            printf 'ARLAS_APP_SMTP_PASSWORD=%s\n' "$ARLAS_APP_SMTP_PASSWORD"
+            printf 'ARLAS_APP_ELASTIC_LOGIN=%s\n' "$ARLAS_APP_ELASTIC_LOGIN"
+            printf 'ARLAS_APP_ELASTIC_PASSWORD=%s\n' "$ARLAS_APP_ELASTIC_PASSWORD"
+            printf 'ARLAS_APP_KEYCLOAK_LOGIN=%s\n' "$ARLAS_APP_KEYCLOAK_LOGIN"
+            printf 'ARLAS_APP_KEYCLOAK_PASSWORD=%s\n' "$ARLAS_APP_KEYCLOAK_PASSWORD"
+            printf 'ARLAS_APP_POSTGRES_LOGIN=%s\n' "$ARLAS_APP_POSTGRES_LOGIN"
+            printf 'ARLAS_APP_POSTGRES_PASSWORD=%s\n' "$ARLAS_APP_POSTGRES_PASSWORD"
+            printf 'ARLAS_APP_RABBITMQ_LOGIN=%s\n' "$ARLAS_APP_RABBITMQ_LOGIN"
+            printf 'ARLAS_APP_RABBITMQ_PASSWORD=%s\n' "$ARLAS_APP_RABBITMQ_PASSWORD"
+          } > ./conf/secret.env
+      - name: Create secrets
+        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
-      - name: deploy arlas
-        run: ./k8s/scripts/start.sh 
-      - name: wait arlas running
-        run: ./k8s/scripts/wait_until_running.sh        
+      - name: Deploy arlas stack
+        run: ./k8s/scripts/start_ingress.sh 
+      - name: Patch core dns
+        run: ./k8s/scripts/ci/patch_coredns.sh
+      - name: Wait arlas running
+        run: ./k8s/scripts/wait_until_running.sh
+      - name: Map ingress hosts to 127.0.0.1
+        run: ./k8s/scripts/ci/set_hostname.sh ingress
+      - name: Run endpoints tests
+        run: ./k8s/scripts/test_endpoints.sh ingress
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: Install arlas_cli
+        run: "python -m pip install --only-binary :all: arlas-cli==26.6.4"
+      - name: Init configurations
+        run: ./k8s/scripts/init_arlas_cli_confs.sh site.arlas.k8s:443 elastic.arlas.k8s:443 keycloak.arlas.k8s:443
+      - name: Init stack with data
+        run: ./scripts/init_stack_with_data.sh local.k8s.kc.data
+
+  aias-on-k8s-cluster-gateway:
+    if: github.event.inputs.stack == 'all' || github.event_name == 'pull_request'
+    runs-on: runner-8core-32gb
+    steps:
+      - uses: actions/checkout@v4.1.4
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1.14.0
+        with:
+          config: ./k8s/kind/kind.yaml
+      - name: Install yq
+        run: sudo snap install yq
+      - name: Install Ingress controller
+        run: ./k8s/scripts/install_envoy_gateway_controller.sh
+      - name: Install operators
+        run: ./k8s/scripts/install_operators.sh keycloak@26.7.4 elasticsearch@3.5.0 rabbitmq@2.23.0
+      - name: Add seaweedfs repo
+        run: |
+          helm repo add seaweedfs https://seaweedfs.github.io/seaweedfs/helm
+          helm repo update
+      - name: Generate secret.env
+        env:
+          NAMESPACE: ${{ vars.NAMESPACE }}
+
+          # ARLAS STACK
+          ARLAS_APP_KEYCLOAK_SECRET: ${{ secrets.ARLAS_APP_KEYCLOAK_SECRET }}
+          ARLAS_APP_SEAWEEDFS_LOGIN: ${{ vars.ARLAS_APP_SEAWEEDFS_LOGIN }}
+          ARLAS_APP_SEAWEEDFS_PASSWORD: ${{ secrets.ARLAS_APP_SEAWEEDFS_PASSWORD }}
+          ARLAS_APP_CELERY_BROKER_URL: ${{ secrets.ARLAS_APP_CELERY_BROKER_URL }}
+          ARLAS_APP_CELERY_RESULT_BACKEND: ${{ secrets.ARLAS_APP_CELERY_RESULT_BACKEND }}
+          ARLAS_APP_REDIS_PASSWORD: ${{ secrets.ARLAS_APP_REDIS_PASSWORD }}
+          ARLAS_APP_SMTP_PASSWORD: ${{ secrets.ARLAS_APP_SMTP_PASSWORD }}
+          ARLAS_APP_ELASTIC_LOGIN: ${{ vars.ARLAS_APP_ELASTIC_LOGIN }}
+          ARLAS_APP_ELASTIC_PASSWORD: ${{ secrets.ARLAS_APP_ELASTIC_PASSWORD }}
+
+          # KEYCLOAK
+          ARLAS_APP_KEYCLOAK_LOGIN: ${{ vars.ARLAS_APP_KEYCLOAK_LOGIN }}
+          ARLAS_APP_KEYCLOAK_PASSWORD: ${{ secrets.ARLAS_APP_KEYCLOAK_PASSWORD }}
+          ARLAS_APP_POSTGRES_LOGIN: ${{ vars.ARLAS_APP_POSTGRES_LOGIN }}
+          ARLAS_APP_POSTGRES_PASSWORD: ${{ secrets.ARLAS_APP_POSTGRES_PASSWORD }}
+
+          # RABBITMQ
+          ARLAS_APP_RABBITMQ_LOGIN: ${{ vars.ARLAS_APP_RABBITMQ_LOGIN }}
+          ARLAS_APP_RABBITMQ_PASSWORD: ${{ secrets.ARLAS_APP_RABBITMQ_PASSWORD }}
+        run: |
+          mkdir -p ./conf
+          umask 077
+          {
+            printf 'NAMESPACE=%s\n' "$NAMESPACE"
+            printf 'ARLAS_APP_KEYCLOAK_SECRET=%s\n' "$ARLAS_APP_KEYCLOAK_SECRET"
+            printf 'ARLAS_APP_SEAWEEDFS_LOGIN=%s\n' "$ARLAS_APP_SEAWEEDFS_LOGIN"
+            printf 'ARLAS_APP_SEAWEEDFS_PASSWORD=%s\n' "$ARLAS_APP_SEAWEEDFS_PASSWORD"
+            printf 'ARLAS_APP_CELERY_BROKER_URL=%s\n' "$ARLAS_APP_CELERY_BROKER_URL"
+            printf 'ARLAS_APP_CELERY_RESULT_BACKEND=%s\n' "$ARLAS_APP_CELERY_RESULT_BACKEND"
+            printf 'ARLAS_APP_REDIS_PASSWORD=%s\n' "$ARLAS_APP_REDIS_PASSWORD"
+            printf 'ARLAS_APP_SMTP_PASSWORD=%s\n' "$ARLAS_APP_SMTP_PASSWORD"
+            printf 'ARLAS_APP_ELASTIC_LOGIN=%s\n' "$ARLAS_APP_ELASTIC_LOGIN"
+            printf 'ARLAS_APP_ELASTIC_PASSWORD=%s\n' "$ARLAS_APP_ELASTIC_PASSWORD"
+            printf 'ARLAS_APP_KEYCLOAK_LOGIN=%s\n' "$ARLAS_APP_KEYCLOAK_LOGIN"
+            printf 'ARLAS_APP_KEYCLOAK_PASSWORD=%s\n' "$ARLAS_APP_KEYCLOAK_PASSWORD"
+            printf 'ARLAS_APP_POSTGRES_LOGIN=%s\n' "$ARLAS_APP_POSTGRES_LOGIN"
+            printf 'ARLAS_APP_POSTGRES_PASSWORD=%s\n' "$ARLAS_APP_POSTGRES_PASSWORD"
+            printf 'ARLAS_APP_RABBITMQ_LOGIN=%s\n' "$ARLAS_APP_RABBITMQ_LOGIN"
+            printf 'ARLAS_APP_RABBITMQ_PASSWORD=%s\n' "$ARLAS_APP_RABBITMQ_PASSWORD"
+          } > ./conf/secret.env
+      - name: Create secrets
+        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq
+      - name: Create certificate
+        run: ./scripts/create_certificate.sh *.arlas.k8s
+      - name: Deploy arlas stack
+        run: ./k8s/scripts/start_gateway.sh
+      - name: Patch core dns
+        run: ./k8s/scripts/ci/patch_coredns.sh
+      - name: Wait arlas running
+        run: ./k8s/scripts/wait_until_running.sh
+      - name: Map gateway hosts to 127.0.0.1
+        run: ./k8s/scripts/ci/set_hostname.sh gateway
+      - name: Run endpoints tests
+        run: ./k8s/scripts/test_endpoints.sh gateway
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: Install arlas_cli
+        run: "python -m pip install --only-binary :all: arlas-cli==26.6.4"
+      - name: Init configurations
+        run: ./k8s/scripts/init_arlas_cli_confs.sh site.arlas.k8s:443 elastic.arlas.k8s:443 keycloak.arlas.k8s:443
+      - name: Init stack with data
+        run: ./scripts/init_stack_with_data.sh local.k8s.kc.data
