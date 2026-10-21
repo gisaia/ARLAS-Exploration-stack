@@ -74,6 +74,10 @@
       forward-auth:
         uri: http://agate:8004/agate/authorization/airs-storage
         request_headers: ["Authorization", "arlas-org-filter"]
+      proxy-rewrite:
+        headers:
+          remove:
+            - Authorization
   -
     uri: /fam/*
     upstream:

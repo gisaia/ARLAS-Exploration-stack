@@ -22,7 +22,6 @@ services:
       - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
       - xpack.security.transport.ssl.verification_mode=certificate
       - path.repo=/usr/share/elasticsearch/backup
-      - tracing.apm.enabled=false
     ulimits:
       memlock: {soft: -1, hard: -1}
       nofile:
