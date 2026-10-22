@@ -1,4 +1,4 @@
-{{- if and .Values.deployment.aias.services.airs.gateway.enabled .Values.global.gateway.enabled }}
+{{- if and .Values.deployment.aias.services.airs.gateway.enabled .Values.global.gateway.enabled (get .Values "aias-services").services.airs.enabled (get .Values "aias-services").services.agate.enabled }}
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
 metadata:

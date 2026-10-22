@@ -1,4 +1,4 @@
-{{- if eq .Values.uis.hub.aboutConfigMapName "arlas-hub-default-about-configmap" }}
+{{- if and (eq .Values.uis.hub.aboutConfigMapName "arlas-hub-default-about-configmap" ) .Values.uis.hub.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

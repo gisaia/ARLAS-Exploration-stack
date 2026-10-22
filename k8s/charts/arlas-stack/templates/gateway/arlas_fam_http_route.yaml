@@ -1,4 +1,4 @@
-{{- if .Values.deployment.aias.services.fam.gateway.enabled }}
+{{- if and .Values.deployment.aias.services.fam.gateway.enabled (get .Values "aias-services").services.fam.enabled }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
