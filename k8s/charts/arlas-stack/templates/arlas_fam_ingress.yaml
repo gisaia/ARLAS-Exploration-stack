@@ -1,4 +1,4 @@
-{{- if .Values.deployment.aias.services.fam.ingress.enabled }}
+{{- if and .Values.deployment.aias.services.fam.ingress.enabled (get .Values "aias-services").services.fam.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
