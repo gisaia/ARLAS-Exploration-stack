@@ -1,3 +1,4 @@
+{{- if .Values.services.agate.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -31,3 +32,4 @@ data:
       {{- if .Values.services.agate.configuration.roles }}
       {{ .Values.services.agate.configuration.roles | toYaml | nindent 6 }}
       {{- end }}
+{{- end }}

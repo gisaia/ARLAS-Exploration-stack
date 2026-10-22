@@ -62,6 +62,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.aboutConfigMapName | string | `"arlas-builder-default-about-configmap"` |  |
 | uis.builder.advancedFeatures | bool | `false` |  |
 | uis.builder.allowExternalNodeConfiguration | bool | `true` |  |
+| uis.builder.enabled | bool | `true` |  |
 | uis.builder.extraContainers | list | `[]` |  |
 | uis.builder.extraEnv | string | `nil` |  |
 | uis.builder.extraInitContainers | string | `nil` |  |
@@ -86,6 +87,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.archivePageSize | int | `10` |  |
 | uis.famWui.catalog | string | `"main catalog"` |  |
 | uis.famWui.collectionName | string | `"main"` |  |
+| uis.famWui.enabled | bool | `true` |  |
 | uis.famWui.extraContainers | list | `[]` |  |
 | uis.famWui.extraEnv | string | `nil` |  |
 | uis.famWui.extraInitContainers | string | `nil` |  |
@@ -99,6 +101,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` | Extra environment variables for the arlas fam wui container |
 | uis.hub.aboutConfigMapName | string | `"arlas-hub-default-about-configmap"` |  |
+| uis.hub.enabled | bool | `true` |  |
 | uis.hub.extraContainers | list | `[]` |  |
 | uis.hub.extraEnv | string | `nil` |  |
 | uis.hub.extraInitContainers | string | `nil` |  |
@@ -116,6 +119,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.serviceType | string | `"ClusterIP"` |  |
 | uis.wui.aboutAndTourConfigMapName | string | `"arlas-default-about-and-tour-configmap"` |  |
 | uis.wui.basemapUrl | string | `nil` |  |
+| uis.wui.enabled | bool | `true` |  |
 | uis.wui.extraContainers | list | `[]` |  |
 | uis.wui.extraEnv | string | `nil` |  |
 | uis.wui.extraInitContainers | string | `nil` |  |

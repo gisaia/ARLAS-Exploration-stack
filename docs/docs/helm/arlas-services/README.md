@@ -56,6 +56,7 @@ A Helm Chart to deploy ARLAS Server
 | services.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | services.mountCertificate | bool | `false` |  |
 | services.permissions.affinity | object | `{}` |  |
+| services.permissions.enabled | bool | `true` |  |
 | services.permissions.extraContainers | list | `[]` |  |
 | services.permissions.extraEnv | string | `nil` |  |
 | services.permissions.extraInitContainers | string | `nil` |  |
@@ -78,6 +79,7 @@ A Helm Chart to deploy ARLAS Server
 | services.permissions.tolerations | list | `[]` |  |
 | services.permissions.urlPrefix | string | `"/permissions"` |  |
 | services.persistence.affinity | object | `{}` |  |
+| services.persistence.enabled | bool | `true` |  |
 | services.persistence.extraContainers | list | `[]` |  |
 | services.persistence.extraEnv | string | `nil` |  |
 | services.persistence.extraInitContainers | string | `nil` |  |
@@ -110,6 +112,7 @@ A Helm Chart to deploy ARLAS Server
 | services.server.autoscaling.minReplicas | int | `1` |  |
 | services.server.autoscaling.targetCPUUtilizationPercentage | int | `70` |  |
 | services.server.autoscaling.targetMemoryUtilizationPercentage | int | `70` |  |
+| services.server.enabled | bool | `true` |  |
 | services.server.extraContainers | list | `[]` |  |
 | services.server.extraEnv | string | `nil` |  |
 | services.server.extraInitContainers | string | `nil` |  |

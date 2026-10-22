@@ -65,6 +65,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.configuration.urbac.verifyJwt | bool | `true` | Whether to verify the JWT signature or not |
 | services.agate.configuration.urbac.verifySsl | bool | `true` | Whether to verify the SSL certificate of the OpenID Provider or not |
 | services.agate.configuration.urlHeader | string | `"x-forwarded-uri"` | HTTP header containing the original request URL |
+| services.agate.enabled | bool | `true` |  |
 | services.agate.extraContainers | list | `[]` |  |
 | services.agate.extraEnv | string | `nil` |  |
 | services.agate.extraInitContainers | string | `nil` |  |
@@ -93,6 +94,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.configuration.s3.secretAccessKey | string | `"$ARLAS_APP_SEAWEEDFS_PASSWORD"` | Name of the environment variable contained within the airs existingSecret that holds the s3 access key secret |
 | services.airs.configuration.s3.tier | string | `"Standard"` | S3 bucket's tier. This value is provided in the item properties of the STAC item |
 | services.airs.configuration.s3.writablePaths | list | `["/"]` | List of writable paths in the S3 bucket |
+| services.airs.enabled | bool | `true` |  |
 | services.airs.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the login and password for connecting to s3 |
 | services.airs.extraContainers | list | `[]` |  |
 | services.airs.extraEnv | list | `[]` |  |
@@ -303,6 +305,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
 | services.aproc.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the Celery configuration |
 | services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
+| services.aproc.service.enabled | bool | `true` |  |
 | services.aproc.service.extraContainers | list | `[]` |  |
 | services.aproc.service.extraEnv | string | `nil` |  |
 | services.aproc.service.extraInitContainers | string | `nil` |  |
@@ -320,6 +323,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.urlPrefix | string | `"/aproc"` |  |
 | services.aproc.storageExistingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the storage access configuration |
 | services.aproc.worker.affinity | object | `{}` | Affinity for APROC worker pods |
+| services.aproc.worker.enabled | bool | `true` |  |
 | services.aproc.worker.extraContainers | list | `[]` |  |
 | services.aproc.worker.extraEnv | string | `nil` |  |
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
@@ -334,6 +338,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.tolerations | list | `[]` | Tolerations for APROC worker pods |
 | services.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | services.fam.affinity | object | `{}` | Affinity for FAM service pods |
+| services.fam.enabled | bool | `true` |  |
 | services.fam.extraContainers | list | `[]` |  |
 | services.fam.extraEnv | string | `nil` |  |
 | services.fam.extraInitContainers | string | `nil` |  |

@@ -17,6 +17,7 @@ services:
   containerSecurityContext:
     allowPrivilegeEscalation: false
   airs:
+    enabled: true
     serviceName: airs-server
     image: gisaia/airs:0.21.0
     imagePullSecrets: []
@@ -80,6 +81,7 @@ services:
     existingSecret: arlas-stack-secret
 
   fam:
+    enabled: true
     serviceName: arlas-fam
     image: gisaia/fam:0.21.0
     # -- Extra environment variables for the fam container
@@ -111,6 +113,7 @@ services:
     otel: false
 
   agate:
+    enabled: true
     serviceName: arlas-agate
     image: gisaia/agate:0.21.0
     # -- Extra environment variables for the agate container
@@ -319,6 +322,7 @@ services:
     # --  Name of the secret containing the environment variables that hold the storage access configuration
     storageExistingSecret: arlas-stack-secret
     service:
+      enabled: true
       serviceName: aproc-service
       image: gisaia/aproc-service:0.21.0
       imagePullSecrets: []
@@ -348,6 +352,7 @@ services:
       # -- Whether OpenTelemetry should be activated or not
       otel: false
     worker:
+      enabled: true
       serviceName: aproc-proc
       image: gisaia/aproc-proc:0.21.0
       imagePullSecrets: []

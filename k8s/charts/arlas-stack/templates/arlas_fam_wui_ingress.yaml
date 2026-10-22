@@ -1,4 +1,4 @@
-{{- if .Values.deployment.aias.uis.ingress.enabled }}
+{{- if and .Values.deployment.aias.uis.ingress.enabled (get .Values "arlas-uis").uis.famWui.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
