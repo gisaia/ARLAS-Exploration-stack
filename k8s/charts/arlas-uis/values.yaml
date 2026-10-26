@@ -110,11 +110,11 @@ uis:
     active:
       color: "#fbb03b"
       opacity: "0.1"
-      dash: [1]
+      dash: "[1]"
     inactive:
       color: "#3bb2d0"
       opacity: "0.1"
-      dash: [2, 1]
+      dash: "[2, 1]"
 services:
   server:
     urlPrefix: /arlas
