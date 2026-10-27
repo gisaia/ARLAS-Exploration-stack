@@ -28,6 +28,9 @@ global:
   # -- __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used.
   ingressClassName: &arlasAppIngressClassName nginx
 
+  # -- __MUST BE CONFIGURED:__ Secret Name with tls config for ingress.
+  ingressTlsSecretName: arlas-tls 
+  
   gateway:
     enabled: true
     name: arlas-gateway
