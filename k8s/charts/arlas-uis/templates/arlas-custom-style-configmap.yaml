@@ -1,3 +1,4 @@
+{{- if .Values.uis.wui.enabled }}
 apiVersion: v1
 data:
   custom-style.css: |
@@ -198,3 +199,4 @@ data:
 kind: ConfigMap
 metadata:
   name: arlas-custom-style
+{{- end }}

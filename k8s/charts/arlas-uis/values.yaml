@@ -16,6 +16,7 @@ uis:
     allowPrivilegeEscalation: false
 
   wui:
+    enabled: true
     serviceName: arlas-wui
     image: gisaia/arlas-wui:29.0.0
     # -- Extra environment variables for the arlas wui container
@@ -40,6 +41,7 @@ uis:
       #      name: arlas-example-assets-configmap
 
   famWui:
+    enabled: true
     serviceName: arlas-fam-wui
     image: gisaia/arlas-fam-wui:0.21.0
     # -- Extra environment variables for the arlas fam wui container
@@ -59,6 +61,7 @@ uis:
 
 
   hub:
+    enabled: true
     serviceName: arlas-hub
     image: gisaia/arlas-wui-hub:29.0.0
     urlPrefix: /hub
@@ -73,6 +76,7 @@ uis:
 
 
   builder:
+    enabled: true
     serviceName: arlas-builder
     image: gisaia/arlas-wui-builder:29.0.0
     urlPrefix: /builder/

@@ -1,4 +1,4 @@
-{{- if and .Values.deployment.arlas.uis.gateway.enabled .Values.global.gateway.enabled }}
+{{- if and .Values.deployment.arlas.uis.gateway.enabled .Values.global.gateway.enabled (get .Values "arlas-uis").uis.hub.enabled   }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
