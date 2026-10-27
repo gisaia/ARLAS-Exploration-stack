@@ -78,11 +78,10 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.colors.handle.color | string | `"#ff4081"` |  |
 | uis.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | uis.drawTheme.active.color | string | `"#fbb03b"` |  |
-| uis.drawTheme.active.dash[0] | int | `1` |  |
+| uis.drawTheme.active.dash | string | `"[1]"` |  |
 | uis.drawTheme.active.opacity | string | `"0.1"` |  |
 | uis.drawTheme.inactive.color | string | `"#3bb2d0"` |  |
-| uis.drawTheme.inactive.dash[0] | int | `2` |  |
-| uis.drawTheme.inactive.dash[1] | int | `1` |  |
+| uis.drawTheme.inactive.dash | string | `"[2, 1]"` |  |
 | uis.drawTheme.inactive.opacity | string | `"0.1"` |  |
 | uis.famWui.archivePageSize | int | `10` |  |
 | uis.famWui.catalog | string | `"main catalog"` |  |

@@ -303,6 +303,8 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.inputsDirectory | string | `"/inputs"` | Directory where archives to ingest are stored |
 | services.aproc.configuration.extensions.ingest.maxNumberOfArchivesForIngest | int | `100000` | Maximum number of archives that can be ingested in a single batch |
 | services.aproc.configuration.extensions.ingest.resourceIdHashStartAt | int | `1` |  |
+| services.aproc.encryptExistingKey | string | `"APROC_TASK_ENCRYPTION_KEYS"` | Name of the key containing the key used to encrypt aproc data passing through the broker in encryptExistingSecret |
+| services.aproc.encryptExistingSecret | string | `"aproc-encryption-keys"` | Name of the secret containing the key used to encrypt aproc data passing through the broker |
 | services.aproc.existingSecret | string | `"arlas-stack-secret"` | Name of the secret containing the environment variables that hold the Celery configuration |
 | services.aproc.service.affinity | object | `{}` | Affinity for APROC service pods |
 | services.aproc.service.enabled | bool | `true` |  |

@@ -82,7 +82,7 @@ jobs:
             printf 'ARLAS_APP_RABBITMQ_PASSWORD=%s\n' "$ARLAS_APP_RABBITMQ_PASSWORD"
           } > ./conf/secret.env
       - name: Create secrets
-        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq
+        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas aproc keycloak elasticsearch rabbitmq
       - name: Create certificate
         run: ./scripts/create_certificate.sh keycloak.arlas.k8s
       - name: Deploy arlas stack
@@ -170,7 +170,7 @@ jobs:
             printf 'ARLAS_APP_RABBITMQ_PASSWORD=%s\n' "$ARLAS_APP_RABBITMQ_PASSWORD"
           } > ./conf/secret.env
       - name: Create secrets
-        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq
+        run: ./k8s/scripts/create_and_deploy_secrets.sh arlas aproc keycloak elasticsearch rabbitmq
       - name: Create certificate
         run: ./scripts/create_certificate.sh *.arlas.k8s
       - name: Deploy arlas stack

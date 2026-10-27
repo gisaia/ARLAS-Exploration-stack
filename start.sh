@@ -68,6 +68,13 @@ then
 
     . ./conf/aias.env
     
+    # Generate a Fernet encryption key only if APROC_TASK_ENCRYPTION_KEYS is not already set.
+    if [[ -z "${APROC_TASK_ENCRYPTION_KEYS:-}" ]]; then
+            export APROC_TASK_ENCRYPTION_KEYS="$(docker run --rm python:3.13-slim \
+            sh -c 'pip install --no-cache-dir cryptography >/dev/null && \
+            python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"')"
+    fi
+    
     export BUCKET_NAME=$AIRS_S3_BUCKET
     docker compose  -p arlas-exploration-stack \
         --env-file conf/versions.env  \

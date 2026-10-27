@@ -111,11 +111,10 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | arlas-uis.uis.colors.arlas.bg | string | `"#265b87"` | Primary color for ARLAS UI |
 | arlas-uis.uis.colors.handle.color | string | `"#384875"` | Primary color for ARLAS handle |
 | arlas-uis.uis.drawTheme.active.color | string | `"#fbb03b"` |  |
-| arlas-uis.uis.drawTheme.active.dash[0] | int | `1` |  |
-| arlas-uis.uis.drawTheme.active.dash[1] | int | `2` |  |
+| arlas-uis.uis.drawTheme.active.dash | string | `"[ 1, 2 ]"` |  |
 | arlas-uis.uis.drawTheme.active.opacity | string | `"0.8"` |  |
 | arlas-uis.uis.drawTheme.inactive.color | string | `"#3bb2d0"` |  |
-| arlas-uis.uis.drawTheme.inactive.dash[0] | int | `1` |  |
+| arlas-uis.uis.drawTheme.inactive.dash | string | `"[ 1 ]"` |  |
 | arlas-uis.uis.drawTheme.inactive.opacity | string | `"0.1"` |  |
 | arlas-uis.uis.wui.basemapUrl | string | `nil` | Extra environment variables for the basemap url to download at init container startup (no download if already present). If none specified, a small basemap is used. See for instance https://build.protomaps.com/20231225.pmtiles for a full basemap or https://storage.googleapis.com/gisaia-public/protomaps/world-20231225-0-9.pmtiles for zoom 0 to 9. |
 | arlas-uis.uis.wui.customi18nConfigMap | string | `"arlas-wui-custom-i18n"` | Configuration for the ARLAS Web User Interface (WUI) translation with a custom configmap. If you want to add custom translations, create a configmap with the same structure as the one in k8s/charts/arlas-stack/templates/arlas_i18n_custom_configmap.yaml file and set the name of this configmap here. If you don't want to add custom translations, set this value to null or empty string and do not create the configmap. Keys can be found in the ARLAS WUI codebase, in the i18n folder: https://github.com/gisaia/ARLAS-wui/tree/develop/src/assets/i18n. |
