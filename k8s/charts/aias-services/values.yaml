@@ -315,6 +315,10 @@ services:
     # -- Whether OpenTelemetry should be activated or not
     otel: false
   aproc:
+    # --  Name of the secret containing the key used to encrypt aproc data passing through the broker
+    encryptExistingSecret: aproc-encryption-keys
+    # --  Name of the key containing the key used to encrypt aproc data passing through the broker in encryptExistingSecret
+    encryptExistingKey: APROC_TASK_ENCRYPTION_KEYS
     # --  Name of the secret containing the environment variables that hold the Celery configuration
     existingSecret: arlas-stack-secret
     # -- Name of the key contained in the existingSecret that holds the celery broker url

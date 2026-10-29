@@ -479,6 +479,7 @@ Image: `ARLAS_VERSION_APROC_PROC` with `gisaia/aproc-proc:${ARLAS_VERSION_AIAS}`
 | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `True` |  | `True` in `conf/aias.env` |
 | `APROC_TASK_TIME_LIMIT` | `APROC_TASK_TIME_LIMIT` | `1200` |  | `1200` in `conf/aias.env` |
 | `APROC_TASK_SOFT_TIME_LIMIT` | `APROC_TASK_SOFT_TIME_LIMIT` | `1190` |  | `1190` in `conf/aias.env` |
+| `APROC_TASK_ENCRYPTION_KEYS` | `APROC_TASK_ENCRYPTION_KEYS` | `` |  |  |
 
 List of volumes:
 
@@ -546,6 +547,7 @@ Image: `ARLAS_VERSION_APROC_SERVICE` with `gisaia/aproc-service:${ARLAS_VERSION_
 | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `APROC_INPUT_STORAGE_API_KEY_PRIVATE_KEY` | `` |  | `""` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_DOMAIN` | `APROC_INPUT_STORAGE_DOMAIN` | `` |  | `geodes-portal.cnes.fr` in `conf/aias.env` |
 | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `APROC_INPUT_STORAGE_FORCE_DOWNLOAD` | `True` |  | `True` in `conf/aias.env` |
+| `APROC_TASK_ENCRYPTION_KEYS` | `APROC_TASK_ENCRYPTION_KEYS` | `` |  |  |
 
 List of volumes:
 

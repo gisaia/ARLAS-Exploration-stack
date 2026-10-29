@@ -74,6 +74,7 @@ spec:
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
+            {{- include "aproc.encrypt" . | nindent 12 }}
             {{- if .Values.services.aproc.service.otel }}
             - name: OTEL_SERVICE_NAME
               value: {{ .Values.services.aproc.service.serviceName }}

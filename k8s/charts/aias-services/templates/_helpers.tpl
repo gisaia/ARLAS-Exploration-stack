@@ -24,3 +24,11 @@
   value: {{ $v | quote }}
 {{- end }}
 {{- end }}
+
+{{- define "aproc.encrypt" -}}
+- name: APROC_TASK_ENCRYPTION_KEYS
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.services.aproc.encryptExistingSecret }}
+      key: {{ .Values.services.aproc.encryptExistingKey }}
+{{- end }}

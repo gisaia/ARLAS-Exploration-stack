@@ -50,7 +50,7 @@ ARLAS_APP_RABBITMQ_PASSWORD=
 # Used to build the Elasticsearch user Secret name: ${ES_CLUSTER_NAME}-user.
 ES_CLUSTER_NAME="${ES_CLUSTER_NAME:-arlas-elasticsearch}"
 
-readonly SUPPORTED_COMPONENTS=(arlas keycloak rabbitmq elasticsearch)
+readonly SUPPORTED_COMPONENTS=(arlas aproc keycloak rabbitmq elasticsearch)
 
 # Variables required for each component.
 readonly ARLAS_REQUIRED_VARS=(
@@ -108,6 +108,7 @@ usage() {
 Usage: $0 <component> [<component>...]
 
 Components:
+  aproc          Create/update aproc-encryption-keys
   arlas          Create/update arlas-stack-secret
   keycloak       Create/update keycloak-bootstrap-admin and keycloak-db
   rabbitmq       Create/update arlas-rabbitmq-default-user
@@ -116,7 +117,7 @@ Components:
 Examples:
   $0 arlas keycloak
   $0 rabbitmq
-  $0 arlas keycloak rabbitmq elasticsearch
+  $0 arlas aproc keycloak rabbitmq elasticsearch
 
 Environment:
   ENV_FILE       Path to the .env file (default: ./conf/secret.env)
@@ -290,6 +291,18 @@ if [[ -n "${selected_components[elasticsearch]:-}" ]]; then
     --dry-run=client \
     -o yaml |
   kubectl apply -f -
+fi
+
+if [[ -n "${selected_components[aproc]:-}" ]]; then
+  log_info "Creating or updating Secrets for component: aproc"
+
+  KEY=$(docker run --rm python:3.13-slim \
+    sh -c 'pip install --no-cache-dir cryptography >/dev/null && \
+          python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"')
+
+  kubectl -n "$NAMESPACE" create secret generic aproc-encryption-keys \
+    --from-literal=APROC_TASK_ENCRYPTION_KEYS="$KEY" \
+    --dry-run=client -o yaml | kubectl apply -f -
 fi
 
 log_info "Successfully created or updated Secrets for: $* in namespace '$NAMESPACE'"
