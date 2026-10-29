@@ -88,13 +88,12 @@ docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yam
     dc/ref-dc-aias-aproc-service.yaml \
     dc/ref-dc-aias-fam-wui.yaml \
     dc/ref-dc-aias-fam.yaml \
-    dc/ref-dc-aias-minio.yaml \
+    dc/ref-dc-aias-seaweedfs.yaml \
     dc/ref-dc-aias-rabbitmq.yaml \
     dc/ref-dc-aias-redis.yaml \
     dc/ref-dc-aias-volumes.yaml \
     dc/ref-dc-aias-agate.yaml \
     conf/aias.env \
-    conf/minio.env \
     conf/versions.env \
     conf/elastic.env \
     conf/arlas.env \
@@ -123,13 +122,12 @@ docker run --rm -v "$PWD":/app -w /app python:3.10 sh -c "pip install ruamel.yam
     dc/ref-dc-aias-aproc-service.yaml \
     dc/ref-dc-aias-fam-wui.yaml \
     dc/ref-dc-aias-fam.yaml \
-    dc/ref-dc-aias-minio.yaml \
+    dc/ref-dc-aias-seaweedfs.yaml \
     dc/ref-dc-aias-rabbitmq.yaml \
     dc/ref-dc-aias-redis.yaml \
     dc/ref-dc-aias-volumes.yaml \
     dc/ref-dc-aias-agate.yaml \
     conf/aias.env \
-    conf/minio.env \
     conf/versions.env \
     conf/elastic.env \
     conf/arlas.env \

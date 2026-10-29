@@ -1,3 +1,4 @@
+{{- if .Values.services.aproc.worker.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -57,7 +58,10 @@ spec:
               value: /app/conf/aproc.yaml
 
             - name: BROKER
-              value: {{ .Values.services.aproc.configuration.celeryBrokerUrl }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.services.aproc.existingSecret | default "arlas-stack-secret" }}
+                  key: {{ .Values.services.aproc.celeryBrokerUrlKey | default "ARLAS_APP_CELERY_BROKER_URL" }}
             - name: QUEUE_NAMES
               value: small_task_queue,medium_task_queue,large_task_queue,aproc_default_queue
 
@@ -66,11 +70,19 @@ spec:
               value: {{ .Values.logger.loggingLevel }}
             - name: ACCESS_LOGGER_LEVEL
               value: {{ .Values.logger.loggingLevel }}
-
+            {{- include "aproc.encrypt" . | nindent 12 }}
             {{- with .Values.services.aproc.worker.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
-
+          envFrom:
+            - secretRef:
+                name: {{ .Values.services.aproc.existingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.services.aproc.storageExistingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.elastic.existingSecret | default "arlas-stack-secret"  }}
+            - secretRef:
+                name: {{ .Values.smtp.existingSecret | default "arlas-stack-secret"  }}
           volumeMounts:
             - name: aproc-files
               mountPath: /app/conf/
@@ -110,3 +122,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

@@ -1,0 +1,23 @@
+{{- if and .Values.deployment.seaweedfs.gateway.enabled .Values.global.gateway.enabled .Values.deployment.seaweedfs.enabled }}
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: seaweedfs-ext-auth
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: arlas-seaweedfs-route
+  jwt:
+    providers:
+{{ include "arlas.jwtProvider.keycloak" . | nindent 4 }}
+
+  extAuth:
+    headersToExtAuth:
+      {{- toYaml .Values.global.gateway.extAuth.headersToExtAuth | nindent 6 }}
+    http:
+      backendRefs:
+        - name: {{ (get .Values "aias-services").services.agate.serviceName }}
+          port: {{ (get .Values "aias-services").services.servicePort }}
+      pathOverride: /agate/authorization/airs-storage
+{{- end }}

@@ -5,7 +5,6 @@ services:
     container_name: elasticsearch
     restart: ${ELASTIC_RESTART_STRATEGY:-always}
     environment:
-      - ELASTIC_LOGIN=${ELASTIC_LOGIN}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - APM_SECRET_TOKEN=${APM_SECRET_TOKEN}
       - discovery.type=single-node
@@ -23,7 +22,6 @@ services:
       - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
       - xpack.security.transport.ssl.verification_mode=certificate
       - path.repo=/usr/share/elasticsearch/backup
-      - tracing.apm.enabled=false
     ulimits:
       memlock: {soft: -1, hard: -1}
       nofile:

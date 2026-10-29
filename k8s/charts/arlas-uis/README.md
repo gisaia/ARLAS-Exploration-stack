@@ -48,7 +48,7 @@ A Helm Chart to deploy ARLAS User Interfaces
 | replicaCount | int | `1` | Number of desired pods |
 | resources.limits.cpu | float | `0.1` |  |
 | resources.limits.memory | string | `"50Mi"` |  |
-| resources.requests.cpu | float | `0.05` |  |
+| resources.requests.cpu | float | `0.1` |  |
 | resources.requests.memory | string | `"10Mi"` |  |
 | resultListEnableExport | bool | `false` | Whether or not to enable result list export |
 | resultListExportSize | int | `1000` | Result list export size |
@@ -62,12 +62,13 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.builder.aboutConfigMapName | string | `"arlas-builder-default-about-configmap"` |  |
 | uis.builder.advancedFeatures | bool | `false` |  |
 | uis.builder.allowExternalNodeConfiguration | bool | `true` |  |
+| uis.builder.enabled | bool | `true` |  |
 | uis.builder.extraContainers | list | `[]` |  |
 | uis.builder.extraEnv | string | `nil` |  |
 | uis.builder.extraInitContainers | string | `nil` |  |
 | uis.builder.extraVolumeMounts | string | `nil` |  |
 | uis.builder.extraVolumes | string | `nil` |  |
-| uis.builder.image | string | `"gisaia/arlas-wui-builder:28.0.1"` |  |
+| uis.builder.image | string | `"gisaia/arlas-wui-builder:29.0.0"` |  |
 | uis.builder.imagePullSecrets | list | `[]` |  |
 | uis.builder.serviceName | string | `"arlas-builder"` |  |
 | uis.builder.tabName | string | `"ARLAS Studio"` |  |
@@ -76,9 +77,16 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.colors.arlas.bg | string | `"#ff4081"` |  |
 | uis.colors.handle.color | string | `"#ff4081"` |  |
 | uis.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| uis.drawTheme.active.color | string | `"#fbb03b"` |  |
+| uis.drawTheme.active.dash | string | `"[1]"` |  |
+| uis.drawTheme.active.opacity | string | `"0.1"` |  |
+| uis.drawTheme.inactive.color | string | `"#3bb2d0"` |  |
+| uis.drawTheme.inactive.dash | string | `"[2, 1]"` |  |
+| uis.drawTheme.inactive.opacity | string | `"0.1"` |  |
 | uis.famWui.archivePageSize | int | `10` |  |
 | uis.famWui.catalog | string | `"main catalog"` |  |
 | uis.famWui.collectionName | string | `"main"` |  |
+| uis.famWui.enabled | bool | `true` |  |
 | uis.famWui.extraContainers | list | `[]` |  |
 | uis.famWui.extraEnv | string | `nil` |  |
 | uis.famWui.extraInitContainers | string | `nil` |  |
@@ -86,18 +94,19 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.famWui.extraVolumes | string | `nil` |  |
 | uis.famWui.famDefaultURL | string | `nil` |  |
 | uis.famWui.filePageSize | int | `50` |  |
-| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.19.0"` |  |
+| uis.famWui.image | string | `"gisaia/arlas-fam-wui:0.21.0"` |  |
 | uis.famWui.imagePullSecrets | list | `[]` |  |
 | uis.famWui.serviceName | string | `"arlas-fam-wui"` |  |
 | uis.famWui.tabName | string | `"ARLAS FAM Wui"` |  |
 | uis.famWui.urlPrefix | string | `"/fam-wui"` | Extra environment variables for the arlas fam wui container |
 | uis.hub.aboutConfigMapName | string | `"arlas-hub-default-about-configmap"` |  |
+| uis.hub.enabled | bool | `true` |  |
 | uis.hub.extraContainers | list | `[]` |  |
 | uis.hub.extraEnv | string | `nil` |  |
 | uis.hub.extraInitContainers | string | `nil` |  |
 | uis.hub.extraVolumeMounts | string | `nil` |  |
 | uis.hub.extraVolumes | string | `nil` |  |
-| uis.hub.image | string | `"gisaia/arlas-wui-hub:28.0.2"` |  |
+| uis.hub.image | string | `"gisaia/arlas-wui-hub:29.0.0"` |  |
 | uis.hub.imagePullSecrets | list | `[]` |  |
 | uis.hub.serviceName | string | `"arlas-hub"` |  |
 | uis.hub.tabName | string | `"ARLAS Hub"` |  |
@@ -109,12 +118,13 @@ A Helm Chart to deploy ARLAS User Interfaces
 | uis.serviceType | string | `"ClusterIP"` |  |
 | uis.wui.aboutAndTourConfigMapName | string | `"arlas-default-about-and-tour-configmap"` |  |
 | uis.wui.basemapUrl | string | `nil` |  |
+| uis.wui.enabled | bool | `true` |  |
 | uis.wui.extraContainers | list | `[]` |  |
 | uis.wui.extraEnv | string | `nil` |  |
 | uis.wui.extraInitContainers | string | `nil` |  |
 | uis.wui.extraVolumeMounts | string | `nil` |  |
 | uis.wui.extraVolumes | string | `nil` |  |
-| uis.wui.image | string | `"gisaia/arlas-wui:28.0.3"` |  |
+| uis.wui.image | string | `"gisaia/arlas-wui:29.0.0"` |  |
 | uis.wui.imagePullSecrets | list | `[]` |  |
 | uis.wui.serviceName | string | `"arlas-wui"` |  |
 | uis.wui.tabName | string | `"ARLAS Exploration"` |  |

@@ -1,4 +1,4 @@
-{{- if .Values.deployment.arlas.services.ingress.enabled }}
+{{- if and .Values.deployment.arlas.services.ingress.enabled (get .Values "arlas-services").services.server.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -7,6 +7,10 @@ metadata:
     {{ .Values.deployment.arlas.services.ingress.annotations | toYaml | nindent 4 }}
 spec:
   ingressClassName: {{ .Values.global.ingressClassName }}
+  tls:
+    - hosts:
+        - {{ .Values.global.dnsDomain }}
+      secretName: {{ .Values.global.ingressTlsSecretName }}
   rules:
     - host: {{ .Values.global.dnsDomain }}
       http:

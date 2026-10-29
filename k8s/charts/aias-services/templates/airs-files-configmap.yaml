@@ -1,3 +1,4 @@
+{{- if .Values.services.airs.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -27,3 +28,4 @@ data:
 
     arlaseo_mapping_url: {{ .Values.services.airs.configuration.arlaseoMappingUrl }}
     arlaseo_collection_url: {{ .Values.services.airs.configuration.arlaseoCollectionUrl }}
+{{- end }}

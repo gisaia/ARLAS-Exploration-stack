@@ -1,0 +1,59 @@
+{{- range $key, $inst := (include "elastic.instances" . | fromJson) }}
+{{- if $inst.enabled }}
+---
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: {{ $inst.elasticsearch.clusterName }}
+spec:
+  image: "{{ $inst.elasticsearch.image.repository }}:{{ $inst.elasticsearch.image.tag }}"
+  version: {{ $inst.elasticsearch.image.tag | quote }}
+  auth:
+    fileRealm:
+      - secretName: {{ $inst.elasticsearch.existingSecret }}
+  nodeSets:
+    {{- range $inst.elasticsearch.nodeSets }}
+    - name: {{ .name }}
+      count: {{ .count }}
+      config:
+        node.roles: {{ .roles | toYaml | nindent 10 }}
+        node.store.allow_mmap: {{ .allowMmap | default false }}
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            storageClassName: {{ .storageClassName | default $.Values.global.defaultStorageClass }}
+            resources:
+              requests:
+                storage: {{ .storageSize | default "3Gi" }}
+      podTemplate:
+        metadata: {}
+        spec:
+          {{- if .nodeSelector }}
+          nodeSelector:
+            {{- toYaml .nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if .tolerations }}
+          tolerations:
+            {{- toYaml .tolerations | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  cpu: {{ .resources.requests.cpu | quote }}
+                  memory: {{ .resources.requests.memory | quote }}
+                limits:
+                  cpu: {{ .resources.limits.cpu | quote }}
+                  memory: {{ .resources.limits.memory | quote }}
+    {{- end }}
+  http:
+    service:
+      spec:
+        type: {{ $inst.elasticsearch.service.type }}
+    tls:
+      selfSignedCertificate:
+        disabled: {{ $inst.elasticsearch.tls.selfSignedDisabled }}
+{{- end }}
+{{- end }}

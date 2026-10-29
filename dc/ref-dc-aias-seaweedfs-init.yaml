@@ -1,0 +1,48 @@
+services:
+  createbuckets:
+    image: ${SEAWEEDFS_VERSION}
+    platform: linux/x86_64
+    container_name: createbuckets
+    depends_on:
+      seaweedfs:
+        condition: service_healthy
+    environment:
+      - BUCKET_NAME=${BUCKET_NAME}
+    networks:
+      - arlas-net
+    logging:
+      driver: "${DOCKER_LOGGING_DRIVER:-json-file}"
+      options:
+        tag: ${ARLAS_LOGGING_TAG:-arlas_logging}
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        echo "create bucket $$BUCKET_NAME"
+        echo "s3.bucket.create -name $$BUCKET_NAME" | weed shell -master=seaweedfs:9333 -filer=seaweedfs:8888
+        exit 0
+
+  s3users:
+    image: ${SEAWEEDFS_VERSION}
+    platform: linux/x86_64
+    depends_on:
+      seaweedfs:
+        condition: service_healthy
+    restart: "no"
+    environment:
+      - LOGIN=${AIRS_S3_ACCESS_KEY_ID:-airs}
+      - PASSWORD=${AIRS_S3_SECRET_ACCESS_KEY:-airssecret}
+      - AIRS_S3_BUCKET=${AIRS_S3_BUCKET:-airstest}
+      - DOWNLOAD_S3_BUCKET=${DOWNLOAD_S3_BUCKET}
+    networks:
+      - arlas-net
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        weed shell -master=seaweedfs:9333 -filer=seaweedfs:8888 <<EOF
+        s3.configure -user=$$LOGIN -access_key=$$LOGIN -secret_key=$$PASSWORD -actions=Admin,Read,Write,List,Tagging -apply
+        s3.configure -user=anonymous -buckets=$$AIRS_S3_BUCKET,$$DOWNLOAD_S3_BUCKET,archives -actions=Read,List -apply
+        s3.configure
+        EOF
