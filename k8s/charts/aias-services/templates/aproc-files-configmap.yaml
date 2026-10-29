@@ -546,16 +546,16 @@ data:
         {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
 
-      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.enabled }}
+      {{- if .Values.services.aproc.configuration.extensions.ingest.drivers.saocom.enabled }}
       -
-        name: soacom
-        class_name: extensions.aproc.proc.ingest.drivers.impl.soacom
-        assets_dir: /tmp/aproc/soacom
+        name: saocom
+        class_name: extensions.aproc.proc.ingest.drivers.impl.saocom
+        assets_dir: /tmp/aproc/saocom
         configuration:
           tmp_directory: $TMP_FOLDER|/tmp
-          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.build_overview_when_remote }}
-          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.build_overview_when_local }}
-        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.soacom.priority }}
+          build_overview_when_remote: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_remote }}
+          build_overview_when_local: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_local }}
+        priority: {{ .Values.services.aproc.configuration.extensions.ingest.drivers.saocom.priority }}
         enrichments:
         {{ .Values.services.aproc.configuration.extensions.ingest.enrichments | toYaml | nindent 10 }}
       {{- end }}
