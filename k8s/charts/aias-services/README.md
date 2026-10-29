@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 28.10.0](https://img.shields.io/badge/Version-28.10.0-informational?style=flat-square) ![AppVersion: 0.21.1](https://img.shields.io/badge/AppVersion-0.21.1-informational?style=flat-square)
+![Version: 28.11.0](https://img.shields.io/badge/Version-28.11.0-informational?style=flat-square) ![AppVersion: 0.21.1](https://img.shields.io/badge/AppVersion-0.21.1-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
@@ -235,6 +235,10 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.priority | int | `5` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_local | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_remote | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.priority | int | `24` |  |
 | services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.satellogic.enabled | bool | `true` |  |
@@ -251,10 +255,6 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.skysat.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.skysat.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.skysat.priority | int | `15` |  |
-| services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_local | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_remote | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.saocom.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.saocom.priority | int | `24` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.enabled | bool | `true` |  |
