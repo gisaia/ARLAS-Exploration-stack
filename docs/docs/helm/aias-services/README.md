@@ -264,9 +264,9 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.superview.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.superview.priority | int | `22` |  |
 | services.aproc.configuration.extensions.ingest.drivers.terrasarx.build_overview_when_local | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.saocomarx.build_overview_when_remote | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.saocomarx.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.saocomarx.priority | int | `7` |  |
+| services.aproc.configuration.extensions.ingest.drivers.terrasarx.build_overview_when_remote | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.terrasarx.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.terrasarx.priority | int | `7` |  |
 | services.aproc.configuration.extensions.ingest.drivers.saocomuild_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.tiff.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.tiff.enabled | bool | `true` |  |
