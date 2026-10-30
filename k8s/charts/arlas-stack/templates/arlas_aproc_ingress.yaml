@@ -7,10 +7,12 @@ metadata:
     {{ .Values.deployment.aias.services.aproc.ingress.annotations | toYaml | nindent 4 }}
 spec:
   ingressClassName: {{ .Values.global.ingressClassName }}
+  {{- if .Values.global.ingressTlsSecretName }}
   tls:
     - hosts:
         - {{ .Values.global.dnsDomain }}
       secretName: {{ .Values.global.ingressTlsSecretName }}
+  {{- end }}
   rules:
     - host: {{ .Values.global.dnsDomain }}
       http:
