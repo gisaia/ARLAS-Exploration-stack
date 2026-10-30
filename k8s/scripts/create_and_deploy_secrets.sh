@@ -191,7 +191,7 @@ declare -A selected_components=()
 
 for component in "$@"; do
   case "$component" in
-    arlas|keycloak|rabbitmq|elasticsearch)
+    arlas|keycloak|rabbitmq|elasticsearch|aproc)
       selected_components["$component"]=1
       ;;
     -h|--help)
