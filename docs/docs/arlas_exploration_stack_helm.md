@@ -181,11 +181,12 @@ __Note for test/dev environment__:  If your KIND cluster does not have operators
 ```
 ### Create secret
 
-__Note for test/dev environment__:  If your KIND cluster does not already contain the secrets described in `./conf/secret.env.template`, you can create them with:
+__Note for test/dev environment__:  If your KIND cluster does not already contain the secrets described in `./conf/secret.env.template`, you can create them with the following command.
+But before, make sure that `./conf/secret.env` exists and contains valid values before running the script or your current environment contains all the variables .
+
 ```shell
-k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq
+k8s/scripts/create_and_deploy_secrets.sh arlas keycloak elasticsearch rabbitmq aproc
 ```
-Make sure that `./conf/secret.env` exists and contains valid values before running the script or your current environment contains all the variables .
 
 ### Services, DNS and Certificates
 
