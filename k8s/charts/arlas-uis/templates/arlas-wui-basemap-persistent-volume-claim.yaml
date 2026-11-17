@@ -1,3 +1,4 @@
+{{- if .Values.uis.wui.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -11,3 +12,4 @@ spec:
     requests:
       storage: {{ .Values.basemap.storageSize }}
   storageClassName: {{ .Values.defaultStorageClass }}
+{{- end }}

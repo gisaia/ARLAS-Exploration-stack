@@ -1,3 +1,4 @@
+{{- if or .Values.services.fam.enabled .Values.services.aproc.service.enabled .Values.services.aproc.worker.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -641,3 +642,4 @@ data:
   fam.yaml: |
     inputs_directory: {{ .Values.services.aproc.configuration.extensions.ingest.inputsDirectory }}
     driver_configuration_file: conf/drivers.yaml
+{{- end }}

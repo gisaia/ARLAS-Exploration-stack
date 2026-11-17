@@ -1,0 +1,34 @@
+{{- if .Values.global.gateway.enabled }}
+{{- range $key, $inst := (include "elastic.instances" . | fromJson) }}
+{{- if and $inst.enabled $inst.elasticsearch.gateway.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: {{ $inst.elasticsearch.clusterName }}-backend-tls
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: {{ $inst.elasticsearch.clusterName }}-es-http
+  validation:
+    hostname: {{ $inst.elasticsearch.clusterName }}-es-http.{{ $.Release.Namespace }}.svc
+    caCertificateRefs:
+      - group: ""
+        kind: Secret
+        name: {{ $inst.elasticsearch.clusterName }}-es-http-certs-public
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: {{ $inst.elasticsearch.clusterName }}-body-limit
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: {{ $inst.elasticsearch.clusterName }}-route
+  requestBuffer:
+    limit: 104857600
+{{- end }}
+{{- end }}
+{{- end }}

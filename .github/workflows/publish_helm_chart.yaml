@@ -41,8 +41,8 @@ jobs:
           helm package k8s/charts/arlas-uis/ --destination charts/
           helm package k8s/charts/titiler/ --destination charts/
           
-          # 3. Add external dependencies (e.g., Bitnami) required by the main stack
-          helm repo add bitnami https://charts.bitnami.com/bitnami
+          # 3. Add external dependencies (e.g., seaweedfs) required by the main stack
+          helm repo add seaweedfs https://seaweedfs.github.io/seaweedfs/helm
           helm repo update
 
           # 4. Inject the newly created packages into the main stack's charts folder
