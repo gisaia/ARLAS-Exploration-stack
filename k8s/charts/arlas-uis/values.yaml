@@ -28,8 +28,8 @@ uis:
     imagePullSecrets: []
     extraContainers: []
     extraInitContainers:
-    extraEnv: #  - name: KEY
-
+    extraEnv:
+    #  - name: KEY
     #    value: "value"
     extraVolumeMounts:
     #  - name: extra-assets-volume

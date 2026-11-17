@@ -137,15 +137,14 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.aias.services.seaweedfs.existingSecret | string | `"arlas-stack-secret"` | Name of secret with SeaweedFS credentials login password use in initbucket |
 | deployment.aias.services.seaweedfs.filerServiceName | string | `"arlas-stack-seaweedfs-filer"` | Name of the Kubernetes service exposing the seaweedfs filer |
 | deployment.aias.services.seaweedfs.filerServicePort | int | `8888` | Port of the seaweedfs filer service |
-| deployment.aias.services.seaweedfs.ingress.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for SeaweedFS ingress |
-| deployment.aias.services.seaweedfs.ingress.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"` | Annotations for SeaweedFS ingress |
+| deployment.aias.services.seaweedfs.ingress.annotations | object | `{"nginx.ingress.kubernetes.io/auth-response-headers":"Authorization, arlas-org-filter","nginx.ingress.kubernetes.io/auth-url":"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/airs-storage"}` | Annotations for SeaweedFS ingress |
 | deployment.aias.services.seaweedfs.loginKey | string | `"ARLAS_APP_SEAWEEDFS_LOGIN"` | Key in secret existingSecret for the login |
 | deployment.aias.services.seaweedfs.masterServiceName | string | `"arlas-stack-seaweedfs-master"` | Name of the Kubernetes service exposing the seaweedfs master |
 | deployment.aias.services.seaweedfs.masterServicePort | int | `9333` | Port of the seaweedfs master service |
 | deployment.aias.services.seaweedfs.passwordKey | string | `"ARLAS_APP_SEAWEEDFS_PASSWORD"` | Key in secret existingSecret for the password |
 | deployment.aias.services.seaweedfs.port | int | `8333` | SeaweedFS service port for AIAS |
 | deployment.aias.services.seaweedfs.serviceName | string | `"arlas-stack-seaweedfs-s3"` | SeaweedFS service configuration for AIAS |
-| deployment.aias.services.titiler.gateway.enabled | bool | `true` |  |
+| deployment.aias.services.titiler.gateway.enabled | bool | `true` | Should the chart deploy titiler gateway |
 | deployment.aias.services.titiler.ingress.enabled | bool | `false` | Should the chart deploy titiler ingress |
 | deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-response-headers" | string | `"Authorization, arlas-org-filter"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.ingress.private.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/cog"` | Annotations for Titiler ingress |
@@ -153,7 +152,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | deployment.aias.services.titiler.ingress.public.annotations."nginx.ingress.kubernetes.io/auth-url" | string | `"http://arlas-agate.arlas.svc.cluster.local:8000/agate/authorization/titiler_public"` | Annotations for Titiler ingress |
 | deployment.aias.services.titiler.port | int | `8000` | Titiler service port for AIAS |
 | deployment.aias.services.titiler.serviceName | string | `"arlas-stack-titiler"` | Titiler service configuration for AIAS |
-| deployment.aias.uis.gateway.enabled | bool | `true` |  |
+| deployment.aias.uis.gateway.enabled | bool | `true` | Should the chart deploy aias-uis gateway |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
 | deployment.aias.uis.ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
 | deployment.aias.uis.ingress.enabled | bool | `false` | Should the chart deploy aias-uis ingress |
@@ -268,7 +267,7 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 | global.gateway.remoteJWKSuri | string | `"http://keycloak-service.arlas.svc.cluster.local:8080/realms/arlas/protocol/openid-connect/certs"` |  |
 | global.gateway.tls.secretName | string | `"arlas-tls"` |  |
 | global.ingressClassName | string | `"nginx"` | __MUST BE CONFIGURED:__ The default ingress class. By default, the `nginx` controler is used. |
-| global.ingressTlsSecretName | string | `"arlas-tls"` | __MUST BE CONFIGURED:__ Secret Name with tls config for ingress. |
+| global.ingressTlsSecretName | string | `nil` |  |
 | global.keycloak.url | string | `"https://keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ Keycloak URL |
 | global.keycloakDnsDomain | string | `"keycloak.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing keycloak for ARLAS deployment |
 | global.kibanaDnsDomain | string | `"kibana.arlas.k8s"` | __MUST BE CONFIGURED:__ The domain name for accessing kibana for ARLAS deployment |

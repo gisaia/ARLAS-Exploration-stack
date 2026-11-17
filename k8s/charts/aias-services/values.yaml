@@ -364,8 +364,8 @@ services:
       extraInitContainers:
       extraEnv:
       extraVolumeMounts:
-      extraVolumes: # -- Number of APROC worker replicas
-
+      extraVolumes: 
+      # -- Number of APROC worker replicas
       replicaCount: 1
       # -- Resources configuration for APROC worker
       resources:

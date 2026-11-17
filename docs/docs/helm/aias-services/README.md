@@ -334,7 +334,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.image | string | `"gisaia/aproc-proc:0.21.1"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
-| services.aproc.worker.replicaCount | int | `1` |  |
+| services.aproc.worker.replicaCount | int | `1` | Number of APROC worker replicas |
 | services.aproc.worker.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":0.25,"memory":"512Mi"}}` | Resources configuration for APROC worker |
 | services.aproc.worker.serviceName | string | `"aproc-proc"` |  |
 | services.aproc.worker.tolerations | list | `[]` | Tolerations for APROC worker pods |
