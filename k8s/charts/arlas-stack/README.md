@@ -8,10 +8,10 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../aias-services | aias-services | 28.10.0 |
-| file://../arlas-services | arlas-services | 28.10.0 |
-| file://../arlas-uis | arlas-uis | 28.10.0 |
-| file://../titiler | titiler | 28.10.0 |
+| file://../aias-services | aias-services | 28.11.0 |
+| file://../arlas-services | arlas-services | 28.11.0 |
+| file://../arlas-uis | arlas-uis | 28.11.0 |
+| file://../titiler | titiler | 28.11.0 |
 | https://seaweedfs.github.io/seaweedfs/helm | seaweedfs | 4.48.0 |
 
 ## Values
