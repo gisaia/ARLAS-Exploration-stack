@@ -289,9 +289,9 @@ drivers:
       - OVERVIEW_COG
 
   - 
-    name: soacom
-    class_name: extensions.aproc.proc.ingest.drivers.impl.soacom
-    assets_dir: /tmp/aproc/soacom
+    name: saocom
+    class_name: extensions.aproc.proc.ingest.drivers.impl.saocom
+    assets_dir: /tmp/aproc/saocom
     configuration:
       tmp_directory: $TMP_FOLDER|/tmp
       build_overview_when_remote: true

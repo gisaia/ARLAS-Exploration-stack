@@ -1,6 +1,6 @@
 # aias-services
 
-![Version: 28.10.0](https://img.shields.io/badge/Version-28.10.0-informational?style=flat-square) ![AppVersion: 0.21.0](https://img.shields.io/badge/AppVersion-0.21.0-informational?style=flat-square)
+![Version: 28.11.0](https://img.shields.io/badge/Version-28.11.0-informational?style=flat-square) ![AppVersion: 0.21.1](https://img.shields.io/badge/AppVersion-0.21.1-informational?style=flat-square)
 
 A Helm Chart to deploy ARLAS AIAS Services
 
@@ -71,7 +71,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.agate.extraInitContainers | string | `nil` |  |
 | services.agate.extraVolumeMounts | string | `nil` |  |
 | services.agate.extraVolumes | string | `nil` |  |
-| services.agate.image | string | `"gisaia/agate:0.21.0"` |  |
+| services.agate.image | string | `"gisaia/agate:0.21.1"` |  |
 | services.agate.imagePullSecrets | list | `[]` | Extra environment variables for the agate container |
 | services.agate.nodeSelector | object | `{}` | Node selector for AGATE service pods |
 | services.agate.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
@@ -101,7 +101,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.airs.extraInitContainers | list | `[]` |  |
 | services.airs.extraVolumeMounts | list | `[]` |  |
 | services.airs.extraVolumes | list | `[]` |  |
-| services.airs.image | string | `"gisaia/airs:0.21.0"` |  |
+| services.airs.image | string | `"gisaia/airs:0.21.1"` |  |
 | services.airs.imagePullSecrets | list | `[]` |  |
 | services.airs.nodeSelector | object | `{}` | Node selector for AIRS service pods |
 | services.airs.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
@@ -250,6 +250,10 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.rapideye.priority | int | `5` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_local | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.build_overview_when_remote | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.enabled | bool | `true` |  |
+| services.aproc.configuration.extensions.ingest.drivers.saocom.priority | int | `24` |  |
 | services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.satellogic.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.satellogic.enabled | bool | `true` |  |
@@ -266,10 +270,6 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.configuration.extensions.ingest.drivers.skysat.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.skysat.enabled | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.skysat.priority | int | `15` |  |
-| services.aproc.configuration.extensions.ingest.drivers.soacom.build_overview_when_local | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.soacom.build_overview_when_remote | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.soacom.enabled | bool | `true` |  |
-| services.aproc.configuration.extensions.ingest.drivers.soacom.priority | int | `24` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.build_overview_when_local | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.build_overview_when_remote | bool | `true` |  |
 | services.aproc.configuration.extensions.ingest.drivers.spot5.enabled | bool | `true` |  |
@@ -313,7 +313,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.service.extraInitContainers | string | `nil` |  |
 | services.aproc.service.extraVolumeMounts | string | `nil` |  |
 | services.aproc.service.extraVolumes | string | `nil` |  |
-| services.aproc.service.image | string | `"gisaia/aproc-service:0.21.0"` |  |
+| services.aproc.service.image | string | `"gisaia/aproc-service:0.21.1"` |  |
 | services.aproc.service.imagePullSecrets | list | `[]` |  |
 | services.aproc.service.nodeSelector | object | `{}` | Node selector for APROC service pods |
 | services.aproc.service.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
@@ -331,7 +331,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.aproc.worker.extraInitContainers | string | `nil` |  |
 | services.aproc.worker.extraVolumeMounts | string | `nil` |  |
 | services.aproc.worker.extraVolumes | string | `nil` |  |
-| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.21.0"` |  |
+| services.aproc.worker.image | string | `"gisaia/aproc-proc:0.21.1"` |  |
 | services.aproc.worker.imagePullSecrets | list | `[]` |  |
 | services.aproc.worker.nodeSelector | object | `{}` | Node selector for APROC worker pods |
 | services.aproc.worker.replicaCount | int | `1` |  |
@@ -346,7 +346,7 @@ A Helm Chart to deploy ARLAS AIAS Services
 | services.fam.extraInitContainers | string | `nil` |  |
 | services.fam.extraVolumeMounts | string | `nil` |  |
 | services.fam.extraVolumes | string | `nil` |  |
-| services.fam.image | string | `"gisaia/fam:0.21.0"` |  |
+| services.fam.image | string | `"gisaia/fam:0.21.1"` |  |
 | services.fam.imagePullSecrets | list | `[]` | Extra environment variables for the fam container |
 | services.fam.nodeSelector | object | `{}` | Node selector for FAM service pods |
 | services.fam.otel | bool | `false` | Whether OpenTelemetry should be activated or not |
