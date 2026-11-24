@@ -31,6 +31,7 @@ deployment.aias.services.aproc.ingress.enabled=false,\
 deployment.aias.services.fam.ingress.enabled=false,\
 deployment.aias.services.titiler.ingress.enabled=false,\
 deployment.seaweedfs.ingress.enabled=false,\
+seaweedfs.admin.ingress.enabled=false,\
 deployment.elasticsearch.app.ingress.enabled=false,\
 deployment.elasticsearch.logs.ingress.enabled=false,\
 deployment.kibana.app.ingress.enabled=false,\
