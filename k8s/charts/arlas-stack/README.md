@@ -1,6 +1,6 @@
 # arlas-aias
 
-![Version: 28.11.0](https://img.shields.io/badge/Version-28.11.0-informational?style=flat-square) ![AppVersion: 28.11.0](https://img.shields.io/badge/AppVersion-28.11.0-informational?style=flat-square)
+![Version: 29.0.0](https://img.shields.io/badge/Version-29.0.0-informational?style=flat-square) ![AppVersion: 29.0.0](https://img.shields.io/badge/AppVersion-29.0.0-informational?style=flat-square)
 
 A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
@@ -8,10 +8,10 @@ A Helm Chart to deploy the ARLAS Exploration Stack with AIAS services
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../aias-services | aias-services | 28.11.0 |
-| file://../arlas-services | arlas-services | 28.11.0 |
-| file://../arlas-uis | arlas-uis | 28.11.0 |
-| file://../titiler | titiler | 28.11.0 |
+| file://../aias-services | aias-services | 29.0.0 |
+| file://../arlas-services | arlas-services | 29.0.0 |
+| file://../arlas-uis | arlas-uis | 29.0.0 |
+| file://../titiler | titiler | 29.0.0 |
 | https://seaweedfs.github.io/seaweedfs/helm | seaweedfs | 4.48.0 |
 
 ## Values

@@ -2,7 +2,7 @@ apiVersion: v1
 appVersion: "latest" # x-release-please-version
 description: A dynamic Web Map tile server
 name: titiler
-version: 28.11.0
+version: 29.0.0
 maintainers:
   - name: emmanuelmathot # Emmanuel Mathot
     url: https://github.com/emmanuelmathot
