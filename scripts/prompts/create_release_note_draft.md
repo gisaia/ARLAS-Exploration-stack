@@ -31,11 +31,14 @@ Draft comprehensive, user-facing Release Notes in Markdown for the **ARLAS Explo
 ## Procedure
 
 1. Ask or confirm `[PREVIOUS_VERSION]` and `[LATEST_VERSION]`.
-2. Check that tags/versions exist on `https://github.com/gisaia/ARLAS-Exploration-stack` and inspect `conf/versions.env`.
+2. Check that tags/versions exist on `https://github.com/gisaia/ARLAS-Exploration-stack` and inspect `conf/versions.env` between `[PREVIOUS_VERSION]` and `[LATEST_VERSION]`:
+   - `ARLAS-Exploration-stack` and `aias` tags have no `v` prefix (`29.0.0`, `0.23.0`), whereas `ARLAS-wui`, `ARLAS-wui-hub`, `ARLAS-wui-builder`, `ARLAS-server`, `ARLAS-persistence`, and `ARLAS-permissions` git tags require a `v` prefix (`v<version>` from `conf/versions.env`). Always prepend `v` for those repos so `git log` and GitHub compare URLs resolve.
 3. Compare git diffs, commits, PRs, and closed issues for the main stack and all subprojects:
-   - For `aias`, keep a very detailed track of driver changes (STAC, S3, CSK, Superview, COG, etc.).
+   - For repos cloned locally, inspect `git log <prev>..<latest>` and diffs directly; for remote-only or stale repos, download `https://api.github.com/repos/gisaia/<repo>/compare/<prev>...<latest>` and `/pulls?state=closed&per_page=50` to scratch JSON files via `curl -sL` and parse with `execute_code`.
+   - Filter PRs strictly against the commits returned by `compare/<prev>...<latest>` — listing recent closed PRs without filtering pulls post-release or prior-patch changes into the wrong release notes.
+   - For `aias`, inspect code diffs and keep a very detailed, verbose track of driver, security, model, and service changes (STAC, S3, CSK, Superview, COG enrichment, AIRS, APROC, AGATE, FAM WUI, CVEs).
    - If a subproject has no version bump, explicitly mark "No changes".
-   - For Kubernetes/Helm, inspect the full git diff of `k8s/charts/arlas-stack/values.yaml` between `[PREVIOUS_VERSION]` and `[LATEST_VERSION]` and list **ALL** changed variables (added, modified, or removed). If an added node contains sub-variables, group them under that node. For every entry, inspect comments (`# -- ...`), chart `README.md`, or Helm templates to provide an accurate description of its role and its default value (plus previous value if modified).
+   - For Kubernetes/Helm, never rely on raw terminal `git diff` alone on large charts (output truncates): in `execute_code`, load both `[PREVIOUS_VERSION]` and `[LATEST_VERSION]` `k8s/charts/arlas-stack/values.yaml` with `yaml.safe_load`, flatten to dotted paths, and compute exact added, modified, and removed keys. Group sub-variables under their parent node when a new node is added, and cross-reference `# --` comments, chart `README.md`, and `k8s/charts/arlas-stack/templates/` so every entry states its role and default value (plus `<old_value>` → `<new_value>` if modified).
 4. Identify breaking changes or configuration migrations.
 5. Categorize items into:
    - `### 🚀 Features`
@@ -69,6 +72,17 @@ Generate release notes adhering strictly to this markdown structure:
 
 ---
 
+## ⚙️ ARLAS Backend (Server, Persistence, Permissions)
+*(Group changes across ARLAS-server, ARLAS-persistence, and ARLAS-permissions)*
+### 🚀 Features
+- ...
+### ⚡ Improvements
+- ...
+### 🐛 Bug Fixes
+- ...
+
+---
+
 ## 🤖 AIAS
 *(Group by driver/plugin category if multiple drivers are affected, e.g., STAC Driver, S3 Driver, Ingest, etc. Keep detailed track of all driver modifications)*
 ### 🚀 Features
@@ -91,10 +105,12 @@ Generate release notes adhering strictly to this markdown structure:
 - ...
 
 ### `k8s/charts/arlas-stack/values.yaml` Variable Changes
-*(List ALL added, modified, or removed variables in `k8s/charts/arlas-stack/values.yaml`. Group sub-variables under their parent node when a new node is added. Every entry must state its role and default value.)*
-- **`<variable.path>`** *(Added / Modified / Removed)*: <Description of the variable or node's role>. Default: `<default_value>` *(if modified, include `<old_value>` → `<new_value>`)*.
+*(List ALL added, modified, or removed variables in `k8s/charts/arlas-stack/values.yaml`. Use icons instead of text labels for change types: ➕ = Added, ✏️ = Modified, 🗑️ = Removed. Group sub-variables under their parent node when a new node is added. Every entry must state its role and default value.)*
+- ➕ **`<variable.path>`**: <Description of the variable or node's role>. Default: `<default_value>`.
   - Sub-variables (if a new node was added):
     - **`<sub_var>`**: <Role>. Default: `<default_value>`.
+- ✏️ **`<variable.path>`**: <Description of the variable's role>. Default: `<old_value>` → `<new_value>`.
+- 🗑️ **`<variable.path>`**: <Description of the removed variable's previous role>. Previous default: `<old_value>`.
 
 ---
 
@@ -108,6 +124,8 @@ Generate release notes adhering strictly to this markdown structure:
 | ARLAS-persistence | `vX.Y.Z` | `vX.Y.Z` |
 | ARLAS-permissions | `vX.Y.Z` | `vX.Y.Z` |
 | AIAS | `vX.Y.Z` | `vX.Y.Z` |
+
+*(Also note any bumped IAM or infrastructure component versions from `conf/versions.env`, such as `ARLAS-wui-iam`, `ARLAS-iam-server`, Elasticsearch, or object storage.)*
 
 [See changes](https://github.com/gisaia/ARLAS-Exploration-stack/compare/[PREVIOUS_VERSION]...[LATEST_VERSION]).
 
