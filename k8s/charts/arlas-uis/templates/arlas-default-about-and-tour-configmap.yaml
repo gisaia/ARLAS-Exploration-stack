@@ -1,4 +1,4 @@
-{{- if eq .Values.uis.wui.aboutAndTourConfigMapName "arlas-default-about-and-tour-configmap" }}
+{{- if and (eq .Values.uis.wui.aboutAndTourConfigMapName "arlas-default-about-and-tour-configmap" ) .Values.uis.wui.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

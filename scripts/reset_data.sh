@@ -7,7 +7,7 @@ docker volume rm \
     arlas-es-config \
     arlas-persist \
     arlas-postgres \
-    arlas-data-minio \
+    arlas-data-seaweedfs \
     arlas-data-mc-conf \
     arlas-data-rabbitmq \
     arlas-data-redis

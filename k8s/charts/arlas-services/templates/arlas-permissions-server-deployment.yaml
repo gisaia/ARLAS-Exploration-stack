@@ -1,3 +1,4 @@
+{{- if .Values.services.permissions.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,21 +32,22 @@ spec:
             - name: http
               containerPort: {{ .Values.services.servicePort }}
               protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /admin/healthcheck
+              port: http
+            periodSeconds: {{ .Values.services.permissions.startupProbe.periodSeconds | default 5 }}
+            failureThreshold: {{ .Values.services.permissions.startupProbe.failureThreshold | default 36 }}
+            timeoutSeconds: 3
           livenessProbe:
             httpGet:
               path: /admin/healthcheck
               port: http
-            initialDelaySeconds: 40            
           readinessProbe:
             httpGet:
               path: /admin/healthcheck
               port: http
-            initialDelaySeconds: 40
           env:
-            # JVM CONFIG
-            - name: JDK_JAVA_OPTIONS
-              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }} "
-
             # ENDPOINT CONFIGURATION
             - name: ARLAS_PERMISSIONS_APP_PATH
               value: /
@@ -65,7 +67,18 @@ spec:
             {{- include "arlasServices.cacheEnv" . | nindent 12 }}
             {{- include "arlasServices.loggingEnv" . | nindent 12 }}
             {{- include "arlasServices.elasticEnv" . | nindent 12 }}
-
+            {{- if .Values.services.permissions.otel }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ .Values.services.permissions.serviceName }}
+            {{- include "arlasServices.otel" . | nindent 12 }}
+              # JVM CONFIG
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }} -javaagent:/opt/app/opentelemetry-javaagent.jar"
+            {{- else }}
+            # JVM CONFIG
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xmx{{ .Values.services.permissions.jvmXmx }} -XX:+ExitOnOutOfMemoryError {{ .Values.services.server.trustStoreOptions }}"
+            {{- end }}
             {{- with .Values.services.permissions.extraEnv }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
@@ -88,3 +101,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

@@ -37,10 +37,12 @@ services:
       - ARLAS_AUTH_KEYCLOAK_RESOURCE=${ARLAS_AUTH_KEYCLOAK_RESOURCE}
       - ARLAS_AUTH_KEYCLOAK_SECRET=${ARLAS_AUTH_KEYCLOAK_SECRET}
       - ARLAS_AUTH_KEYCLOAK_URL=${ARLAS_AUTH_KEYCLOAK_URL}
+      - ARLAS_AUTH_INIT_ROLES_PATH=/opt/app/roles.yaml
     expose:
       - "9998"
     volumes:
       - ${PWD}/conf/truststore.p12:/opt/app/truststore.p12:ro
+      - ${PWD}/conf/aias/roles.yaml:/opt/app/roles.yaml:ro
     networks:
       - arlas-net
     healthcheck:

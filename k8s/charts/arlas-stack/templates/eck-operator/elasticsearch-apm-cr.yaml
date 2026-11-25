@@ -1,0 +1,30 @@
+{{- if .Values.deployment.apmServer.enabled }}
+apiVersion: apm.k8s.elastic.co/v1
+kind: ApmServer
+metadata:
+  name: {{ .Values.apmServer.name | default "apm-server" }}
+spec:
+  version: {{ .Values.apmServer.image.tag | quote }}
+  count: {{ .Values.apmServer.instances | default 1 }}
+  elasticsearchRef:
+    name: {{ .Values.apmServer.elasticsearchRef }}
+  kibanaRef:
+    name: {{ .Values.apmServer.kibanaRef }}
+  podTemplate:
+    spec:
+      {{- with .Values.apmServer.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.apmServer.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: apm-server
+          {{- with .Values.apmServer.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+{{- end }}

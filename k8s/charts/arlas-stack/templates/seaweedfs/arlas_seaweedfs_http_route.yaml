@@ -1,0 +1,25 @@
+{{- if and .Values.deployment.seaweedfs.gateway.enabled .Values.global.gateway.enabled .Values.deployment.seaweedfs.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: arlas-seaweedfs-route
+spec:
+  parentRefs:
+    - name: {{ .Values.global.gateway.name }}
+      sectionName: https
+  hostnames:
+    - {{ .Values.global.dnsDomain | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /airs-storage/
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            remove:
+              - Authorization
+      backendRefs:
+        - name: {{ .Values.deployment.aias.services.seaweedfs.serviceName }}
+          port: {{ .Values.deployment.aias.services.seaweedfs.port }}
+{{- end }}

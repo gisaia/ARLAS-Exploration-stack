@@ -18,7 +18,7 @@ arlas_cli --config-file /tmp/arlas-cli.yaml \
     --persistence https://${ARLAS_HOST}/persist \
     --persistence-headers "Content-Type:application/json" \
     --elastic https://${ES_HOST} \
-    --elastic-login elastic \
+    --elastic-login arlas-user \
     --elastic-password secret4elastic \
     --elastic-headers "Content-Type:application/json" \
     --allow-delete \

@@ -1,0 +1,31 @@
+{{- if .Values.deployment.redis.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.redis.service.serviceName }}
+  labels:
+    app.kubernetes.io/component: {{ .Values.redis.service.serviceName }}
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/component: {{ .Values.redis.service.serviceName }}
+  ports:
+  - name: redis
+    port: {{ .Values.redis.service.port }}
+    targetPort: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.redis.service.serviceName }}-client
+  labels:
+    app.kubernetes.io/component: {{ .Values.redis.service.serviceName }}
+spec:
+  selector:
+    app.kubernetes.io/component: {{ .Values.redis.service.serviceName }}
+  type: {{ .Values.redis.service.clientService.type }}
+  ports:
+  - name: redis
+    port: {{ .Values.redis.service.port }}
+    targetPort: redis
+{{ end }}
