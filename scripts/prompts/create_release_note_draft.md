@@ -1,17 +1,23 @@
-# Role & Objective
-You are a Technical Writer and Release Manager. Your task is to draft comprehensive, user-facing Release Notes in Markdown for the **ARLAS Exploration Stack** comparing version **[PREVIOUS_VERSION]** against **[LATEST_VERSION]**.
-
-
+---
+name: arlas-release-notes
+description: Draft release notes for ARLAS Exploration Stack versions.
+version: 0.1.0
+author: Sylvain Gaudan, Hermes Agent
+license: MIT
+platforms: [linux, macos]
+metadata:
+  hermes:
+    tags: [arlas, release-notes, exploration-stack, changelog]
 ---
 
-First, ask the which version should be used for **[PREVIOUS_VERSION]** and which for **[LATEST_VERSION]**. 
-Then check they exists on e`https://github.com/gisaia/ARLAS-Exploration-stack`, then proceed. Otherwise tell the problem.
+# ARLAS Exploration Stack Release Notes Skill
+
+Draft comprehensive, user-facing Release Notes in Markdown for the **ARLAS Exploration Stack** comparing `[PREVIOUS_VERSION]` against `[LATEST_VERSION]`.
 
 ## Target Repositories & Dependency Mapping
 
 1. **Main Stack Repository**:
    - `https://github.com/gisaia/ARLAS-Exploration-stack`
-
 2. **Subproject Repositories**:
    Determine the exact tag/version used for each subproject by inspecting `conf/versions.env` between `[PREVIOUS_VERSION]` and `[LATEST_VERSION]`:
    - `https://github.com/gisaia/ARLAS-wui`
@@ -22,36 +28,28 @@ Then check they exists on e`https://github.com/gisaia/ARLAS-Exploration-stack`, 
    - `https://github.com/gisaia/ARLAS-permissions`
    - `https://github.com/gisaia/aias`
 
----
+## Procedure
 
-## Step-by-Step Instructions
+1. Ask or confirm `[PREVIOUS_VERSION]` and `[LATEST_VERSION]`.
+2. Check that tags/versions exist on `https://github.com/gisaia/ARLAS-Exploration-stack` and inspect `conf/versions.env`.
+3. Compare git diffs, commits, PRs, and closed issues for the main stack and all subprojects:
+   - For `aias`, keep a very detailed track of driver changes (STAC, S3, CSK, Superview, COG, etc.).
+   - If a subproject has no version bump, explicitly mark "No changes".
+   - For Kubernetes/Helm, inspect the full git diff of `k8s/charts/arlas-stack/values.yaml` between `[PREVIOUS_VERSION]` and `[LATEST_VERSION]` and list **ALL** changed variables (added, modified, or removed). If an added node contains sub-variables, group them under that node. For every entry, inspect comments (`# -- ...`), chart `README.md`, or Helm templates to provide an accurate description of its role and its default value (plus previous value if modified).
+4. Identify breaking changes or configuration migrations.
+5. Categorize items into:
+   - `### 🚀 Features`
+   - `### ⚡ Improvements`
+   - `### 🐛 Bug Fixes`
+   - `### ⚠️ Breaking Changes & Deprecations`
+6. Format links:
+   - Issue/PR: `[#<issue_number>](<issue_url>) - <Short description>`
+   - Commit: `[`<short_hash>`](<commit_url>) - <Short description>`
+## Output Template
 
-### Step 1: Analyze Changes
-- For the main stack and all subprojects:
-  - Important: Compare the git diffs, commits, PRs, and closed issues between the two corresponding versions. It MUST be applied to all **Subproject Repositories **. 
-  - For aias, keep a very detailed track of the changes
-  - If a subproject has no version bump in `conf/versions.env`, explicitly skip it or note "No changes".
-- Identify any **Breaking Changes** or configuration migrations required.
+Generate release notes adhering strictly to this markdown structure:
 
-### Step 2: Categorize Items
-Group all changes within their respective sections using the following standardized subheadings (for aias, be verbose and do not forget anything):
-- `### 🚀 Features` (New capabilities and functionalities)
-- `### ⚡ Improvements` (Enhancements, refactoring, performance improvements)
-- `### 🐛 Bug Fixes` (Fixes for unexpected behaviors or errors)
-- `### ⚠️ Breaking Changes & Deprecations` (If applicable)
-
-### Step 3: Formatting & Linking Rules
-- Every bullet point must include:
-  - A clear, concise summary of the change from a user/operator perspective.
-  - A markdown link to the related Issue or Pull Request formatted as: `[#<issue_number>](<issue_url>) - <Short description>`.
-  - If no issue/PR exists, link the commit hash: `[`<short_hash>`](<commit_url>) - <Short description>`.
-
----
-
-## Output Template Structure
-
-Generate the output strictly following this Markdown structure:
-
+```markdown
 # ARLAS Exploration Stack [LATEST_VERSION] Release Notes
 
 ## 📌 In a nutshell
@@ -72,7 +70,7 @@ Generate the output strictly following this Markdown structure:
 ---
 
 ## 🤖 AIAS
-*(Group by driver/plugin category if multiple drivers are affected, e.g., STAC Driver, S3 Driver, etc.)*
+*(Group by driver/plugin category if multiple drivers are affected, e.g., STAC Driver, S3 Driver, Ingest, etc. Keep detailed track of all driver modifications)*
 ### 🚀 Features
 - ...
 ### ⚡ Improvements
@@ -92,6 +90,12 @@ Generate the output strictly following this Markdown structure:
 *(Changes strictly affecting Helm charts, Kubernetes manifests, or cluster deployments)*
 - ...
 
+### `k8s/charts/arlas-stack/values.yaml` Variable Changes
+*(List ALL added, modified, or removed variables in `k8s/charts/arlas-stack/values.yaml`. Group sub-variables under their parent node when a new node is added. Every entry must state its role and default value.)*
+- **`<variable.path>`** *(Added / Modified / Removed)*: <Description of the variable or node's role>. Default: `<default_value>` *(if modified, include `<old_value>` → `<new_value>`)*.
+  - Sub-variables (if a new node was added):
+    - **`<sub_var>`**: <Role>. Default: `<default_value>`.
+
 ---
 
 ## 📦 Dependency Versions Summary
@@ -105,8 +109,7 @@ Generate the output strictly following this Markdown structure:
 | ARLAS-permissions | `vX.Y.Z` | `vX.Y.Z` |
 | AIAS | `vX.Y.Z` | `vX.Y.Z` |
 
-
-
 [See changes](https://github.com/gisaia/ARLAS-Exploration-stack/compare/[PREVIOUS_VERSION]...[LATEST_VERSION]).
 
 [Artifacthub ARLAS AIAS](https://artifacthub.io/packages/helm/arlas-stack/arlas-aias/[LATEST_VERSION])
+```
