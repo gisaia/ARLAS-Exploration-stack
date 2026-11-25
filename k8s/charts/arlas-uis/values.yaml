@@ -43,7 +43,7 @@ uis:
   famWui:
     enabled: true
     serviceName: arlas-fam-wui
-    image: gisaia/arlas-fam-wui:0.21.0
+    image: gisaia/arlas-fam-wui:0.23.0
     # -- Extra environment variables for the arlas fam wui container
     urlPrefix: /fam-wui
     tabName: ARLAS FAM Wui
